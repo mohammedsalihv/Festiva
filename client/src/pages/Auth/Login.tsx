@@ -48,7 +48,6 @@ const Login = () => {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Enter your email"
                     value={emailValue}
                     onFocus={() => setIsEmailFocused(true)}
                     onBlur={() => setIsEmailFocused(false)}
@@ -70,7 +69,6 @@ const Login = () => {
                   <Input
                     id="password"
                     type="password"
-                    placeholder="Enter your password"
                     value={passwordValue}
                     onFocus={() => setIsPasswordFocused(true)}
                     onBlur={() => setIsPasswordFocused(false)}
