@@ -1,0 +1,41 @@
+
+node_modules/
+
+# Build output
+dist/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local environment variables
+.env
+.env.local
+
+# IDE/Editor settings
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Coverage reports
+coverage/
+
+# Optional: Ignore tests or mock data
+# /__tests__/
+# /mockData/
+
+# Optional: PM2 process files
+.pm2/
+
+# Ignore build artifacts
+*.map

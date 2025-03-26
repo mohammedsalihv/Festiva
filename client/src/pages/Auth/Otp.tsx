@@ -5,7 +5,6 @@ import { Images } from "@/assets";
 
 const Otp = () => {
   const handleSubmit = () => {
-    console.log("OTP submitted");
   };
 
   return (

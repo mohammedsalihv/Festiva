@@ -17,12 +17,12 @@ const Login = () => {
     if (value.trim() !== "" || isFocused) {
       return "border-white border-2";
     }
-    return "border-b-2 border-white/40 hover:border-white/80";
+    return "border-b-2 border-gray-300 hover:border-gray-500";
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-full h-screen grid grid-cols-1 md:grid-cols-2 overflow-hidden">
+      <Card className="w-full h-screen grid grid-cols-1 md:grid-cols-2">
         <div
           className="flex items-center justify-center bg-cover bg-center w-full h-64 sm:h-72 md:h-auto relative"
           style={{ backgroundImage: `url(${Images.login_bg})` }}
@@ -40,11 +40,12 @@ const Login = () => {
                   Email
                 </Label>
                 <div
-                  className={`w-full rounded-sm transition-all duration-300 ${getInputBorderClass(
+                  className={`w-full rounded-sm transition-all duration-300 flex items-center border-b-2 ${getInputBorderClass(
                     emailValue,
                     isEmailFocused
                   )}`}
                 >
+                  <img className="w-6 h-6 mr-2" src={Images.mail} alt="" />
                   <Input
                     id="email"
                     type="email"
@@ -52,7 +53,8 @@ const Login = () => {
                     onFocus={() => setIsEmailFocused(true)}
                     onBlur={() => setIsEmailFocused(false)}
                     onChange={(e) => setEmailValue(e.target.value)}
-                    className="w-full bg-transparent px-3 py-1 transition-all duration-300"
+                    className="w-full bg-transparent px-3 py-2 transition-all duration-300 border-none focus:outline-none"
+                    required
                   />
                 </div>
               </div>
@@ -61,11 +63,12 @@ const Login = () => {
                   Password
                 </Label>
                 <div
-                  className={`w-full rounded-md transition-all duration-300 ${getInputBorderClass(
+                  className={`w-full rounded-sm transition-all duration-300 flex items-center border-b-2 ${getInputBorderClass(
                     passwordValue,
                     isPasswordFocused
                   )}`}
                 >
+                  <img className="w-8 h-6 mr-2" src={Images.lock} alt="" />
                   <Input
                     id="password"
                     type="password"
@@ -73,11 +76,9 @@ const Login = () => {
                     onFocus={() => setIsPasswordFocused(true)}
                     onBlur={() => setIsPasswordFocused(false)}
                     onChange={(e) => setPasswordValue(e.target.value)}
-                    className="w-full bg-transparent px-3 py-1 transition-all duration-300"
+                    className="w-full bg-transparent px-3 py-2 transition-all duration-300 border-none focus:outline-none"
+                    required
                   />
-                </div>
-                <div className="text-left text-sm text-main_color font-bold">
-                  Forgot password?
                 </div>
               </div>
               <div>
@@ -101,15 +102,19 @@ const Login = () => {
                 </span>
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
               </div>
-              <div className="flex items-center , justify-center space-x-4">
+              <div className="flex items-center justify-center space-x-4">
                 <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
-                 <img className="w-6 h-6" src={Images.google} alt="Google" />
+                  <img className="w-6 h-6" src={Images.google} alt="Google" />
                 </button>
                 <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
-                 <img className="w-6 h-6" src={Images.github} alt="Google" />
+                  <img className="w-6 h-6" src={Images.github} alt="GitHub" />
                 </button>
                 <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
-                 <img className="w-6 h-6" src={Images.linkedin} alt="Google" />
+                  <img
+                    className="w-6 h-6"
+                    src={Images.linkedin}
+                    alt="LinkedIn"
+                  />
                 </button>
               </div>
             </CardContent>

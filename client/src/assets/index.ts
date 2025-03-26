@@ -3,6 +3,8 @@ import linkedin from '../assets/images/linkedin.png';
 import google from '../assets/images/google.png';
 import github from '../assets/images/github.png';
 import security from '../assets/images/lock.png'
+import lock from '../assets/images/lock.png';
+import mail from '../assets/images/mail.png'
 
 
 export const Images = {
@@ -10,5 +12,7 @@ export const Images = {
     linkedin,
     google,
     github,
-    security
+    security,
+    lock,
+    mail
 }
