@@ -54,7 +54,6 @@ const Login = () => {
                     onBlur={() => setIsEmailFocused(false)}
                     onChange={(e) => setEmailValue(e.target.value)}
                     className="w-full bg-transparent px-3 py-2 transition-all duration-300 border-none focus:outline-none"
-                    required
                   />
                 </div>
               </div>
@@ -77,7 +76,6 @@ const Login = () => {
                     onBlur={() => setIsPasswordFocused(false)}
                     onChange={(e) => setPasswordValue(e.target.value)}
                     className="w-full bg-transparent px-3 py-2 transition-all duration-300 border-none focus:outline-none"
-                    required
                   />
                 </div>
               </div>
