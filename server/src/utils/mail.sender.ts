@@ -15,10 +15,10 @@ export const sendVerificationEmail = async (email: string, otp: string) => {
       to: email,
       subject: "Your OTP Code for Festiva",
       html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+      <div style="font-family: Arial, sans-serif; max-width: 600px;">
         <h1 style="color: #4a6baf;">Welcome to Festiva!</h1>
         <p>Your OTP code is: <strong>${otp}</strong></p>
-        <p>This code expires in 10 minutes.</p>
+        <p>This code expires in 2 minutes.</p>
       </div>
     `,
     });

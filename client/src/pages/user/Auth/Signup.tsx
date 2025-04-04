@@ -11,7 +11,9 @@ import {
   validateSignupForm,
   FormState,
 } from "@/utils/validations/signupValidation";
-import { toast } from "sonner";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+import CustomToastContainer from "../../../reusable-components/Messages/ToastContainer";
 
 interface ErrorState {
   firstname?: string;
@@ -20,6 +22,7 @@ interface ErrorState {
   phone?: string;
   password?: string;
   confirmPassword?: string;
+  terms?: string;
 }
 
 const Signup = () => {
@@ -50,18 +53,26 @@ const Signup = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    setForm(prev => ({ ...prev, [id]: value }));
-    // Clear error when user types
+    setForm((prev) => ({ ...prev, [id]: value }));
+
     if (errors[id as keyof ErrorState]) {
-      setErrors(prev => ({ ...prev, [id]: "" }));
+      setErrors((prev) => ({ ...prev, [id]: "" }));
     }
   };
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    
+
     if (!isChecked) {
-      toast.error("Please accept the terms and conditions");
+      toast.error("Please accept the terms and conditions to proceed", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       return;
     }
 
@@ -73,11 +84,9 @@ const Signup = () => {
 
     sendOtpMutation({ email: form.email });
   };
-
   return (
     <div className="flex items-center justify-center min-h-screen">
       <Card className="w-full h-screen grid grid-cols-1 md:grid-cols-[40%_60%] overflow-hidden">
-        {/* Left side with branding */}
         <div className="flex items-center justify-center bg-main_color w-full h-full px-4 py-6 sm:px-8 sm:py-12">
           <div className="text-white text-center">
             <p className="text-start text-3xl sm:text-4xl md:text-5xl font-extrabold">
@@ -91,8 +100,6 @@ const Signup = () => {
             </p>
           </div>
         </div>
-
-        {/* Right side with form */}
         <Card className="bg-white flex items-center justify-center w-full max-w-4xl">
           <div className="w-full max-w-4xl bg-white p-6 sm:p-8">
             <form onSubmit={handleSubmit}>
@@ -103,8 +110,6 @@ const Signup = () => {
                     Create an account to enjoy services
                   </p>
                 </div>
-
-                {/* Name fields */}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div className="space-y-1">
                     <Label htmlFor="firstname" className="text-sm font-medium">
@@ -118,7 +123,9 @@ const Signup = () => {
                       value={form.firstname}
                     />
                     {errors.firstname && (
-                      <p className="text-red-500 text-xs mt-1">{errors.firstname}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.firstname}
+                      </p>
                     )}
                   </div>
                   <div className="space-y-1">
@@ -133,12 +140,12 @@ const Signup = () => {
                       value={form.lastname}
                     />
                     {errors.lastname && (
-                      <p className="text-red-500 text-xs mt-1">{errors.lastname}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.lastname}
+                      </p>
                     )}
                   </div>
                 </div>
-
-                {/* Email and Phone */}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div className="space-y-1">
                     <Label htmlFor="email" className="text-sm font-medium">
@@ -152,7 +159,9 @@ const Signup = () => {
                       value={form.email}
                     />
                     {errors.email && (
-                      <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.email}
+                      </p>
                     )}
                   </div>
                   <div className="space-y-1">
@@ -167,12 +176,12 @@ const Signup = () => {
                       value={form.phone}
                     />
                     {errors.phone && (
-                      <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.phone}
+                      </p>
                     )}
                   </div>
                 </div>
-
-                {/* Password fields */}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div className="space-y-1">
                     <Label htmlFor="password" className="text-sm font-medium">
@@ -186,11 +195,16 @@ const Signup = () => {
                       value={form.password}
                     />
                     {errors.password && (
-                      <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.password}
+                      </p>
                     )}
                   </div>
                   <div className="space-y-1">
-                    <Label htmlFor="confirmPassword" className="text-sm font-medium">
+                    <Label
+                      htmlFor="confirmPassword"
+                      className="text-sm font-medium"
+                    >
                       Confirm Password
                     </Label>
                     <Input
@@ -201,35 +215,52 @@ const Signup = () => {
                       value={form.confirmPassword}
                     />
                     {errors.confirmPassword && (
-                      <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errors.confirmPassword}
+                      </p>
                     )}
                   </div>
                 </div>
 
-                {/* Terms and submit */}
-                <div className="flex flex-col sm:flex-row items-center justify-between w-full space-x-2">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="terms"
-                      checked={isChecked}
-                      onCheckedChange={(checked) => setIsChecked(checked === true)}
-                      className="h-4 w-4"
-                    />
-                    <label
-                      htmlFor="terms"
-                      className="text-sm font-semibold sm:text-base md:text-1xl text-neutral-400 cursor-pointer"
-                    >
-                      I agree to the{" "}
-                      <span className="text-main_color hover:underline sm:text-base md:text-1xl">
-                        terms and conditions
-                      </span>
-                    </label>
+                <div className="flex flex-col sm:flex-row items-start justify-between w-full gap-4">
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="terms"
+                        checked={isChecked}
+                        onCheckedChange={(checked) => {
+                          setIsChecked(Boolean(checked));
+                          if (errors.terms) {
+                            setErrors((prev) => ({
+                              ...prev,
+                              terms: undefined,
+                            }));
+                          }
+                        }}
+                        className={`h-4 w-4 ${
+                          errors.terms ? "border-red-500" : ""
+                        }`}
+                      />
+                      <label
+                        htmlFor="terms"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        I agree to the{" "}
+                        <span className="text-main_color hover:underline">
+                          terms and conditions
+                        </span>
+                      </label>
+                    </div>
+                    {errors.terms && (
+                      <p className="text-sm text-red-500">{errors.terms}</p>
+                    )}
                   </div>
-                  <div className="flex items-center justify-center w-full sm:w-auto bg-main_color max-w-md rounded-md h-12 mt-4 sm:mt-0 sm:ml-4">
+
+                  <div className="w-full sm:w-auto bg-main_color rounded-md h-12">
                     <Button
                       type="submit"
                       disabled={sendingOtp}
-                      className="text-white w-full sm:w-48"
+                      className="w-full h-full text-white"
                     >
                       {sendingOtp ? "Sending OTP..." : "Signup"}
                     </Button>
@@ -238,6 +269,7 @@ const Signup = () => {
               </CardContent>
             </form>
           </div>
+          <CustomToastContainer />
         </Card>
       </Card>
     </div>
