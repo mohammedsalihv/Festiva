@@ -5,6 +5,7 @@ import github from '../assets/images/github.png';
 import security from '../assets/images/lock.png'
 import lock from '../assets/images/lock.png';
 import mail from '../assets/images/mail.png'
+import home_image from '../assets/images/main-home.webp'
 
 
 export const Images = {
@@ -14,5 +15,6 @@ export const Images = {
     github,
     security,
     lock,
-    mail
+    mail,
+    home_image
 }

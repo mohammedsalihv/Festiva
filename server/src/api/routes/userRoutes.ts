@@ -9,44 +9,44 @@ import {
 
 const userRoutes = express.Router();
 
-userRoutes.post("/signup", async (req, res, next) => {
+userRoutes.post("/signup", async (req, res) => {
   try {
-    await userController.register(req, res, next);
+    await userController.register(req, res);
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 });
 
-userRoutes.post("/send-otp", async (req, res, next) => {
+userRoutes.post("/send-otp", async (req, res) => {
   try {
-    await otpController.sendOTP(req, res, next);
+    await otpController.sendOTP(req, res);
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 });
 
-userRoutes.post("/verify_otp", async (req, res, next) => {
+userRoutes.post("/verify_otp", async (req, res) => {
   try {
-    await verifyOtpController.verifyOTP(req, res, next);
+    await verifyOtpController.verifyOTP(req, res);
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 });
 
-userRoutes.post("/login", async (req, res, next) => {
+userRoutes.post("/login", async (req, res) => {
   try {
-    await loginController.login(req, res, next);
+    await loginController.login(req, res);
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 });
 
 
-userRoutes.post("/google-login", async (req, res, next) => {
+userRoutes.post("/google-login", async (req, res) => {
   try {
-    await googleController.login(req, res, next);
+    await googleController.login(req, res);
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 });
 
