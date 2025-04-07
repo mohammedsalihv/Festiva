@@ -17,7 +17,8 @@ module.exports = {
         poppins: ['Poppins', 'sans-serif'],
         prompt: ['Prompt', 'sans-serif'],
         boldonse: ['Boldonse', 'sans-serif'],
-        lilita: ['Lilita One', 'cursive']
+        lilita: ['Lilita One', 'cursive'],
+        JosephicSans : ["Josefin Sans"]
       },
     },
     container:{
