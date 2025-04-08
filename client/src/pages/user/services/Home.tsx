@@ -4,6 +4,7 @@ import ExploreButton from "@/components/ExploreButton";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { useEffect } from "react";
+import CategoryCard from "@/components/CategoryCard";
 
 const images = [Images.Landing_1, Images.Landing_2];
 
@@ -79,7 +80,9 @@ const Home = () => {
                   className="h-3 w-3 sm:h-4 sm:w-4 object-contain filter invert group-hover:invert-0 transition-all duration-300"
                 />
               </div>
-              <span className="mt-2 text-[11px] md:text-[13px] sm:text-[13px] font-poppins">venues</span>
+              <span className="mt-2 text-[11px] md:text-[13px] sm:text-[13px] font-poppins">
+                venues
+              </span>
             </div>
             <div className="flex flex-col items-center group cursor-pointer">
               <div className="bg-white/20 rounded-full p-4 transition-all duration-300 group-hover:bg-white">
@@ -89,7 +92,9 @@ const Home = () => {
                   className="h-3 w-3 sm:h-4 sm:w-4 object-contain filter invert group-hover:invert-0 transition-all duration-300"
                 />
               </div>
-              <span className="mt-2 text-[11px] md:text-[13px] sm:text-[13px] font-poppins">rent cars</span>
+              <span className="mt-2 text-[11px] md:text-[13px] sm:text-[13px] font-poppins">
+                rent cars
+              </span>
             </div>
 
             <div className="flex flex-col items-center group cursor-pointer">
@@ -100,7 +105,9 @@ const Home = () => {
                   className="h-3 w-3 sm:h-4 sm:w-4 object-contain filter invert group-hover:invert-0 transition-all duration-300"
                 />
               </div>
-              <span className="mt-2 text-[11px] md:text-[13px] sm:text-[13px] font-poppins">photo&video</span>
+              <span className="mt-2 text-[11px] md:text-[13px] sm:text-[13px] font-poppins">
+                photo&video
+              </span>
             </div>
             <div className="flex flex-col items-center group cursor-pointer">
               <div className="bg-white/20 rounded-full p-4 transition-all duration-300 group-hover:bg-white">
@@ -110,13 +117,25 @@ const Home = () => {
                   className="h-3 w-3 sm:h-4 sm:w-4 object-contain filter invert group-hover:invert-0 transition-all duration-300"
                 />
               </div>
-              <span className="mt-2 text-[11px] md:text-[13px] sm:text-[13px] font-poppins">catering</span>
+              <span className="mt-2 text-[11px] md:text-[13px] sm:text-[13px] font-poppins">
+                catering
+              </span>
             </div>
           </div>
         </div>
-        <div className="">
-           
-        </div>
+        <section className="py-10 px-6 flex flex-col items-center gap-6">
+  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:overflow-x-auto">
+    <CategoryCard title="VENUE RENTALS" imageUrl={Images.car} />
+    <CategoryCard title="CAR RENTALS" imageUrl={Images.car} />
+    <CategoryCard title="PHOTOGRAPHERS & VIDEOGRAPHERS" imageUrl={Images.car} />
+    <CategoryCard title="CATERERS" imageUrl={Images.car} />
+  </div>
+
+  <button className="flex items-center gap-2 px-6 py-2 border border-black text-black hover:bg-black hover:text-white transition rounded-md mt-4">
+    VIEW MORE
+    <span className="text-xl">→</span>
+  </button>
+</section>
       </section>
     </div>
   );

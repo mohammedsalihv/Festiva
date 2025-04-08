@@ -17,6 +17,11 @@ import catering from '@/assets/images/catering_service.png';
 import car_rent from '@/assets/images/car-rent_service.png';
 
 
+
+// service images
+
+import car from '@/assets/images/cars.jpg'
+
 export const Images = {
     login_bg,   
     linkedin,
@@ -30,5 +35,7 @@ export const Images = {
     venues,
     camera_video,
     catering,
-    car_rent
+    car_rent,
+    car
+    
 }
