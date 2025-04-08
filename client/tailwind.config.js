@@ -8,7 +8,8 @@ module.exports = {
     extend: {
       colors: {
         charcoal: '#202020',
-        main_color: "#7155FF"
+        main_color: "#7155FF",
+        main_white:"#FFFFFF"
       },
       boxShadow: {
         'r-lg': '10px 0 30px -10px rgba(0, 0, 0, 0.5)',

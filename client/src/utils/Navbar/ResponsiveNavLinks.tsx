@@ -22,12 +22,12 @@ const ResponsiveNavLinks = ({ open, setOpen }: ResponsiveNavLinksProps) => {
           />
 
           {/* Close Icon (on top of blur) */}
-          <div className="fixed top-6 right-6 z-30 md:hidden mt-3 ml-6">
-            <MdClose
-              onClick={() => setOpen(false)}
-              className="text-white text-4xl cursor-pointer "
-            />
-          </div>
+          <div className="fixed top-[38px] right-4 z-30 md:hidden">
+  <MdClose
+    onClick={() => setOpen(false)}
+    className="text-white text-4xl cursor-pointer"
+  />
+</div>
 
           {/* Nav Links */}
           <motion.div

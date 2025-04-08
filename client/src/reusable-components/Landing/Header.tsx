@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <>
-      <nav className="absolute top-0 left-0 w-full z-10 bg-transparent mt-4">
+      <nav className="absolute top-0 left-0 w-full z-30 bg-transparent mt-4">
         <div className="container mx-auto flex justify-between items-center px-4 py-6">
           <div className="text-xl sm:text-2xl flex items-center gap-2 font-bold uppercase">
             <GiPartyFlags className="text-yellow-500 text-xl sm:text-2xl" />
@@ -46,7 +46,7 @@ const Header = () => {
           </div>
           <div className="md:hidden text-white" onClick={() => setOpen(!open)}>
             {open ? (
-              <MdClose className="text-4xl cursor-pointer" />
+              <MdClose className="text-4xl cursor-pointer " />
             ) : (
               <MdMenu className="text-4xl cursor-pointer" />
             )}
