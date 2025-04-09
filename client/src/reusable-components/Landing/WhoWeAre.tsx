@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+
 const stats = [
   { count: "150+", label: "Luxury agencies" },
   { count: "350+", label: "Luxury assets" },
@@ -28,6 +31,43 @@ const infoBlocks = [
   },
 ];
 
+
+interface AnimatedCounterProps {
+  end: string;
+  duration?: number;
+}
+
+const AnimatedCounter = ({ end, duration = 1500 }: AnimatedCounterProps) => {
+  const [ref, inView] = useInView({ triggerOnce:true });
+  const [count, setCount] = useState<number | string>(0);
+
+  useEffect(() => {
+    if (!inView) return;
+
+    let start = 0;
+    const final = parseInt(end);
+    const increment = final / (duration / 30); 
+    let rafId: number;
+
+    const step = () => {
+      start += Math.ceil(Math.random() * increment);
+      if (start >= final) {
+        setCount(`${end}+`);
+      } else {
+        setCount(start);
+        rafId = requestAnimationFrame(step);
+      }
+    };
+
+    rafId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafId);
+  }, [inView, end, duration]);
+
+  return <div ref={ref}>{count}</div>;
+};
+
+
+
 const WhoWeAre = () => {
   return (
     <section className="w-full px-8 py-16 max-w-7xl mx-auto">
@@ -50,6 +90,7 @@ const WhoWeAre = () => {
           ))}
         </div>
       </div>
+
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-16">
         {stats.map((stat, index) => (
           <div
@@ -58,7 +99,9 @@ const WhoWeAre = () => {
               stat.highlight ? "bg-purple-600 text-white" : "bg-white"
             }`}
           >
-            <div className="text-3xl font-bold">{stat.count}</div>
+            <div className="text-3xl font-bold">
+              <AnimatedCounter end={stat.count.replace(/\D/g, "")} />
+            </div>
             <div className="text-base mt-2">{stat.label}</div>
           </div>
         ))}
