@@ -6,6 +6,11 @@ import "keen-slider/keen-slider.min.css";
 import { useEffect } from "react";
 import CategoryCard from "@/components/CategoryCard";
 import WhoWeAre from "@/reusable-components/Landing/WhoWeAre";
+import FAQ from "@/reusable-components/Landing/FAQ";
+import Footer from "@/reusable-components/Landing/Footer";
+import Supporters from "@/reusable-components/Landing/Supporters";
+
+
 
 const images = [Images.Landing_1, Images.Landing_2];
 const featureCards = [
@@ -67,7 +72,7 @@ const Home = () => {
       </section>
       <section className="w-full bg-black text-main_white py-10 px-4 z-20 relative">
         <div className="text-center">
-          <h2 className="text-md md:text-2xl font-bold mb-10 tracking-wide">
+          <h2 className="text-[10px] md:text-[22px] font-bold mb-10 tracking-wide font-boldonse">
             Each service is thoughtfully curated to <br /> spark connection and
             create lasting memories.
           </h2>
@@ -122,7 +127,7 @@ const Home = () => {
               Our personal concierge service ensures you experience ultimate
               luxury stress-free.
             </p>
-            <p className="mb-8 text-sm text-gray-400">
+            <p className="mb-8 text-sm text-gray-400 font-bold">
               From coordinating every step to handling every detail, our bespoke
               concierge team is at your service.
             </p>
@@ -147,6 +152,11 @@ const Home = () => {
           </div>
         </div>
       </section>
+        <section className="bg-black text-white py-16 px-4 lg:px-24">
+        <FAQ/>
+        <Supporters/>
+    </section>
+    <Footer/>
     </div>
   );
 };

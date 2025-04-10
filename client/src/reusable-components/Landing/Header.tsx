@@ -2,9 +2,9 @@ import { NavbarMenu } from "@/utils/Navbar/navLinks";
 import { CiSearch } from "react-icons/ci";
 import { MdMenu, MdClose } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
-import { GiPartyFlags } from "react-icons/gi";
 import { useState } from "react";
 import ResponsiveNavLinks from "../../utils/Navbar/ResponsiveNavLinks";
+import { Images } from "@/assets";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -14,7 +14,11 @@ const Header = () => {
       <nav className="absolute top-0 left-0 w-full z-30 bg-transparent mt-4">
         <div className="container mx-auto flex justify-between items-center px-4 py-6">
           <div className="text-xl sm:text-2xl flex items-center gap-2 font-bold uppercase">
-            <GiPartyFlags className="text-yellow-500 text-xl sm:text-2xl" />
+            <img
+              src={Images.logo_png}
+              alt=""
+              className="text-yellow-500 h-6 w-6 md:h-8 md:w-9"
+            />
             <span className="text-main_color font-lilita text-2xl sm:text-3xl">
               Festiva.
             </span>

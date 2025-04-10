@@ -73,7 +73,7 @@ const WhoWeAre = () => {
     <section className="w-full px-8 py-16 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row gap-8">
         <div className="flex-shrink-0 flex items-start justify-center md:w-1/4">
-          <div className="text-3xl font-medium leading-tight">
+          <div className="text-xl md:text-2xl font-medium leading-tight">
             <span className="block">WHO</span>
             <span className="block text-purple-600">WE</span>
             <span className="block">ARE?</span>
@@ -81,7 +81,7 @@ const WhoWeAre = () => {
         </div>
         <div className="flex flex-col gap-10 md:w-3/4">
           {infoBlocks.map((block, index) => (
-            <div key={index} className="border-b pb-4">
+            <div key={index} className="border-b pb-4 md:ml-20">
               <h3 className="text-lg font-semibold uppercase mb-2">
                 {block.title}
               </h3>
