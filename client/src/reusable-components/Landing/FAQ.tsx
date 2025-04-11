@@ -52,7 +52,7 @@ const FAQ = () => {
             }`}
           >
             <div className="flex justify-between items-start">
-              <p className="text-sm font-medium">{item.question}</p>
+              <p className="text-md font-JosephicSans">{item.question}</p>
               <button
                 className="bg-[#4f46e5] w-8 h-8 flex items-center justify-center rounded"
                 onClick={() => toggleFAQ(i)}
@@ -68,7 +68,7 @@ const FAQ = () => {
             {toggleStates[i] && (
               <>
                 <hr className="my-4 border-gray-600" />
-                <p className="text-sm text-gray-300">{item.answer}</p>
+                <p className="text-sm text-gray-300 font-JosephicSans">{item.answer}</p>
               </>
             )}
           </div>

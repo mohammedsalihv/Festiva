@@ -10,8 +10,6 @@ import FAQ from "@/reusable-components/Landing/FAQ";
 import Footer from "@/reusable-components/Landing/Footer";
 import Supporters from "@/reusable-components/Landing/Supporters";
 
-
-
 const images = [Images.Landing_1, Images.Landing_2];
 const featureCards = [
   { img: Images.service_247, label: "24/7 Availability" },
@@ -60,12 +58,15 @@ const Home = () => {
                 <div>management</div>
               </div>
             </div>
-            <div className="flex flex-col items-end text-right max-w-sm">
+            <div className="flex flex-col items-end text-left text-sm max-w-sm">
               <p className="text-white font-JosephicSans text-sm md:text-lg mb-2">
                 Your local partner for an unforgettable and effortless luxury
                 lifestyle.
               </p>
-              <ExploreButton content="Try it out now" />
+              <ExploreButton
+                content="Try it out now"
+                className="w-40 text   flex items-center gap-2 px-3 py-3"
+              />
             </div>
           </div>
         </div>
@@ -123,15 +124,15 @@ const Home = () => {
             <h2 className="text-3xl font-semibold mb-4">
               BOOK YOUR PERSONAL CONCIERGE SERVICE IN FESTIVA
             </h2>
-            <p className="mb-6 text-gray-300">
+            <p className="mb-6 text-gray-300 font-JosephicSans">
               Our personal concierge service ensures you experience ultimate
               luxury stress-free.
             </p>
-            <p className="mb-8 text-sm text-gray-400 font-bold">
+            <p className="mb-8 text-sm text-gray-400 font-bold ">
               From coordinating every step to handling every detail, our bespoke
               concierge team is at your service.
             </p>
-            <button className="bg-black px-6 py-3 rounded-md text-white font-medium hover:brightness-125 transition">
+            <button className="bg-black px-6 py-3 rounded-md text-white font-medium hover:brightness-125 transition font-JosephicSans">
               ENQUIRE HERE →
             </button>
           </div>
@@ -146,17 +147,19 @@ const Home = () => {
                   alt={card.label}
                   className="w-12 h-12 object-contain mb-2"
                 />
-                <p className="text-xs text-white text-center">{card.label}</p>
+                <p className="text-xs text-white text-center font-JosephicSans">
+                  {card.label}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
-        <section className="bg-black text-white py-16 px-4 lg:px-24">
-        <FAQ/>
-        <Supporters/>
-    </section>
-    <Footer/>
+      <section className="bg-black text-white py-16 px-4 lg:px-24">
+        <FAQ />
+        <Supporters />
+      </section>
+      <Footer />
     </div>
   );
 };

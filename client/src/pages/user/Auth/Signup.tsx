@@ -106,7 +106,7 @@ const Signup = () => {
               <CardContent className="space-y-6">
                 <div className="text-center space-y-2 p-3">
                   <h1 className="text-3xl font-bold text-charcoal">Signup</h1>
-                  <p className="text-neutral-400">
+                  <p className="text-neutral-400 font-JosephicSans">
                     Create an account to enjoy services
                   </p>
                 </div>
@@ -243,10 +243,10 @@ const Signup = () => {
                       />
                       <label
                         htmlFor="terms"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        className="font-JosephicSans text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
                         I agree to the{" "}
-                        <span className="text-main_color hover:underline">
+                        <span className="text-main_color hover:underline font-JosephicSans">
                           terms and conditions
                         </span>
                       </label>

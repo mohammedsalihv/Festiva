@@ -85,7 +85,7 @@ const WhoWeAre = () => {
               <h3 className="text-lg font-semibold uppercase mb-2">
                 {block.title}
               </h3>
-              <p className="text-sm text-gray-600 max-w-xl">{block.text}</p>
+              <p className="text-sm text-gray-600 max-w-xl font-JosephicSans">{block.text}</p>
             </div>
           ))}
         </div>
@@ -102,7 +102,7 @@ const WhoWeAre = () => {
             <div className="text-3xl font-bold">
               <AnimatedCounter end={stat.count.replace(/\D/g, "")} />
             </div>
-            <div className="text-base mt-2">{stat.label}</div>
+            <div className="text-base mt-2 font-JosephicSans">{stat.label}</div>
           </div>
         ))}
       </div>

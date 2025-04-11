@@ -6,6 +6,7 @@ import Landing_1 from "../assets/images/Landing_1.webp";
 import Landing_2 from "../assets/images/Landing_2.jpg";
 
 
+
 // logo
 
 import logo_png from '@/assets/images/logo_png.png';
@@ -50,6 +51,26 @@ import c_6 from '@/assets/images/c_6.png';
 import c_7 from '@/assets/images/c_7.png';
 import c_8 from '@/assets/images/c_8.png';
 
+
+
+
+
+
+
+//host
+
+
+import host_landing from '@/assets/images/host_landing.jpg';
+import host_icon from '@/assets/images/host.png';
+import casual_user from '@/assets/images/casual_user.png';
+
+
+
+
+
+
+
+
 export const Images = {
   logo_png,
   login_bg,
@@ -83,5 +104,8 @@ export const Images = {
   c_5,
   c_6,
   c_7,
-  c_8
+  c_8,
+  host_landing,
+  host_icon,
+  casual_user
 };

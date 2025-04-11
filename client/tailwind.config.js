@@ -21,6 +21,15 @@ module.exports = {
         lilita: ['Lilita One', 'cursive'],
         JosephicSans : ["Josefin Sans"]
       },
+      keyframes: {
+        zoomOut: {
+          '0%': { transform: 'scale(1.4)' },
+          '100%': { transform: 'scale(1)' },
+        },
+      },
+      animation: {
+        zoomOut: 'zoomOut 1s ease-out forwards',
+      },
     },
     container:{
       center:true,

@@ -2,6 +2,7 @@ import { Images } from "@/assets";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import ToastContainer from "@/reusable-components/Messages/ToastContainer";
+import LogoText from "@/components/LogoText";
 
 const Footer = () => {
   const [formData, setFormData] = useState({
@@ -47,16 +48,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto space-y-12">
         <div className="flex flex-col lg:flex-row justify-between gap-12">
           <div className="flex flex-col gap-12 w-full lg:w-3/4">
-            <div className="flex items-center gap-2 uppercase">
-              <img
-                src={Images.logo_png}
-                alt="Logo"
-                className="h-6 w-6 md:h-8 md:w-9"
-              />
-              <span className="text-main_color font-lilita text-2xl sm:text-3xl">
-                Festiva.
-              </span>
-            </div>
+            <LogoText />
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 px-4 py-6 sm:px-0">
               {[
                 {
@@ -83,7 +75,7 @@ const Footer = () => {
                   <ul className="space-y-2 text-sm">
                     {section.links.map((link, i) => (
                       <li key={i}>
-                        <a href="#" className="hover:text-white">
+                        <a href="#" className="hover:text-white font-JosephicSans">
                           {link}
                         </a>
                       </li>
@@ -136,15 +128,15 @@ const Footer = () => {
         </div>
         <div className="mt-12 border-t border-gray-700 pt-6 flex flex-col sm:flex-row items-center justify-between gap-8 text-sm">
           <p className="text-center sm:text-right">
-            <a href="#" className="hover:underline hover:text-white">
+            <a href="#" className="hover:underline hover:text-white font-JosephicSans">
               Terms & Conditions
             </a>{" "}
             ·{" "}
-            <a href="#" className="hover:underline hover:text-white">
+            <a href="#" className="hover:underline hover:text-white font-JosephicSans">
               Privacy
             </a>{" "}
             ·{" "}
-            <a href="#" className="hover:underline hover:text-white">
+            <a href="#" className="hover:underline hover:text-white font-JosephicSans">
               Contact
             </a>
           </p>
@@ -163,7 +155,7 @@ const Footer = () => {
               </div>
             ))}
           </div>
-          <p>© {new Date().getFullYear()} Festiva. All rights reserved.</p>
+          <p className="font-JosephicSans">© {new Date().getFullYear()} Festiva. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -194,7 +194,7 @@ const Login = () => {
                 >
                   {mutation.isPending ? "Logging in..." : "Login"}
                 </Button>
-                <div className="text-center text-sm text-gray-600">
+                <div className="text-center text-sm text-gray-600 font-JosephicSans">
                   Don't have an account?{" "}
                   <button
                     onClick={() => navigate("/signup")}
@@ -206,7 +206,7 @@ const Login = () => {
               </div>
               <div className="flex items-center justify-center my-6">
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
-                <span className="mx-4 whitespace-nowrap text-sm text-neutral-500">
+                <span className="mx-4 whitespace-nowrap text-sm text-neutral-500 font-JosephicSans">
                   or login with
                 </span>
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
