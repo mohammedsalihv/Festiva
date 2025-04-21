@@ -1,6 +1,8 @@
 import { Images } from "@/assets";
-import HostLandingHeader from "../Components/HostLandingHeader";
+import HostLandingHeader from "@/reusable-components/host/HostLandingHeader";
 import ExploreButton from "@/components/ExploreButton";
+import { Link } from "react-router-dom";
+
 
 const services = [
   {
@@ -38,7 +40,7 @@ const HostLanding = () => {
   return (
     <div className="relative">
       <HostLandingHeader />
-      <section className="w-full h-[50vh] sm:h-screen overflow-hidden flex items-center justify-center border border-red-500 mt-4 md:mt-5 md:mb-[0.5px]">
+      <section className="w-full h-[50vh] sm:h-screen overflow-hidden flex items-center justify-center border border-red-500 mt-4 md:mt-5">
         <img
           src={Images.host_landing}
           alt="host landing"
@@ -92,7 +94,9 @@ const HostLanding = () => {
           <h1 className="text-black font-bold text-md sm:text-2xl text-center">
             Ready to get started?
           </h1>
-          <ExploreButton className="w-40 m-4" content="Go" showIcon={false} />
+          <Link to={'/host/kind-of-service'}>
+           <ExploreButton className="w-40 m-4 bg-red-500" content="Go" showIcon={false} />
+          </Link>
         </div>
       </section>
     </div>

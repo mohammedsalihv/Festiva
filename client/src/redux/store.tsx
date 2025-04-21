@@ -1,10 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from './userSlice';
+import userReducer from './Slice/user/userSlice';
+import selectService from './Slice/host/selectService';
+import locationFeatures from './Slice/host/locationFeaturesSlice';
+import imageReducer from './Slice/host/imageSlice';
 
 
 const store = configureStore({
     reducer:{
         user:userReducer,
+        selectService:selectService,
+        locationFeatures:locationFeatures,
+        images: imageReducer
     },
 })
 

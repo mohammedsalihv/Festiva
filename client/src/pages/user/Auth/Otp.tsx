@@ -7,7 +7,7 @@ import { verifyOtp, registerUser, sendOtp } from "@/services/Auth/authService";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { setUserDetails } from "@/redux/userSlice";
+import { setUserDetails } from "@/redux/Slice/user/userSlice";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { AxiosError } from "axios";
 

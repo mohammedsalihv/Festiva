@@ -60,10 +60,16 @@ import c_8 from '@/assets/images/c_8.png';
 //host
 
 
-import host_landing from '@/assets/images/host_landing.jpg';
-import host_icon from '@/assets/images/host.png';
-import casual_user from '@/assets/images/casual_user.png';
-
+import host_landing from '@/assets/images/Host/host_landing.jpg';
+import host_icon from '@/assets/images/Host/host.png';
+import casual_user from '@/assets/images/Host/casual_user.png';
+import kind_detail_venues from '@/assets/images/Host/detailVenue_of_kind.png';
+import kind_wedding from '@/assets/images/Host/kind_of_wedding.png'
+import kind_multipurpose from '@/assets/images/Host/kind_of_multipurpose.png'
+import kind_office from '@/assets/images/Host/kind_of_officespace.png'
+import kind_event from '@/assets/images/Host/kind_of_events.png'
+import kind_location from '@/assets/images/Host/Kind_location.png';
+import image_uplaod from '@/assets/images/Host/picture.png';
 
 
 
@@ -107,5 +113,12 @@ export const Images = {
   c_8,
   host_landing,
   host_icon,
-  casual_user
+  casual_user,
+  kind_detail_venues,
+  kind_event,
+  kind_multipurpose,
+  kind_office,
+  kind_wedding,
+  kind_location,
+  image_uplaod
 };

@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { LoginUser , googleLogin } from "@/services/Auth/authService";
-import { setUserDetails } from "@/redux/userSlice";
+import { setUserDetails } from "@/redux/Slice/user/userSlice";
 import { AxiosError } from "axios";
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import store from "@/redux/store";
-import { setUserDetails, logoutUser } from "@/redux/userSlice";
+import { setUserDetails, logoutUser } from "@/redux/Slice/user/userSlice";
 
 const axiosInstance: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL || "http://localhost:4000/api", 

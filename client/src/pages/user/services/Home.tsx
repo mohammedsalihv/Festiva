@@ -1,14 +1,14 @@
 import { Images } from "@/assets";
-import Header from "@/reusable-components/Landing/Header";
+import Header from "@/reusable-components/user/Landing/Header";
 import ExploreButton from "@/components/ExploreButton";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { useEffect } from "react";
 import CategoryCard from "@/components/CategoryCard";
-import WhoWeAre from "@/reusable-components/Landing/WhoWeAre";
-import FAQ from "@/reusable-components/Landing/FAQ";
-import Footer from "@/reusable-components/Landing/Footer";
-import Supporters from "@/reusable-components/Landing/Supporters";
+import WhoWeAre from "@/reusable-components/user/Landing/WhoWeAre";
+import FAQ from "@/reusable-components/user/Landing/FAQ";
+import Footer from "@/reusable-components/user/Landing/Footer";
+import Supporters from "@/reusable-components/user/Landing/Supporters";
 
 const images = [Images.Landing_1, Images.Landing_2];
 const featureCards = [

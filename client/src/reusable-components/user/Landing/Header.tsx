@@ -3,7 +3,7 @@ import { CiSearch } from "react-icons/ci";
 import { MdMenu, MdClose } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
 import { useState } from "react";
-import ResponsiveNavLinks from "../../utils/Navbar/ResponsiveNavLinks";
+import ResponsiveNavLinks from "../../../utils/Navbar/ResponsiveNavLinks";
 import { useNavigate } from "react-router-dom";
 import LogoText from "@/components/LogoText";
 
