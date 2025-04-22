@@ -19,6 +19,7 @@ export class UserController{
                     id: user.id,
                     firstname: user.firstname,
                     lastname: user.lastname,
+                    phone:user.phone,
                     email: user.email,
                     role: user.role,
                   },

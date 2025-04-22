@@ -7,13 +7,11 @@ import { Checkbox } from "@/components/Checkbox";
 import { Button } from "@/components/Button";
 import { useState, ChangeEvent, FormEvent } from "react";
 import { sendOtp } from "@/services/Auth/authService";
-import {
-  validateSignupForm,
-  FormState,
-} from "@/utils/validations/signupValidation";
+import { validateSignupForm, FormState } from "@/utils/validations/signupValidation";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import CustomToastContainer from "../../../reusable-components/Messages/ToastContainer";
+import { Link } from "react-router-dom";
 
 interface ErrorState {
   firstname?: string;
@@ -59,6 +57,7 @@ const Signup = () => {
       setErrors((prev) => ({ ...prev, [id]: "" }));
     }
   };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -84,15 +83,16 @@ const Signup = () => {
 
     sendOtpMutation({ email: form.email });
   };
+
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-full h-screen grid grid-cols-1 md:grid-cols-[40%_60%] overflow-hidden">
+    <div className="flex flex-col min-h-screen">
+      <Card className="w-full h-full md:h-screen grid grid-cols-1 md:grid-cols-[40%_60%] overflow-hidden">
         <div className="flex items-center justify-center bg-main_color w-full h-full px-4 py-6 sm:px-8 sm:py-12">
           <div className="text-white text-center">
-            <p className="text-start text-3xl sm:text-4xl md:text-5xl font-extrabold">
+            <p className="text-start text-2xl sm:text-3xl md:text-3xl lg:text-5xl font-extrabold">
               Explore limitless
             </p>
-            <p className="text-start text-3xl sm:text-4xl md:text-5xl font-extrabold">
+            <p className="text-start text-2xl sm:text-3xl md:text-3xl font-extrabold">
               service possibilities.
             </p>
             <p className="text-start font-extrabold bg-gradient-to-r from-yellow-600 via-green-100 to-cyan-300 bg-clip-text text-transparent text-sm sm:text-1xl md:text-2xl">
@@ -100,10 +100,10 @@ const Signup = () => {
             </p>
           </div>
         </div>
-        <Card className="bg-white flex items-center justify-center w-full max-w-4xl">
-          <div className="w-full max-w-4xl bg-white p-6 sm:p-8">
-            <form onSubmit={handleSubmit}>
-              <CardContent className="space-y-6">
+        <Card className="bg-white flex flex-col justify-end md:justify-center w-full max-w-4xl md:max-w-none h-full md:items-center">
+          <div className="w-full h-full bg-white p-4 sm:p-8 flex flex-col">
+            <form onSubmit={handleSubmit} className="flex flex-col h-full">
+              <CardContent className="space-y-6 flex-grow">
                 <div className="text-center space-y-2 p-3">
                   <h1 className="text-3xl font-bold text-charcoal">Signup</h1>
                   <p className="text-neutral-400 font-JosephicSans">
@@ -221,10 +221,9 @@ const Signup = () => {
                     )}
                   </div>
                 </div>
-
-                <div className="flex flex-col sm:flex-row items-start justify-between w-full gap-4">
+                <div className="flex flex-col sm:flex-row items-start justify-between w-full gap-4 md:mt-auto">
                   <div className="flex flex-col space-y-2">
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-1 max-sm:flex-nowrap max-sm:text-xs">
                       <Checkbox
                         id="terms"
                         checked={isChecked}
@@ -237,25 +236,28 @@ const Signup = () => {
                             }));
                           }
                         }}
-                        className={`h-4 w-4 ${
-                          errors.terms ? "border-red-500" : ""
-                        }`}
+                        className={`h-4 w-4 ${errors.terms ? "border-red-500" : ""}`}
                       />
                       <label
                         htmlFor="terms"
-                        className="font-JosephicSans text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        className="font-JosephicSans text-sm max-sm:text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
                         I agree to the{" "}
-                        <span className="text-main_color hover:underline font-JosephicSans">
+                        <span className="text-main_color hover:underline font-JosephicSans md:text-sm max-sm:text-xs">
                           terms and conditions
+                        </span>
+                      </label>
+                      <label className="font-JosephicSans text-sm max-sm:text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 max-sm:pl-2 sm:pl-4">
+                        Already have an account?{" "}
+                        <span className="text-main_color hover:underline font-JosephicSans">
+                          <Link to={"/login"}>Login</Link>
                         </span>
                       </label>
                     </div>
                     {errors.terms && (
-                      <p className="text-sm text-red-500">{errors.terms}</p>
+                      <p className="text-sm max-sm:text-xs text-red-500">{errors.terms}</p>
                     )}
                   </div>
-
                   <div className="w-full sm:w-auto bg-main_color rounded-md h-12">
                     <Button
                       type="submit"

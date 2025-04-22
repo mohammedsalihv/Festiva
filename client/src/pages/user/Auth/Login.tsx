@@ -51,8 +51,11 @@ const Login = () => {
       };
 
       if (data.success) {
-        toast.success(" Login Successful!");
+        setTimeout(()=>{
+          toast.success(" Login Successful!");
+        },3000)
         dispatch(setUserDetails(userData));
+        console.log(userData)
         navigate("/home");
       } else {
         toast.error("Login failed. Please check your credentials.");
@@ -216,7 +219,7 @@ const Login = () => {
     onSuccess={(credentialResponse) => handleGoogleLogin(credentialResponse)}
     onError={() => toast.error("Google login failed. Please try again.")}
   />
-                {/* <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
+                <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
                   <img className="w-6 h-6" src={Images.github} alt="GitHub" />
                 </button>
                 <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
@@ -226,7 +229,7 @@ const Login = () => {
                     alt="LinkedIn"
                   />
                 </button>
-                */}
+               
               </div>
             </CardContent>
           </div>

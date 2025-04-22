@@ -35,9 +35,23 @@ export class LoginController {
         });
       }
 
+      if (error.message === "User not found") {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+
+      if (error.name === "ValidationError") {
+        return res.status(400).json({
+          success: false,
+          message: error.message,
+        });
+      }
+
       res.status(500).json({
         success: false,
-        message: "Internal server error",
+        message: error.message || "Internal server error",
       });
     }
   }
