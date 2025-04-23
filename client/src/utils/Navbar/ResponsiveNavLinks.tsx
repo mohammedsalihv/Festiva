@@ -5,9 +5,18 @@ import { MdClose } from "react-icons/md";
 type ResponsiveNavLinksProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isAuthenticated: boolean;
+  onLogout: () => void;
+  navigate: (path: string) => void;
 };
 
-const ResponsiveNavLinks = ({ open, setOpen }: ResponsiveNavLinksProps) => {
+const ResponsiveNavLinks = ({
+  open,
+  setOpen,
+  isAuthenticated,
+  onLogout,
+  navigate,
+}: ResponsiveNavLinksProps) => {
   return (
     <AnimatePresence mode="wait">
       {open && (
@@ -21,13 +30,13 @@ const ResponsiveNavLinks = ({ open, setOpen }: ResponsiveNavLinksProps) => {
             className="fixed top-0 left-0 w-full h-full backdrop-blur-sm bg-black/30 z-10"
           />
 
-          {/* Close Icon (on top of blur) */}
+          {/* Close Icon */}
           <div className="fixed top-[38px] right-4 z-30 md:hidden">
-  <MdClose
-    onClick={() => setOpen(false)}
-    className="text-white text-4xl cursor-pointer"
-  />
-</div>
+            <MdClose
+              onClick={() => setOpen(false)}
+              className="text-white text-4xl cursor-pointer"
+            />
+          </div>
 
           {/* Nav Links */}
           <motion.div
@@ -50,6 +59,34 @@ const ResponsiveNavLinks = ({ open, setOpen }: ResponsiveNavLinksProps) => {
                     </a>
                   </li>
                 ))}
+
+                {/* Profile Dropdown Options (Mobile Only) */}
+                {isAuthenticated && (
+                  <>
+                    <li>
+                      <button
+                        className="hover:text-main_color transition-colors duration-300"
+                        onClick={() => {
+                          navigate("/profile");
+                          setOpen(false);
+                        }}
+                      >
+                        Profile
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="hover:text-main_color transition-colors duration-300"
+                        onClick={() => {
+                          onLogout();
+                          setOpen(false);
+                        }}
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
           </motion.div>

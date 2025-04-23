@@ -4,6 +4,9 @@ import lock from "../assets/images/lock.png";
 import mail from "../assets/images/mail.png";
 import Landing_1 from "../assets/images/Landing_1.webp";
 import Landing_2 from "../assets/images/Landing_2.jpg";
+import default_profile from '@/assets/images/default_profile.png';
+import landing_lady_sing from '@/assets/images/Landing_lady_sing.jpg';
+import landing_venue from '@/assets/images/landing_venue.jpg';
 
 
 
@@ -88,6 +91,9 @@ export const Images = {
   mail,
   Landing_1,
   Landing_2,
+  landing_lady_sing,
+  landing_venue,
+  default_profile,
   venues,
   camera_video,
   catering,

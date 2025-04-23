@@ -18,8 +18,12 @@ export interface FormState {
     if (!form.lastname.trim()) errors.lastname = "Lastname is required";
     if (!form.email.match(/^\S+@\S+\.\S+$/)) errors.email = "Invalid Email";
     if (!form.phone.match(/^\+?\d{10,15}$/)) errors.phone = "Invalid Phone Number";
+    if (!form.password.trim()) errors.password = "Password is required";
+    if (!form.confirmPassword.trim()) errors.confirmPassword = "Confirm Password is required";
     if (form.password.length < 6)
       errors.password = "Password must be at least 6 characters";
+    if (form.confirmPassword.length < 6)
+      errors.password = "Confirm Password must be at least 6 characters";
     if (form.password !== form.confirmPassword)
       errors.confirmPassword = "Passwords do not match";
   

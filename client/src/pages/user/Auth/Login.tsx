@@ -56,7 +56,7 @@ const Login = () => {
         },3000)
         dispatch(setUserDetails(userData));
         console.log(userData)
-        navigate("/home");
+        navigate("/user/home");
       } else {
         toast.error("Login failed. Please check your credentials.");
       }

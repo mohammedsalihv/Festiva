@@ -2,26 +2,26 @@ export const NavbarMenu = [
     {
         id:1,
         title:'Home',
-        link:'/home'
+        link:'/user/home'
     },
     {
         id:2,
         title:'Services',
-        link:'/Services'
+        link:'/user/Services'
     },
     {
         id:3,
         title:'us',
-        link:'/who-we-are'
+        link:'/user/who-we-are'
     },
     {
         id:4,
         title:'connect',
-        link:'/contact'
+        link:'/user/contact'
     },
     {
         id:5,
         title:'Become Host',
-        link:'/host/'
+        link:'/host/landing'
     }
 ]

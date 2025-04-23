@@ -2,14 +2,47 @@ import { NavbarMenu } from "@/utils/Navbar/navLinks";
 import { CiSearch } from "react-icons/ci";
 import { MdMenu, MdClose } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ResponsiveNavLinks from "../../../utils/Navbar/ResponsiveNavLinks";
 import { useNavigate } from "react-router-dom";
 import LogoText from "@/components/LogoText";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { logoutUser } from "@/redux/Slice/user/userSlice";
+import { Images } from "@/assets";
+import ConfirmDialog from "./ConfirmDialog";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const [dropDown, setDropDown] = useState(false);
+  const dropDownRef = useRef<HTMLDivElement>(null);
+  const [confirmLogout, setConfirmLogout] = useState(false);
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const isAuthenticated = !!userInfo?.accessToken;
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropDownRef.current &&
+        !dropDownRef.current.contains(event.target as Node)
+      ) {
+        setDropDown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate("/login");
+  };
   return (
     <>
       <nav className="absolute top-0 left-0 w-full z-30 bg-transparent mt-4">
@@ -36,12 +69,42 @@ const Header = () => {
             <button className="text-white text-xl sm:text-2xl hover:bg-main_color hover:text-white rounded-full p-2 duration-300">
               <CiLocationOn />
             </button>
-            <button
-              onClick={() => navigate("/login")}
-              className="hidden md:block hover:bg-main_color hover:border-main_color text-white border border-neutral-300 rounded-md px-6 py-1.5 duration-300 font-JosephicSans"
-            >
-              Login
-            </button>
+            {isAuthenticated ? (
+              <div className="relative hidden md:block" ref={dropDownRef}>
+                <img
+                  onClick={(e: React.MouseEvent<HTMLImageElement>) => {
+                    e.preventDefault();
+                    setDropDown((prev) => !prev);
+                  }}
+                  src={Images.default_profile}
+                  alt=""
+                  className="w-10 h-10 rounded-full cursor-pointer border border-white"
+                />
+                {dropDown && (
+                  <div className="absolute right-0 mt-2 w-40 bg-white z-50 shadow-lg rounded-md">
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-black"
+                      onClick={() => navigate("/user/profile")}
+                    >
+                      Profile
+                    </button>
+                    <button
+                      onClick={() => setConfirmLogout(true)}
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-black"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                onClick={() => navigate("/login")}
+                className="hidden md:block hover:bg-main_color hover:border-main_color text-white border border-neutral-300 rounded-md px-6 py-1.5 duration-300 font-JosephicSans"
+              >
+                Login
+              </button>
+            )}
           </div>
           <div className="md:hidden text-white" onClick={() => setOpen(!open)}>
             {open ? (
@@ -52,7 +115,25 @@ const Header = () => {
           </div>
         </div>
       </nav>
-      <ResponsiveNavLinks open={open} setOpen={setOpen} />
+      <ResponsiveNavLinks
+        open={open}
+        setOpen={setOpen}
+        isAuthenticated={isAuthenticated}
+        onLogout={() => setConfirmLogout(true)}
+        navigate={navigate}
+      />
+      <ConfirmDialog
+        isOpen={confirmLogout}
+        title="Confirm Logout"
+        description="Are you sure you want to logout?"
+        confirmText="Yes, Logout"
+        cancelText="Cancel"
+        onConfirm={() => {
+          handleLogout();
+          setConfirmLogout(false);
+        }}
+        onCancel={() => setConfirmLogout(false)}
+      />
     </>
   );
 };
