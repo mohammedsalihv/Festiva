@@ -4,7 +4,7 @@ import { useState } from "react";
 import {
   locationFormState,
   validateLocationForm,
-} from "@/utils/validations/LocationFormValidation";
+} from "@/utils/validations/host/service/LocationFormValidation";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import CustomToastContainer from "../../../reusable-components/Messages/ToastContainer";

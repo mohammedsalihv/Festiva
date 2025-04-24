@@ -18,19 +18,20 @@ const initialState: UserState = {
 
 
 const userSlice = createSlice({
-    name:'user',
-    initialState,
-    reducers:{
-        setUserDetails:(state , action : PayloadAction<UserState["userInfo"]> )=>{
-            state.userInfo = action.payload
-            localStorage.setItem("userInfo" , JSON.stringify(action.payload))
-        },
-        logoutUser:(state)=>{
-          state.userInfo = null;
-          localStorage.removeItem("userInfo")
-        }
-    }
-})
+  name: "user",
+  initialState,
+  reducers: {
+    setUserDetails: (state, action: PayloadAction<UserState["userInfo"]>) => {
+      state.userInfo = action.payload;
+      localStorage.setItem("userInfo", JSON.stringify(action.payload)); // Save the user info in localStorage
+    },
+    logoutUser: (state) => {
+      state.userInfo = null;
+      localStorage.removeItem("userInfo");
+    },
+  },
+});
+
 
 export const { setUserDetails , logoutUser} = userSlice.actions;
 export default userSlice.reducer;

@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import errorMiddleware from "./middlewares/errorMiddleware";
 import userRoutes from "./api/routes/userRoutes";
+import hostRoutes from "./api/routes/hostRoutes";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use("/api/auth", userRoutes);
+app.use("api/host/auth" , hostRoutes)
 app.use(errorMiddleware);
 
 export default app;

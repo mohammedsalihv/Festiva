@@ -7,8 +7,8 @@ export class UserController{
 
    async register(req:Request , res:Response) : Promise<void>{
         try {
-            const {firstname , lastname , email , password } = req.body
-            const userData: RegisterUserDTO = {firstname , lastname , email , password}
+            const {firstname , lastname , email , phone , password } = req.body
+            const userData: RegisterUserDTO = {firstname , lastname , email , phone , password}
 
             const {user , accessToken , refreshToken} = 
             await this.registerUser.execute(userData)

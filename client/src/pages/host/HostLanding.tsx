@@ -2,6 +2,7 @@ import { Images } from "@/assets";
 import HostLandingHeader from "@/reusable-components/host/HostLandingHeader";
 import ExploreButton from "@/components/ExploreButton";
 import { Link } from "react-router-dom";
+import HostRegister from "./Auth/HostRegister";
 
 
 const services = [
@@ -98,6 +99,9 @@ const HostLanding = () => {
            <ExploreButton className="w-40 m-4 bg-red-500" content="Go" showIcon={false} />
           </Link>
         </div>
+      </section>
+      <section>
+        <HostRegister/>
       </section>
     </div>
   );

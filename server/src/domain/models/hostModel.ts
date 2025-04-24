@@ -6,6 +6,7 @@ const HostSchema = new Schema<Ihost>({
     phone:{type:String , required:true},
     password:{type:String , required:true},
     email:{type:String , required:true},
+    role:{type:String , enum: ["host", "user"], default: "host"},
     profile_pic:{type:String , required:true},
     location:{type:String , required:true},
     isActive: { type: Boolean, default: true },

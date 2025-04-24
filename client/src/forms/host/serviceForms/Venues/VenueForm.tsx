@@ -8,7 +8,7 @@ import CustomToastContainer from "@/reusable-components/Messages/ToastContainer"
 import {
   validateVenueDetailsForm,
   venueDetailsFormState,
-} from "@/utils/validations/VenueDetailsValidation";
+} from "@/utils/validations/host/service/VenueDetailsValidation";
 
 interface VenueDetailsErrorState {
   name?: string;

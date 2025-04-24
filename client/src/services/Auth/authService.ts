@@ -20,6 +20,21 @@ export interface GoogleLoginData {
   sub: string;
 }
 
+
+export interface HostRegisterData {
+  name: string;
+  email: string;
+  password: string;
+  phone:string;
+  location: string;
+}
+
+export const registerHost = async (data: HostRegisterData) => {
+  const response = await axiosInstance.post("/host/auth/register", data);
+  return response.data;
+};
+
+
 export const registerUser = async (data: SignupData) => {
   const response = await axiosInstance.post("/auth/signup", data);
   return response.data;

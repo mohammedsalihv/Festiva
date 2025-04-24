@@ -6,6 +6,7 @@ import HostRoutes from "./routes/HostRoutes";
 import RoleBasedRoute from "./routes/Protect/RoleBasedRoute";
 import PublicRoutes from "./routes/PublicRoutes";
 import { Roles } from "./utils/constants/roles";
+import HostLanding from "@/pages/host/HostLanding";
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,14 @@ const App: React.FC = () => {
         {/* Public Routes (outside protected RoleBasedRoute) */}
         <Route path="/*" element={<PublicRoutes  />} />
        
+        <Route
+          path="/host/landing"
+          element={
+            <RoleBasedRoute allowedRoles={[Roles.USER, Roles.HOST]}>
+              <HostLanding />
+            </RoleBasedRoute>
+          }
+        />
 
         {/* Protected User Routes */}
         <Route

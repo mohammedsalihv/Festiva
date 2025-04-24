@@ -4,6 +4,7 @@ export interface Ihost{
     phone?:string;
     password?:string;
     location?:string;
+    role?:string;
     email?:string;
     profile_pic:string;
     isActive?: boolean;

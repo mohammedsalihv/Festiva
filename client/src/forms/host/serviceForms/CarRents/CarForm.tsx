@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import {
   carRentFormState,
   validateCarRentForm,
-} from "@/utils/validations/CarRentFormValidation";
+} from "@/utils/validations/host/service/CarRentFormValidation";
 import { Clock } from "lucide-react";
 
 interface ErrorState {

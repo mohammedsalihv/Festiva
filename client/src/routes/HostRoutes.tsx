@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import HostLanding from "@/pages/host/HostLanding";
 import KindOfService from "@/pages/host/KindOfService";
 import LocationForm from "@/forms/host/submitForms/LocationForm";
 import VenueForm from "@/forms/host/serviceForms/Venues/VenueForm";
@@ -12,10 +11,11 @@ import CarFeatures from "@/forms/host/serviceForms/CarRents/CarFeatures";
 import NotFound from "@/components/NotFound";
 import PrivateRoute from "./Protect/PrivateRoute";
 
+
+
 const HostRoutes: React.FC = () => {
   return (
     <Routes>
-      <Route path="/host/landing" element={<HostLanding />} />
       <Route
         path="/host/kind-of-service"
         element={
