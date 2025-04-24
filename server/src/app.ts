@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import cookieParser from "cookie-parser";
+import bodyParser from 'body-parser';
 import cors from "cors";
 import dotenv from "dotenv";
 import errorMiddleware from "./middlewares/errorMiddleware";
@@ -24,9 +25,11 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/auth", userRoutes);
-app.use("api/host/auth" , hostRoutes)
+app.use("/api/host/auth" , hostRoutes)
 app.use(errorMiddleware);
 
 export default app;

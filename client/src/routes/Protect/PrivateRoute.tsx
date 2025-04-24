@@ -1,22 +1,37 @@
 import React, { ReactElement } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { RootState } from "@/redux/store"; 
+import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 
 interface PrivateRouteProps {
-    children: ReactElement;
-  }
-
-const PrivateRoute : React.FC<PrivateRouteProps> = ({children}) => {
-    
-    const userInfo =  useSelector((state:RootState) => state.user.userInfo)
-    const location = useLocation();
-    const isAuthenticated = !!userInfo?.accessToken
-
-    if(!isAuthenticated){
-        return <Navigate to="/login" state={{ from: location }} replace />;
-    }
-  return children
+  children: ReactElement;
+  allowedRoles?: string[];
 }
 
-export default PrivateRoute
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, allowedRoles }) => {
+  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const hostInfo = useSelector((state: RootState) => state.host.hostInfo);
+  const location = useLocation();
+
+  const accessToken = userInfo?.accessToken || hostInfo?.accessToken;
+  const role = userInfo?.role || hostInfo?.role;
+  const isAuthenticated = !!accessToken;
+
+  console.log("userInfo:", userInfo); // Log userInfo
+  console.log("hostInfo:", hostInfo); // Log hostInfo
+  console.log("role:", role); // Log role
+
+  if (!isAuthenticated) {
+    console.log("Not authenticated, redirecting to login...");
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(role!)) {
+    console.log(`User does not have access to this route. Redirecting to /`);
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
+
+export default PrivateRoute;

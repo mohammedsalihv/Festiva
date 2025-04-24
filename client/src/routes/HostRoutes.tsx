@@ -1,11 +1,13 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import KindOfService from "@/pages/host/KindOfService";
+
+import HostDashboard from "@/pages/host/landing/HostDashboard";
+import KindOfService from "@/pages/host/List-assets/KindOfService";
 import LocationForm from "@/forms/host/submitForms/LocationForm";
 import VenueForm from "@/forms/host/serviceForms/Venues/VenueForm";
-import LocationFeaturesTab from "@/pages/host/LocationFeatures";
-import ImageUpload from "@/pages/host/ImageUpload";
+import LocationFeaturesTab from "@/pages/host/List-assets/LocationFeatures";
+import ImageUpload from "@/pages/host/List-assets/ImageUpload";
 import CarForm from "@/forms/host/serviceForms/CarRents/CarForm";
 import CarFeatures from "@/forms/host/serviceForms/CarRents/CarFeatures";
 import NotFound from "@/components/NotFound";
@@ -16,6 +18,14 @@ import PrivateRoute from "./Protect/PrivateRoute";
 const HostRoutes: React.FC = () => {
   return (
     <Routes>
+      <Route
+        path="/host/dashboard"
+        element={
+          <PrivateRoute>
+            <HostDashboard />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/host/kind-of-service"
         element={

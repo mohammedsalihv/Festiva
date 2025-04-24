@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { registerHost } from "@/services/Auth/authService";
+import { registerHost } from "@/services/Auth/host/hostAuthService";
 import {
   validateHostRegisterForm,
   FormState,
 } from "@/utils/validations/host/auth/hostRegisterValidation";
-
+import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
+import { Link } from "react-router-dom";
 
 interface ErrorState {
   name?: string;
@@ -42,12 +45,24 @@ const HostRegister = () => {
       validateHostRegisterForm(formData);
     if (!isValid) {
       setErrors(validationErrors);
+      toast.error("Please correct the errors in the form.");
+
+      if(submitError){
+        toast.error(submitError)
+      }
+
+      setTimeout(() => {
+        setErrors({});
+      }, 5000);
       return;
     }
 
     try {
       await registerHost(formData);
       setSuccess("Host registration successful!");
+      setTimeout(()=>{
+        toast.success("Host registration successful!")
+      },3000)
       setFormData({
         name: "",
         email: "",
@@ -57,15 +72,37 @@ const HostRegister = () => {
       });
       setErrors({});
       setSubmitError("");
-      navigate("/host/landing");
-    } catch (err: any) {
-      setSubmitError(err.response?.data?.message || "Something went wrong.");
+      navigate("/host/login");
+    } catch (err: unknown) {
+      let errorMessage = "Something went wrong.";
+    
+      if (err instanceof AxiosError) {
+        const backendData = err.response?.data;
+    
+        if (typeof backendData?.message === "string") {
+          toast.error(backendData.message)
+          errorMessage = backendData.message;
+        }
+    
+        // If it's an object with multiple field errors
+        else if (typeof backendData === "object" && backendData !== null) {
+          Object.entries(backendData).forEach(([field, message]) => {
+            if (typeof message === "string") {
+              toast.error(`${field}: ${message}`);
+            }
+          });
+        }
+      } else {
+        toast.error(errorMessage);
+      }
+    
+      setSubmitError(errorMessage);
     }
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-gradient-to-b from-black to-gray-900 text-white font-sans">
-      <div className="w-full lg:w-1/2 p-7 lg:p-16 flex flex-col justify-center space-y-6 bg-black text-center lg:text-left">
+    <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black via-gray-900 to-black text-white font-sans flex flex-col lg:flex-row">
+      <div className="w-full lg:w-1/2 p-7 lg:p-16 flex flex-col justify-center space-y-6 text-center lg:text-left bg-black/30">
         <h1 className="text-3xl md:text-4xl font-bold">Superlist</h1>
         <h2 className="text-xl md:text-2xl">Start your 30-day free trial</h2>
         <p className="text-sm text-gray-400">No credit card required</p>
@@ -76,8 +113,9 @@ const HostRegister = () => {
         </div>
       </div>
 
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-10">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6">
         <div className="w-full max-w-md bg-zinc-900 rounded-2xl shadow-xl p-6 sm:p-8">
+          <h1 className="p-3 font-bold">Enter Your Info!</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="text"
@@ -87,7 +125,9 @@ const HostRegister = () => {
               placeholder="Name"
               className="w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none"
             />
-            {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
+            {errors.name && (
+              <p className="text-red-500 text-xs">{errors.name}</p>
+            )}
 
             <input
               type="text"
@@ -97,7 +137,9 @@ const HostRegister = () => {
               placeholder="Email"
               className="w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none"
             />
-            {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-xs">{errors.email}</p>
+            )}
 
             <input
               type="text"
@@ -107,7 +149,9 @@ const HostRegister = () => {
               placeholder="Phone"
               className="w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none"
             />
-            {errors.phone && <p className="text-red-500 text-xs">{errors.phone}</p>}
+            {errors.phone && (
+              <p className="text-red-500 text-xs">{errors.phone}</p>
+            )}
 
             <input
               type="password"
@@ -117,7 +161,9 @@ const HostRegister = () => {
               placeholder="Password"
               className="w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none"
             />
-            {errors.password && <p className="text-red-500 text-xs">{errors.password}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-xs">{errors.password}</p>
+            )}
 
             <input
               type="text"
@@ -127,9 +173,11 @@ const HostRegister = () => {
               placeholder="Location"
               className="w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none"
             />
-            {errors.location && <p className="text-red-500 text-xs">{errors.location}</p>}
+            {errors.location && (
+              <p className="text-red-500 text-xs">{errors.location}</p>
+            )}
 
-            {submitError && <p className="text-red-500 text-sm">{submitError}</p>}
+           
             {success && <p className="text-green-500 text-sm">{success}</p>}
 
             <button
@@ -146,11 +194,14 @@ const HostRegister = () => {
             <p className="text-sm text-center mt-2">
               Already registered?{" "}
               <span className="text-red-500 underline cursor-pointer">
+                <Link to={'/host/login'}>
                 Login
+                </Link>
               </span>
             </p>
           </form>
         </div>
+        <CustomToastContainer />
       </div>
     </div>
   );

@@ -16,6 +16,8 @@ export class RegsiterHost {
       name: string;
       email: string;
       phone: string;
+      location:string;
+      profile_pic:string;
       role: string;
     };
   }> {
@@ -28,8 +30,9 @@ export class RegsiterHost {
       email: hostData.email,
       password: hashedPassword,
       phone: hostData.phone || "",
-      profile_pic: "",
       role: "host",
+      location:hostData.location,
+      profile_pic:hostData.profile_pic,
       isActive: true,
       timestamp: new Date(),
       is_blocked: false,
@@ -53,6 +56,8 @@ export class RegsiterHost {
         name: createdHost.name!,
         email: createdHost.email!,
         phone: createdHost.phone!,
+        location:createdHost.location!,
+        profile_pic:createdHost.profile_pic || "",
         role: createdHost.role || "user" || "host",
       },
     };

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
-import { LoginUser , googleLogin } from "@/services/Auth/authService";
+import { LoginUser , googleLogin } from "@/services/Auth/user/authService";
 import { setUserDetails } from "@/redux/Slice/user/userSlice";
 import { AxiosError } from "axios";
 import { GoogleLogin, CredentialResponse } from "@react-oauth/google";

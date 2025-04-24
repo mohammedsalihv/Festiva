@@ -13,15 +13,15 @@ export class HostLoginController {
       );
       res.status(200).json({
         success: true,
-        message: "User logged in successfully",
-        user: {
+        message: "Host logged in successfully",
+        host: {
           id: host.id,
           name: host.name,
           email: host.email,
           role: host.role,
+          accessToken,
+          refreshToken,
         },
-        accessToken,
-        refreshToken,
       });
     } catch (error: any) {
       console.error("Login Error:", error);
@@ -32,7 +32,7 @@ export class HostLoginController {
         });
       }
 
-      if (error.message === "User not found") {
+      if (error.message === "Host not found") {
         return res.status(404).json({
           success: false,
           message: "User not found",

@@ -6,7 +6,7 @@ export interface Ihost{
     location?:string;
     role?:string;
     email?:string;
-    profile_pic:string;
+    profile_pic?:string;
     isActive?: boolean;
     timestamp?: Date;
     is_blocked?: boolean;

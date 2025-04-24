@@ -3,24 +3,42 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import UserRoutes from "./routes/UserRoutes";
 import HostRoutes from "./routes/HostRoutes";
-import RoleBasedRoute from "./routes/Protect/RoleBasedRoute";
 import PublicRoutes from "./routes/PublicRoutes";
-import { Roles } from "./utils/constants/roles";
-import HostLanding from "@/pages/host/HostLanding";
+
+import HostLanding from "@/pages/host/landing/HostLanding";
+import HostRegister from "./pages/host/Auth/HostRegister";
+import HostLogin from "./pages/host/Auth/HostLogin";
+import PrivateRoute from "./routes/Protect/PrivateRoute";
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
         {/* Public Routes (outside protected RoleBasedRoute) */}
-        <Route path="/*" element={<PublicRoutes  />} />
-       
+        <Route path="/*" element={<PublicRoutes />} />
+
         <Route
           path="/host/landing"
           element={
-            <RoleBasedRoute allowedRoles={[Roles.USER, Roles.HOST]}>
+            <PrivateRoute>
               <HostLanding />
-            </RoleBasedRoute>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/host/register"
+          element={
+            <PrivateRoute>
+              <HostRegister />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/host/login"
+          element={
+            <PrivateRoute>
+              <HostLogin />
+            </PrivateRoute>
           }
         />
 
@@ -28,9 +46,9 @@ const App: React.FC = () => {
         <Route
           path="/user/*"
           element={
-            <RoleBasedRoute allowedRoles={[Roles.USER]}>
+            <PrivateRoute allowedRoles={["user"]}>
               <UserRoutes />
-            </RoleBasedRoute>
+            </PrivateRoute>
           }
         />
 
@@ -38,9 +56,9 @@ const App: React.FC = () => {
         <Route
           path="/host/*"
           element={
-            <RoleBasedRoute allowedRoles={[Roles.HOST]}>
+            <PrivateRoute allowedRoles={["host"]}>
               <HostRoutes />
-            </RoleBasedRoute>
+            </PrivateRoute>
           }
         />
       </Routes>

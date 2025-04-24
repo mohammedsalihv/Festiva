@@ -6,7 +6,7 @@ import { Input } from "@/components/Input";
 import { Checkbox } from "@/components/Checkbox";
 import { Button } from "@/components/Button";
 import { useState, ChangeEvent, FormEvent } from "react";
-import { sendOtp } from "@/services/Auth/authService";
+import { sendOtp } from "@/services/Auth/user/authService";
 import { validateSignupForm, FormState } from "@/utils/validations/signupValidation";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";

@@ -12,17 +12,15 @@ const RoleBasedRoute: React.FC<RoleBasedRouteProps> = ({
   allowedRoles,
 }) => {
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
-  
-  console.log("User Info:", userInfo);  // Debugging: Check userInfo
-  console.log("Allowed Roles:", allowedRoles); // Debugging: Check allowedRoles
+  const hostInfo = useSelector((state: RootState) => state.host.hostInfo);
 
-  if (!userInfo) {
-    return <Navigate to={"/login"} />;
+  const role = userInfo?.role || hostInfo?.role;
+
+  if (!role) {
+    return <Navigate to="/login" />;
   }
 
-  if (!allowedRoles.includes(userInfo.role)) {
-    console.log(userInfo)
-    console.log("Redirecting due to role mismatch");  // Debugging: Check if the role mismatch occurs
+  if (!allowedRoles.includes(role)) {
     return <Navigate to="/" />;
   }
 
