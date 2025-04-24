@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { loginHost } from "@/services/Auth/host/hostAuthService"; // Adjusted for login service
+import { loginHost } from "@/services/Auth/host/hostAuthService";
 import {
   validateHostLoginForm,
   FormState,
@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux"; 
+import { setHostDetails } from "@/redux/Slice/host/hostSlice"; 
 
 interface ErrorState {
   email?: string;
@@ -23,6 +25,7 @@ const HostLogin = () => {
 
   const [errors, setErrors] = useState<ErrorState>({});
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev: FormState) => ({
@@ -46,10 +49,21 @@ const HostLogin = () => {
     }
 
     try {
-      await loginHost(formData);
-      setTimeout(() => {
-        toast.success("Login successful!");
-      }, 3000);
+      const response = await loginHost(formData);
+      console.log("Login response:", response); 
+
+      dispatch(
+        setHostDetails({
+          refreshToken: response.refreshToken,
+          accessToken: response.accessToken,
+          role: response.role,
+          name: response.name,
+          email: response.email,
+          id: response.id || response.hostId 
+        })
+      );
+
+      toast.success("Login successful!");
       setFormData({
         email: "",
         password: "",
@@ -65,9 +79,7 @@ const HostLogin = () => {
         if (typeof backendData?.message === "string") {
           toast.error(backendData.message);
           errorMessage = backendData.message;
-        }
-
-        else if (typeof backendData === "object" && backendData !== null) {
+        } else if (typeof backendData === "object" && backendData !== null) {
           Object.entries(backendData).forEach(([field, message]) => {
             if (typeof message === "string") {
               toast.error(`${field}: ${message}`);
@@ -77,6 +89,7 @@ const HostLogin = () => {
       } else {
         toast.error(errorMessage);
       }
+      console.error("Login error:", err); 
     }
   };
 

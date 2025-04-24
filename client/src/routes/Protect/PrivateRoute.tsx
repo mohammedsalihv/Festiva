@@ -17,9 +17,15 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, allowedRoles }) =
   const role = userInfo?.role || hostInfo?.role;
   const isAuthenticated = !!accessToken;
 
-  console.log("userInfo:", userInfo); // Log userInfo
-  console.log("hostInfo:", hostInfo); // Log hostInfo
-  console.log("role:", role); // Log role
+  console.log("PrivateRoute Debug:", {
+    userInfo,
+    hostInfo,
+    accessToken,
+    role,
+    isAuthenticated,
+    allowedRoles,
+    currentPath: location.pathname,
+  });
 
   if (!isAuthenticated) {
     console.log("Not authenticated, redirecting to login...");
@@ -27,7 +33,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, allowedRoles }) =
   }
 
   if (allowedRoles && !allowedRoles.includes(role!)) {
-    console.log(`User does not have access to this route. Redirecting to /`);
+    console.log(`User does not have access to this route. Role: ${role}, Required: ${allowedRoles}`);
     return <Navigate to="/" replace />;
   }
 
