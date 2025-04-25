@@ -1,10 +1,10 @@
-import React, { ReactElement } from "react";
+import React, { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 
 interface PrivateRouteProps {
-  children: ReactElement;
+  children: ReactNode;
   allowedRoles?: string[];
 }
 
@@ -17,16 +17,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, allowedRoles }) =
   const role = userInfo?.role || hostInfo?.role;
   const isAuthenticated = !!accessToken;
 
-  console.log("PrivateRoute Debug:", {
-    userInfo,
-    hostInfo,
-    accessToken,
-    role,
-    isAuthenticated,
-    allowedRoles,
-    currentPath: location.pathname,
-  });
-
   if (!isAuthenticated) {
     console.log("Not authenticated, redirecting to login...");
     return <Navigate to="/login" state={{ from: location }} replace />;
@@ -37,7 +27,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, allowedRoles }) =
     return <Navigate to="/" replace />;
   }
 
-  return children;
+  return <>{children}</>;
 };
 
 export default PrivateRoute;

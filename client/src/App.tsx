@@ -1,64 +1,51 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import UserRoutes from "./routes/UserRoutes";
 import HostRoutes from "./routes/HostRoutes";
 import PublicRoutes from "./routes/PublicRoutes";
-
 import HostLanding from "@/pages/host/landing/HostLanding";
-import HostRegister from "./pages/host/Auth/HostRegister";
 import HostLogin from "./pages/host/Auth/HostLogin";
-import PrivateRoute from "./routes/Protect/PrivateRoute";
+import HostRegister from "./pages/host/Auth/HostRegister";
+import HostPrivateRoute from "./routes/Protect/HostPrivateRoute";
+import UserPrivateRoute from "./routes/Protect/UserPrivateRoute";
+import SharedAccessRoute from "./routes/Protect/SharedAccessRoute";
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        {/* Public Routes (outside protected RoleBasedRoute) */}
+        {/* Public Routes */}
         <Route path="/*" element={<PublicRoutes />} />
-
+        
+        {/* Shared Access Routes (for both users and hosts) */}
         <Route
           path="/host/landing"
           element={
-            <PrivateRoute>
+            <SharedAccessRoute>
               <HostLanding />
-            </PrivateRoute>
+            </SharedAccessRoute>
           }
         />
-        <Route
-          path="/host/register"
-          element={
-            <PrivateRoute>
-              <HostRegister />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/host/login"
-          element={
-            <PrivateRoute>
-              <HostLogin />
-            </PrivateRoute>
-          }
-        />
-
+        <Route path="/host/login" element={<HostLogin />} />
+        <Route path="/host/register" element={<HostRegister />} />
+        
         {/* Protected User Routes */}
         <Route
           path="/user/*"
           element={
-            <PrivateRoute allowedRoles={["user"]}>
+            <UserPrivateRoute>
               <UserRoutes />
-            </PrivateRoute>
+            </UserPrivateRoute>
           }
         />
-
-        {/* Protected Host Routes */}
+        
+        {/* Protected Host-only Routes */}
         <Route
           path="/host/*"
           element={
-            <PrivateRoute allowedRoles={["host"]}>
+            <HostPrivateRoute>
               <HostRoutes />
-            </PrivateRoute>
+            </HostPrivateRoute>
           }
         />
       </Routes>

@@ -1,7 +1,5 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-
-
 import HostDashboard from "@/pages/host/landing/HostDashboard";
 import KindOfService from "@/pages/host/List-assets/KindOfService";
 import LocationForm from "@/forms/host/submitForms/LocationForm";
@@ -11,77 +9,25 @@ import ImageUpload from "@/pages/host/List-assets/ImageUpload";
 import CarForm from "@/forms/host/serviceForms/CarRents/CarForm";
 import CarFeatures from "@/forms/host/serviceForms/CarRents/CarFeatures";
 import NotFound from "@/components/NotFound";
-import PrivateRoute from "./Protect/PrivateRoute";
-
 
 
 const HostRoutes: React.FC = () => {
   return (
     <Routes>
-      <Route
-        path="/host/dashboard"
-        element={
-          <PrivateRoute>
-            <HostDashboard />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/host/kind-of-service"
-        element={
-          <PrivateRoute>
-            <KindOfService />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/host/location-form"
-        element={
-          <PrivateRoute>
-            <LocationForm />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/host/venue-details"
-        element={
-          <PrivateRoute>
-            <VenueForm />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/host/location-features"
-        element={
-          <PrivateRoute>
-            <LocationFeaturesTab />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/host/image-upload"
-        element={
-          <PrivateRoute>
-            <ImageUpload />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/host/car-rent-form"
-        element={
-          <PrivateRoute>
-            <CarForm />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/host/car-features-form"
-        element={
-          <PrivateRoute>
-            <CarFeatures />
-          </PrivateRoute>
-        }
-      />
+      {/* Dashboard */}
+      <Route path="dashboard" element={<HostDashboard />} />
+      
+      {/* Service Management */}
+      <Route path="kind-of-service" element={<KindOfService />} />
+      <Route path="location-form" element={<LocationForm />} />
+      <Route path="venue-details" element={<VenueForm />} />
+      <Route path="location-features" element={<LocationFeaturesTab />} />
+      <Route path="image-upload" element={<ImageUpload />} />
+      <Route path="car-rent-form" element={<CarForm />} />
+      <Route path="car-features-form" element={<CarFeatures />} />
+      
+      
+      {/* Catch-all route */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

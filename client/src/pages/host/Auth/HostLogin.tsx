@@ -9,88 +9,82 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux"; 
-import { setHostDetails } from "@/redux/Slice/host/hostSlice"; 
-
-interface ErrorState {
-  email?: string;
-  password?: string;
-}
+import { useDispatch } from "react-redux";
+import { setHostDetails } from "@/redux/Slice/host/hostSlice";
+import { useMutation } from "@tanstack/react-query";
 
 const HostLogin = () => {
   const [formData, setFormData] = useState<FormState>({
     email: "",
     password: "",
   });
-
-  const [errors, setErrors] = useState<ErrorState>({});
+  const [errors, setErrors] = useState<Partial<FormState>>({});
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const mutation = useMutation({
+    mutationFn: loginHost,
+    onSuccess: (data) => {
+      const hostData = {
+        id: data.host.id,
+        email: data.host.email,
+        role: data.host.role,
+        accessToken: data.host.accessToken,
+        refreshToken: data.host.refreshToken,
+        name: data.host.name 
+      };
+
+      if (data.success) {
+        setTimeout(() => {
+          toast.success("Login Successful!");
+        }, 3000);
+        dispatch(setHostDetails(hostData));
+        navigate("/host/dashboard");
+      } else {
+        toast.error("Login failed. Please check your credentials.");
+      }
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      if (error.response) {
+        const { status, data } = error.response;
+        const errorMessage = data?.message || "An error occurred while logging in.";
+
+        if (status === 403) {
+          toast.warning("Host is blocked. Please contact support.");
+        } else if (errorMessage === "Invalid credentials") {
+          toast.error("Invalid email or password.");
+        } else {
+          toast.error(errorMessage);
+        }
+      } else {
+        toast.warning("Network error. Please check your connection.");
+      }
+    },
+  });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev: FormState) => ({
+    setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
+    // Clear error when user types
+    if (errors[e.target.name as keyof FormState]) {
+      setErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { isValid, errors: validationErrors } =
-      validateHostLoginForm(formData);
+    const { isValid, errors: validationErrors } = validateHostLoginForm(formData);
+
     if (!isValid) {
       setErrors(validationErrors);
-      toast.error("Please correct the errors in the form.");
-
-      setTimeout(() => {
-        setErrors({});
-      }, 5000);
+      toast.error("Please correct the highlighted errors");
       return;
     }
 
-    try {
-      const response = await loginHost(formData);
-      console.log("Login response:", response); 
-
-      dispatch(
-        setHostDetails({
-          refreshToken: response.refreshToken,
-          accessToken: response.accessToken,
-          role: response.role,
-          name: response.name,
-          email: response.email,
-          id: response.id || response.hostId 
-        })
-      );
-
-      toast.success("Login successful!");
-      setFormData({
-        email: "",
-        password: "",
-      });
-      setErrors({});
-      navigate("/host/dashboard");
-    } catch (err: unknown) {
-      let errorMessage = "Something went wrong.";
-
-      if (err instanceof AxiosError) {
-        const backendData = err.response?.data;
-
-        if (typeof backendData?.message === "string") {
-          toast.error(backendData.message);
-          errorMessage = backendData.message;
-        } else if (typeof backendData === "object" && backendData !== null) {
-          Object.entries(backendData).forEach(([field, message]) => {
-            if (typeof message === "string") {
-              toast.error(`${field}: ${message}`);
-            }
-          });
-        }
-      } else {
-        toast.error(errorMessage);
-      }
-      console.error("Login error:", err); 
-    }
+    mutation.mutate(formData);
   };
 
   return (
@@ -110,53 +104,89 @@ const HostLogin = () => {
 
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6">
         <div className="w-full max-w-md bg-zinc-900 rounded-2xl shadow-xl p-6 sm:p-8">
-          <h1 className="p-3 font-bold">Login to Your Account</h1>
+          <h1 className="p-3 font-bold text-xl">Login to Your Account</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email"
-              className="w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-xs">{errors.email}</p>
-            )}
+            <div>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email"
+                className={`w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none ${
+                  errors.email ? "border border-red-500" : ""
+                }`}
+                autoComplete="username"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
+            </div>
 
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password"
-              className="w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-xs">{errors.password}</p>
-            )}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
+                className={`w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none ${
+                  errors.password ? "border border-red-500" : ""
+                }`}
+                autoComplete="current-password"
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-2.5 text-gray-400 hover:text-white text-sm"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+              )}
+            </div>
 
             <button
               type="submit"
-              className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-md transition-all"
+              disabled={mutation.isPending}
+              className={`w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-md transition-all ${
+                mutation.isPending ? "opacity-70 cursor-not-allowed" : ""
+              }`}
             >
-              Login
+              {mutation.isPending ? "Logging in..." : "Login"}
             </button>
 
-            <p className="text-xs text-gray-400 mt-4 text-center">
-              By logging in, you agree to the{" "}
-              <span className="underline">Terms of Service</span>.
-            </p>
-            <p className="text-sm text-center mt-2">
-              Don't have an account?{" "}
-              <span className="text-red-500 underline cursor-pointer">
-                <Link to={"/host/register"}>Register</Link>
-              </span>
-            </p>
+            <div className="text-center text-sm mt-4">
+              <p className="text-gray-400">
+                By logging in, you agree to our{" "}
+                <Link to="/terms" className="underline hover:text-white">
+                  Terms of Service
+                </Link>
+                .
+              </p>
+              <p className="mt-2">
+                Don't have an account?{" "}
+                <Link
+                  to="/host/register"
+                  className="text-red-500 hover:text-red-400 underline"
+                >
+                  Register
+                </Link>
+              </p>
+              <p className="mt-2">
+                <Link
+                  to="/host/forgot-password"
+                  className="text-gray-400 hover:text-white underline text-xs"
+                >
+                  Forgot password?
+                </Link>
+              </p>
+            </div>
           </form>
         </div>
-        <CustomToastContainer />
       </div>
+      <CustomToastContainer />
     </div>
   );
 };

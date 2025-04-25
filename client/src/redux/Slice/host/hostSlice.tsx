@@ -12,9 +12,17 @@ interface HostState {
 }
 
 const initialState: HostState = {
-  hostInfo: localStorage.getItem("hostInfo")
-    ? JSON.parse(localStorage.getItem("hostInfo") as string)
-    : null,
+  hostInfo:
+    typeof window !== "undefined" && localStorage.getItem("hostInfo")
+      ? (() => {
+          try {
+            return JSON.parse(localStorage.getItem("hostInfo") as string);
+          } catch (error) {
+            console.error("Failed to parse hostInfo from localStorage", error);
+            return null;
+          }
+        })()
+      : null,
 };
 
 const hostSlice = createSlice({

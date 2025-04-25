@@ -84,7 +84,6 @@ const HostRegister = () => {
           errorMessage = backendData.message;
         }
     
-        // If it's an object with multiple field errors
         else if (typeof backendData === "object" && backendData !== null) {
           Object.entries(backendData).forEach(([field, message]) => {
             if (typeof message === "string") {

@@ -18,7 +18,7 @@ export class HostLoginController {
           id: host.id,
           name: host.name,
           email: host.email,
-          role: host.role,
+          role: "host",
           accessToken,
           refreshToken,
         },
