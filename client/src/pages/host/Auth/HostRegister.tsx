@@ -47,8 +47,8 @@ const HostRegister = () => {
       setErrors(validationErrors);
       toast.error("Please correct the errors in the form.");
 
-      if(submitError){
-        toast.error(submitError)
+      if (submitError) {
+        toast.error(submitError);
       }
 
       setTimeout(() => {
@@ -60,9 +60,9 @@ const HostRegister = () => {
     try {
       await registerHost(formData);
       setSuccess("Host registration successful!");
-      setTimeout(()=>{
-        toast.success("Host registration successful!")
-      },3000)
+      setTimeout(() => {
+        toast.success("Host registration successful!");
+      }, 3000);
       setFormData({
         name: "",
         email: "",
@@ -75,16 +75,14 @@ const HostRegister = () => {
       navigate("/host/login");
     } catch (err: unknown) {
       let errorMessage = "Something went wrong.";
-    
+
       if (err instanceof AxiosError) {
         const backendData = err.response?.data;
-    
+
         if (typeof backendData?.message === "string") {
-          toast.error(backendData.message)
+          toast.error(backendData.message);
           errorMessage = backendData.message;
-        }
-    
-        else if (typeof backendData === "object" && backendData !== null) {
+        } else if (typeof backendData === "object" && backendData !== null) {
           Object.entries(backendData).forEach(([field, message]) => {
             if (typeof message === "string") {
               toast.error(`${field}: ${message}`);
@@ -94,7 +92,7 @@ const HostRegister = () => {
       } else {
         toast.error(errorMessage);
       }
-    
+
       setSubmitError(errorMessage);
     }
   };
@@ -122,7 +120,9 @@ const HostRegister = () => {
               value={formData.name}
               onChange={handleChange}
               placeholder="Name"
-              className="w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none"
+              className={`w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none ${
+                errors.name ? "border border-red-500" : ""
+              }`}
             />
             {errors.name && (
               <p className="text-red-500 text-xs">{errors.name}</p>
@@ -134,7 +134,9 @@ const HostRegister = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="Email"
-              className="w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none"
+              className={`w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none ${
+                errors.email ? "border border-red-500" : ""
+              }`}
             />
             {errors.email && (
               <p className="text-red-500 text-xs">{errors.email}</p>
@@ -146,7 +148,9 @@ const HostRegister = () => {
               value={formData.phone}
               onChange={handleChange}
               placeholder="Phone"
-              className="w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none"
+              className={`w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none ${
+                errors.phone ? "border border-red-500" : ""
+              }`}
             />
             {errors.phone && (
               <p className="text-red-500 text-xs">{errors.phone}</p>
@@ -158,7 +162,9 @@ const HostRegister = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Password"
-              className="w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none"
+              className={`w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none ${
+                errors.password ? "border border-red-500" : ""
+              }`}
             />
             {errors.password && (
               <p className="text-red-500 text-xs">{errors.password}</p>
@@ -170,13 +176,14 @@ const HostRegister = () => {
               value={formData.location}
               onChange={handleChange}
               placeholder="Location"
-              className="w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none"
+              className={`w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none ${
+                errors.location ? "border border-red-500" : ""
+              }`}
             />
             {errors.location && (
               <p className="text-red-500 text-xs">{errors.location}</p>
             )}
 
-           
             {success && <p className="text-green-500 text-sm">{success}</p>}
 
             <button
@@ -193,9 +200,13 @@ const HostRegister = () => {
             <p className="text-sm text-center mt-2">
               Already registered?{" "}
               <span className="text-red-500 underline cursor-pointer">
-                <Link to={'/host/login'}>
-                Login
-                </Link>
+                <Link to={"/host/login"}>Login</Link>
+              </span>
+            </p>
+            <p className="text-sm text-center mt-2">
+              Switch to user?{" "}
+              <span className="text-red-500 underline cursor-pointer">
+                <Link to="/user/home">Switch</Link>
               </span>
             </p>
           </form>

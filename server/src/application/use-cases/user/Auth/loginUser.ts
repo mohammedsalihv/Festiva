@@ -20,9 +20,6 @@ export class LoginUser {
       role: string
     };
   }> {
-    if (!email || !password) {
-      throw new CustomError("All fields are required", 400);
-    }
 
     const user = await this.userRepository.findByEmail(email);
     if (!user) {

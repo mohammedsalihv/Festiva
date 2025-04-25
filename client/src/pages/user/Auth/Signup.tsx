@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/Checkbox";
 import { Button } from "@/components/Button";
 import { useState, ChangeEvent, FormEvent } from "react";
 import { sendOtp } from "@/services/Auth/user/authService";
-import { validateSignupForm, FormState } from "@/utils/validations/signupValidation";
+import { validateSignupForm, FormState } from "@/utils/validations/user/Auth/signupValidation";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import CustomToastContainer from "../../../reusable-components/Messages/ToastContainer";

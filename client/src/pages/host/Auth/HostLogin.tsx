@@ -68,7 +68,7 @@ const HostLogin = () => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    // Clear error when user types
+
     if (errors[e.target.name as keyof FormState]) {
       setErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
     }
@@ -81,6 +81,9 @@ const HostLogin = () => {
     if (!isValid) {
       setErrors(validationErrors);
       toast.error("Please correct the highlighted errors");
+      setTimeout(()=>{
+        setErrors({})
+      },4000)
       return;
     }
 
@@ -172,6 +175,15 @@ const HostLogin = () => {
                   className="text-red-500 hover:text-red-400 underline"
                 >
                   Register
+                </Link>
+              </p>
+              <p className="mt-2">
+                Switch to user?{" "}
+                <Link
+                  to="/user/home"
+                  className="text-red-500 hover:text-red-400 underline"
+                >
+                  Switch
                 </Link>
               </p>
               <p className="mt-2">
