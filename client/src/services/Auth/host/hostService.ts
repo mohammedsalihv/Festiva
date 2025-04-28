@@ -1,12 +1,11 @@
 import axiosInstance from "@/config/hostAddServiceAxiosInstence";
-import { Types } from "mongoose";
 
 export interface AddVenueData {
   venueName?: string;
-  rent?: number;
-  capacity?: number;
+  rent?: number | null;
+  capacity?: number | null;
   shift?: string;
-  squareFeet?: number;
+  squareFeet?: number | null;
   timeSlots?: string[];
   availableDates?: string[];
   details?: string;
@@ -15,8 +14,9 @@ export interface AddVenueData {
   venueDescription: string;
   terms: string;
   venueImages: string[];
-  location: Types.ObjectId;
+  location: object;
 }
+
 
 export const addVenue = async (data: AddVenueData) => {
   const response = await axiosInstance.post("/services/addVenue", data);

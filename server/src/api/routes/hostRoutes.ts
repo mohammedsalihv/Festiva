@@ -33,4 +33,5 @@ hostRoutes.post("/addVenue", async (req, res) => {
       .json({ message: "An error occurred while adding the venue" });
   }
 });
+
 export default hostRoutes;

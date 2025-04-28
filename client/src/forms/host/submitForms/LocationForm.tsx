@@ -1,5 +1,6 @@
 import { Input } from "@/components/Input";
 import { Images } from "@/assets";
+import { RootState } from "@/redux/store";
 import { useState } from "react";
 import {
   locationFormState,
@@ -8,8 +9,10 @@ import {
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import CustomToastContainer from "../../../reusable-components/Messages/ToastContainer";
-import { useDispatch} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setLocationDetails } from "@/redux/Slice/host/locationSlice";
+import { handleFinalSubmit } from "./FinalSubmit";
+import { croppedImages, LocationDetails, VenueDetails, LocationFeatures } from "@/utils/constants/types";
 
 interface ErrorState {
   houseNo?: string;
@@ -22,7 +25,7 @@ interface ErrorState {
 
 const LocationForm = () => {
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [errors, setErrors] = useState<ErrorState>({});
   const [form, setForm] = useState<locationFormState>({
     houseNo: "",
@@ -33,6 +36,14 @@ const LocationForm = () => {
     zip: "",
   });
 
+  const venueDetails = useSelector<RootState, VenueDetails>((state) => state.venueDetails);
+  const locationDetails = useSelector<RootState, LocationDetails>((state) => state.location);
+  const images = useSelector<RootState, croppedImages>((state) => state.images);
+  const locationFeatures = useSelector<RootState, LocationFeatures>((state) => state.locationFeatures);
+
+  // Handling rent value to ensure it's always a number
+  const rent = venueDetails.rent ?? 0;  // Default to 0 if rent is null
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -42,28 +53,35 @@ const LocationForm = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLoading(true);
     const { isValid, errors: validationErrors } = validateLocationForm(form);
     if (!isValid) {
       setErrors(validationErrors);
       toast.error("Please correct the errors in the form.");
-
       setTimeout(() => {
         setErrors({});
       }, 5000);
       setLoading(false);
       return;
     }
-    
-    dispatch(setLocationDetails(form))
-    toast.success(
-      "Location details submitted. Redirecting to the next step..."
-    );
-    setTimeout(() => {
+
+    try {
+      dispatch(setLocationDetails(form));
+
+      setTimeout(() => {
+        setLoading(false);
+        toast.success("Location details submitted. Redirecting to the next step...");
+      }, 5000);
+
+      // Call FinalSubmit after location data submission, passing necessary data
+      await handleFinalSubmit(venueDetails, locationDetails, images, locationFeatures);
+
+    } catch (error: unknown) {
       setLoading(false);
-       
-    }, 5000);
+      toast.error("Something went wrong while submitting the location.");
+      console.error(error);
+    }
   };
 
   return (
