@@ -1,6 +1,5 @@
 import express, { Application } from "express";
 import cookieParser from "cookie-parser";
-import bodyParser from 'body-parser';
 import cors from "cors";
 import dotenv from "dotenv";
 import errorMiddleware from "./middlewares/errorMiddleware";
@@ -16,20 +15,22 @@ app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
   next();
 });
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "*",
+    origin: process.env.FRONTEND_URL || "*",  // Ensure this is correctly set for production
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
   })
 );
+
 app.use(cookieParser());
-app.use(express.json());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());  // Use express.json() only, no need for bodyParser
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", userRoutes);
-app.use("/api/host/auth" , hostRoutes)
+app.use("/api/host/auth", hostRoutes);
+app.use("/api/host/service", hostRoutes);  // Check for potential route conflict
 app.use(errorMiddleware);
 
 export default app;

@@ -8,7 +8,8 @@ import {
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import CustomToastContainer from "../../../reusable-components/Messages/ToastContainer";
-import { useNavigate } from "react-router-dom";
+import { useDispatch} from "react-redux";
+import { setLocationDetails } from "@/redux/Slice/host/locationSlice";
 
 interface ErrorState {
   houseNo?: string;
@@ -21,7 +22,7 @@ interface ErrorState {
 
 const LocationForm = () => {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const dispatch = useDispatch()
   const [errors, setErrors] = useState<ErrorState>({});
   const [form, setForm] = useState<locationFormState>({
     houseNo: "",
@@ -54,13 +55,14 @@ const LocationForm = () => {
       setLoading(false);
       return;
     }
-
+    
+    dispatch(setLocationDetails(form))
     toast.success(
       "Location details submitted. Redirecting to the next step..."
     );
     setTimeout(() => {
       setLoading(false);
-      navigate("/host/venue-details");
+       
     }, 5000);
   };
 

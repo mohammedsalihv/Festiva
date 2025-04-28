@@ -1,13 +1,19 @@
 import CardOption from "@/components/OptionCards";
 import { Images } from "@/assets";
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedOption, setSelectedTab } from "@/redux/Slice/host/selectService";
+import {
+  setSelectedOption,
+  setSelectedTab,
+} from "@/redux/Slice/host/selectServiceSlice";
 import { RootState } from "@/redux/store";
 import { BsFillBuildingsFill } from "react-icons/bs";
 import { FaCar } from "react-icons/fa";
 import { IoFastFood } from "react-icons/io5";
 import { RiCameraAiLine } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 
 const venueOptions = [
   {
@@ -31,37 +37,21 @@ const venueOptions = [
 const photoAndVideoOptions = [
   {
     label: "Photo and videography",
-    image: Images.kind_wedding,
-  }
+    image: Images.photography_sub,
+  },
 ];
 
 const carRentalOptions = [
   {
-    label: "Compact car",
-    image: Images.kind_multipurpose,
-  },
-  {
-    label: "SUV",
-    image: Images.kind_multipurpose,
-  },
-  {
-    label: "Luxury cars",
-    image: Images.kind_multipurpose,
+    label: "Rent Cars",
+    image: Images.carRent_sub,
   },
 ];
 
 const cateringOptions = [
   {
-    label: "Vegetarian",
-    image: Images.kind_multipurpose,
-  },
-  {
-    label: "Non-Vegetarian",
-    image: Images.kind_multipurpose,
-  },
-  {
-    label: "Vegan",
-    image: Images.kind_multipurpose,
+    label: "Man power",
+    image: Images.catering_manpower_sub,
   },
 ];
 
@@ -76,6 +66,8 @@ const tabs = [
 ];
 
 const KindOfService = () => {
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { selectedTab, selectedOption } = useSelector(
     (state: RootState) => state.selectService
@@ -85,8 +77,8 @@ const KindOfService = () => {
     switch (selectedTab) {
       case "Car rentals":
         return carRentalOptions;
-        case "Photo & Video services":
-          return photoAndVideoOptions;
+      case "Photo & Video services":
+        return photoAndVideoOptions;
       case "Catering management":
         return cateringOptions;
       default:
@@ -101,11 +93,11 @@ const KindOfService = () => {
           image: Images.kind_multipurpose,
           text: "Choose the best car for your trip. We have various categories for all types of needs.",
         };
-        case "Studio":
-          return {
-            image: Images.kind_multipurpose,
-            text: "Choose from photography and videography options for your needs.",
-          };
+      case "Studio":
+        return {
+          image: Images.kind_multipurpose,
+          text: "Choose from photography and videography options for your needs.",
+        };
       case "Catering management":
         return {
           image: Images.kind_multipurpose,
@@ -119,8 +111,40 @@ const KindOfService = () => {
     }
   };
 
+  const handleNext = () => {
+    if (!selectedOption) {
+      setError(true);
+      toast.error("Select one option");
+      setTimeout(()=>{
+        setError(false);
+       },3000)
+      return;
+    }
+
+    switch (selectedTab) {
+      case "Car rentals":
+        navigate("/host/car-rent-service");
+        break;
+      case "Photo & Video services":
+        navigate("/host/photo-video-service");
+        break;
+      case "Catering management":
+        navigate("/host/catering-service");
+        break;
+      default:
+        navigate("/host/venue-service");
+        break;
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 font-prompt">
+      {error && (
+        <p className="text-red-600 text-sm sm:px-20 font-medium text-center mb-3">
+          Please select at least one option before continuing.
+        </p>
+      )}
+
       <div className="mb-6 sm:px-20">
         <h1 className="text-black font-bold text-xl sm:text-2xl md:text-3xl text-center sm:text-left">
           What kind of the space is it?
@@ -134,7 +158,10 @@ const KindOfService = () => {
         {tabs.map((tabItem, index) => (
           <div
             key={index}
-            onClick={() => dispatch(setSelectedTab(tabItem.tab))}
+            onClick={() => {
+              dispatch(setSelectedTab(tabItem.tab));
+              dispatch(setSelectedOption("")); 
+            }}
             className={`flex flex-col items-center justify-center border rounded-md text-center text-sm font-medium cursor-pointer transition px-4 py-3
         ${
           selectedTab === tabItem.tab
@@ -173,11 +200,13 @@ const KindOfService = () => {
         </div>
       </div>
       <div className="flex justify-end sm:px-20 px-3 mt-10 ">
-       <Link to={'/host/location-form'}>
-       <button className="bg-main_host text-white text-lg px-10 py-3 rounded-lg hover:bg-main_host transition">
+        <button
+          onClick={handleNext}
+          className="bg-main_host text-white text-lg px-10 py-3 rounded-lg hover:bg-main_host transition"
+        >
           Next
         </button>
-       </Link>
+        <CustomToastContainer />
       </div>
     </div>
   );

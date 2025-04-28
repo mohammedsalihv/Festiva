@@ -5,7 +5,7 @@ import ConfirmDialog from "../user/Landing/ConfirmDialog";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutHost } from "@/redux/Slice/host/hostSlice";
-import TooltipIcon from "@/components/TooltipIcon"; // Import TooltipIcon
+import TooltipIcon from "@/components/TooltipIcon";
 
 const HostHeader: React.FC = () => {
   const dispatch = useDispatch();
@@ -25,14 +25,14 @@ const HostHeader: React.FC = () => {
       <div className="flex items-center gap-6">
         <h1 className="text-lg font-medium text-gray-800">Revenue Overview</h1>
         <nav className="hidden md:flex items-center gap-4 text-sm text-gray-500">
+        <a href="/host/dashboard" className="hover:text-black transition">
+           Dashboard
+          </a>
           <a href="#" className="hover:text-black transition">
             About
           </a>
           <a href="#" className="hover:text-black transition">
             Landing
-          </a>
-          <a href="#" className="hover:text-black transition">
-            Home
           </a>
         </nav>
       </div>
@@ -48,7 +48,7 @@ const HostHeader: React.FC = () => {
         </div>
         <div className="flex items-center gap-3 cursor-pointer">
           <TooltipIcon
-            icon={<MessageSquareDiff className="h-6 w-6 text-black hover:text-white" />}
+            icon={<MessageSquareDiff className="h-6 w-6 text-black hover:text-white" onClick={() => navigate('/host/kind-of-service')} />}
             label="Upload new business"
           />
           <TooltipIcon

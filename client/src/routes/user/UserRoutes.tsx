@@ -8,7 +8,7 @@ import Home from "@/pages/user/services/Home";
 import MyBookings from "@/pages/user/services/MyBookings";
 import Profile from "@/pages/user/services/Profile";
 import NotFound from "@/components/NotFound";
-import PrivateRoute from "./Protect/PrivateRoute";
+import PrivateRoute from "@/routes/Protect/PrivateRoute";
 
 const UserRoutes: React.FC = () => {
   return (

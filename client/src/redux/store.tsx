@@ -1,19 +1,22 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from './Slice/user/userSlice';
 import hostReducer from "@/redux/Slice/host/hostSlice";
-import selectService from './Slice/host/selectService';
-import locationFeatures from './Slice/host/locationFeaturesSlice';
+import selectServiceReducer from './Slice/host/selectServiceSlice';
+import locationFeaturesReducer from './Slice/host/locationFeaturesSlice';
 import imageReducer from './Slice/host/imageSlice';
-
+import venueDetailsReducer from '@/redux/Slice/host/venueDetailsSlice';
+import locationReducer from "@/redux/Slice/host/locationSlice";
 
 
 const store = configureStore({
     reducer:{
         user:userReducer,
         host:hostReducer,
-        selectService:selectService,
-        locationFeatures:locationFeatures,
-        images: imageReducer
+        selectService:selectServiceReducer,
+        locationFeatures:locationFeaturesReducer,
+        images: imageReducer,
+        venueDetails:venueDetailsReducer,
+        location:locationReducer
     },
 })
 

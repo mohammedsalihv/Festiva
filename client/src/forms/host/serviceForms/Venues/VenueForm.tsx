@@ -9,6 +9,8 @@ import {
   validateVenueDetailsForm,
   venueDetailsFormState,
 } from "@/utils/validations/host/service/VenueDetailsValidation";
+import { useDispatch } from "react-redux";
+import { setVenueDetails } from "@/redux/Slice/host/venueDetailsSlice";
 
 interface VenueDetailsErrorState {
   name?: string;
@@ -37,6 +39,7 @@ const VenueDetailsForm = () => {
   const [loading, setLoading] = useState(false);
   const [dateInput, setDateInput] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   const [startTime, setStartTime] = useState({
     hour: "10",
@@ -155,7 +158,6 @@ const VenueDetailsForm = () => {
     if (!isValid) {
       setErrors(validationErrors);
       toast.error("Please correct the errors in the form.");
-
       setTimeout(() => {
         setErrors({});
       }, 5000);
@@ -163,8 +165,9 @@ const VenueDetailsForm = () => {
       return;
     }
 
+    dispatch(setVenueDetails(form))
     toast.success("Venue details submitted!");
-    setTimeout(() => navigate("/host/venue-preview"), 5000);
+    setTimeout(() => navigate("/host/location-features"), 5000);
   };
 
   return (

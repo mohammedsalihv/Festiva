@@ -1,4 +1,3 @@
-import HostHeader from "@/reusable-components/host/HostHeader";
 import React, { useState } from "react";
 
 interface Client {
@@ -73,7 +72,6 @@ const HostDashboard = () => {
 
   return (
     <div>
-      <HostHeader />
       <div className="min-h-screen bg-gray-100 p-4 md:p-8 w-full">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl md:text-3xl font-bold">Financial Overview</h1>

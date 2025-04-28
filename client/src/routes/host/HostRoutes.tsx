@@ -8,23 +8,27 @@ import LocationFeaturesTab from "@/pages/host/List-assets/LocationFeatures";
 import ImageUpload from "@/pages/host/List-assets/ImageUpload";
 import CarForm from "@/forms/host/serviceForms/CarRents/CarForm";
 import CarFeatures from "@/forms/host/serviceForms/CarRents/CarFeatures";
+import CateringForm from "@/forms/host/serviceForms/Caters/CateringForm";
+import PhotoVideoForm from "@/forms/host/serviceForms/Studio/PhotoVideoForm";
 import NotFound from "@/components/NotFound";
+
 
 
 const HostRoutes: React.FC = () => {
   return (
     <Routes>
-      {/* Dashboard */}
       <Route path="dashboard" element={<HostDashboard />} />
       
       {/* Service Management */}
       <Route path="kind-of-service" element={<KindOfService />} />
-      <Route path="location-form" element={<LocationForm />} />
-      <Route path="venue-details" element={<VenueForm />} />
+      <Route path="location-details" element={<LocationForm />} />
+      <Route path="venue-service" element={<VenueForm />} />
       <Route path="location-features" element={<LocationFeaturesTab />} />
       <Route path="image-upload" element={<ImageUpload />} />
-      <Route path="car-rent-form" element={<CarForm />} />
-      <Route path="car-features-form" element={<CarFeatures />} />
+      <Route path="car-rent-service" element={<CarForm />} />
+      <Route path="car-features" element={<CarFeatures />} />
+      <Route path="catering-service" element={<CateringForm />} />
+      <Route path="photo-video-service" element={<PhotoVideoForm />} />
       
       
       {/* Catch-all route */}

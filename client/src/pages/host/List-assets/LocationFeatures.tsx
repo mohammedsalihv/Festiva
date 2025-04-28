@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { setAllLocationFeatures } from "@/redux/Slice/host/locationFeaturesSlice";
 
 const FEATURES = [
   "A/c",
@@ -87,8 +88,18 @@ const LocationFeaturesTab: React.FC = () => {
 
     dispatch(setLoading(true));
     toast.success("Features have been sent");
+
+    dispatch(
+      setAllLocationFeatures({
+        features,
+        parkingFeatures,
+        venueDescription,
+        terms,
+      })
+    );
+
     setTimeout(() => {
-      navigate("/host/picture-upload");
+      navigate("/host/image-upload");
       dispatch(setLoading(false));
     }, 2000);
   };

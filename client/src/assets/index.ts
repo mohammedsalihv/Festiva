@@ -73,6 +73,9 @@ import kind_office from '@/assets/images/Host/kind_of_officespace.png'
 import kind_event from '@/assets/images/Host/kind_of_events.png'
 import kind_location from '@/assets/images/Host/Kind_location.png';
 import image_uplaod from '@/assets/images/Host/picture.png';
+import photography_sub from "@/assets/images/Host/photography_sub.png";
+import carRent_sub from "@/assets/images/Host/car-rent_sub.png";
+import catering_manpower_sub from '@/assets/images/Host/manpower_sub.png';
 
 
 
@@ -126,5 +129,8 @@ export const Images = {
   kind_office,
   kind_wedding,
   kind_location,
-  image_uplaod
+  image_uplaod,
+  photography_sub,
+  carRent_sub,
+  catering_manpower_sub
 };
