@@ -1,22 +1,19 @@
-// FinalSubmit.ts
 import { AddVenueData, addVenue } from "@/services/Auth/host/hostService";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-
+import { NavigateFunction } from "react-router-dom";
 
 export const handleFinalSubmit = async (
   venueDetails: any,
   locationDetails: any,
   images: any,
-  locationFeatures: any
+  locationFeatures: any,
+  navigate: NavigateFunction // Add navigate as a parameter
 ) => {
-  const navigate = useNavigate();
-
   try {
     const { rent, ...restVenueDetails } = venueDetails;
 
     const finalData: AddVenueData = {
-      ...restVenueDetails,
+      ...restVenueDetails, // From venueDetails, excluding rent
       rent: rent ?? undefined,
       features: locationFeatures.features,
       parkingFeatures: locationFeatures.parkingFeatures,
@@ -30,7 +27,7 @@ export const handleFinalSubmit = async (
 
     console.log("Submitted Successfully");
     toast.success("All data submitted successfully!");
-    navigate('/host/dashboard');
+    navigate("/host/dashboard"); // Use the passed navigate function
   } catch (error) {
     console.error("Submission Failed:", error);
     toast.error("Something went wrong while submitting!");

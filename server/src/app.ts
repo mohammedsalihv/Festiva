@@ -27,6 +27,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());  // Use express.json() only, no need for bodyParser
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
 
 app.use("/api/auth", userRoutes);
 app.use("/api/host/auth", hostRoutes);

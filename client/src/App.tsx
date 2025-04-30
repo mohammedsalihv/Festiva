@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import UserRoutes from "./routes/user/UserRoutes";
 import HostRoutes from "./routes/host/HostRoutes";
+import AdminRoutes from "./routes/admin/AdminRoutes";
 import PublicRoutes from "./routes/user/PublicRoutes";
 import HostLanding from "@/pages/host/landing/HostLanding";
 import HostLogin from "./pages/host/Auth/HostLogin";
@@ -46,6 +47,12 @@ const App: React.FC = () => {
             <HostPrivateRoute>
               <HostRoutes />
             </HostPrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/*"
+          element={
+            <AdminRoutes/>
           }
         />
       </Routes>

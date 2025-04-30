@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLocationDetails } from "@/redux/Slice/host/locationSlice";
 import { handleFinalSubmit } from "./FinalSubmit";
 import { croppedImages, LocationDetails, VenueDetails, LocationFeatures } from "@/utils/constants/types";
+import { useNavigate } from "react-router-dom"; 
 
 interface ErrorState {
   houseNo?: string;
@@ -26,6 +27,7 @@ interface ErrorState {
 const LocationForm = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate(); 
   const [errors, setErrors] = useState<ErrorState>({});
   const [form, setForm] = useState<locationFormState>({
     houseNo: "",
@@ -40,9 +42,6 @@ const LocationForm = () => {
   const locationDetails = useSelector<RootState, LocationDetails>((state) => state.location);
   const images = useSelector<RootState, croppedImages>((state) => state.images);
   const locationFeatures = useSelector<RootState, LocationFeatures>((state) => state.locationFeatures);
-
-  // Handling rent value to ensure it's always a number
-  const rent = venueDetails.rent ?? 0;  // Default to 0 if rent is null
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -74,9 +73,7 @@ const LocationForm = () => {
         toast.success("Location details submitted. Redirecting to the next step...");
       }, 5000);
 
-      // Call FinalSubmit after location data submission, passing necessary data
-      await handleFinalSubmit(venueDetails, locationDetails, images, locationFeatures);
-
+      await handleFinalSubmit(venueDetails, locationDetails, images, locationFeatures, navigate);
     } catch (error: unknown) {
       setLoading(false);
       toast.error("Something went wrong while submitting the location.");
@@ -106,7 +103,7 @@ const LocationForm = () => {
                 onChange={handleChange}
               />
               {errors.houseNo && (
-                <p className="text-red-500 text-xs mt-1">{errors.houseNo}</p> // Error message directly below the input
+                <p className="text-red-500 text-xs mt-1">{errors.houseNo}</p>
               )}
             </div>
 
@@ -119,7 +116,7 @@ const LocationForm = () => {
                 onChange={handleChange}
               />
               {errors.street && (
-                <p className="text-red-500 text-xs mt-1">{errors.street}</p> // Error message directly below the input
+                <p className="text-red-500 text-xs mt-1">{errors.street}</p>
               )}
             </div>
 
@@ -133,7 +130,7 @@ const LocationForm = () => {
                   onChange={handleChange}
                 />
                 {errors.district && (
-                  <p className="text-red-500 text-xs mt-1">{errors.district}</p> // Error message directly below the input
+                  <p className="text-red-500 text-xs mt-1">{errors.district}</p>
                 )}
               </div>
 
@@ -146,7 +143,7 @@ const LocationForm = () => {
                   onChange={handleChange}
                 />
                 {errors.state && (
-                  <p className="text-red-500 text-xs mt-1">{errors.state}</p> // Error message directly below the input
+                  <p className="text-red-500 text-xs mt-1">{errors.state}</p>
                 )}
               </div>
             </div>
@@ -161,7 +158,7 @@ const LocationForm = () => {
                   onChange={handleChange}
                 />
                 {errors.country && (
-                  <p className="text-red-500 text-xs mt-1">{errors.country}</p> // Error message directly below the input
+                  <p className="text-red-500 text-xs mt-1">{errors.country}</p>
                 )}
               </div>
 
@@ -174,7 +171,7 @@ const LocationForm = () => {
                   onChange={handleChange}
                 />
                 {errors.zip && (
-                  <p className="text-red-500 text-xs mt-1">{errors.zip}</p> // Error message directly below the input
+                  <p className="text-red-500 text-xs mt-1">{errors.zip}</p>
                 )}
               </div>
             </div>

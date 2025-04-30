@@ -1,10 +1,10 @@
-// types.ts
+
 export interface VenueDetails {
   name: string;
-  rent: number;
-  capacity: number;
+  rent: number | null;
+  capacity: number | null;
   shift: string;
-  squareFeet: number;
+  squareFeet: number | null;
   timeSlots: string[];
   availableDates: string[];
   details: string;
