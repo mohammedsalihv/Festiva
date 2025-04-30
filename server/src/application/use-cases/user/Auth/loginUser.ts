@@ -15,6 +15,7 @@ export class LoginUser {
     user: {
       firstname: string;
       lastname : string;
+      phone:string;
       email: string;
       id: string;
       role: string
@@ -55,6 +56,7 @@ export class LoginUser {
           firstname: user.firstname,
           lastname: user.lastname ?? "",
           email: user.email,
+          phone:user.phone || "Please add contact details",
           role: user.role || "user",
         },
       };

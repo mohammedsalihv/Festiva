@@ -6,6 +6,7 @@ import locationFeaturesReducer from './Slice/host/locationFeaturesSlice';
 import imageReducer from './Slice/host/imageSlice';
 import venueDetailsReducer from '@/redux/Slice/host/venueDetailsSlice';
 import locationReducer from "@/redux/Slice/host/locationSlice";
+import adminReduer from '@/redux/Slice/admin/adminSlice';
 
 
 const store = configureStore({
@@ -16,7 +17,8 @@ const store = configureStore({
         locationFeatures:locationFeaturesReducer,
         images: imageReducer,
         venueDetails:venueDetailsReducer,
-        location:locationReducer
+        location:locationReducer,
+        admin:adminReduer
     },
 })
 

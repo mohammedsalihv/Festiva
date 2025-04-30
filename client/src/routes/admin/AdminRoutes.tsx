@@ -1,8 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-
-import AdminLogin from "@/pages/admin/auth/AdminLogin";
-import NotFound from "@/components/NotFound";
+import AdminDashboard from "@/pages/admin/service/AdminDashboard";
 
 
 
@@ -10,10 +8,7 @@ import NotFound from "@/components/NotFound";
 const AdminRoutes: React.FC = () => {
     return (
       <Routes>
-        <Route path="login" element={<AdminLogin />} />
-        
-        {/* Catch-all route */}
-        <Route path="*" element={<NotFound />} />
+        <Route path="dashbaord" element={<AdminDashboard />} />
       </Routes>
     );
   };

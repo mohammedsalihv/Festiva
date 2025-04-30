@@ -15,7 +15,6 @@ export interface HostLoginData {
 
 export const loginHost = async (data: HostLoginData) => {
   const response = await axiosInstance.post("/auth/login-host", data);
-
   return response.data;
 };
 

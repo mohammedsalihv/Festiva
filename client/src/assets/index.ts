@@ -83,6 +83,13 @@ import catering_manpower_sub from '@/assets/images/Host/manpower_sub.png';
 
 
 
+
+
+// admin
+
+import admin_login from '@/assets/images/admin/Admin_login.jpeg';
+
+
 export const Images = {
   logo_png,
   login_bg,
@@ -132,5 +139,6 @@ export const Images = {
   image_uplaod,
   photography_sub,
   carRent_sub,
-  catering_manpower_sub
+  catering_manpower_sub,
+  admin_login
 };

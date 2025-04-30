@@ -51,6 +51,9 @@ const Login = () => {
     mutationFn: LoginUser,
     onSuccess: (data) => {
       const userData = {
+        firstname:data.user.firstname,
+        lastname:data.user.lastname,
+        phone:data.user.phone,
         id: data.user.id,
         email: data.user.email,
         role: data.user.role,

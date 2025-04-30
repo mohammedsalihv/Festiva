@@ -6,10 +6,12 @@ import AdminRoutes from "./routes/admin/AdminRoutes";
 import PublicRoutes from "./routes/user/PublicRoutes";
 import HostLanding from "@/pages/host/landing/HostLanding";
 import HostLogin from "./pages/host/Auth/HostLogin";
+import AdminLogin from "@/pages/admin/auth/AdminLogin";
 import HostRegister from "./pages/host/Auth/HostRegister";
 import HostPrivateRoute from "./routes/host/HostPrivateRoute";
 import UserPrivateRoute from "./routes/Protect/UserPrivateRoute";
 import SharedAccessRoute from "./routes/Protect/SharedAccessRoute";
+import AdminPrivateRoute from "./routes/admin/AdminPrivateRoutes";
 
 const App: React.FC = () => {
   return (
@@ -17,7 +19,7 @@ const App: React.FC = () => {
       <Routes>
         {/* Public Routes */}
         <Route path="/*" element={<PublicRoutes />} />
-        
+
         {/* Shared Access Routes (for both users and hosts) */}
         <Route
           path="/host/landing"
@@ -29,7 +31,7 @@ const App: React.FC = () => {
         />
         <Route path="/host/login" element={<HostLogin />} />
         <Route path="/host/register" element={<HostRegister />} />
-        
+
         {/* Protected User Routes */}
         <Route
           path="/user/*"
@@ -39,7 +41,7 @@ const App: React.FC = () => {
             </UserPrivateRoute>
           }
         />
-        
+
         {/* Protected Host-only Routes */}
         <Route
           path="/host/*"
@@ -52,9 +54,12 @@ const App: React.FC = () => {
         <Route
           path="/admin/*"
           element={
-            <AdminRoutes/>
+            <AdminPrivateRoute>
+              <AdminRoutes />
+            </AdminPrivateRoute>
           }
         />
+        <Route path="/admin/login-admin" element={<AdminLogin />} />
       </Routes>
     </Router>
   );

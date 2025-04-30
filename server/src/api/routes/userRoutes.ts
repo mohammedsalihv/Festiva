@@ -51,4 +51,12 @@ userRoutes.post("/google-login", async (req, res) => {
 });
 
 
+userRoutes.get('/profile' , async (req,res)=>{
+  try {
+    await googleController.login(req, res);
+  } catch (error) {
+    console.log(error);
+  }
+})
+
 export default userRoutes;

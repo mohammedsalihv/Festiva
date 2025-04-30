@@ -3,6 +3,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface UserState {
   userInfo: {
     accessToken: string;
+    email:string
+    firstname:string;
+    lastname:string;
+    phone:string;
     refreshToken: string;
     role: "admin" | "user" | "host";
     isVerified?: boolean;

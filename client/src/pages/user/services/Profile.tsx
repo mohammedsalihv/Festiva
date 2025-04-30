@@ -1,7 +1,13 @@
+import { Images } from '@/assets';
+import { RootState } from '@/redux/store';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux'; // Importing useSelector for accessing Redux state
 
 const Profile: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Profile Information');
+
+  // Directly access user info from Redux store
+  const profile = useSelector((state:RootState) => state.user.userInfo);
 
   const tabs = [
     'Profile Information',
@@ -10,7 +16,7 @@ const Profile: React.FC = () => {
     'Service ticket',
     'FAQ',
     'Mylist',
-    'Logout'
+    'Logout',
   ];
 
   return (
@@ -35,14 +41,14 @@ const Profile: React.FC = () => {
 
         {/* Profile Content */}
         <div className="bg-white flex-1 p-6 rounded-xl space-y-6 border border-gray-400">
-          {activeTab === 'Profile Information' && (
+          {activeTab === 'Profile Information' ? (
             <>
               {/* Profile Picture */}
-              <div className="space-y-2  border-gray-400">
+              <div className="space-y-2 border-gray-400">
                 <p className="text-lg font-semibold">Profile picture</p>
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 border border-black rounded-full flex items-center justify-center text-xl">
-                    👤
+                    <img src={Images.default_profile} alt="" />
                   </div>
                   <button className="text-sm text-[#6c63ff] underline">Change photo</button>
                 </div>
@@ -52,10 +58,28 @@ const Profile: React.FC = () => {
               <div className="space-y-2">
                 <p className="text-lg font-semibold">Personal data</p>
                 <div className="flex flex-col md:flex-row gap-4">
-                  <input type="text" placeholder="First Name" className="border-b-2 p-2 rounded flex-1" />
-                  <input type="text" placeholder="Last Name" className="border-b-2 p-2 rounded flex-1" />
+                  <input
+                    type="text"
+                    placeholder="First Name"
+                    value={profile?.firstname || ''}
+                    className="border-b-2 p-2 rounded flex-1"
+                    readOnly
+                  />
+                  <input
+                    type="text"
+                    placeholder="Last Name"
+                    value={profile?.lastname || ''}
+                    className="border-b-2 p-2 rounded flex-1"
+                    readOnly
+                  />
                 </div>
-                <input type="email" placeholder="Email" className="border-b-2 p-2 rounded w-full mt-2" />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={profile?.email || ''}
+                  className="border-b-2 p-2 rounded w-full mt-2"
+                  readOnly
+                />
               </div>
 
               {/* Change Password */}
@@ -70,12 +94,13 @@ const Profile: React.FC = () => {
               {/* Delete Account */}
               <div className="space-y-2">
                 <p className="text-lg font-semibold">Delete account</p>
-                <p className="text-sm text-gray-400">Deleting account is a permanent action and cannot be undone. Are you sure you want to proceed?</p>
+                <p className="text-sm text-gray-400">
+                  Deleting account is a permanent action and cannot be undone. Are you sure you want to proceed?
+                </p>
                 <button className="bg-red-600 text-white px-4 py-2 rounded text-sm font-semibold">Delete</button>
               </div>
             </>
-          )}
-          {activeTab !== 'Profile Information' && (
+          ) : (
             <div className="text-gray-300 text-sm">
               <p>This is the "{activeTab}" tab content placeholder.</p>
             </div>
