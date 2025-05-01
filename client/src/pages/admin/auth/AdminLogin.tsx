@@ -42,20 +42,18 @@ const AdminLogin: React.FC = () => {
     mutationFn: adminLogin,
     onSuccess: (data) => {
       const adminData = {
-        id: data.user.id,
-        email: data.user.email,
-        role: data.user.role,
-        accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
+        id: data.admin.id,
+        email: data.admin.email,
+        role: data.admin.role,
+        accessToken: data.admin.accessToken,
+        refreshToken: data.admin.refreshToken,
       };
-
       if (data.success) {
         setTimeout(() => {
           toast.success(" Login Successful!");
         }, 3000);
         dispatch(setAdminDetails(adminData));
-        console.log(adminData);
-        navigate("/admin/dashboard");
+        navigate("/admin/dashboard"); 
       } else {
         toast.error("Login failed. Please check your credentials.");
       }
@@ -77,6 +75,7 @@ const AdminLogin: React.FC = () => {
         }
       } else {
         toast.warning("Network error. Please check your connection.");
+        console.log(error)
       }
     },
   });
@@ -108,7 +107,6 @@ const AdminLogin: React.FC = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
       <div className="flex w-full max-w-4xl flex-col-reverse items-center gap-10  p-8  md:flex-row md:justify-between">
-        {/* Left side: Login Form */}
         <div className="w-full md:w-1/2">
           <h2 className="mb-2 text-2xl font-semibold">Welcome to Dashboard</h2>
           <p className="mb-6 text-sm text-gray-500">

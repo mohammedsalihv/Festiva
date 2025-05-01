@@ -3,11 +3,11 @@ import { Navigate, useLocation } from "react-router-dom";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 
-interface HostPrivateRouteProps {
+interface AdminPrivateRouteProps {
   children: ReactNode;
 }
 
-const AdminPrivateRoute: React.FC<HostPrivateRouteProps> = ({ children }) => {
+const AdminPrivateRoute: React.FC<AdminPrivateRouteProps> = ({ children }) => {
   const adminInfo = useSelector((state: RootState) => state.admin.adminInfo);
   const location = useLocation();
 

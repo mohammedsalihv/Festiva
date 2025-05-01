@@ -11,6 +11,7 @@ module.exports = {
         main_color: "#7155FF",
         main_white:"#FFFFFF",
         main_host: "#ef4444",
+        admin_bg:"#D9D9D9",
       },
       boxShadow: {
         'r-lg': '10px 0 30px -10px rgba(0, 0, 0, 0.5)',
