@@ -1,9 +1,9 @@
-import { NavbarMenu } from "@/utils/Navbar/navLinks";
+import { NavbarMenu } from "@/utils/Navbar/user/navLinks";
 import { CiSearch } from "react-icons/ci";
 import { MdMenu, MdClose } from "react-icons/md";
 import { CiLocationOn } from "react-icons/ci";
 import React, { useState, useRef, useEffect } from "react";
-import ResponsiveNavLinks from "../../../utils/Navbar/ResponsiveNavLinks";
+import ResponsiveNavLinks from "../../../utils/Navbar/user/ResponsiveNavLinks";
 import { useNavigate } from "react-router-dom";
 import LogoText from "@/components/LogoText";
 import { useDispatch, useSelector } from "react-redux";

@@ -33,10 +33,10 @@ const AdminHeader: React.FC<HeaderProps> = ({role}) => {
   }, []);
 
   return (
-    <header className="flex justify-between items-center p-4 bg-white shadow-sm rounded-md w-full font-prompt">
+    <header className="flex justify-between items-center p-4 bg-gray-200 shadow-sm rounded-md w-full font-prompt">
       <div className="text-sm sm:text-base">
         <p className="font-medium">Welcome!</p>
-        <p className="text-gray-500">{dateTime}</p>
+        <p className="text-gray-500 font-semibold">{dateTime}</p>
       </div>
 
       <div className="flex items-center gap-4">

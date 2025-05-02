@@ -54,7 +54,7 @@ const AdminLogin: React.FC = () => {
       if (data.success) {
         setTimeout(() => {
           toast.success(" Login Successful!");
-        }, 3000);
+        }, 500);
         dispatch(setAdminDetails(adminData));
         navigate("/admin/dashboard"); 
       } else {

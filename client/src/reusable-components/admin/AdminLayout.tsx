@@ -10,14 +10,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <div className="flex min-h-screen">
       <div className="hidden md:block w-16 bg-gray-200 text-white p-4">
-         <AdminSidebar/>
+        <AdminSidebar />
       </div>
       <div className="flex-1 p-4 bg-gray-200">
-       <AdminHeader 
-       name="Tristan Hartwiz"
-  role="Project Manager"
-       
-       />
+        <AdminHeader role="Project Manager" />
         {children}
       </div>
     </div>

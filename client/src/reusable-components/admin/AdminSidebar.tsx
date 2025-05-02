@@ -13,8 +13,10 @@ const AdminSidebar: FC = () => {
   const [confirmLogout, setConfirmLogout] = useState(false);
   const handleLogout = () => {
     dispatch(logoutAdmin());
+    setTimeout(()=>{
+      toast.success("Logout Successful!");
+    },1000)
     navigate("/admin/admin-login");
-    toast.success("Logout successfully");
   };
 
   return (
@@ -24,17 +26,20 @@ const AdminSidebar: FC = () => {
           key={i}
           title={item.label}
           className="text-black hover:text-blue-500 cursor-pointer"
-          href={item.link}
           onClick={(e) => {
             e.preventDefault();
-            if (item.label === "Signout") {
+            if (item.isLogout) {
               setConfirmLogout(true);
+            }else if(item.link){
+              navigate(item.link)
             }
           }}
         >
           <item.icon className="text-[28px]" />
         </a>
       ))}
+
+      <CustomToastContainer />
 
       <ConfirmDialog
         isOpen={confirmLogout}
@@ -48,7 +53,6 @@ const AdminSidebar: FC = () => {
         }}
         onCancel={() => setConfirmLogout(false)}
       />
-      <CustomToastContainer />
     </aside>
   );
 };

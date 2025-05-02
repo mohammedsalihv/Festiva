@@ -13,7 +13,7 @@ import {
   Line,
   ResponsiveContainer,
 } from "recharts";
-import AdminLayout from "../AdminLayout";
+import AdminLayout from "../../reusable-components/admin/AdminLayout";
 
 const barData = [
   { name: "Mon", complete: 60 },

@@ -4,9 +4,9 @@ import { Routes, Route } from "react-router-dom";
 import Login from "@/pages/user/Auth/Login";
 import Signup from "@/pages/user/Auth/Signup";
 import Otp from "@/pages/user/Auth/Otp";
-import Home from "@/pages/user/services/Home";
-import MyBookings from "@/pages/user/services/MyBookings";
-import Profile from "@/pages/user/services/Profile";
+import Home from "@/pages/user/Home";
+import MyBookings from "@/pages/user/MyBookings";
+import Profile from "@/pages/user/Profile";
 import NotFound from "@/components/NotFound";
 import PrivateRoute from "@/routes/Protect/PrivateRoute";
 

@@ -10,10 +10,10 @@ const navItems = [
     label: "Home",
     link: "/admin/dashboard",
   },
-  { icon: SiBookstack, label: "Bookings", link: "/admin/Bookings" },
-  { icon: PiUsersThreeFill, label: "Customers", link: "/admin/Users" },
-  { icon: IoSettings, label: "Settings", link: "/admin/Settings" },
-  { icon: RiLogoutCircleRLine, label: "Signout" },
+  { icon: SiBookstack, label: "Bookings", link: "/admin/bookings" },
+  { icon: PiUsersThreeFill, label: "Customers", link: "/admin/users" },
+  { icon: IoSettings, label: "Settings", link: "/admin/dettings" },
+  { icon: RiLogoutCircleRLine, label: "Signout" , isLogout: true, },
 ];
 
 export default navItems;
