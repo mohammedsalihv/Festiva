@@ -44,6 +44,9 @@ const AdminLogin: React.FC = () => {
       const adminData = {
         id: data.admin.id,
         email: data.admin.email,
+        firstname:data.admin.firstname,
+        lastname:data.admin.lastname,
+        phone:data.admin.phone,
         role: data.admin.role,
         accessToken: data.admin.accessToken,
         refreshToken: data.admin.refreshToken,

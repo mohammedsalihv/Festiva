@@ -4,6 +4,9 @@ interface AdminState {
   adminInfo: {
     accessToken: string;
     email:string
+    firstname:string;
+    lastname:string;
+    phone:string;
     refreshToken: string;
     role: "admin";
     isVerified?: boolean;

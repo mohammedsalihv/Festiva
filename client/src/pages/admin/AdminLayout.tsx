@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import AdminSidebar from "@/reusable-components/admin/AdminSidebar";
+import AdminHeader from "@/reusable-components/admin/AdminHeader";
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -12,6 +13,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
          <AdminSidebar/>
       </div>
       <div className="flex-1 p-4 bg-gray-200">
+       <AdminHeader 
+       name="Tristan Hartwiz"
+  role="Project Manager"
+       
+       />
         {children}
       </div>
     </div>

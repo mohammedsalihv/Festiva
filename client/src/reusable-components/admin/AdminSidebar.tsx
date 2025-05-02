@@ -18,14 +18,19 @@ const AdminSidebar: FC = () => {
   };
 
   return (
-    <aside className="fixed left-0 h-screen w-16 flex flex-col justify-center items-center py-4 space-y-6 z-50">
+    <aside className="font-prompt fixed left-0 h-screen w-16 flex flex-col justify-center items-center py-4 space-y-6 z-50">
       {navItems.map((item, i) => (
         <a
           key={i}
           title={item.label}
           className="text-black hover:text-blue-500 cursor-pointer"
           href={item.link}
-          onClick={item.label === "Signout" ? handleLogout : undefined}
+          onClick={(e) => {
+            e.preventDefault();
+            if (item.label === "Signout") {
+              setConfirmLogout(true);
+            }
+          }}
         >
           <item.icon className="text-[28px]" />
         </a>

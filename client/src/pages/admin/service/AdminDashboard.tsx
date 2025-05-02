@@ -38,7 +38,7 @@ const lineData = [
 export default function AdminDashboard() {
   return (
     <AdminLayout>
-      <div className="p-4 md:p-8 bg-white min-h-screen rounded-md">
+      <div className="p-4 md:p-8 bg-white min-h-screen rounded-md font-prompt">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           <Card className="md:col-span-2">
             <CardContent className="p-4">

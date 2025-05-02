@@ -15,7 +15,9 @@ export class AdminLoginController {
         message: "Admin logged in successfully",
         admin: {
           id: admin.id,
-          name: admin.firstname,
+          firstname: admin.firstname,
+          lastname:admin.lastname,
+          phone:admin.phone,
           email: admin.email,
           role: "admin",
           accessToken,
