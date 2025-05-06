@@ -2,6 +2,7 @@ import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { AuthRequest } from "../domain/entities/controlInterface/authType";
 import { JwtPayload } from "../domain/entities/controlInterface/authType";
+import logger from "../utils/logger";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
 
@@ -27,6 +28,7 @@ export const authenticateToken = (
     req.user = decode;
     next();
   } catch (error) {
+    logger.info(error);
     res.status(403).json({ message: "Invalid token" });
     return;
   }

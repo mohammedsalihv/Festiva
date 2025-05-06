@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { SendOTP } from "../../../../application/use-cases/user/Auth/sentOtp";
+import logger from "../../../../utils/logger";
 
 export class OTPController {
   constructor(private sendOTPUseCase: SendOTP) {}
@@ -15,7 +16,7 @@ export class OTPController {
       const response = await this.sendOTPUseCase.execute(email);
       res.status(response.success ? 200 : 409).json(response);
     } catch (error: any) {
-      console.error("Error in sendOTPController:", error);
+      logger.error("Error in sendOTPController:", error);
 
       if (error.message === "User already exists") {
         return res

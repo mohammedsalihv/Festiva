@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import logger from "../../utils/logger";
 
 export class TokenService {
   static generateAccessToken(payload: { id: string; role?: string }): string {
@@ -22,6 +23,7 @@ export class TokenService {
         role?: string;
       };
     } catch (error) {
+      logger.info(error);
       return null;
     }
   }

@@ -1,4 +1,4 @@
-import { ProfileController } from "../../../../api/controllers/user/pages/profile.controller";
+import { ProfileController } from "../../../../Presentation/controllers/user/pages/profile.controller";
 
 
 import { ProfileDataUseCase } from "../../../../application/use-cases/user/Pages/profilePage";

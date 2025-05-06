@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import logger from "./logger";
 
 export const sendVerificationEmail = async (email: string, otp: string) => {
   try {
@@ -23,7 +24,7 @@ export const sendVerificationEmail = async (email: string, otp: string) => {
     `,
     });
   } catch (error) {
-    console.error("Error sending email:", error);
+    logger.error("Error sending email:", error);
     throw error;
   }
 };

@@ -1,0 +1,29 @@
+// import { Request, Response } from "express";
+// import { GoogleLogin } from "../../../../application/use-cases/user/Auth/googleLogin";
+// import logger from "../../../../utils/logger";
+
+// export class GoogleController {
+//   constructor(private googleLogin: GoogleLogin) {}
+//   async login(req: Request, res: Response): Promise<void> {
+//     try {
+//       const { email, name, sub: googleId } = req.body;
+//       const { user, accessToken, refreshToken } =
+//         await this.googleLogin.execute(name, googleId, email);
+//       res.status(200).json({
+//         success: true,
+//         message: "Google login successful",
+//         user: {
+//           id: user.id,
+//           firstname: user.firstname,
+//           email: user.email,
+//           role: user.role,
+//         },
+//         accessToken,
+//         refreshToken,
+//       });
+//     } catch (error: any) {
+//       logger.error(error);
+//       res.status(error.statusCode || 500).json({ message: error.message });
+//     }
+//   }
+// }

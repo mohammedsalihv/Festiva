@@ -1,8 +1,8 @@
 // Controller
 
-import { HostLoginController } from "../../../../api/controllers/host/auth/hostLogin.controller";
-import { HostRegisterController } from "../../../../api/controllers/host/auth/hostRegister.controller";
-import { RefreshTokenController } from "../../../../api/controllers/user/auth/refreshToken.controller";
+import { HostLoginController } from "../../../../Presentation/controllers/host/auth/hostLogin.controller";
+import { HostRegisterController } from "../../../../Presentation/controllers/host/auth/hostRegister.controller";
+import { RefreshTokenController } from "../../../../Presentation/controllers/user/auth/refreshToken.controller";
 
 // use-case
 

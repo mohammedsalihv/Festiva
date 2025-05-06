@@ -2,14 +2,30 @@ import express, { Application } from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
+import morgan from "morgan";
+import logger from "./utils/logger";
 import errorMiddleware from "./middlewares/errorMiddleware";
-import userRoutes from "./api/routes/userRoutes";
-import hostRoutes from "./api/routes/hostRoutes";
-import adminRoutes from "./api/routes/adminRoutes";
+
+import userAuthRoutes from "./Presentation/routes/user/UserAuthRoutes";
+
+import hostAuthRoutes from "./Presentation/routes/host/HostAuthRoutes";
+import hostRoutes from "./Presentation/routes/host/hostRoutes";
+
+import adminAuthRoutes from "./Presentation/routes/admin/AdminAuthRoutes";
+import adminRoutes from "./Presentation/routes/admin/adminRoutes";
 
 dotenv.config();
 
 const app: Application = express();
+
+
+app.use(
+  morgan('combined',{
+    stream:{
+      write:(message:string) => logger.info(message.trim())
+    }
+  })
+)
 
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
@@ -32,10 +48,19 @@ app.use(express.json({ limit: '10mb' }));
 
 
 
-app.use('/api/admin/auth', adminRoutes)
-app.use("/api/auth", userRoutes);
-app.use("/api/host/auth", hostRoutes);
-app.use("/api/host/service", hostRoutes); 
+// User routes
+app.use("/api/auth", userAuthRoutes);
+//app.use("/api/user", userRoutes);
+
+// Host routes
+app.use("/api/host/auth", hostAuthRoutes);
+app.use("/api/host", hostRoutes);
+
+// Admin routes
+app.use("/api/admin/auth", adminAuthRoutes);
+app.use("/api/admin", adminRoutes);
+
+
 app.use(errorMiddleware);
 
 export default app;

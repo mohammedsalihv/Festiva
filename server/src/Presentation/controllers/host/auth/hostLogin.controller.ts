@@ -1,34 +1,31 @@
 import { Request, Response } from "express";
-import { LoginUser } from "../../../../application/use-cases/user/Auth/loginUser";
+import { LoginHost } from "../../../../application/use-cases/host/Auth/loginHost";
+import logger from "../../../../utils/logger";
 
-export class LoginController {
-  constructor(private loginUser: LoginUser) {}
+export class HostLoginController {
+  constructor(private loginHost: LoginHost) {}
 
-  async login(req: Request, res: Response) {
+  async hostLogin(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
-      const { accessToken, refreshToken, user } = await this.loginUser.execute(
+      const { accessToken, refreshToken, host } = await this.loginHost.execute(
         email,
         password
       );
-
       res.status(200).json({
         success: true,
-        message: "User logged in successfully",
-        user: {
-          id: user.id,
-          firstname: user.firstname,
-          lastname: user.lastname,
-          phone:user.phone,
-          email: user.email,
-          role: user.role,
+        message: "Host logged in successfully",
+        host: {
+          id: host.id,
+          name: host.name,
+          email: host.email,
+          role: "host",
+          accessToken,
+          refreshToken,
         },
-        accessToken,
-        refreshToken,
       });
     } catch (error: any) {
-      console.error("Login Error:", error);
-
+      logger.error("Login Error:", error);
       if (error.message === "Invalid credentials") {
         return res.status(401).json({
           success: false,
@@ -36,7 +33,7 @@ export class LoginController {
         });
       }
 
-      if (error.message === "User not found") {
+      if (error.message === "Host not found") {
         return res.status(404).json({
           success: false,
           message: "User not found",

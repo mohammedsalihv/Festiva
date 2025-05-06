@@ -19,7 +19,7 @@ export interface AddVenueData {
 
 
 export const addVenue = async (data: AddVenueData) => {
-  const response = await axiosInstance.post("/services/addVenue", data);
+  const response = await axiosInstance.post("/addVenue", data);
   console.log(response);
   return response.data;
 };

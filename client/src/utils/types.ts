@@ -29,3 +29,22 @@ export interface LocationFeatures {
   venueDescription: string;
   terms: string;
 }
+
+
+
+
+
+export interface User {
+  _id: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  isActive: boolean;
+  isVerified: boolean;
+  phone: string;
+  password?: string; 
+  profilePic: string[];
+  role: "admin" | "user";
+  timestamp: string;
+  __v?: number;
+}

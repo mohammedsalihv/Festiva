@@ -12,7 +12,7 @@ import CustomToastContainer from "../../../reusable-components/Messages/ToastCon
 import { useDispatch, useSelector } from "react-redux";
 import { setLocationDetails } from "@/redux/Slice/host/locationSlice";
 import { handleFinalSubmit } from "./FinalSubmit";
-import { croppedImages, LocationDetails, VenueDetails, LocationFeatures } from "@/utils/constants/types";
+import { croppedImages, LocationDetails, VenueDetails, LocationFeatures } from "@/utils/types";
 import { useNavigate } from "react-router-dom"; 
 
 interface ErrorState {

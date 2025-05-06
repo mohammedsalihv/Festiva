@@ -1,7 +1,7 @@
 import mongoose, {Schema} from "mongoose"
-import { Iuser } from "../entities/modelInterface/user.interface"
+import { IUser } from "../entities/modelInterface/user.interface"
 
-const UserSchema = new Schema<Iuser>({
+const UserSchema = new Schema<IUser>({
   firstname: { type: String, required: true },
   lastname: { type: String },
   email: { type: String, required: true },
@@ -17,4 +17,4 @@ const UserSchema = new Schema<Iuser>({
   timestamp: { type: Date, default: Date.now },
 });
 
-export const UserModal = mongoose.model<Iuser>("User", UserSchema);
+export const UserModal = mongoose.model<IUser>("User", UserSchema);

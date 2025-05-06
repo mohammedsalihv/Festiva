@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { RegisterHostDTO } from "../../../../config/DTO/hostDto";
 import { RegsiterHost } from "../../../../application/use-cases/host/Auth/registerHost";
+import logger from "../../../../utils/logger";
 
 export class HostRegisterController {
   constructor(private registerHost: RegsiterHost) {}
@@ -39,7 +40,7 @@ export class HostRegisterController {
         refreshToken,
       });
     } catch (error: any) {
-      console.error("Error during registration:", error.message);
+      logger.error("Error during registration:", error.message);
 
       if (error.response) {
         res

@@ -1,4 +1,4 @@
-import { IAdminRepository } from "../../../../domain/entities/repositoryInterface/admin/adminLogin.repository";
+import { IAdminRepository } from "../../../../domain/entities/repositoryInterface/admin/adminLogin.interface";
 import CustomError  from "../../../../utils/errorHandler";
 import { TokenService } from "../../../../application/services/service.token";
 import bcrypt from "bcrypt";

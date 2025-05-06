@@ -1,4 +1,4 @@
-import { venueController } from "../../../../api/controllers/host/service/venue.controller";
+import { venueController } from "../../../../Presentation/controllers/host/service/venue.controller";
 
 import { addVenueUseCase } from "../../../../application/use-cases/host/service/venueUseCase";
 

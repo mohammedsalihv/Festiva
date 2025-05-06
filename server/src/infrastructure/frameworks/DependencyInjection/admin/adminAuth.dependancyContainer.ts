@@ -1,7 +1,7 @@
 // Controller
 
-import { AdminLoginController } from "../../../../api/controllers/admin/auth/adminLogin.controller";
-import { RefreshTokenController } from "../../../../api/controllers/user/auth/refreshToken.controller";
+import { AdminLoginController } from "../../../../Presentation/controllers/admin/auth/adminLogin.controller";
+import { RefreshTokenController } from "../../../../Presentation/controllers/user/auth/refreshToken.controller";
 
 // use-case
 

@@ -1,20 +1,15 @@
-import { Iuser } from "../../../../domain/entities/modelInterface/user.interface";
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/userRepository.interface";
+import { IUser } from "../../../../domain/entities/modelInterface/user.interface";
+import { IUserRegisterRepository } from "../../../../domain/entities/repositoryInterface/user/userRegisterRepository.interface";
 import { UserModal } from "../../../../domain/models/userModel";
 
-export class UserRepository implements IUserRepository {
-    async findByEmail(email: string): Promise<Iuser | null> {
+export class UserRegisterRepository implements IUserRegisterRepository {
+    async findByEmail(email: string): Promise<IUser | null> {
       return UserModal.findOne({ email });
     }
-  
-    async createUser(user: Iuser): Promise<Iuser> {
+    async createUser(user: IUser): Promise<IUser> {
       const newUser = new UserModal(user);
       await newUser.save();
       return newUser;
-    }
-  
-    async updateUser(id: string, updates: Partial<Iuser>): Promise<Iuser | null> {
-      return UserModal.findByIdAndUpdate(id, updates, { new: true });
     }
   }
   

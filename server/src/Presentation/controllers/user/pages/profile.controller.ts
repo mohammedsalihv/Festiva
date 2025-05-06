@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { ProfileDataUseCase } from "../../../../application/use-cases/user/Pages/profilePage";
+import logger from "../../../../utils/logger";
 
 export class ProfileController {
   constructor(private profileDataUseCase: ProfileDataUseCase) {}
 
   async getProfile(req: Request, res: Response) {
     try {
-      const userId = req.user?.id; // Safely access user.id
+      const userId = req.user?.id;
 
       if (!userId) {
         return res.status(401).json({
@@ -25,7 +26,7 @@ export class ProfileController {
         refreshToken,
       });
     } catch (error: any) {
-      console.error("Profile Fetch Error:", error);
+      logger.error("Profile Fetch Error:", error);
 
       if (error.message === "User not found") {
         return res.status(404).json({

@@ -28,9 +28,16 @@ module.exports = {
           '0%': { transform: 'scale(1.4)' },
           '100%': { transform: 'scale(1)' },
         },
+        "slide-in": {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(0%)" },
+        },
       },
       animation: {
         zoomOut: 'zoomOut 1s ease-out forwards',
+      },
+      animation: {
+        "slide-in": "slide-in 0.3s ease-out forwards",
       },
     },
     container:{
