@@ -6,12 +6,12 @@ import morgan from "morgan";
 import logger from "./utils/logger";
 import errorMiddleware from "./middlewares/errorMiddleware";
 
-import userAuthRoutes from "./Presentation/routes/user/UserAuthRoutes";
+import userAuthRoutes from "./Presentation/routes/user/userAuthRoutes";
 
-import hostAuthRoutes from "./Presentation/routes/host/HostAuthRoutes";
+import hostAuthRoutes from "./Presentation/routes/host/hostAuthRoutes";
 import hostRoutes from "./Presentation/routes/host/hostRoutes";
 
-import adminAuthRoutes from "./Presentation/routes/admin/AdminAuthRoutes";
+import adminAuthRoutes from "./Presentation/routes/admin/adminauthRoutes";
 import adminRoutes from "./Presentation/routes/admin/adminRoutes";
 
 dotenv.config();
