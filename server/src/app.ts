@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import logger from "./utils/logger";
 import errorMiddleware from "./middlewares/errorMiddleware";
+import { createUploadsFolder } from "./utils/createUploadsFolder";
 
 import userAuthRoutes from "./Presentation/routes/user/userAuthRoutes";
 import userRoutes from "./Presentation/routes/user/userRoutes";
@@ -13,6 +14,8 @@ import hostRoutes from "./Presentation/routes/host/hostRoutes";
 
 import adminAuthRoutes from "./Presentation/routes/admin/adminauthRoutes";
 import adminRoutes from "./Presentation/routes/admin/adminRoutes";
+
+createUploadsFolder()
 
 dotenv.config();
 const app: Application = express();
@@ -48,7 +51,7 @@ app.use(express.json({ limit: '10mb' }));
 
 
 // User routes
-app.use("/api/auth", userAuthRoutes);
+app.use("/api/user/auth", userAuthRoutes);
 app.use("/api/user", userRoutes);
 
 // Host routes

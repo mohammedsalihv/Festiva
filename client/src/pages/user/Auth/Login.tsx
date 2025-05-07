@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
-import { LoginUser } from "@/services/Auth/user/authService";
+import { LoginUser } from "@/services/user/userAuthService";
 import { setUserDetails } from "@/redux/Slice/user/userSlice";
 import { AxiosError } from "axios";
 import {
@@ -64,9 +64,8 @@ const Login = () => {
       if (data.success) {
         setTimeout(() => {
           toast.success(" Login Successful!");
-        }, 3000);
+        }, 500);
         dispatch(setUserDetails(userData));
-        console.log(userData);
         navigate("/user/home");
       } else {
         toast.error("Login failed. Please check your credentials.");

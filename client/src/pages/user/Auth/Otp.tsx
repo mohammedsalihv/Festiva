@@ -3,7 +3,7 @@ import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useLocation } from "react-router-dom";
-import { verifyOtp, registerUser, sendOtp } from "@/services/Auth/user/authService";
+import { verifyOtp, registerUser, sendOtp } from "@/services/user/userAuthService";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
@@ -68,7 +68,9 @@ const Otp = () => {
         refreshToken: data.refreshToken,
       };
       dispatch(setUserDetails(user));
-      toast.success("Registration successful!");
+      setTimeout(() =>{
+        toast.success("Registration successful!");
+      },500)
       navigate("/login");
     },
     onError: (error: unknown) => {

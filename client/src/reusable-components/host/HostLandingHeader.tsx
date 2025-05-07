@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 
 const HostLandingHeader = () => {
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
-  console.log(userInfo)
 
   return (
     <nav className="fixed top-0 left-0 w-full z-30 bg-white shadow border-b border-gray-200">

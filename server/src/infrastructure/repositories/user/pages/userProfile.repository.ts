@@ -3,11 +3,10 @@ import { UserModal } from "../../../../domain/models/userModel";
 import { IUserProfileRepository } from "../../../../domain/entities/repositoryInterface/user/userProfile.interface";
 
 export class UserProfileRepository implements IUserProfileRepository {
-
-  async changeProfile(userId: string, imageFilename: string): Promise<IUser> {
+  async changeProfile(userId: string, imageUrl: string): Promise<IUser> {
     const updatedUser = await UserModal.findByIdAndUpdate(
       userId,
-      { profilePic: imageFilename },
+      { profilePic: imageUrl },
       { new: true }
     );
 

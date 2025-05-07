@@ -11,6 +11,7 @@ import { RootState } from "@/redux/store";
 import { logoutUser } from "@/redux/Slice/user/userSlice";
 import { Images } from "@/assets";
 import ConfirmDialog from "./ConfirmDialog";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -41,6 +42,9 @@ const Header = () => {
 
   const handleLogout = () => {
     dispatch(logoutUser());
+    setTimeout(()=>{
+      toast.success('Logout successful')
+    },500)
     navigate("/login");
   };
   return (

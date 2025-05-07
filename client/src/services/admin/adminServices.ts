@@ -1,4 +1,4 @@
-import axiosInstance from "@/config/admin/adminAuthAxiosInstence";
+import axiosInstance from "@/config/admin/adminAxiosInstence";
 import { AxiosError } from "axios";
 import { User } from "@/utils/types";
 

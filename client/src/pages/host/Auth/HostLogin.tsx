@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { loginHost } from "@/services/Auth/host/hostAuthService";
+import { loginHost } from "@/services/host/hostAuthService";
 import {
   validateHostLoginForm,
   FormState,
@@ -184,14 +184,6 @@ const HostLogin = () => {
                   className="text-red-500 hover:text-red-400 underline"
                 >
                   Switch
-                </Link>
-              </p>
-              <p className="mt-2">
-                <Link
-                  to="/host/forgot-password"
-                  className="text-gray-400 hover:text-white underline text-xs"
-                >
-                  Forgot password?
                 </Link>
               </p>
             </div>

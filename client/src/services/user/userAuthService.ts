@@ -1,4 +1,4 @@
-import axiosInstance from "@/config/useraxiosInstence";
+import axiosInstance from "@/config/user/userAxiosInstence";
 import { AxiosError } from "axios";
 
 

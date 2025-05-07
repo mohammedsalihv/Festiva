@@ -19,12 +19,11 @@ const UserPrivateRoute: React.FC<UserPrivateRouteProps> = ({ children, allowedRo
   const isAuthenticated = !!accessToken;
 
   if (!isAuthenticated) {
-    console.log(userInfo)
+    console.log('User not authenticated', accessToken,userInfo)
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(role!)) {
-    console.log(userInfo)
     return <Navigate to="/" replace />;
   }
 

@@ -1,4 +1,4 @@
-import axiosInstance from "@/config/hostaxiosInstence";
+import axiosInstance from "@/config/host/hostAxiosInstence";
 
 export interface HostRegisterData {
   name: string;

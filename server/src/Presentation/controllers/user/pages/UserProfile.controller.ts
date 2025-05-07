@@ -12,8 +12,15 @@ export class UserProfileController {
 
   async changeProfile(req: MulterRequest, res: Response) {
     try {
-      const userId = req.params.id;
-      const image = req.file; 
+      const userId = req.params.userId;
+      const image = req.file;
+  
+      if(!image){
+        return res.status(400).json({
+          success:false,
+          message: "No image file uploaded.",
+        })
+      }
 
       if (!userId) {
         return res.status(401).json({

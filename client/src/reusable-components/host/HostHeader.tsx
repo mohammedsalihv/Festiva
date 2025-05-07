@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutHost } from "@/redux/Slice/host/hostSlice";
 import TooltipIcon from "@/components/TooltipIcon";
+import { toast } from "react-toastify";
+import CustomToastContainer from "../Messages/ToastContainer";
 
 const HostHeader: React.FC = () => {
   const dispatch = useDispatch();
@@ -14,6 +16,9 @@ const HostHeader: React.FC = () => {
 
   const handleLogout = () => {
     dispatch(logoutHost());
+    setTimeout(()=>{
+      toast.success('Logout sucessful')
+    },500)
     navigate("/host/login");
   };
   const handleLogoutClick = () => {
@@ -86,7 +91,9 @@ const HostHeader: React.FC = () => {
           }}
           onCancel={() => setConfirmLogout(false)}
         />
+        <CustomToastContainer/>
       </div>
+      
     </header>
   );
 };
