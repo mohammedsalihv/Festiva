@@ -3,14 +3,25 @@ import { setUserDetails } from "@/redux/Slice/user/userSlice";
 import { RootState } from "@/redux/store";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
+import { useNavigate } from "react-router-dom";
+import { logoutUser } from "@/redux/Slice/user/userSlice";
+import { changeProfile } from "@/services/Auth/user/userService";
+import { setLoading } from "@/redux/Slice/host/locationFeaturesSlice";
+import { toast } from "react-toastify";
+import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 
 const Profile: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Profile Information");
   const profile = useSelector((state: RootState) => state.user.userInfo);
+  console.log(profile);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [confirmLogout, setConfirmLogout] = useState(false);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -20,19 +31,38 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handleSaveImage = () => {
+  const handleSaveImage = async () => {
     if (selectedImage && profile) {
-      const imageUrl = URL.createObjectURL(selectedImage);
+      const userId = profile.id;
+      const formData = new FormData();
+      formData.append("file", selectedImage);
+      formData.append("userId", userId);
 
-      dispatch(
-        setUserDetails({
-          profilePhoto: imageUrl,
-        })
-      );
-
-      setSelectedImage(null);
-      setPreviewImage(null);
+      setLoading(true);
+      try {
+        const response = await changeProfile(formData);
+        if(response){
+          toast.success('Image updated')
+        }
+        const imageUrl = URL.createObjectURL(selectedImage);
+        dispatch(
+          setUserDetails({
+            profilePhoto: imageUrl,
+          })
+        );
+        setSelectedImage(null);
+        setPreviewImage(null);
+      } catch (error) {
+        console.error("Error updating profile image:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate("/login");
   };
 
   const tabs = [
@@ -46,9 +76,8 @@ const Profile: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white p-4 md:p-10 text-black">
+    <div className="min-h-screen bg-white p-4 md:p-10 text-black font-JosephicSans">
       <div className="flex flex-col md:flex-row gap-10">
-        {/* Sidebar Tabs */}
         <div className="bg-white p-6 rounded-xl w-full md:w-60 space-y-4 border border-gray-400">
           <div className="flex flex-col space-y-2 text-sm">
             {tabs.map((tab) => (
@@ -59,33 +88,43 @@ const Profile: React.FC = () => {
                     ? "bg-[#6c63ff] text-white"
                     : "hover:border-gray-400"
                 }`}
-                onClick={() => setActiveTab(tab)}
+                onClick={() => {
+                  if (tab === "Logout") {
+                    setConfirmLogout(true);
+                  } else {
+                    setActiveTab(tab);
+                  }
+                }}
               >
                 {tab}
               </button>
             ))}
           </div>
         </div>
-
-        {/* Main Content */}
         <div className="bg-white flex-1 p-6 rounded-xl space-y-6 border border-gray-400">
           {activeTab === "Profile Information" ? (
             <>
-              {/* Profile Picture */}
               <div className="space-y-2">
                 <p className="text-lg font-semibold">Profile picture</p>
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-4 w-full">
-                  <div className="w-14 h-14 border border-black rounded-full overflow-hidden">
-                    <img
-                      src={
-                        previewImage ||
-                        profile?.profilePhoto ||
-                        Images.default_profile
-                      }
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="w-[93px] h-[85px] border border-black rounded-full overflow-hidden relative">
+                    {isLoading ? (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-8 h-8 border-4 border-t-transparent border-blue-500 rounded-full animate-spin"></div>
+                      </div>
+                    ) : (
+                      <img
+                        src={
+                          previewImage ||
+                          profile?.profilePhoto ||
+                          Images.default_profile
+                        }
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                   </div>
+
                   <div className="flex flex-col lg:flex-row gap-2 items-center justify-between w-full">
                     <div className="flex items-center gap-2">
                       <label
@@ -104,7 +143,7 @@ const Profile: React.FC = () => {
                     </div>
                     {selectedImage && (
                       <button
-                        className="bg-[#6c63ff] text-white px-4 py-1 rounded text-sm font-semibold"
+                        className="bg-[#6c63ff] text-white hover:bg-[#564eef] px-4 py-2 rounded text-sm font-semibold"
                         onClick={handleSaveImage}
                       >
                         Save
@@ -113,10 +152,7 @@ const Profile: React.FC = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Personal Data & Change Password */}
               <div className="flex flex-col lg:flex-row gap-6 w-full">
-                {/* Personal Data */}
                 <div className="space-y-3 flex-1">
                   <p className="text-lg font-semibold">Personal data</p>
                   <div className="flex flex-col lg:flex-row gap-4 w-full">
@@ -126,6 +162,7 @@ const Profile: React.FC = () => {
                       value={profile?.firstname || ""}
                       className="border-b-2 p-2 rounded w-full"
                       readOnly
+                      disabled
                     />
                     <input
                       type="text"
@@ -133,6 +170,7 @@ const Profile: React.FC = () => {
                       value={profile?.lastname || ""}
                       className="border-b-2 p-2 rounded w-full"
                       readOnly
+                      disabled
                     />
                   </div>
                   <input
@@ -141,10 +179,9 @@ const Profile: React.FC = () => {
                     value={profile?.email || ""}
                     className="border-b-2 p-2 rounded w-full"
                     readOnly
+                    disabled
                   />
                 </div>
-
-                {/* Change Password */}
                 <div className="space-y-3 lg:w-1/2 w-full">
                   <p className="text-lg font-semibold">Change Password</p>
                   <input
@@ -158,21 +195,19 @@ const Profile: React.FC = () => {
                     className="border-b-2 p-2 rounded w-full"
                   />
                   <div className="flex justify-end">
-                    <button className="bg-[#6c63ff] text-white px-4 py-2 rounded text-sm font-semibold">
+                    <button className="bg-[#6c63ff] hover:bg-[#564eef] text-white px-4 py-2 rounded text-sm font-semibold">
                       Change
                     </button>
                   </div>
                 </div>
               </div>
-
-              {/* Delete Account */}
               <div className="space-y-2">
                 <p className="text-lg font-semibold">Delete account</p>
                 <p className="text-sm text-gray-400">
                   Deleting account is a permanent action and cannot be undone.
                   Are you sure you want to proceed?
                 </p>
-                <button className="bg-red-600 text-white px-4 py-2 rounded text-sm font-semibold">
+                <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-semibold">
                   Delete
                 </button>
               </div>
@@ -184,6 +219,19 @@ const Profile: React.FC = () => {
           )}
         </div>
       </div>
+      <ConfirmDialog
+        isOpen={confirmLogout}
+        title="Confirm Logout"
+        description="Are you sure you want to logout?"
+        confirmText="Yes, Logout"
+        cancelText="Cancel"
+        onConfirm={() => {
+          handleLogout();
+          setConfirmLogout(false);
+        }}
+        onCancel={() => setConfirmLogout(false)}
+      />
+      <CustomToastContainer/>
     </div>
   );
 };

@@ -45,7 +45,7 @@ const Header = () => {
   };
   return (
     <>
-      <nav className="absolute top-0 left-0 w-full z-30 bg-transparent mt-4">
+      <nav className="fixed top-0 left-0 w-full z-30 bg-black bg-opacity-40 text-white backdrop-blur-md">
         <div className="container mx-auto flex justify-between items-center px-4 py-6">
           <LogoText />
           <div className="hidden md:block">
@@ -87,6 +87,12 @@ const Header = () => {
                       onClick={() => navigate("/user/profile")}
                     >
                       Profile
+                    </button>
+                    <button
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-black"
+                      onClick={() => navigate("/user/bookings")}
+                    >
+                      My bookings
                     </button>
                     <button
                       onClick={() => setConfirmLogout(true)}

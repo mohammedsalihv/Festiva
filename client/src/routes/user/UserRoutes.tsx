@@ -28,9 +28,7 @@ const UserRoutes: React.FC = () => {
       <Route
         path="/profile"
         element={
-          <PrivateRoute>
             <Profile />
-          </PrivateRoute>
         }
       />
       <Route

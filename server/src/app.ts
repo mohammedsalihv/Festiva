@@ -7,7 +7,7 @@ import logger from "./utils/logger";
 import errorMiddleware from "./middlewares/errorMiddleware";
 
 import userAuthRoutes from "./Presentation/routes/user/userAuthRoutes";
-
+import userRoutes from "./Presentation/routes/user/userRoutes";
 import hostAuthRoutes from "./Presentation/routes/host/hostAuthRoutes";
 import hostRoutes from "./Presentation/routes/host/hostRoutes";
 
@@ -15,7 +15,6 @@ import adminAuthRoutes from "./Presentation/routes/admin/adminauthRoutes";
 import adminRoutes from "./Presentation/routes/admin/adminRoutes";
 
 dotenv.config();
-
 const app: Application = express();
 
 
@@ -50,7 +49,7 @@ app.use(express.json({ limit: '10mb' }));
 
 // User routes
 app.use("/api/auth", userAuthRoutes);
-//app.use("/api/user", userRoutes);
+app.use("/api/user", userRoutes);
 
 // Host routes
 app.use("/api/host/auth", hostAuthRoutes);

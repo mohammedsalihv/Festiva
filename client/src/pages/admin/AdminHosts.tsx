@@ -226,7 +226,7 @@ const AdminHosts = () => {
                 <p>
                   <strong>Register Time and Date:</strong>
                 </p>
-                <p>{selectedUser.registrationDateTime}</p>
+                <p>{selectedUser.registrationDateTime.toLocaleString()}</p>
               </div>
             </div>
 
