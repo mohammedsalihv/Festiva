@@ -90,7 +90,8 @@ const AdminUsers = () => {
                   <th className="px-4 py-2">
                     <div className="flex justify-center">Person</div>
                   </th>
-                  <th className="px-4 py-2">Name</th>
+                  <th className="px-4 py-2">Firstname</th>
+                  <th className="px-4 py-2">Lastname</th>
                   <th className="px-4 py-2">Email</th>
                   <th className="px-4 py-2">Role</th>
                 </tr>
@@ -121,7 +122,10 @@ const AdminUsers = () => {
                         </div>
                       </td>
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
-                        {user.firstname || "N/A"} {user.lastname || ""}
+                        {user.firstname || "N/A"}
+                      </td>
+                      <td className="px-4 py-2 text-[10px] lg:text-sm">
+                        {user.lastname || "N/A"}
                       </td>
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
                         {user.email || "N/A"}

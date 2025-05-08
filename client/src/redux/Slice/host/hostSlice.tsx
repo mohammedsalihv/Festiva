@@ -29,8 +29,18 @@ const hostSlice = createSlice({
   name: "host",
   initialState,
   reducers: {
-    setHostDetails: (state, action: PayloadAction<HostState["hostInfo"]>) => {
-      state.hostInfo = action.payload;
+    setHostDetails: (
+      state,
+      action: PayloadAction<Partial<HostState["hostInfo"]>>
+    ) => {
+      if (state.hostInfo) {
+        state.hostInfo = {
+          ...state.hostInfo,
+          ...action.payload,
+        };
+      } else {
+        state.hostInfo = action.payload as HostState["hostInfo"];
+      }
       localStorage.setItem("hostInfo", JSON.stringify(action.payload));
     },
     logoutHost: (state) => {

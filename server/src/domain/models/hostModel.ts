@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import { Ihost } from "../entities/modelInterface/host.interface";
+import { IHost } from "../entities/modelInterface/host.interface";
 
-const HostSchema = new Schema<Ihost>({
+const HostSchema = new Schema<IHost>({
   name: { type: String, required: true },
   phone: { type: String, required: true },
   password: { type: String, required: true },
@@ -9,9 +9,15 @@ const HostSchema = new Schema<Ihost>({
   role: { type: String, enum: ["host", "user"], default: "host" },
   profile_pic: { type: String, required: false, default: "" }, 
   location: { type: String, required: true },
-  isActive: { type: Boolean, default: true },
-  is_blocked: { type: Boolean, default: false },
+  isBlocked:{ type:Boolean , default:false},
+  isVerfied:{type:Boolean , default:false },
+  isSubscriber:{type:Boolean , default:false },
+  isActive:{type:Boolean , default:true },
+  listedAssets:{type:Number , default:0 },
+  totalRequests:{type:Number , default:0 },
+  acceptedRequests:{type:Number , default:0 },
+  rejectedRequests:{type:Number , default:0 },
   timestamp: { type: Date, default: Date.now },
 });
 
-export const HostModel = mongoose.model<Ihost>("Host", HostSchema);
+export const HostModel = mongoose.model<IHost>("Host", HostSchema);

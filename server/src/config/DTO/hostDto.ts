@@ -1,9 +1,17 @@
 export interface RegisterHostDTO {
-    name: string;
-    email: string;
-    phone: string;
-    password: string;
-    location: string;
-    profile_pic?: string;
-  }
-  
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  location: string;
+  role?: string;
+  profile_pic?: string;
+  isBlocked?: boolean;
+  isVerfied?: boolean;
+  isSubscriber?: boolean;
+  isActive?: boolean;
+  listedAssets?: number;
+  totalRequests?: number;
+  acceptedRequests?: number;
+  rejectedRequests?: number;
+}

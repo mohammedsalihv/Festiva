@@ -62,7 +62,7 @@ const HostRegister = () => {
       setSuccess("Host registration successful!");
       setTimeout(() => {
         toast.success("Host registration successful!");
-      }, 3000);
+      }, 500);
       setFormData({
         name: "",
         email: "",
