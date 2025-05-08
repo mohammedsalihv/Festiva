@@ -1,4 +1,4 @@
-import { AddVenueData, addVenue } from "@/services/Auth/host/hostService";
+import { AddVenueData, addVenue } from "@/services/host/hostService";
 import { toast } from "react-toastify";
 import { NavigateFunction } from "react-router-dom";
 

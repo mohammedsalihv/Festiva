@@ -3,7 +3,7 @@ import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useLocation } from "react-router-dom";
-import { verifyOtp, registerUser, sendOtp } from "@/services/Auth/user/authService";
+import { verifyOtp, registerUser, sendOtp } from "@/services/user/userAuthService";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";

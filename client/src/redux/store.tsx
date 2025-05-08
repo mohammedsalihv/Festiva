@@ -8,6 +8,7 @@ import venueDetailsReducer from "@/redux/Slice/host/venueDetailsSlice";
 import locationReducer from "@/redux/Slice/host/locationSlice";
 import adminReduer from "@/redux/Slice/admin/adminSlice";
 import userManagementReducer from "@/redux/Slice/admin/userManagementSlice";
+import hostManagementReducer from "@/redux/Slice/admin/hostManagementSlice";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     location: locationReducer,
     admin: adminReduer,
     userManagement: userManagementReducer,
+    hostManagement: hostManagementReducer,
   },
 });
 

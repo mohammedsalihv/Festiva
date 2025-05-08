@@ -53,7 +53,7 @@ const AdminUsers = () => {
     })();
   }, [dispatch, page]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="text-cente font-bold px-4 py-4">Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (

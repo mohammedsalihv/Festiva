@@ -1,4 +1,4 @@
-import axiosInstance from "@/config/admin/adminAuthAxiosInstence";
+import axiosInstance from "@/config/admin/adminAxiosInstence";
 import { AxiosError } from "axios";
 export interface AdminLoginData {
   email: string;

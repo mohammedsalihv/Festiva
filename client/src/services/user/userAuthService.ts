@@ -1,4 +1,5 @@
-import axiosInstance from "@/config/useraxiosInstence";
+import axiosInstance from "@/config/user/userAxiosInstence";
+import { AxiosError } from "axios";
 
 
 export interface SignupData {
@@ -42,8 +43,10 @@ export const LoginUser = async (data: LoginData) => {
   try {
     const response = await axiosInstance.post("/auth/login", data);
     return response.data;
-  } catch (error: any) {
-    console.error("Login failed:", error.response?.data || error.message);
+  } catch (error: unknown) {
+    if(error instanceof AxiosError){
+      console.log('Login failed',error)
+    }
     throw error;
   }
 };

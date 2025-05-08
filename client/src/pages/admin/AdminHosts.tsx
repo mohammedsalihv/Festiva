@@ -10,107 +10,50 @@ import Drawer from "@/components/Drawer";
 import { IoMdArrowDropright } from "react-icons/io";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { CgCloseR } from "react-icons/cg";
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  location: string;
-  active: boolean;
-  verified: string;
-  registrationDateTime: string;
-  listedAssets: number;
-  totalRequests: number;
-  acceptedRequests: number;
-  rejectedRequests: number;
-  subscribed: boolean;
-}
+import { getAllHosts } from "@/services/admin/adminServices";
+import { useDispatch, useSelector } from "react-redux";
+import { setAllHosts } from "@/redux/Slice/admin/hostManagementSlice";
+import { AxiosError } from "axios";
+import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import { toast } from "react-toastify";
+import { Host } from "@/utils/types";
+import { RootState } from "@/redux/store";
+import { AiTwotoneEdit } from "react-icons/ai";
+import { MdBlock } from "react-icons/md";
 
 const AdminHosts = () => {
   const [page, setPage] = useState(1);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const users = [
-    {
-      id: 1,
-      name: "Alice Johnson",
-      email: "alice.johnson@example.com",
-      phone: "123456798",
-      location: "NY, USA",
-      active: true,
-      verified: "verified",
-      registrationDateTime: "2025-05-03T09:00:00Z",
-      listedAssets: 3,
-      totalRequests: 10,
-      acceptedRequests: 7,
-      rejectedRequests: 3,
-      subscribed: true,
-    },
-    {
-      id: 2,
-      name: "Bob Smith",
-      email: "bob.smith@example.com",
-      phone: "123456798",
-      location: "LA, USA",
-      active: true,
-      verified: "not verified",
-      registrationDateTime: "2025-05-01T11:30:00Z",
-      listedAssets: 3,
-      totalRequests: 10,
-      acceptedRequests: 7,
-      rejectedRequests: 3,
-      subscribed: true,
-    },
-    {
-      id: 3,
-      name: "Catherine Lee",
-      email: "catherine.lee@example.com",
-      phone: "123456798",
-      location: "TX, USA",
-      active: true,
-      verified: "verified",
-      registrationDateTime: "2025-04-28T15:45:00Z",
-      listedAssets: 3,
-      totalRequests: 10,
-      acceptedRequests: 7,
-      rejectedRequests: 3,
-      subscribed: true,
-    },
-    {
-      id: 4,
-      name: "David Wright",
-      email: "david.wright@example.com",
-      phone: "123456798",
-      location: "FL, USA",
-      active: false,
-      verified: "not verified",
-      registrationDateTime: "2025-05-02T08:10:00Z",
-      listedAssets: 3,
-      totalRequests: 10,
-      acceptedRequests: 7,
-      rejectedRequests: 3,
-      subscribed: false,
-    },
-    {
-      id: 5,
-      name: "Emily Davis",
-      email: "emily.davis@example.com",
-      phone: "123456798",
-      location: "IL, USA",
-      active: true,
-      verified: "verified",
-      registrationDateTime: "2025-05-03T12:00:00Z",
-      listedAssets: 3,
-      totalRequests: 10,
-      acceptedRequests: 7,
-      rejectedRequests: 3,
-      subscribed: true,
-    },
-  ];
+  const [selectedUser, setSelectedUser] = useState<Host | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch();
+  const hosts = useSelector((state: RootState) => state.hostManagement.hosts);
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const data = await getAllHosts();
+        dispatch(setAllHosts(data));
+        toast.success("list refreshed");
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          console.log("Axios Error", error.response?.data || error.message);
+          setError("Failed to load hosts");
+          toast.error("hosts list fetching failed");
+        } else {
+          console.log("something went wrong", error);
+          setError("An unexpected error occurred");
+        }
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [dispatch]);
 
-  useEffect(()=>{
-    
-  })
+  if (loading)
+    return <div className="text-cente font-bold px-4 py-4">Loading...</div>;
+  if (error)
+    return <div className="text-cente font-bold px-4 py-4">{error}</div>;
 
   return (
     <AdminLayout>
@@ -132,47 +75,52 @@ const AdminHosts = () => {
           </div>
           <div className="relative w-full overflow-x-auto">
             <table className="min-w-full table-auto divide-y divide-gray-200">
-              <thead className="bg-gray-50 text-left">
+              <thead className="bg-gray-50 text-center">
                 <tr>
-                  <th className="px-4 py-2 text-left">
+                  <th className="px-6 lg:px-3 py-2">
+                    <div className="flex justify-center">
                     <VscListSelection />
+                    </div>
                   </th>
-                  <th className="px-4 py-2 text-left text-sm">Person</th>
-                  <th className="px-4 py-2 text-left text-sm">Email</th>
-                  <th className="px-4 py-2 text-left text-sm">Block</th>
-                  <th className="px-4 py-2 text-left text-sm">More</th>
+                  <th className="px-4 py-2">
+                    <div className="flex justify-center">
+                    Person
+                    </div>
+                  </th>
+                  <th className="px-4 py-2 ">Name</th>
+                  <th className="px-4 py-2 ">Email</th>
+                  <th className="px-4 py-2">More</th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {users.map((user, index) => (
+              <tbody className="bg-white divide-y divide-gray-200 text-center">
+                {hosts.map((host, index) => (
                   <tr
-                    key={user.id}
+                    key={host._id}
                     className="cursor-pointer hover:bg-gray-100 transition-all duration-200"
                   >
                     <td className="px-4 py-2">{index + 1}</td>
-                    <td className="px-4 py-2 flex items-center gap-2">
+                    <td className="flex justify-center gap-2">
                       <img
-                        src={Images.default_profile}
+                        src={host.profile_pic || Images.casual_user}
                         alt="Profile"
                         className="w-8 h-8 rounded-full"
                       />
+                    </td>
+                    <td className="px-4 py-2 text-[10px] lg:text-sm">
                       <span className="text-[10px] lg:text-sm">
-                        {user.name}
+                        {host.name}
                       </span>
                     </td>
                     <td className="px-4 py-2 text-[10px] lg:text-sm">
-                      {user.email}
+                      {host.email}
                     </td>
                     <td className="px-4 py-2">
-                      <button className="border px-2 py-1 rounded text-sm hover:bg-black hover:text-white">
-                        Block
-                      </button>
-                    </td>
-                    <td className="px-4 py-2">
-                      <IoMdArrowForward
+                    <div className="flex justify-center">
+                    <IoMdArrowForward
                         className="text-black h-5 w-5 lg:h-7 lg:w-7"
-                        onClick={() => setSelectedUser(user)}
+                        onClick={() => setSelectedUser(host)}
                       />
+                    </div>
                     </td>
                   </tr>
                 ))}
@@ -196,8 +144,7 @@ const AdminHosts = () => {
         {" "}
         {selectedUser && (
           <>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:px-10 lg:py-10 px-4 py-4 font-prompt">
-              {/* Left - Image and Info */}
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:px-5 lg:py-5 px-4 py-4 font-prompt">
               <div className="flex lg:items-start items-center">
                 <img
                   src={Images.casual_user}
@@ -216,25 +163,35 @@ const AdminHosts = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col justify-center items-center text-sm">
+              <div className="flex flex-col justify-center lg:items-center items-start text-sm">
                 <p
                   className={`${
-                    selectedUser.active ? "text-green-500" : "text-red-500"
+                    selectedUser.isActive ? "text-green-500" : "text-red-500"
                   } font-semibold text-sm`}
                 >
-                  {selectedUser.active ? "Active" : "Not Active"}
+                  {selectedUser.isActive ? "Active" : "Not Active"}
                 </p>
                 <p>Verified</p>
               </div>
-              <div className="flex flex-col justify-center lg:items-end items-center text-sm">
+              <div className="flex flex-col justify-center lg:items-end items-start text-sm">
                 <p>
                   <strong>Register Time and Date:</strong>
                 </p>
-                <p>{selectedUser.registrationDateTime}</p>
+                <p>timestamp</p>
+              </div>
+              <div className="flex flex-col justify-center lg:items-end items-start text-sm">
+                <p className="flex md:flex-col flex-row gap-1">
+                <button className="border px-2 py-1 rounded text-sm bg-yellow-500 hover:bg-yellow-600 text-white flex gap-1">
+                      Edit < AiTwotoneEdit className="w-4 h-4"/>
+                      </button>
+                <button className="border px-2 py-1 rounded text-sm bg-red-600 hover:bg-red-700 text-white flex gap-1">
+                      Block < MdBlock className="w-4 h-4"/>
+                      </button>
+                </p>
               </div>
             </div>
 
-            <div className="lg:px-20">
+            <div className="lg:px-14">
               <div className="w-full overflow-x-auto font-prompt">
                 <table className="w-full table-auto border-collapse text-left">
                   <thead className="bg-gray-100">
@@ -255,18 +212,17 @@ const AdminHosts = () => {
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
                         {selectedUser.location}
                       </td>
-                      <td className="px-4 py-2 text-[10px] lg:text-sm">
-                      </td>
+                      <td className="px-4 py-2 text-[10px] lg:text-sm"></td>
                     </tr>
                     <tr>
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
                         Listed Assets
                       </td>
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
-                          {selectedUser.listedAssets}{" "}
+                        {selectedUser.listedAssets}{" "}
                       </td>
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
-                      <IoMdArrowDropright className="w-7 h-6 cursor-pointer text-blue-800" />
+                       <a href=""><IoMdArrowDropright className="w-7 h-6 cursor-pointer text-blue-800 underline" /></a>
                       </td>
                     </tr>
                     <tr>
@@ -274,10 +230,10 @@ const AdminHosts = () => {
                         Total Requests
                       </td>
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
-                      {selectedUser.totalRequests}
+                        {selectedUser.totalRequests}
                       </td>
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
-                      <IoMdArrowDropright className="w-7 h-6 cursor-pointer text-blue-800" />
+                        <IoMdArrowDropright className="w-7 h-6 cursor-pointer text-blue-800" />
                       </td>
                     </tr>
                     <tr>
@@ -285,10 +241,10 @@ const AdminHosts = () => {
                         Accepted Requests
                       </td>
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
-                      {selectedUser.acceptedRequests}
+                        {selectedUser.acceptedRequests}
                       </td>
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
-                      <IoMdArrowDropright className="w-7 h-6 cursor-pointer text-blue-800" />
+                        <IoMdArrowDropright className="w-7 h-6 cursor-pointer text-blue-800" />
                       </td>
                     </tr>
                     <tr>
@@ -296,10 +252,10 @@ const AdminHosts = () => {
                         Rejected Requests
                       </td>
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
-                      {selectedUser.rejectedRequests}
+                        {selectedUser.rejectedRequests}
                       </td>
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
-                      <IoMdArrowDropright className="w-7 h-6 cursor-pointer text-blue-800" />
+                        <IoMdArrowDropright className="w-7 h-6 cursor-pointer text-blue-800" />
                       </td>
                     </tr>
                     <tr>
@@ -307,7 +263,7 @@ const AdminHosts = () => {
                         Subscribed
                       </td>
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
-                        {selectedUser.subscribed ? (
+                        {selectedUser.isSubscriber ? (
                           <IoMdCheckmarkCircleOutline className="w-5 h-5 text-green-500" />
                         ) : (
                           <CgCloseR className="w-5 h-5 text-red-500" />
@@ -317,6 +273,7 @@ const AdminHosts = () => {
                   </tbody>
                 </table>
               </div>
+              <CustomToastContainer />
             </div>
           </>
         )}
