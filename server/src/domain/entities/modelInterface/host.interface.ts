@@ -1,13 +1,19 @@
-export interface Ihost{
-    _id?: string;
-    name?:string;
-    phone?:string;
-    password?:string;
-    location?:string;
+export interface IHost{
+    id?:string
+    name?: string;
+    email?: string;
+    phone?: string;
+    password?: string;
+    location?: string;
     role?:string;
-    email?:string;
-    profile_pic?:string;
-    isActive?: boolean;
+    profile_pic?: string;
+    isBlocked?:boolean;
+    isVerfied?:boolean;
+    isSubscriber?:boolean;
+    isActive?:boolean;
+    listedAssets?:number;
+    totalRequests?:number;
+    acceptedRequests?:number
+    rejectedRequests?:number;
     timestamp?: Date;
-    is_blocked?: boolean;
 }

@@ -2,12 +2,12 @@ import { Request, Response } from "express";
 import { UserManagementUseCase } from "../../../application/use-cases/admin/UserManagement.usecase";
 import logger from "../../../utils/logger";
 
-export class AdminController {
-  constructor(private getUserManagementUseCase: UserManagementUseCase) {}
+export class UserAdminController {
+  constructor(private UserManagementUseCase: UserManagementUseCase) {}
 
   async getUsers(req: Request, res: Response): Promise<void> {
     try {
-      const users = await this.getUserManagementUseCase.execute();
+      const users = await this.UserManagementUseCase.execute();
       res.status(200).json({
         message: "Users list fetched successfully",
         success: true,

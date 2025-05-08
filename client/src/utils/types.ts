@@ -48,3 +48,15 @@ export interface User {
   timestamp: string;
   __v?: number;
 }
+
+export interface Host{
+  id?:string
+  name?: string;
+  email?: string;
+  phone?: string;
+  password?: string;
+  location?: string;
+  role?:string;
+  profile_pic?: string;
+  timestamp?: Date;
+}

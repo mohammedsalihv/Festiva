@@ -4,7 +4,7 @@ import { FaSort } from "react-icons/fa";
 import { VscListSelection } from "react-icons/vsc";
 import { Images } from "@/assets";
 import Pagination from "@/components/Pagination";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMdArrowForward } from "react-icons/io";
 import Drawer from "@/components/Drawer";
 import { IoMdArrowDropright } from "react-icons/io";
@@ -107,6 +107,10 @@ const AdminHosts = () => {
       subscribed: true,
     },
   ];
+
+  useEffect(()=>{
+    
+  })
 
   return (
     <AdminLayout>
