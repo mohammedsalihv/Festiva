@@ -39,3 +39,6 @@ coverage/
 
 # Ignore build artifacts
 *.map
+
+
+/uploads/

@@ -13,9 +13,8 @@ const Landing = () => {
       className="w-full bg-white text-black"
       initial="hidden"
       animate="show"
-      variants={fadeInUp} // Fix applied here
+      variants={fadeInUp} 
     >
-      {/* Hero Section */}
       <motion.section
         variants={fadeInUp}
         className="w-full bg-black text-white p-6 md:p-12 text-center"

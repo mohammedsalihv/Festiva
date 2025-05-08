@@ -68,7 +68,9 @@ const Otp = () => {
         refreshToken: data.refreshToken,
       };
       dispatch(setUserDetails(user));
-      toast.success("Registration successful!");
+      setTimeout(() =>{
+        toast.success("Registration successful!");
+      },500)
       navigate("/login");
     },
     onError: (error: unknown) => {

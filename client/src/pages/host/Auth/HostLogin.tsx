@@ -186,14 +186,6 @@ const HostLogin = () => {
                   Switch
                 </Link>
               </p>
-              <p className="mt-2">
-                <Link
-                  to="/host/forgot-password"
-                  className="text-gray-400 hover:text-white underline text-xs"
-                >
-                  Forgot password?
-                </Link>
-              </p>
             </div>
           </form>
         </div>

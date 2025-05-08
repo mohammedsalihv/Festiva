@@ -64,9 +64,8 @@ const Login = () => {
       if (data.success) {
         setTimeout(() => {
           toast.success(" Login Successful!");
-        }, 3000);
+        }, 500);
         dispatch(setUserDetails(userData));
-        console.log(userData);
         navigate("/user/home");
       } else {
         toast.error("Login failed. Please check your credentials.");

@@ -45,9 +45,14 @@ export const LoginUser = async (data: LoginData) => {
     return response.data;
   } catch (error: unknown) {
     if(error instanceof AxiosError){
+<<<<<<< HEAD
       console.log('Login failed',error)
     }
+=======
+    console.error("Login failed:", error.response?.data || error.message);
+>>>>>>> main
     throw error;
+    }
   }
 };
 

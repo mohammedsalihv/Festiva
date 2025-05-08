@@ -1,5 +1,5 @@
 import express from "express";
-import { userController , otpController , verifyOtpController , loginController } from "../../../infrastructure/frameworks/DependencyInjection/user/Auth.dependancyContainer";
+import { userController , otpController , verifyOtpController , loginController , refreshTokenController } from "../../../infrastructure/frameworks/DependencyInjection/user/Auth.dependancyContainer";
 import logger from "../../../utils/logger";
 
 const userAuthRoutes = express.Router();
@@ -35,6 +35,17 @@ userAuthRoutes.post("/login", async (req, res) => {
     logger.info(error);
   }
 });
+
+userAuthRoutes.post("/refresh", async (req, res) => {
+  try {
+    await refreshTokenController.refreshAccessToken(req, res);
+  } catch (error) {
+    logger.info(error);
+  }
+});
+
+
+
 
 // userRoutes.post("/google-login", async (req, res) => {
 //   try {

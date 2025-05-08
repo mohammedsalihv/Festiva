@@ -2,6 +2,8 @@ import React, { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import Header from "@/reusable-components/user/Landing/Header";
+
 
 interface UserPrivateRouteProps {
   children: ReactNode;
@@ -17,16 +19,21 @@ const UserPrivateRoute: React.FC<UserPrivateRouteProps> = ({ children, allowedRo
   const isAuthenticated = !!accessToken;
 
   if (!isAuthenticated) {
-    console.log(userInfo)
+    console.log('User not authenticated', accessToken,userInfo)
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(role!)) {
-    console.log(userInfo)
     return <Navigate to="/" replace />;
   }
 
-  return <>{children}</>;
+  return <>
+  <Header/>
+  <div className="pt-16">
+  {children}
+  </div>
+
+  </>;
 };
 
 export default UserPrivateRoute;

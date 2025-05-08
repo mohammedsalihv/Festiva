@@ -3,7 +3,7 @@ import store from "@/redux/store";
 import { setUserDetails, logoutUser } from "@/redux/Slice/user/userSlice";
 
 const axiosInstance: AxiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL || "http://localhost:4000/api", 
+    baseURL: import.meta.env.VITE_BASE_URL_USER || "http://localhost:4000/api/user", 
     withCredentials: true,
     timeout: 10000,
   });
@@ -18,6 +18,7 @@ axiosInstance.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
+
 
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -35,7 +36,7 @@ axiosInstance.interceptors.response.use(
         }
 
         const response = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/auth/refresh`,
+          `${import.meta.env.VITE_BASE_URL_USER}/auth/refresh`,
           { refreshToken }
         );
 

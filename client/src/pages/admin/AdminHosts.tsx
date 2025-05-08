@@ -177,6 +177,7 @@ const AdminHosts = () => {
                 <p>
                   <strong>Register Time and Date:</strong>
                 </p>
+<<<<<<< HEAD
                 <p>timestamp</p>
               </div>
               <div className="flex flex-col justify-center lg:items-end items-start text-sm">
@@ -188,6 +189,9 @@ const AdminHosts = () => {
                       Block < MdBlock className="w-4 h-4"/>
                       </button>
                 </p>
+=======
+                <p>{selectedUser.registrationDateTime.toLocaleString()}</p>
+>>>>>>> main
               </div>
             </div>
 
