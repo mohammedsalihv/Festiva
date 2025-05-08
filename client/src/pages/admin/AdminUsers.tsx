@@ -8,17 +8,27 @@ import { FaSort } from "react-icons/fa";
 import { AiTwotoneEdit } from "react-icons/ai";
 import Pagination from "@/components/Pagination";
 import { MdBlock } from "react-icons/md";
-import { getAllUsers } from "@/services/admin/adminServices";
+import { getAllUsers } from "@/services/admin/userManagement.services";
 import { setAllUsers } from "@/redux/Slice/admin/userManagementSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { User } from "@/utils/types";
 import { AxiosError } from "axios";
+import { CgUnblock } from "react-icons/cg";
+import { blockUser } from "@/services/admin/userManagement.services";
+import logger from "@/utils/logger";
+import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
+
+
+
+
+
 
 const AdminUsers = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [confirmAction , setConfirmAction] = useState(false)
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const userData = useSelector(
@@ -52,10 +62,32 @@ const AdminUsers = () => {
       }
     })();
   }, [dispatch, page]);
-  
-  if (loading) return <div className="text-cente font-bold px-4 py-4">Loading...</div>;
 
-  if (loading) return <div className="text-center font-poppins p-10">Loading...</div>;
+  const handleBlock = async (userId : string) =>{
+    try {
+      await blockUser(userId)
+    } catch (error : unknown) {
+      if (error instanceof AxiosError) {
+        const errorMessage = error.response?.data?.message || error.message;
+        logger.error({ userId, error: errorMessage }, "Blocking failed");
+        throw new Error(`Blocking failed: ${errorMessage}`);
+      } else {
+        const errorMessage = (error as Error).message || "Something went wrong";
+        logger.error({ userId, error: errorMessage }, "Blocking failed");
+        throw new Error(`Blocking failed: ${errorMessage}`);
+      }
+    }
+  }
+
+  const handleConfirm = () =>{
+
+  }
+
+  if (loading)
+    return <div className="text-cente font-bold px-4 py-4">Loading...</div>;
+
+  if (loading)
+    return <div className="text-center font-poppins p-10">Loading...</div>;
 
   if (error) return <div>{error}</div>;
 
@@ -143,9 +175,11 @@ const AdminUsers = () => {
           </div>
         </div>
         {selectedUser && (
-          <div className="w-full md:w-1/3 p-2 bg-gray-50 mt-7">
-            <div className="flex justify-between items-center mb-4 mt-7">
-              <h3 className="text-sm lg:text-xl font-semibold">User Details</h3>
+          <div className="w-full md:w-1/3 p-2 bg-gray-50">
+            <div className="flex justify-between items-center mb-4 mt-2">
+              <h3 className="text-sm lg:text-xl font-semibold px-2">
+                User Details
+              </h3>
               <RiCloseFill
                 className="w-6 h-6 cursor-pointer"
                 onClick={() => setSelectedUser(null)}
@@ -158,7 +192,7 @@ const AdminUsers = () => {
                 className="w-24 h-24 mb-4 rounded-full"
               />
               <p className="text-[12px] lg:text-sm">
-                <strong>Name:</strong> {selectedUser.firstname || "N/A"}{" "}
+                <strong>Name:</strong> {selectedUser.firstname || "N/A"}
                 {selectedUser.lastname || ""}
               </p>
               <p className="text-[12px] text-sm lg:text-base">
@@ -187,12 +221,22 @@ const AdminUsers = () => {
                   Edit
                   <AiTwotoneEdit className="w-4 h-4" />
                 </button>
-                <button className="px-3 p-1 border rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-1">
-                  Block
-                  <MdBlock className="w-4 h-4" />
-                </button>
+                {selectedUser.isBlocked ? (
+                  <button className="px-3 p-1 border rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-1">
+                    Unblock
+                    <CgUnblock className="w-4 h-4" />
+                  </button>
+                ) : (
+                  <button className="px-3 p-1 border rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-1">
+                    Block
+                    <MdBlock className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
+            <ConfirmDialog
+            
+            />
           </div>
         )}
       </div>

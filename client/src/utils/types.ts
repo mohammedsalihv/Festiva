@@ -37,6 +37,7 @@ export interface User {
   email: string;
   firstname: string;
   lastname: string;
+  isBlocked:boolean;
   isActive: boolean;
   isVerified: boolean;
   phone: string;

@@ -10,7 +10,7 @@ import Drawer from "@/components/Drawer";
 import { IoMdArrowDropright } from "react-icons/io";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { CgCloseR } from "react-icons/cg";
-import { getAllHosts } from "@/services/admin/adminServices";
+import { getAllHosts } from "@/services/admin/hostManagement.services";
 import { useDispatch, useSelector } from "react-redux";
 import { setAllHosts } from "@/redux/Slice/admin/hostManagementSlice";
 import { AxiosError } from "axios";
@@ -176,7 +176,11 @@ const AdminHosts = () => {
                   <strong>Register Time and Date:</strong>
                 </p>
 
-                <p>timestamp</p>
+                <p>
+                  {selectedUser.timestamp
+                    ? new Date(selectedUser.timestamp).toLocaleString()
+                    : "N/A"}
+                </p>
               </div>
               <div className="flex flex-col justify-center lg:items-end items-start text-sm">
                 <p className="flex md:flex-col flex-row gap-1">

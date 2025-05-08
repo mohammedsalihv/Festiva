@@ -216,8 +216,6 @@ const Profile: React.FC = () => {
                   Change
                 </button>
               </div>
-
-              {/* Delete Account Section */}
               <div className="space-y-3">
                 <p className="text-sm md:text-lg font-bold">Delete account</p>
                 <p className="text-sm text-gray-400">

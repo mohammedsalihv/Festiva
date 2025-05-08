@@ -34,6 +34,8 @@
     "keen-slider": "^6.8.6",
     "lucide-react": "^0.483.0",
     "mongoose": "^8.14.0",
+    "pino": "^9.6.0",
+    "pino-pretty": "^13.0.0",
     "react": "^19.0.0",
     "react-advanced-cropper": "^0.20.1",
     "react-dom": "^19.0.0",
