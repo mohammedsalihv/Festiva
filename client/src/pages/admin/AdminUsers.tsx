@@ -52,12 +52,11 @@ const AdminUsers = () => {
       }
     })();
   }, [dispatch, page]);
-
-<<<<<<< HEAD
+  
   if (loading) return <div className="text-cente font-bold px-4 py-4">Loading...</div>;
-=======
+
   if (loading) return <div className="text-center font-poppins p-10">Loading...</div>;
->>>>>>> main
+
   if (error) return <div>{error}</div>;
 
   return (

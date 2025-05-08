@@ -79,13 +79,11 @@ const AdminHosts = () => {
                 <tr>
                   <th className="px-6 lg:px-3 py-2">
                     <div className="flex justify-center">
-                    <VscListSelection />
+                      <VscListSelection />
                     </div>
                   </th>
                   <th className="px-4 py-2">
-                    <div className="flex justify-center">
-                    Person
-                    </div>
+                    <div className="flex justify-center">Person</div>
                   </th>
                   <th className="px-4 py-2 ">Name</th>
                   <th className="px-4 py-2 ">Email</th>
@@ -115,12 +113,12 @@ const AdminHosts = () => {
                       {host.email}
                     </td>
                     <td className="px-4 py-2">
-                    <div className="flex justify-center">
-                    <IoMdArrowForward
-                        className="text-black h-5 w-5 lg:h-7 lg:w-7"
-                        onClick={() => setSelectedUser(host)}
-                      />
-                    </div>
+                      <div className="flex justify-center">
+                        <IoMdArrowForward
+                          className="text-black h-5 w-5 lg:h-7 lg:w-7"
+                          onClick={() => setSelectedUser(host)}
+                        />
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -177,21 +175,20 @@ const AdminHosts = () => {
                 <p>
                   <strong>Register Time and Date:</strong>
                 </p>
-<<<<<<< HEAD
+
                 <p>timestamp</p>
               </div>
               <div className="flex flex-col justify-center lg:items-end items-start text-sm">
                 <p className="flex md:flex-col flex-row gap-1">
-                <button className="border px-2 py-1 rounded text-sm bg-yellow-500 hover:bg-yellow-600 text-white flex gap-1">
-                      Edit < AiTwotoneEdit className="w-4 h-4"/>
-                      </button>
-                <button className="border px-2 py-1 rounded text-sm bg-red-600 hover:bg-red-700 text-white flex gap-1">
-                      Block < MdBlock className="w-4 h-4"/>
-                      </button>
+                  <button className="border px-2 py-1 rounded text-sm bg-yellow-500 hover:bg-yellow-600 text-white flex gap-1">
+                    Edit <AiTwotoneEdit className="w-4 h-4" />
+                  </button>
+                  <button className="border px-2 py-1 rounded text-sm bg-red-600 hover:bg-red-700 text-white flex gap-1">
+                    Block <MdBlock className="w-4 h-4" />
+                  </button>
                 </p>
-=======
-                <p>{selectedUser.registrationDateTime.toLocaleString()}</p>
->>>>>>> main
+
+                <p></p>
               </div>
             </div>
 
@@ -226,7 +223,9 @@ const AdminHosts = () => {
                         {selectedUser.listedAssets}{" "}
                       </td>
                       <td className="px-4 py-2 text-[10px] lg:text-sm">
-                       <a href=""><IoMdArrowDropright className="w-7 h-6 cursor-pointer text-blue-800 underline" /></a>
+                        <a href="">
+                          <IoMdArrowDropright className="w-7 h-6 cursor-pointer text-blue-800 underline" />
+                        </a>
                       </td>
                     </tr>
                     <tr>
