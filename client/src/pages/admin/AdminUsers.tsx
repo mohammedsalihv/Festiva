@@ -79,10 +79,6 @@ const AdminUsers = () => {
     }
   }
 
-  const handleConfirm = () =>{
-
-  }
-
   if (loading)
     return <div className="text-cente font-bold px-4 py-4">Loading...</div>;
 
@@ -227,7 +223,9 @@ const AdminUsers = () => {
                     <CgUnblock className="w-4 h-4" />
                   </button>
                 ) : (
-                  <button className="px-3 p-1 border rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-1">
+                  <button className="px-3 p-1 border rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-1"
+                   onClick={() => setConfirmAction(true)}
+                  >
                     Block
                     <MdBlock className="w-4 h-4" />
                   </button>
@@ -235,7 +233,16 @@ const AdminUsers = () => {
               </div>
             </div>
             <ConfirmDialog
-            
+             isOpen={confirmAction}
+             title="Confirm Block"
+             description="Are you sure you want to block this user?"
+             confirmText="Yes, Block"
+             cancelText="Cancel"
+             onConfirm={()=>{
+              handleBlock(selectedUser._id)
+              setConfirmAction(false)
+             }}
+             onCancel={()=> setConfirmAction(false)}
             />
           </div>
         )}
