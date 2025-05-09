@@ -11,6 +11,7 @@ interface GetUsersResponse {
 
 interface BlockUserResponse {
   message?: string;
+  success: boolean;
 }
 
 export const getAllUsers = async () => {
@@ -31,16 +32,16 @@ export const getAllUsers = async () => {
   }
 };
 
-export const blockUser = async (userId: string): Promise<BlockUserResponse> => {
+export const blockUnblockUser = async (userId: string, isBlocked: boolean): Promise<BlockUserResponse> => {
   try {
-    if (!userId) {
-      logger.error({ userId }, "User ID is required");
-      throw new Error("User ID is required");
+    if (!userId || !isBlocked) {
+      logger.error({ userId }, "User ID or action is required");
+      throw new Error("User ID or action is required");
     }
     logger.debug({ userId }, "Attempting to block user");
     const response = await axiosInstance.patch<BlockUserResponse>(
-      `users/${userId}/block`,
-      { isBlocked: true }
+      `users/${userId}/blockUnblock`,
+      { isBlocked: isBlocked }
     );
     logger.info(
       { userId, response: response.data },
@@ -50,12 +51,12 @@ export const blockUser = async (userId: string): Promise<BlockUserResponse> => {
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
       const errorMessage = error.response?.data?.message || error.message;
-      logger.error({ userId, error: errorMessage }, "Blocking failed");
+      logger.error({ userId, error: errorMessage }, "Blocking/Unblocking failed");
       throw new Error(`Blocking failed: ${errorMessage}`);
     } else {
       const errorMessage = (error as Error).message || "Something went wrong";
-      logger.error({ userId, error: errorMessage }, "Blocking failed");
-      throw new Error(`Blocking failed: ${errorMessage}`);
+      logger.error({ userId, error: errorMessage }, "Blocking/Unblocking failed");
+      throw new Error(`Blocking/Unblocking failed: ${errorMessage}`);
     }
   }
 };

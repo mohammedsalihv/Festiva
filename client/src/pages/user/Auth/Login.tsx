@@ -73,17 +73,10 @@ const Login = () => {
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       if (error.response) {
-        const { status, data } = error.response;
+        const { data } = error.response;
         const errorMessage =
           data?.message || "An error occurred while logging in.";
-
-        if (status === 403) {
-          toast.warning(" User is blocked. Please contact support.");
-        } else if (errorMessage === "Invalid credentials") {
-          toast.error("Invalid email or password.");
-        } else {
-          toast.error(errorMessage);
-        }
+        toast.error(errorMessage)
       } else {
         toast.warning("Network error. Please check your connection.");
       }

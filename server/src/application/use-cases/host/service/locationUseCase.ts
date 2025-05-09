@@ -1,7 +1,7 @@
 import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/locationRepostory";
 import { addLocationDTO } from "../../../../config/DTO/locationDTO";
 import { ILocation } from "../../../../domain/entities/modelInterface/location.interface";
-import ErrorHandler from "../../../../utils/errorHandler";
+import ErrorHandler from "../../../../utils/CustomError";
 
 export class addLocationUseCase {
   constructor(private locationRepository: ILocationRepository) {}

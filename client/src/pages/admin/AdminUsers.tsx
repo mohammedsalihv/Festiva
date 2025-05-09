@@ -15,9 +15,9 @@ import { RootState } from "@/redux/store";
 import { User } from "@/utils/types";
 import { AxiosError } from "axios";
 import { CgUnblock } from "react-icons/cg";
-import { blockUser } from "@/services/admin/userManagement.services";
 import logger from "@/utils/logger";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
+import { blockUnblockUser } from "@/services/admin/userManagement.services";
 
 
 
@@ -63,18 +63,18 @@ const AdminUsers = () => {
     })();
   }, [dispatch, page]);
 
-  const handleBlock = async (userId : string) =>{
+  const handleBlockOrUnblock = async (userId : string,isBlocked: boolean) =>{
     try {
-      await blockUser(userId)
+      await blockUnblockUser(userId, isBlocked)
     } catch (error : unknown) {
       if (error instanceof AxiosError) {
         const errorMessage = error.response?.data?.message || error.message;
-        logger.error({ userId, error: errorMessage }, "Blocking failed");
-        throw new Error(`Blocking failed: ${errorMessage}`);
+        logger.error({ userId, error: errorMessage }, "Blocking/Unblocking failed");
+        throw new Error(`Blocking/Unblocking failed: ${errorMessage}`);
       } else {
         const errorMessage = (error as Error).message || "Something went wrong";
-        logger.error({ userId, error: errorMessage }, "Blocking failed");
-        throw new Error(`Blocking failed: ${errorMessage}`);
+        logger.error({ userId, error: errorMessage }, "Blocking/Unblocking failed");
+        throw new Error(`Blocking/Unblocking failed: ${errorMessage}`);
       }
     }
   }
@@ -218,7 +218,9 @@ const AdminUsers = () => {
                   <AiTwotoneEdit className="w-4 h-4" />
                 </button>
                 {selectedUser.isBlocked ? (
-                  <button className="px-3 p-1 border rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-1">
+                  <button className="px-3 p-1 border rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-1"
+                  onClick={() => setConfirmAction(true)}
+                  >
                     Unblock
                     <CgUnblock className="w-4 h-4" />
                   </button>
@@ -234,12 +236,12 @@ const AdminUsers = () => {
             </div>
             <ConfirmDialog
              isOpen={confirmAction}
-             title="Confirm Block"
-             description="Are you sure you want to block this user?"
-             confirmText="Yes, Block"
+             title={selectedUser.isBlocked ? "Confirm Unblock" : "Confirm Block"}
+             description={selectedUser.isBlocked ? "Are you sure you want to unblock this user?" : "Are you sure you want to block this user?"}
+             confirmText={selectedUser.isBlocked ? "Yes, Unblock" : "Yes, Block"}
              cancelText="Cancel"
              onConfirm={()=>{
-              handleBlock(selectedUser._id)
+              handleBlockOrUnblock(selectedUser._id , !selectedUser.isBlocked)
               setConfirmAction(false)
              }}
              onCancel={()=> setConfirmAction(false)}

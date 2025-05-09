@@ -1,5 +1,5 @@
 import { IVenueRepository } from "../../../../domain/entities/repositoryInterface/host/venueRepository";
-import ErrorHandler from "../../../../utils/errorHandler";
+import ErrorHandler from "../../../../utils/CustomError";
 import { addVenueDTO } from "../../../../config/DTO/venueDto";
 import { Types } from "mongoose";
 import { IVenue } from "../../../../domain/entities/modelInterface/venue.interface"; // Fixed typo

@@ -1,6 +1,6 @@
 import { hash } from "../../../../utils/passwordHash";
 import { RegisterHostDTO } from "../../../../config/DTO/hostDto";
-import ErrorHandler from "../../../../utils/errorHandler";
+import ErrorHandler from "../../../../utils/CustomError";
 import { IHost } from "../../../../domain/entities/modelInterface/host.interface";
 import { TokenService } from "../../../services/service.token";
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostRepository.interface";

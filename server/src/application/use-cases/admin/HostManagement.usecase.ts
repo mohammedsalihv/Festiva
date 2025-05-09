@@ -1,6 +1,6 @@
 import { IHost } from "../../../domain/entities/modelInterface/host.interface";
 import { IHostManagementRepository } from "../../../domain/entities/repositoryInterface/admin/hostManagement.interface";
-import CustomError from "../../../utils/errorHandler";
+import CustomError from "../../../utils/CustomError";
 
 export class HostManagementUseCase {
   constructor(private UserManagementRepository: IHostManagementRepository) {}

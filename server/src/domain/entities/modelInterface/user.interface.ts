@@ -9,11 +9,10 @@ export interface IUser {
     role?: string;
     googleId?: string;
     isActive?: boolean;
-    isVerified: boolean;
     gender?: string;
     country?: string;
     timestamp?: Date;
-    is_blocked?: boolean;
+    isBlocked?: boolean;
   }
   
   

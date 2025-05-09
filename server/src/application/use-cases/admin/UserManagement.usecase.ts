@@ -1,6 +1,6 @@
 import { IUser } from "../../../domain/entities/modelInterface/user.interface";
 import { IUserManagementRepository } from "../../../domain/entities/repositoryInterface/admin/userManagement.interface";
-import CustomError from "../../../utils/errorHandler";
+import CustomError from "../../../utils/CustomError";
 
 export class UserManagementUseCase {
   constructor(private userManagementRepository: IUserManagementRepository) {}
@@ -14,4 +14,19 @@ export class UserManagementUseCase {
 
     return users;
   }
+
+
+  async UserBlockUnblock(userId:string,isBlocked: boolean):Promise<boolean>{
+    const response  = await this.userManagementRepository.UserBlockUnblock(userId,isBlocked)
+   
+    if (!response) {
+      throw new CustomError("Blocking failed", 500);
+    }
+    return response;
+  }
+   
 }
+
+
+
+

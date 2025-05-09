@@ -1,11 +1,9 @@
 import { UserAdminController } from "../../../../Presentation/controllers/admin/UserAdmin.Controller";
-
 import { UserManagementUseCase } from "../../../../application/use-cases/admin/UserManagement.usecase";
+import { UserManagementRepository } from "../../../repositories/admin/UserManagement.repository";
 
-import { UserManagementRepostory } from "../../../repositories/admin/UserManagement.repository";
+const userManagementRepository = new UserManagementRepository();
+const userManagementUseCase = new UserManagementUseCase(userManagementRepository);
+const userAdminController = new UserAdminController(userManagementUseCase);
 
-const userManagementRepostory = new UserManagementRepostory();
-const getUsers = new UserManagementUseCase(userManagementRepostory);
-const adminController = new UserAdminController(getUsers);
-
-export { adminController };
+export { userAdminController };

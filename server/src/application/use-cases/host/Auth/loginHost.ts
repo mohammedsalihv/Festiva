@@ -1,5 +1,5 @@
 import { IhostRepository } from "../../../../domain/entities/repositoryInterface/host/hostLoginRepository.interface";
-import CustomError from "../../../../utils/errorHandler";
+import CustomError from "../../../../utils/CustomError";
 import { TokenService } from "../../../services/service.token";
 import bcrypt from "bcrypt";
 

@@ -1,6 +1,6 @@
 import multer from "multer";
 import path from "path";
-import CustomeError from "../utils/errorHandler";
+import CustomeError from "../utils/CustomError";
 import {createUploadsFolder} from "../utils/createUploadsFolder";
 
 createUploadsFolder()
