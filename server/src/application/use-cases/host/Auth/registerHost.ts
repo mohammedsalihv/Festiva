@@ -37,11 +37,11 @@ export class RegsiterHost {
 
     const createdHost = await this.hostRepository.createHost(newHost);
     const accessToken = TokenService.generateAccessToken({
-      id: createdHost.id!,
+      id: createdHost._id!,
       role: createdHost.role,
     });
     const refreshToken = TokenService.generateRefreshToken({
-      id: createdHost.id!,
+      id: createdHost._id!,
       role: createdHost.role,
     });
 
@@ -49,7 +49,7 @@ export class RegsiterHost {
       accessToken,
       refreshToken,
       host: {
-        id: createdHost.id!,
+        id: createdHost._id!,
         name: createdHost.name!,
         email: createdHost.email!,
         phone: createdHost.phone!,

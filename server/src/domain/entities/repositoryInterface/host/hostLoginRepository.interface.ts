@@ -1,5 +1,5 @@
-import { Ihost } from "../../modelInterface/host.interface";
+import { IHost } from "../../modelInterface/host.interface";
 
-export interface IhostRepository{
-    findByEmail(email:string) : Promise<Ihost | null>
+export interface IHostRepository {
+  findByEmail(email: string): Promise<IHost | null>;
 }

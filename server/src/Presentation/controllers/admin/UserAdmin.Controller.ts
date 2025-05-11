@@ -35,7 +35,7 @@ export class UserAdminController {
     }
 
     try {
-      const result = await this.userManagementUseCase.UserBlockUnblock(
+      const response = await this.userManagementUseCase.UserBlockUnblock(
         userId,
         isBlocked
       );
@@ -44,13 +44,41 @@ export class UserAdminController {
           isBlocked ? "blocked" : "unblocked"
         } successfully`,
         success: true,
-        result,
+        response,
       });
     } catch (error) {
       logger.error(String(error), "Error blocking/unblocking user");
       res.status(500).json({
         success: false,
         message: "Error while blocking/unblocking the account",
+      });
+    }
+  }
+
+  async editUser(req: Request, res: Response): Promise<void> {
+    const { userId } = req.params;
+    const formData = req.body;
+
+    if (!userId || !formData) {
+      res.status(400).json({
+        success: false,
+        message: "Missing userId or form data",
+      });
+      return;
+    }
+
+    try {
+      const users = await this.userManagementUseCase.editUser(userId, formData);
+      res.status(200).json({
+        message: "User details updated successfully",
+        success: true,
+        data: users,
+      });
+    } catch (error) {
+      logger.error(String(error), "Error updating user details");
+      res.status(500).json({
+        success: false,
+        message: "Failed to update user details",
       });
     }
   }

@@ -40,39 +40,38 @@ const AdminLogin: React.FC = () => {
 
   const mutation = useMutation({
     mutationFn: adminLogin,
+  
     onSuccess: (data) => {
       const adminData = {
         id: data.admin.id,
         email: data.admin.email,
-        firstname:data.admin.firstname,
-        lastname:data.admin.lastname,
-        phone:data.admin.phone,
+        firstname: data.admin.firstname,
+        lastname: data.admin.lastname,
+        phone: data.admin.phone,
         role: data.admin.role,
         accessToken: data.admin.accessToken,
         refreshToken: data.admin.refreshToken,
       };
+  
       if (data.success) {
-        setTimeout(() => {
-          toast.success("Login Successful!");
-        }, 500);
+        toast.success("Login Successful!");
         dispatch(setAdminDetails(adminData));
-        navigate("/admin/dashboard"); 
+        navigate("/admin/dashboard");
       }
     },
+  
     onError: (error: AxiosError<{ message?: string }>) => {
       if (error.response) {
-        console.log(error.response)
-        const {data } = error.response;
-        console.log()
+        const { data } = error.response;
         const errorMessage =
           data?.message || "An error occurred while logging in.";
-        toast.error(errorMessage)
+        toast.error(errorMessage);
       } else {
         toast.warning("Network error. Please check your connection.");
-        console.log(error)
       }
     },
   });
+  
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -155,8 +154,9 @@ const AdminLogin: React.FC = () => {
               onClick={handleLogin}
               type="button"
               className="w-full rounded bg-black px-4 py-2 text-white hover:bg-gray-800"
+              disabled={mutation.isPending}
             >
-              Login
+              {mutation.isPending ? "Logging in" : "Login"}
             </button>
           </form>
           <CustomToastContainer />

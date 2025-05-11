@@ -264,7 +264,7 @@ const Signup = () => {
                       disabled={sendingOtp}
                       className="w-full h-full text-white"
                     >
-                      {sendingOtp ? "Sending OTP..." : "Signup"}
+                      {sendingOtp ? "Sending OTP" : "Signup"}
                     </Button>
                   </div>
                 </div>

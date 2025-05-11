@@ -1,18 +1,12 @@
 import axiosInstance from "@/config/admin/adminAxiosInstence";
 import { AxiosError } from "axios";
-import { User } from "@/utils/types";
+import {
+  EditUserPayload,
+  EditUserResponse,
+  BlockUserResponse,
+  GetUsersResponse,
+} from "@/utils/types";
 import logger from "@/utils/logger";
-
-interface GetUsersResponse {
-  data: User[];
-  message: string;
-  success: boolean;
-}
-
-interface BlockUserResponse {
-  message?: string;
-  success: boolean;
-}
 
 export const getAllUsers = async () => {
   try {
@@ -32,9 +26,12 @@ export const getAllUsers = async () => {
   }
 };
 
-export const blockUnblockUser = async (userId: string, isBlocked: boolean): Promise<BlockUserResponse> => {
+export const blockUnblockUser = async (
+  userId: string,
+  isBlocked: boolean
+): Promise<BlockUserResponse> => {
   try {
-    if (!userId || !isBlocked) {
+    if (!userId || isBlocked === undefined || isBlocked === null) {
       logger.error({ userId }, "User ID or action is required");
       throw new Error("User ID or action is required");
     }
@@ -51,12 +48,50 @@ export const blockUnblockUser = async (userId: string, isBlocked: boolean): Prom
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
       const errorMessage = error.response?.data?.message || error.message;
-      logger.error({ userId, error: errorMessage }, "Blocking/Unblocking failed");
+      logger.error(
+        { userId, error: errorMessage },
+        "Blocking/Unblocking failed"
+      );
       throw new Error(`Blocking failed: ${errorMessage}`);
     } else {
       const errorMessage = (error as Error).message || "Something went wrong";
-      logger.error({ userId, error: errorMessage }, "Blocking/Unblocking failed");
+      logger.error(
+        { userId, error: errorMessage },
+        "Blocking/Unblocking failed"
+      );
       throw new Error(`Blocking/Unblocking failed: ${errorMessage}`);
     }
+  }
+};
+
+export const editUserDetails = async (
+  userId: string,
+  formData: EditUserPayload
+): Promise<EditUserResponse> => {
+  try {
+    if (!userId) {
+      throw new Error("User ID is required");
+    }
+
+    logger.debug({ userId, formData }, "Editing user details");
+
+    const response = await axiosInstance.patch<EditUserResponse>(
+      `users/${userId}/edit`,
+      formData
+    );
+
+    logger.info(
+      { userId, response: response.data },
+      "User updated successfully"
+    );
+    return response.data;
+  } catch (error: unknown) {
+    const message =
+      error instanceof AxiosError
+        ? error.response?.data?.message || error.message
+        : (error as Error).message || "Something went wrong";
+
+    logger.error({ userId, error: message }, "Edit user failed");
+    throw new Error(`Edit user failed: ${message}`);
   }
 };

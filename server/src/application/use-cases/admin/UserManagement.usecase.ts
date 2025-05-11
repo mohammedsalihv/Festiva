@@ -1,6 +1,7 @@
 import { IUser } from "../../../domain/entities/modelInterface/user.interface";
 import { IUserManagementRepository } from "../../../domain/entities/repositoryInterface/admin/userManagement.interface";
 import CustomError from "../../../utils/CustomError";
+import { EditUserPayload } from "../../../domain/entities/modelInterface/editUser.interface";
 
 export class UserManagementUseCase {
   constructor(private userManagementRepository: IUserManagementRepository) {}
@@ -24,6 +25,17 @@ export class UserManagementUseCase {
     }
     return response;
   }
+
+  async editUser(userId: string, form: EditUserPayload): Promise<IUser[]> {
+    const response = await this.userManagementRepository.editUser(userId, form);
+  
+    if (!response || response.length === 0) {
+      throw new CustomError("User update failed", 500);
+    }
+  
+    return response;
+  }
+  
    
 }
 

@@ -5,7 +5,7 @@ import { HostManagementUseCase } from "../../../../application/use-cases/admin/H
 import { HostManagementRepostory } from "../../../repositories/admin/HostManagement.repository";
 
 const hostManagementRepostory = new HostManagementRepostory();
-const getHosts = new HostManagementUseCase(hostManagementRepostory);
-const hostAdminController = new HostAdminController(getHosts);
+const hostManagementUseCase = new HostManagementUseCase(hostManagementRepostory);
+const hostAdminController = new HostAdminController(hostManagementUseCase);
 
 export { hostAdminController };

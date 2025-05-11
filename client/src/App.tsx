@@ -12,6 +12,7 @@ import UserPrivateRoute from "./routes/Protect/UserPrivateRoute";
 import SharedAccessRoute from "./routes/Protect/SharedAccessRoute";
 import AdminPrivateRoute from "./routes/admin/AdminPrivateRoutes";
 import NotFound from "./components/NotFound";
+import AdminLogin from "./pages/admin/auth/AdminLogin";
 
 const App: React.FC = () => {
   return (
@@ -61,6 +62,7 @@ const App: React.FC = () => {
             </AdminPrivateRoute>
           }
         />
+        <Route path="/admin/login-admin" element={<AdminLogin />} />
       </Routes>
     </Router>
   );

@@ -28,7 +28,7 @@ export class LoginUser {
     }
 
     if (user.isBlocked) {
-      throw new CustomError("User is blocked. Please contact support.", 403);
+      throw new CustomError("Account has been blocked. Please contact support.", 403);
     }
 
     const isPasswordValid = user.password
@@ -53,9 +53,9 @@ export class LoginUser {
         refreshToken,
         user: {
           id: user._id!,
-          firstname: user.firstname,
+          firstname: user.firstname ?? "",
           lastname: user.lastname ?? "",
-          email: user.email,
+          email: user.email ?? "",
           phone:user.phone || "Please add contact details",
           role: user.role || "user",
         },

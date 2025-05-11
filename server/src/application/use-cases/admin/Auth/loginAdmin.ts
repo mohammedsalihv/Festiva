@@ -28,10 +28,10 @@ export class LoginAdmin {
     }
 
     if(admin.role !== "admin"){
-      throw new CustomError("Account not authrized", 401);
+      throw new CustomError("Account unauthorized", 401);
     }
 
-    if (!admin.isBlocked) {
+    if (admin.isBlocked) {
       throw new CustomError("This account has been blocked. Please contact support.", 403);
     }
 
@@ -57,9 +57,9 @@ export class LoginAdmin {
         refreshToken,
         admin: {
           id: admin._id!,
-          firstname: admin.firstname,
+          firstname: admin.firstname ?? "",
           lastname: admin.lastname ?? "",
-          email: admin.email,
+          email: admin.email ?? "",
           phone:admin.phone || "Please add contact details",
           role: admin.role || "",
         },
