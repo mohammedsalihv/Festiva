@@ -24,28 +24,18 @@ import { blockUnblockUser } from "@/services/admin/userManagement.services";
 import { toast } from "react-toastify";
 import Drawer from "@/components/Drawer";
 import Loader from "@/components/Loader";
-import { validateAdminEditUserForm } from "@/utils/validations/admin/auth/editUser";
 import { useNavigate } from "react-router-dom";
-
-interface ErrorState {
-  firstname?: string;
-  lastname?: string;
-  phone?: string;
-  role?: string;
-  isActive?: string;
-  isBlocked?: string;
-}
 
 const AdminUsers = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [confirmAction, setConfirmAction] = useState(false);
   const [editForm, setEditForm] = useState<typeof selectedUser | null>(null);
   const [page, setPage] = useState(1);
-  const [errors, setErrors] = useState<ErrorState>({});
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const userData = useSelector(
     (state: RootState) => state.userManagement.users
   );
@@ -55,7 +45,7 @@ const AdminUsers = () => {
     lastname: selectedUser?.lastname || "",
     phone: selectedUser?.phone || "",
     role: selectedUser?.role || "",
-    isActive: selectedUser?.isActive || true,
+    isActive: selectedUser?.isActive || false,
     isBlocked: selectedUser?.isBlocked || false,
   });
 
@@ -66,7 +56,7 @@ const AdminUsers = () => {
         lastname: selectedUser.lastname || "",
         phone: selectedUser.phone || "",
         role: selectedUser.role || "",
-        isActive: selectedUser.isActive || true,
+        isActive: selectedUser.isActive || false,
         isBlocked: selectedUser.isBlocked || false,
       });
     }
@@ -84,6 +74,7 @@ const AdminUsers = () => {
     } else if (name === "isActive") {
       setForm((prev) => ({
         ...prev,
+        isActive: value === "active",
       }));
     } else {
       setForm((prev) => ({
@@ -151,46 +142,43 @@ const AdminUsers = () => {
 
   const handleEditForm = async (e: FormEvent) => {
     e.preventDefault();
-  
-    const { isValid, errors: validationErrors } = validateAdminEditUserForm(form);
-  
-    if (!isValid) {
-      setErrors(validationErrors);
-      return;
-    }
-  
+
     if (!selectedUser?._id) {
       toast.error("No user selected");
       return;
     }
-  
-    try {
-      setErrors({});
-      const payload: EditUserPayload = {
-        firstname: form.firstname,
-        lastname: form.lastname,
-        phone: form.phone,
-        role: form.role,
-        isActive: form.isActive,
-        isBlocked: form.isBlocked,
-      };
-  
-      const res = await editUserDetails(selectedUser._id, payload);
-      toast.success(res.message);
-  
-      const updatedUsers = await getAllUsers().catch((err) => {
-        console.error('Failed to fetch users:', err);
-        return [];
-      });
-      dispatch(setAllUsers(updatedUsers));
-      setSelectedUser(updatedUsers.find((u) => u._id === selectedUser._id) || null);
-      setEditForm(null);
-      navigate('/admin/users');
-    } catch (err: unknown) {
-      toast.error((err as Error).message || "Failed to update user");
-    }
-  };
+    setSubmitting(true);
+    setTimeout(async () => {
+      try {
+        const payload: EditUserPayload = {
+          firstname: form.firstname,
+          lastname: form.lastname,
+          phone: form.phone,
+          role: form.role,
+          isActive: form.isActive,
+          isBlocked: form.isBlocked,
+        };
 
+        const res = await editUserDetails(selectedUser._id, payload);
+        toast.success(res.message);
+
+        const updatedUsers = await getAllUsers().catch((err) => {
+          console.error("Failed to fetch users:", err);
+          return [];
+        });
+        dispatch(setAllUsers(updatedUsers));
+        setSelectedUser(
+          updatedUsers.find((u) => u._id === selectedUser._id) || null
+        );
+        setEditForm(null);
+        navigate("/admin/users");
+      } catch (err: unknown) {
+        toast.error((err as Error).message || "Failed to update user");
+      } finally {
+        setSubmitting(false);
+      }
+    }, 2000);
+  };
 
   if (loading)
     return (
@@ -314,6 +302,13 @@ const AdminUsers = () => {
                 <strong>Email:</strong> {selectedUser.email || "N/A"}
               </p>
               <p className="text-[12px] text-sm lg:text-base">
+                <strong>Phone:</strong> {selectedUser.phone || "N/A"}
+              </p>
+              <p className="text-[12px] text-sm lg:text-base">
+                <strong>Block/Unblock:</strong>{" "}
+                {selectedUser.isBlocked ? "Block" : "Unblock"}
+              </p>
+              <p className="text-[12px] text-sm lg:text-base">
                 <strong>Status:</strong>{" "}
                 {selectedUser.isActive ? (
                   <span className="text-green-600 text-[12px] lg:text-sm font-semibold">
@@ -416,7 +411,12 @@ const AdminUsers = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="firstname" className={`text-sm font-light px-1 ${errors.firstname ? "text-red-600" : "text-black"}`}>Firstname</label>
+                    <label
+                      htmlFor="firstname"
+                      className="text-sm font-light px-1"
+                    >
+                      Firstname
+                    </label>
                     <input
                       id="firstname"
                       name="firstname"
@@ -425,15 +425,15 @@ const AdminUsers = () => {
                       value={form.firstname}
                       onChange={handleInputChange}
                     />
-                    {errors.firstname && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.firstname}
-                      </p>
-                    )}
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="lastname" className={`text-sm font-light px-1 ${errors.lastname ? "text-red-600" : "text-black"}`}>Lastname</label>
+                    <label
+                      htmlFor="lastname"
+                      className="text-sm font-light px-1"
+                    >
+                      Lastname
+                    </label>
                     <input
                       id="lastname"
                       name="lastname"
@@ -442,15 +442,12 @@ const AdminUsers = () => {
                       value={form.lastname}
                       onChange={handleInputChange}
                     />
-                    {errors.lastname && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.lastname}
-                      </p>
-                    )}
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="email" className="text-sm font-light px-1">Email</label>
+                    <label htmlFor="email" className="text-sm font-light px-1">
+                      Email
+                    </label>
                     <input
                       id="email"
                       type="email"
@@ -463,7 +460,9 @@ const AdminUsers = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="phone" className={`text-sm font-light px-1 ${errors.phone ? "text-red-600" : "text-black"}`}>Phone</label>
+                    <label htmlFor="phone" className="text-sm font-light px-1">
+                      Phone
+                    </label>
                     <input
                       id="phone"
                       name="phone"
@@ -472,15 +471,12 @@ const AdminUsers = () => {
                       value={form.phone}
                       onChange={handleInputChange}
                     />
-                    {errors.phone && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.phone}
-                      </p>
-                    )}
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="role" className={`text-sm font-light px-1 ${errors.role ? "text-red-600" : "text-black"}`}>Role</label>
+                    <label htmlFor="role" className="text-sm font-light px-1">
+                      Role
+                    </label>
                     <select
                       id="role"
                       name="role"
@@ -495,13 +491,15 @@ const AdminUsers = () => {
                       <option value="user">User</option>
                       <option value="admin">Admin</option>
                     </select>
-                    {errors.role && (
-                      <p className="text-red-500 text-xs mt-1">{errors.role}</p>
-                    )}
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="register" className="text-sm font-light px-1">Logged Time</label>
+                    <label
+                      htmlFor="register"
+                      className="text-sm font-light px-1"
+                    >
+                      Logged Time
+                    </label>
                     <input
                       id="register"
                       type="text"
@@ -514,7 +512,12 @@ const AdminUsers = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="isBlocked" className={`text-sm font-light px-1 ${errors.isBlocked ? "text-red-600" : "text-black"}`}>Block Status</label>
+                    <label
+                      htmlFor="isBlocked"
+                      className="text-sm font-light px-1"
+                    >
+                      Block Status
+                    </label>
                     <div className="flex gap-2">
                       <input
                         type="text"
@@ -534,15 +537,15 @@ const AdminUsers = () => {
                         <option value="unblock">Unblock</option>
                       </select>
                     </div>
-                    {errors.isBlocked && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.isBlocked}
-                      </p>
-                    )}
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label htmlFor="isActive" className={`text-sm font-light px-1 ${errors.isActive ? "text-red-600" : "text-black"}`}>Account Status</label>
+                    <label
+                      htmlFor="isActive"
+                      className="text-sm font-light px-1"
+                    >
+                      Account Status
+                    </label>
                     <div className="flex gap-2">
                       <input
                         type="text"
@@ -562,20 +565,18 @@ const AdminUsers = () => {
                         <option value="inactive">Inactive</option>
                       </select>
                     </div>
-                    {errors.isActive && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.isActive}
-                      </p>
-                    )}
                   </div>
                 </div>
 
                 <div className="flex justify-end">
                   <button
-                    className="px-4 py-2 border bg-black hover:bg-slate-800 text-white rounded-md"
+                    className={`px-4 py-2 border hover:bg-slate-700 ${
+                      submitting ? "bg-slate-700" : "bg-black"
+                    } text-white rounded-md`}
                     type="submit"
+                    disabled={submitting}
                   >
-                    Submit
+                    {submitting ? "Saving..." : "Save Changes"}
                   </button>
                 </div>
               </form>

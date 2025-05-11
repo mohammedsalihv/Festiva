@@ -25,11 +25,12 @@ import { AiTwotoneEdit } from "react-icons/ai";
 import { MdBlock } from "react-icons/md";
 import logger from "@/utils/logger";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
-import { Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Loader from "@/components/Loader";
 
 const AdminHosts = () => {
   const [page, setPage] = useState(1);
+  const [submitting , setSubmitting] = useState(false)
   const [selectedHost, setSelectedHost] = useState<Host | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +45,7 @@ const AdminHosts = () => {
     phone: selectedHost?.phone || "",
     role: selectedHost?.role || "",
     location: selectedHost?.location || "",
-    isActive: selectedHost?.isActive || true,
+    isActive: selectedHost?.isActive || false,
     isBlocked: selectedHost?.isBlocked || false,
     isVerfied: selectedHost?.isVerfied || false,
     isSubscriber: selectedHost?.isSubscriber || false,
@@ -61,7 +62,7 @@ const AdminHosts = () => {
         phone: selectedHost.phone || "",
         location: selectedHost?.location || "",
         role: selectedHost.role || "",
-        isActive: selectedHost.isActive || true,
+        isActive: selectedHost.isActive || false,
         isBlocked: selectedHost.isBlocked || false,
         isVerfied: selectedHost?.isVerfied || false,
         isSubscriber: selectedHost?.isSubscriber || false,
@@ -85,6 +86,7 @@ const AdminHosts = () => {
     } else if (name === "isActive") {
       setForm((prev) => ({
         ...prev,
+        isActive: value === "active",
       }));
     } else if (name === "isVerfied") {
       setForm((prev) => ({
@@ -147,41 +149,49 @@ const AdminHosts = () => {
 
   const handleEditForm = async (e: FormEvent) => {
     e.preventDefault();
+  
     if (!selectedHost?._id) {
       toast.error("No host selected");
       return;
     }
-
-    try {
-      const payload: EditHostPayload = {
-        name: form.name,
-        phone: form.phone,
-        location: form.location,
-        role: form.role,
-        isActive: form.isActive,
-        isBlocked: form.isBlocked,
-        isVerfied: form.isVerfied,
-        isSubscriber: form.isSubscriber,
-        listedAssets: form.listedAssets,
-        totalRequests: form.totalRequests,
-        acceptedRequests: form.acceptedRequests,
-        rejectedRequests: form.rejectedRequests,
-      };
-
-      const res = await editHostDetails(selectedHost._id, payload);
-      toast.success(res.message);
-
-      const updatedHosts = await getAllHosts();
-      dispatch(setAllHosts(updatedHosts));
-      setSelectedHost(
-        updatedHosts.find((h) => h._id === selectedHost._id) || null
-      );
-      setEditForm(null);
-      navigate("/admin/hosts");
-    } catch (err: unknown) {
-      toast.error((err as Error).message || "Failed to update host");
-    }
+  
+    setSubmitting(true);
+  
+    setTimeout(async () => {
+      try {
+        const payload: EditHostPayload = {
+          name: form.name,
+          phone: form.phone,
+          location: form.location,
+          role: form.role,
+          isActive: form.isActive,
+          isBlocked: form.isBlocked,
+          isVerfied: form.isVerfied,
+          isSubscriber: form.isSubscriber,
+          listedAssets: form.listedAssets,
+          totalRequests: form.totalRequests,
+          acceptedRequests: form.acceptedRequests,
+          rejectedRequests: form.rejectedRequests,
+        };
+  
+        const res = await editHostDetails(selectedHost._id, payload);
+        toast.success(res.message);
+  
+        const updatedHosts = await getAllHosts();
+        dispatch(setAllHosts(updatedHosts));
+        setSelectedHost(
+          updatedHosts.find((h) => h._id === selectedHost._id) || null
+        );
+        setEditForm(null);
+        navigate("/admin/hosts");
+      } catch (err: unknown) {
+        toast.error((err as Error).message || "Failed to update host");
+      } finally {
+        setSubmitting(false);
+      }
+    }, 2000);
   };
+  
 
   const filteredHosts = hosts.filter(
     (host) =>
@@ -190,11 +200,7 @@ const AdminHosts = () => {
   );
 
   if (loading)
-    return (
-      <div className="text-center font-bold px-4 py-4">
-        <Loader />
-      </div>
-    );
+    return <Loader/>
   if (error)
     return <div className="text-center font-bold px-4 py-4">{error}</div>;
 
@@ -754,10 +760,11 @@ const AdminHosts = () => {
                 </div>
                 <div className="flex justify-end md:py-9">
                   <button
-                    className="px-4 py-2 border bg-black hover:bg-slate-800 text-white rounded-md"
+                    className={`px-4 py-2 border hover:bg-slate-700 ${submitting ? "bg-slate-700" : "bg-black"} text-white rounded-md`}
                     type="submit"
+                    disabled={submitting}
                   >
-                    Submit
+                    {submitting ? "Saving..." : "Save Changes"}
                   </button>
                 </div>
               </form>
