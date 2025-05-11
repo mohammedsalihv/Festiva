@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { LoginUser } from "../../../../application/use-cases/user/Auth/loginUser";
 import logger from "../../../../utils/logger";
+import CustomError from "../../../../utils/CustomError";
 
 export class LoginController {
   constructor(private loginUser: LoginUser) {}
@@ -29,32 +30,19 @@ export class LoginController {
       });
     } catch (error: any) {
       logger.error("Login Error:", error);
-
-      if (error.message === "Invalid credentials") {
-        return res.status(401).json({
-          success: false,
-          message: "Invalid email or password",
-        });
-      }
-
-      if (error.message === "User not found") {
-        return res.status(404).json({
-          success: false,
-          message: "User not found",
-        });
-      }
-
-      if (error.name === "ValidationError") {
-        return res.status(400).json({
+    
+      if (error instanceof CustomError) {
+        return res.status(error.statusCode).json({
           success: false,
           message: error.message,
         });
       }
-
-      res.status(500).json({
+    
+      return res.status(500).json({
         success: false,
-        message: error.message || "Internal server error",
+        message: "Internal server error",
       });
     }
+    
   }
 }

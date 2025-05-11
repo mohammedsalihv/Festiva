@@ -13,9 +13,9 @@ const AdminSidebar: FC = () => {
   const [confirmLogout, setConfirmLogout] = useState(false);
   const handleLogout = () => {
     dispatch(logoutAdmin());
-    setTimeout(()=>{
+    setTimeout(() => {
       toast.success("Logout Successful!");
-    },1000)
+    }, 1000);
     navigate("/admin/admin-login");
   };
 
@@ -30,8 +30,8 @@ const AdminSidebar: FC = () => {
             e.preventDefault();
             if (item.isLogout) {
               setConfirmLogout(true);
-            }else if(item.link){
-              navigate(item.link)
+            } else if (item.link) {
+              navigate(item.link);
             }
           }}
         >

@@ -1,7 +1,7 @@
 import { hash } from "../../../../utils/passwordHash";
 import { RegisterHostDTO } from "../../../../config/DTO/hostDto";
-import ErrorHandler from "../../../../utils/errorHandler";
-import { Ihost } from "../../../../domain/entities/modelInterface/host.interface";
+import ErrorHandler from "../../../../utils/CustomError";
+import { IHost } from "../../../../domain/entities/modelInterface/host.interface";
 import { TokenService } from "../../../services/service.token";
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostRepository.interface";
 
@@ -16,8 +16,8 @@ export class RegsiterHost {
       name: string;
       email: string;
       phone: string;
-      location:string;
-      profile_pic:string;
+      location: string;
+      profile_pic: string;
       role: string;
     };
   }> {
@@ -25,17 +25,14 @@ export class RegsiterHost {
     const existingHost = await this.hostRepository.findByEmail(email);
     if (existingHost) throw new ErrorHandler("Email already exists", 400);
     const hashedPassword = await hash(password);
-    const newHost: Ihost = {
+    const newHost: IHost = {
       name: hostData.name || "",
       email: hostData.email,
       password: hashedPassword,
       phone: hostData.phone || "",
       role: "host",
-      location:hostData.location,
-      profile_pic:hostData.profile_pic,
-      isActive: true,
-      timestamp: new Date(),
-      is_blocked: false,
+      location: hostData.location,
+      profile_pic: hostData.profile_pic,
     };
 
     const createdHost = await this.hostRepository.createHost(newHost);
@@ -56,9 +53,9 @@ export class RegsiterHost {
         name: createdHost.name!,
         email: createdHost.email!,
         phone: createdHost.phone!,
-        location:createdHost.location!,
-        profile_pic:createdHost.profile_pic || "",
-        role: createdHost.role || "user" || "host",
+        location: createdHost.location!,
+        profile_pic: createdHost.profile_pic || "",
+        role: createdHost.role || "host",
       },
     };
   }

@@ -1,5 +1,5 @@
 import { IAdminRepository } from "../../../../domain/entities/repositoryInterface/admin/adminLogin.interface";
-import CustomError  from "../../../../utils/errorHandler";
+import CustomError  from "../../../../utils/CustomError";
 import { TokenService } from "../../../../application/services/service.token";
 import bcrypt from "bcrypt";
 
@@ -24,10 +24,14 @@ export class LoginAdmin {
 
     const admin = await this.adminRepository.findByEmail(email);
     if (!admin) {
-      throw new CustomError("Invalid email or password. If you dont've authentication to access this , please be back", 401);
+      throw new CustomError("User not found", 401);
     }
 
-    if (!admin.isActive) {
+    if(admin.role !== "admin"){
+      throw new CustomError("Account unauthorized", 401);
+    }
+
+    if (admin.isBlocked) {
       throw new CustomError("This account has been blocked. Please contact support.", 403);
     }
 
@@ -53,11 +57,11 @@ export class LoginAdmin {
         refreshToken,
         admin: {
           id: admin._id!,
-          firstname: admin.firstname,
+          firstname: admin.firstname ?? "",
           lastname: admin.lastname ?? "",
-          email: admin.email,
+          email: admin.email ?? "",
           phone:admin.phone || "Please add contact details",
-          role: admin.role || "admin",
+          role: admin.role || "",
         },
       };
   }

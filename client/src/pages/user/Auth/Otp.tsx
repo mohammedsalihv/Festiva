@@ -91,7 +91,7 @@ const Otp = () => {
     },
     onSuccess: () => {
       toast.dismiss("resend-toast");
-      toast.success("OTP resent successfully!", { autoClose: 3000 });
+      toast.success("OTP recent successfully!", { autoClose: 3000 });
       setOtp(new Array(6).fill(""));
       setTimer(60);
       inputRefs.current[0]?.focus();

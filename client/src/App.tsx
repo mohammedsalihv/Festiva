@@ -6,12 +6,13 @@ import AdminRoutes from "./routes/admin/AdminRoutes";
 import PublicRoutes from "./routes/user/PublicRoutes";
 import HostLanding from "@/pages/host/landing/HostLanding";
 import HostLogin from "./pages/host/Auth/HostLogin";
-import AdminLogin from "@/pages/admin/auth/AdminLogin";
 import HostRegister from "./pages/host/Auth/HostRegister";
 import HostPrivateRoute from "./routes/host/HostPrivateRoute";
 import UserPrivateRoute from "./routes/Protect/UserPrivateRoute";
 import SharedAccessRoute from "./routes/Protect/SharedAccessRoute";
 import AdminPrivateRoute from "./routes/admin/AdminPrivateRoutes";
+import NotFound from "./components/NotFound";
+import AdminLogin from "./pages/admin/auth/AdminLogin";
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,8 @@ const App: React.FC = () => {
       <Routes>
         {/* Public Routes */}
         <Route path="/*" element={<PublicRoutes />} />
+        <Route path="/notfound" element={<NotFound />} />
+        
 
         {/* Shared Access Routes (for both users and hosts) */}
         <Route

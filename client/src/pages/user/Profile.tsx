@@ -1,27 +1,27 @@
-import { Images } from "@/assets";
-import { setUserDetails } from "@/redux/Slice/user/userSlice";
-import { RootState } from "@/redux/store";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
 import { useNavigate } from "react-router-dom";
-import { logoutUser } from "@/redux/Slice/user/userSlice";
-import { changeProfile } from "@/services/user/userService";
-import { setLoading } from "@/redux/Slice/host/locationFeaturesSlice";
 import { toast } from "react-toastify";
+
+import { Images } from "@/assets";
+import { RootState } from "@/redux/store";
+import { setUserDetails, logoutUser } from "@/redux/Slice/user/userSlice";
+import { setLoading } from "@/redux/Slice/host/locationFeaturesSlice";
+import { changeProfile } from "@/services/user/userService";
+import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 
 const Profile: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Profile Information");
-  const profile = useSelector((state: RootState) => state.user.userInfo);
-  console.log(profile);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const profile = useSelector((state: RootState) => state.user.userInfo);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -35,19 +35,20 @@ const Profile: React.FC = () => {
     if (selectedImage && profile) {
       const formData = new FormData();
       formData.append("file", selectedImage);
-
-      setLoading(true);
+  
+      dispatch(setLoading(true));
       try {
         const response = await changeProfile(profile.id, formData);
-        console.log('response' , response)
-        if(response?.profilePhotoUrl){
+        console.log('response', response); // <- From `main`, optional to keep
+  
+        if (response?.profilePhotoUrl) {
           dispatch(
             setUserDetails({
               profilePhoto: response.profilePhotoUrl,
             })
           );
-          toast.success('Image updated')
-        }else{
+          toast.success("Image updated");
+        } else {
           toast.error("Failed to update profile photo.");
         }
         setSelectedImage(null);
@@ -59,6 +60,7 @@ const Profile: React.FC = () => {
       }
     }
   };
+  
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -101,12 +103,14 @@ const Profile: React.FC = () => {
             ))}
           </div>
         </div>
+
         <div className="bg-white flex-1 p-6 rounded-xl space-y-6 border border-gray-400">
           {activeTab === "Profile Information" ? (
             <>
+              {/* Profile Picture Section */}
               <div className="space-y-2">
                 <p className="text-sm md:text-lg font-bold">Profile picture</p>
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-4 w-full">
+                <div className="flex flex-col lg:flex-row items-center gap-4 w-full">
                   <div className="w-[93px] h-[85px] border border-black rounded-full overflow-hidden relative">
                     {isLoading ? (
                       <div className="absolute inset-0 flex items-center justify-center">
@@ -114,11 +118,7 @@ const Profile: React.FC = () => {
                       </div>
                     ) : (
                       <img
-                        src={
-                          previewImage ||
-                          profile?.profilePhoto ||
-                          Images.default_profile
-                        }
+                        src={previewImage || profile?.profilePhoto || Images.default_profile}
                         alt="Profile"
                         className="w-full h-full object-cover"
                       />
@@ -152,75 +152,79 @@ const Profile: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col lg:flex-row gap-6 w-full">
-                <div className="space-y-3 flex-1">
-                  <p className="text-sm md:text-lg font-bold">Personal data</p>
-                  <div className="flex flex-col lg:flex-row gap-4 w-full">
-                    <input
-                      type="text"
-                      placeholder="First Name"
-                      value={profile?.firstname || ""}
-                      className="border-b-2 p-2 rounded w-full text-sm"
-                      readOnly
-                      disabled
-                    />
-                    <input
-                      type="text"
-                      placeholder="Last Name"
-                      value={profile?.lastname || ""}
-                      className="border-b-2 p-2 rounded w-full text-sm"
-                      readOnly
-                      disabled
-                    />
-                  </div>
+
+              {/* Personal Info Section */}
+              <div className="space-y-3">
+                <p className="text-sm md:text-lg font-bold">Personal data</p>
+                <div className="flex flex-col lg:flex-row gap-4">
                   <input
-                    type="email"
-                    placeholder="Email"
-                    value={profile?.email || ""}
+                    type="text"
+                    placeholder="First Name"
+                    value={profile?.firstname || ""}
                     className="border-b-2 p-2 rounded w-full text-sm"
                     readOnly
                     disabled
                   />
                   <input
-                    type="phone"
-                    placeholder="Phone"
-                    value={profile?.phone || ""}
+                    type="text"
+                    placeholder="Last Name"
+                    value={profile?.lastname || ""}
                     className="border-b-2 p-2 rounded w-full text-sm"
                     readOnly
                     disabled
                   />
-                   <div className="flex justify-end">
-                    <button className="bg-[#6c63ff] hover:bg-[#564eef] text-white md:px-4 md:py-2 px-2 py-1 rounded text-sm font-semibold">
-                      Edit
-                    </button>
-                  </div>
                 </div>
-                <div className="space-y-3 lg:w-1/2 w-full">
-                  <p className="text-sm md:text-lg font-bold">Change Password</p>
-                  <input
-                    type="password"
-                    placeholder="Current password"
-                    className="border-b-2 p-2 rounded w-full text-sm"
-                  />
-                  <input
-                    type="password"
-                    placeholder="New password"
-                    className="border-b-2 p-2 rounded w-full text-sm"
-                  />
-                  <div className="flex justify-end">
-                    <button className="bg-[#6c63ff] hover:bg-[#564eef] text-white md:px-4 md:py-2 px-2 py-1 rounded text-sm font-semibold">
-                      Change
-                    </button>
-                  </div>
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={profile?.email || ""}
+                  className="border-b-2 p-2 rounded w-full text-sm"
+                  readOnly
+                  disabled
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone"
+                  value={profile?.phone || ""}
+                  className="border-b-2 p-2 rounded w-full text-sm"
+                  readOnly
+                  disabled
+                />
+                <div className="flex justify-end">
+                  <button className="bg-[#6c63ff] hover:bg-[#564eef] text-white px-4 py-2 rounded text-sm font-semibold">
+                    Edit
+                  </button>
                 </div>
               </div>
-              <div className="space-y-2">
+
+              {/* Change Password Section */}
+              <div className="space-y-3">
+                <p className="text-sm md:text-lg font-bold">Change Password</p>
+                <input
+                  type="password"
+                  placeholder="Current password"
+                  className="border-b-2 p-2 rounded w-full text-sm"
+                />
+                <input
+                  type="password"
+                  placeholder="New password"
+                  className="border-b-2 p-2 rounded w-full text-sm"
+                />
+                <input
+                  type="password"
+                  placeholder="Repeat password"
+                  className="border-b-2 p-2 rounded w-full text-sm"
+                />
+                <button className="bg-[#6c63ff] text-white px-4 py-2 rounded text-sm font-semibold">
+                  Change
+                </button>
+              </div>
+              <div className="space-y-3">
                 <p className="text-sm md:text-lg font-bold">Delete account</p>
                 <p className="text-sm text-gray-400">
-                  Deleting account is a permanent action and cannot be undone.
-                  Are you sure you want to proceed?
+                  Deleting account is a permanent action and cannot be undone. Are you sure you want to proceed?
                 </p>
-                <button className="bg-red-600 hover:bg-red-700 text-white md:px-4 md:py-2 px-2 py-1 rounded text-sm font-semibold">
+                <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-semibold">
                   Delete
                 </button>
               </div>
@@ -232,6 +236,7 @@ const Profile: React.FC = () => {
           )}
         </div>
       </div>
+
       <ConfirmDialog
         isOpen={confirmLogout}
         title="Confirm Logout"
@@ -244,7 +249,7 @@ const Profile: React.FC = () => {
         }}
         onCancel={() => setConfirmLogout(false)}
       />
-      <CustomToastContainer/>
+      <CustomToastContainer />
     </div>
   );
 };

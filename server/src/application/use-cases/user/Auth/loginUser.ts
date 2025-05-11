@@ -1,5 +1,5 @@
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/loginRepository.interface";
-import CustomError  from "../../../../utils/errorHandler";
+import CustomError  from "../../../../utils/CustomError";
 import { TokenService } from "../../../../application/services/service.token";
 import bcrypt from "bcrypt";
 
@@ -24,11 +24,11 @@ export class LoginUser {
 
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
-      throw new CustomError("Invalid email or password", 401);
+      throw new CustomError("User not found", 401);
     }
 
-    if (!user.isActive) {
-      throw new CustomError("User is blocked. Please contact support.", 403);
+    if (user.isBlocked) {
+      throw new CustomError("Account has been blocked. Please contact support.", 403);
     }
 
     const isPasswordValid = user.password
@@ -53,9 +53,9 @@ export class LoginUser {
         refreshToken,
         user: {
           id: user._id!,
-          firstname: user.firstname,
+          firstname: user.firstname ?? "",
           lastname: user.lastname ?? "",
-          email: user.email,
+          email: user.email ?? "",
           phone:user.phone || "Please add contact details",
           role: user.role || "user",
         },

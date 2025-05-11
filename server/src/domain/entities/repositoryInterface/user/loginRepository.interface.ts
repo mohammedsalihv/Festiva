@@ -1,4 +1,4 @@
-import { Iuser } from "../../modelInterface/user.interface";
+import { IUser } from "../../modelInterface/user.interface";
 export interface IUserRepository {
-  findByEmail(email: string): Promise<Iuser | null>;
+  findByEmail(email: string): Promise<IUser | null>;
 }

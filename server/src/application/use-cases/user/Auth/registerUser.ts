@@ -1,6 +1,6 @@
 import { hash } from "../../../../utils/passwordHash";
 import { RegisterUserDTO } from "../../../../config/DTO/userDto";
-import ErrorHandler from "../../../../utils/errorHandler";
+import ErrorHandler from "../../../../utils/CustomError";
 import { IUser } from "../../../../domain/entities/modelInterface/user.interface";
 import { TokenService } from "../../../services/service.token";
 import { IUserRegisterRepository } from "../../../../domain/entities/repositoryInterface/user/userRegisterRepository.interface";
@@ -27,7 +27,6 @@ export class RegisterUser {
 
     const hashedPassword = await hash(password);
 
-    // const newUser: Iuser = { ...userData, password: hashedPassword };
     const newUser: IUser = {
       firstname: userData.firstname || "Unknown",
       lastname: userData.lastname || "",
@@ -36,9 +35,8 @@ export class RegisterUser {
       phone: userData.phone || "",
       role: "user",
       isActive: true,
-      isVerified: false,
+      isBlocked: false,
       timestamp: new Date(),
-      is_blocked: false,
     };
 
     const createdUser = await this.userRepository.createUser(newUser);

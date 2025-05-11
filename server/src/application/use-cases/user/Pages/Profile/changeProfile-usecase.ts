@@ -1,6 +1,6 @@
 import { IUser } from "../../../../../domain/entities/modelInterface/user.interface";
 import { IUserProfileRepository } from "../../../../../domain/entities/repositoryInterface/user/userProfile.interface";
-import CustomError from "../../../../../utils/errorHandler";
+import CustomError from "../../../../../utils/CustomError";
 
 export class UserProfile {
   constructor(private UserProfileRepository: IUserProfileRepository) {}

@@ -8,7 +8,7 @@ interface AdminState {
     lastname:string;
     phone:string;
     refreshToken: string;
-    role: "admin";
+    role: string;
     isVerified?: boolean;
   } | null;
 }

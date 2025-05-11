@@ -1,10 +1,10 @@
-import { IhostRepository } from "../../../../domain/entities/repositoryInterface/host/hostLoginRepository.interface";
-import CustomError from "../../../../utils/errorHandler";
+import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostLoginRepository.interface";
+import CustomError from "../../../../utils/CustomError";
 import { TokenService } from "../../../services/service.token";
 import bcrypt from "bcrypt";
 
 export class LoginHost {
-  constructor(private hostRepository: IhostRepository) {}
+  constructor(private HostRepository: IHostRepository) {}
 
   async execute(
     email: string,
@@ -23,7 +23,7 @@ export class LoginHost {
       throw new CustomError("All fields are required", 400);
     }
 
-    const host = await this.hostRepository.findByEmail(email); // ✅ await
+    const host = await this.HostRepository.findByEmail(email); // ✅ await
     if (!host) {
       throw new CustomError("Invalid email or password", 401);
     }

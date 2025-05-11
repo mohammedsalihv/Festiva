@@ -1,7 +1,8 @@
 import React, { ReactNode } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+
 
 interface AdminPrivateRouteProps {
   children: ReactNode;
@@ -9,14 +10,13 @@ interface AdminPrivateRouteProps {
 
 const AdminPrivateRoute: React.FC<AdminPrivateRouteProps> = ({ children }) => {
   const adminInfo = useSelector((state: RootState) => state.admin.adminInfo);
-  const location = useLocation();
-
+  
   if (!adminInfo?.accessToken) {
-    return <Navigate to="/admin/login-admin" state={{ from: location }} replace />;
+    return <Navigate to="/admin/login-admin" replace />;
   }
 
   if (adminInfo.role !== "admin") {
-    return <Navigate to="*" replace />;
+    return <Navigate to="/notfound" replace />;
   }
 
   return children
