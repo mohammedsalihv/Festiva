@@ -51,12 +51,16 @@ const Login = () => {
     mutationFn: LoginUser,
     onSuccess: (data) => {
       const userData = {
+        id: data.user.id,
         firstname:data.user.firstname,
         lastname:data.user.lastname,
         phone:data.user.phone,
-        id: data.user.id,
         email: data.user.email,
         role: data.user.role,
+        profilePic:data.user.profilePic,
+        isBlocked:data.user.isBlocked,
+        isActive:data.user.isActive,
+        timestamp:data.user.timestamp,
         accessToken: data.accessToken,
         refreshToken: data.refreshToken,
       };
@@ -75,7 +79,7 @@ const Login = () => {
       if (error.response) {
         const { data } = error.response;
         const errorMessage =
-          data?.message || "An error occurred while logging in.";
+          data?.message;
         toast.error(errorMessage)
       } else {
         toast.warning("Network error. Please check your connection.");

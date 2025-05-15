@@ -20,4 +20,5 @@ userRoutes.put("/changeprofile/:userId", singleImageUpload , async (req, res) =>
   }
 });
 
+
 export default userRoutes;

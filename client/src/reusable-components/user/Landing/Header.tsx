@@ -24,6 +24,7 @@ const Header = () => {
 
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const isAuthenticated = !!userInfo?.accessToken;
+  const profile = useSelector((state: RootState) => state.user.userInfo);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -42,9 +43,9 @@ const Header = () => {
 
   const handleLogout = () => {
     dispatch(logoutUser());
-    setTimeout(()=>{
-      toast.success('Logout successful')
-    },500)
+    setTimeout(() => {
+      toast.success("Logout successful");
+    }, 500);
     navigate("/login");
   };
   return (
@@ -80,9 +81,15 @@ const Header = () => {
                     e.preventDefault();
                     setDropDown((prev) => !prev);
                   }}
-                  src={Images.default_profile}
+                  src={
+                    profile?.profilePic
+                      ? `${import.meta.env.VITE_PROFILE_URL}${
+                          profile.profilePic
+                        }`
+                      : Images.default_profile
+                  }
                   alt=""
-                  className="w-10 h-10 rounded-full cursor-pointer border border-white"
+                  className="w-10 h-10 rounded-full cursor-pointer border border-white bg-white"
                 />
                 {dropDown && (
                   <div className="absolute right-0 mt-2 w-40 bg-white z-50 shadow-lg rounded-md">

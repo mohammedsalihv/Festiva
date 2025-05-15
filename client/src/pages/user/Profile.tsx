@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -6,10 +6,10 @@ import { toast } from "react-toastify";
 import { Images } from "@/assets";
 import { RootState } from "@/redux/store";
 import { setUserDetails, logoutUser } from "@/redux/Slice/user/userSlice";
-import { setLoading } from "@/redux/Slice/host/locationFeaturesSlice";
 import { changeProfile } from "@/services/user/userService";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import { AxiosError } from "axios";
 
 const Profile: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Profile Information");
@@ -20,12 +20,19 @@ const Profile: React.FC = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const profile = useSelector((state: RootState) => state.user.userInfo);
+   const profile = useSelector((state: RootState) => state.user.userInfo);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (!file.type.match("image.*")) {
+        toast.error("Please select an image file");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size should be less than 5MB");
+        return;
+      }
       setSelectedImage(file);
       setPreviewImage(URL.createObjectURL(file));
     }
@@ -35,32 +42,32 @@ const Profile: React.FC = () => {
     if (selectedImage && profile) {
       const formData = new FormData();
       formData.append("file", selectedImage);
-  
-      dispatch(setLoading(true));
+
+      setIsLoading(true);
       try {
         const response = await changeProfile(profile.id, formData);
-        console.log('response', response); // <- From `main`, optional to keep
-  
+        console.log(response)
         if (response?.profilePhotoUrl) {
           dispatch(
             setUserDetails({
-              profilePhoto: response.profilePhotoUrl,
+              ...profile,
+              profilePic: response.profilePhotoUrl,
             })
           );
-          toast.success("Image updated");
+          toast.success("Profile image updated successfully");
         } else {
-          toast.error("Failed to update profile photo.");
+          toast.error("Failed to update profile photo");
         }
-        setSelectedImage(null);
-        setPreviewImage(null);
-      } catch (error) {
-        console.error("Error updating profile image:", error);
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          toast.error(error.message || "Failed to update profile");
+        }
       } finally {
         setIsLoading(false);
+        setSelectedImage(null);
       }
     }
   };
-  
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -72,7 +79,7 @@ const Profile: React.FC = () => {
     "My bookings",
     "Saved",
     "Service ticket",
-    "FAQ",
+    "Faq",
     "Mylist",
     "Logout",
   ];
@@ -85,7 +92,7 @@ const Profile: React.FC = () => {
             {tabs.map((tab) => (
               <button
                 key={tab}
-                className={`w-full py-2 rounded font-semibold text-left px-3 ${
+                className={`w-full py-2 rounded font-semibold text-left text-[15px] px-3 ${
                   activeTab === tab
                     ? "bg-[#6c63ff] text-white"
                     : "hover:border-gray-400 hover:text-main_color"
@@ -103,11 +110,9 @@ const Profile: React.FC = () => {
             ))}
           </div>
         </div>
-
         <div className="bg-white flex-1 p-6 rounded-xl space-y-6 border border-gray-400">
           {activeTab === "Profile Information" ? (
             <>
-              {/* Profile Picture Section */}
               <div className="space-y-2">
                 <p className="text-sm md:text-lg font-bold">Profile picture</p>
                 <div className="flex flex-col lg:flex-row items-center gap-4 w-full">
@@ -118,18 +123,28 @@ const Profile: React.FC = () => {
                       </div>
                     ) : (
                       <img
-                        src={previewImage || profile?.profilePhoto || Images.default_profile}
+                        src={
+                          previewImage ||
+                          (profile?.profilePic
+                            ? `${import.meta.env.VITE_PROFILE_URL}${
+                                profile.profilePic
+                              }`
+                            : Images.default_profile)
+                        }
                         alt="Profile"
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src =
+                            Images.default_profile;
+                        }}
                       />
                     )}
                   </div>
-
                   <div className="flex flex-col lg:flex-row gap-2 items-center justify-between w-full">
                     <div className="flex items-center gap-2">
                       <label
                         htmlFor="profileImage"
-                        className="text-sm text-[#6c63ff] underline cursor-pointer"
+                        className="text-[16px] text-[#6c63ff] underline cursor-pointer"
                       >
                         Change photo
                       </label>
@@ -152,77 +167,80 @@ const Profile: React.FC = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Personal Info Section */}
-              <div className="space-y-3">
-                <p className="text-sm md:text-lg font-bold">Personal data</p>
-                <div className="flex flex-col lg:flex-row gap-4">
+              <div className="flex flex-col lg:flex-row gap-8">
+                <div className="w-full lg:w-1/2 space-y-3">
+                  <p className="text-sm md:text-lg font-bold">Personal data</p>
+                  <div className="flex flex-col lg:flex-row gap-4">
+                    <input
+                      type="text"
+                      placeholder="First Name"
+                      value={profile?.firstname || ""}
+                      className="border-b-2 p-2 rounded w-full text-[16px]"
+                      readOnly
+                      disabled
+                    />
+                    <input
+                      type="text"
+                      placeholder="Last Name"
+                      value={profile?.lastname || ""}
+                      className="border-b-2 p-2 rounded w-full text-[16px]"
+                      readOnly
+                      disabled
+                    />
+                  </div>
                   <input
-                    type="text"
-                    placeholder="First Name"
-                    value={profile?.firstname || ""}
-                    className="border-b-2 p-2 rounded w-full text-sm"
+                    type="email"
+                    placeholder="Email"
+                    value={profile?.email || ""}
+                    className="border-b-2 p-2 rounded w-full text-[16px]"
                     readOnly
                     disabled
                   />
                   <input
-                    type="text"
-                    placeholder="Last Name"
-                    value={profile?.lastname || ""}
-                    className="border-b-2 p-2 rounded w-full text-sm"
+                    type="tel"
+                    placeholder="Phone"
+                    value={profile?.phone || ""}
+                    className="border-b-2 p-2 rounded w-full text-[16px]"
                     readOnly
                     disabled
                   />
+                  <div className="flex justify-end">
+                    <button className="bg-[#6c63ff] hover:bg-[#564eef] text-white px-4 py-2 rounded text-sm font-semibold">
+                      Edit
+                    </button>
+                  </div>
                 </div>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={profile?.email || ""}
-                  className="border-b-2 p-2 rounded w-full text-sm"
-                  readOnly
-                  disabled
-                />
-                <input
-                  type="tel"
-                  placeholder="Phone"
-                  value={profile?.phone || ""}
-                  className="border-b-2 p-2 rounded w-full text-sm"
-                  readOnly
-                  disabled
-                />
-                <div className="flex justify-end">
-                  <button className="bg-[#6c63ff] hover:bg-[#564eef] text-white px-4 py-2 rounded text-sm font-semibold">
-                    Edit
-                  </button>
+                <div className="w-full lg:w-1/2 space-y-3">
+                  <p className="text-sm md:text-lg font-bold">
+                    Change Password
+                  </p>
+                  <input
+                    type="password"
+                    placeholder="Current password"
+                    className="border-b-2 p-2 rounded w-full text-[16px]"
+                  />
+                  <input
+                    type="password"
+                    placeholder="New password"
+                    className="border-b-2 p-2 rounded w-full text-[16px]"
+                  />
+                  <input
+                    type="password"
+                    placeholder="Repeat password"
+                    className="border-b-2 p-2 rounded w-full text-[16px]"
+                  />
+                  <div className="flex justify-end">
+                    <button className="bg-[#6c63ff] hover:bg-[#564eef] text-white px-4 py-2 rounded text-sm font-semibold">
+                      Change
+                    </button>
+                  </div>
                 </div>
-              </div>
-
-              {/* Change Password Section */}
-              <div className="space-y-3">
-                <p className="text-sm md:text-lg font-bold">Change Password</p>
-                <input
-                  type="password"
-                  placeholder="Current password"
-                  className="border-b-2 p-2 rounded w-full text-sm"
-                />
-                <input
-                  type="password"
-                  placeholder="New password"
-                  className="border-b-2 p-2 rounded w-full text-sm"
-                />
-                <input
-                  type="password"
-                  placeholder="Repeat password"
-                  className="border-b-2 p-2 rounded w-full text-sm"
-                />
-                <button className="bg-[#6c63ff] text-white px-4 py-2 rounded text-sm font-semibold">
-                  Change
-                </button>
               </div>
               <div className="space-y-3">
                 <p className="text-sm md:text-lg font-bold">Delete account</p>
-                <p className="text-sm text-gray-400">
-                  Deleting account is a permanent action and cannot be undone. Are you sure you want to proceed?
+                <p className="text-[16px] text-gray-400">
+                  Deleting account is a permanent action and cannot be undone.
+                  Are you sure you want to proceed?
                 </p>
                 <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-semibold">
                   Delete

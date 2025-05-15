@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import { HostManagementUseCase } from "../../../application/use-cases/admin/HostManagement.usecase";
 import logger from "../../../utils/logger";
 
+interface MulterRequest extends Request {
+  file: Express.Multer.File;
+}
+
 export class HostAdminController {
   constructor(private HostManagementUseCase: HostManagementUseCase) {}
 
@@ -79,6 +83,89 @@ export class HostAdminController {
       res.status(500).json({
         success: false,
         message: "Failed to update host details",
+      });
+    }
+  }
+
+  async changeProfile(req: MulterRequest, res: Response) {
+    try {
+      const hostId = req.params.hostId;
+      const image = req.file;
+
+      if (!image) {
+        res.status(400).json({
+          success: false,
+          message: "No image file uploaded.",
+        });
+      }
+      if (!hostId) {
+        return res.status(401).json({
+          success: false,
+          message: "Unauthorized. No host ID found in request.",
+        });
+      }
+
+      const updatedHost = await this.HostManagementUseCase.changeProfile(
+        hostId,
+        image
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Profile image changed!",
+        data: {
+          profilePhotoUrl: updatedHost.profilePic,
+          ...updatedHost,
+        },
+      });
+    } catch (error: any) {
+      logger.error("Profile change Error:", error);
+
+      if (error.message === "Host not found") {
+        return res.status(404).json({
+          success: false,
+          message: "Host not found",
+        });
+      }
+
+      res.status(500).json({
+        success: false,
+        message: error.message || "Internal server error",
+      });
+    }
+  }
+
+  async deleteHost(req: Request, res: Response): Promise<void> {
+    const { hostId } = req.params;
+
+    if (!hostId) {
+      res.status(400).json({
+        success: false,
+        message: "Missing or invalid hostId",
+      });
+      return;
+    }
+
+    try {
+      const isDeleted = await this.HostManagementUseCase.deleteHost(hostId);
+
+      if (!isDeleted) {
+        res.status(404).json({
+          success: false,
+          message: "Host not found or already deleted",
+        });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "Host account deleted successfully",
+      });
+    } catch (error) {
+      logger.error(String(error), "Error deleting host");
+      res.status(500).json({
+        success: false,
+        message: "Error while deleting the account",
       });
     }
   }

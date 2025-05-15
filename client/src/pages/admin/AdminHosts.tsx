@@ -1,6 +1,5 @@
 import AdminLayout from "@/reusable-components/admin/AdminLayout";
 import { LuUserSearch } from "react-icons/lu";
-import { FaSort } from "react-icons/fa";
 import { VscListSelection } from "react-icons/vsc";
 import { Images } from "@/assets";
 import Pagination from "@/components/Pagination";
@@ -14,12 +13,17 @@ import {
   blockUnblockHost,
   getAllHosts,
   editHostDetails,
+  changeProfile,
+  deleteHost,
 } from "@/services/admin/hostManagement.services";
 import { useDispatch, useSelector } from "react-redux";
-import { setAllHosts } from "@/redux/Slice/admin/hostManagementSlice";
+import {
+  setAllHosts,
+  updateHost,
+} from "@/redux/Slice/admin/hostManagementSlice";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { Host, EditHostPayload } from "@/utils/types";
+import { Host, EditHostPayload, HostSortOptions } from "@/utils/types";
 import { RootState } from "@/redux/store";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { MdBlock } from "react-icons/md";
@@ -27,10 +31,16 @@ import logger from "@/utils/logger";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
 import { useNavigate } from "react-router-dom";
 import Loader from "@/components/Loader";
+import Dropdown from "@/components/Dropdown";
+import { FaTrashRestoreAlt } from "react-icons/fa";
 
 const AdminHosts = () => {
   const [page, setPage] = useState(1);
-  const [submitting , setSubmitting] = useState(false)
+  const [submitting, setSubmitting] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [sort, setSort] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [selectedHost, setSelectedHost] = useState<Host | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,7 +57,8 @@ const AdminHosts = () => {
     location: selectedHost?.location || "",
     isActive: selectedHost?.isActive || false,
     isBlocked: selectedHost?.isBlocked || false,
-    isVerfied: selectedHost?.isVerfied || false,
+    isVerified: selectedHost?.isVerified || false,
+    profilePic: selectedHost?.profilePic || "",
     isSubscriber: selectedHost?.isSubscriber || false,
     listedAssets: selectedHost?.listedAssets || 0,
     totalRequests: selectedHost?.totalRequests || 0,
@@ -64,7 +75,8 @@ const AdminHosts = () => {
         role: selectedHost.role || "",
         isActive: selectedHost.isActive || false,
         isBlocked: selectedHost.isBlocked || false,
-        isVerfied: selectedHost?.isVerfied || false,
+        isVerified: selectedHost?.isVerified || false,
+        profilePic: selectedHost?.profilePic || "",
         isSubscriber: selectedHost?.isSubscriber || false,
         listedAssets: selectedHost?.listedAssets || 0,
         totalRequests: selectedHost?.totalRequests || 0,
@@ -88,10 +100,10 @@ const AdminHosts = () => {
         ...prev,
         isActive: value === "active",
       }));
-    } else if (name === "isVerfied") {
+    } else if (name === "isVerified") {
       setForm((prev) => ({
         ...prev,
-        isVerfied: value === "Verfied",
+        isVerified: value === "verified",
       }));
     } else if (name === "isSubscriber") {
       setForm((prev) => ({
@@ -149,14 +161,14 @@ const AdminHosts = () => {
 
   const handleEditForm = async (e: FormEvent) => {
     e.preventDefault();
-  
+
     if (!selectedHost?._id) {
       toast.error("No host selected");
       return;
     }
-  
+
     setSubmitting(true);
-  
+
     setTimeout(async () => {
       try {
         const payload: EditHostPayload = {
@@ -166,17 +178,18 @@ const AdminHosts = () => {
           role: form.role,
           isActive: form.isActive,
           isBlocked: form.isBlocked,
-          isVerfied: form.isVerfied,
+          isVerified: form.isVerified,
+          profilePic: form.profilePic,
           isSubscriber: form.isSubscriber,
           listedAssets: form.listedAssets,
           totalRequests: form.totalRequests,
           acceptedRequests: form.acceptedRequests,
           rejectedRequests: form.rejectedRequests,
         };
-  
+
         const res = await editHostDetails(selectedHost._id, payload);
         toast.success(res.message);
-  
+
         const updatedHosts = await getAllHosts();
         dispatch(setAllHosts(updatedHosts));
         setSelectedHost(
@@ -191,19 +204,122 @@ const AdminHosts = () => {
       }
     }, 2000);
   };
-  
 
-  const filteredHosts = hosts.filter(
-    (host) =>
-      host.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      host.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.match("image.*")) {
+        toast.error("Please select an image file");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size should be less than 5MB");
+        return;
+      }
+      setSelectedImage(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSaveImage = async () => {
+    if (selectedHost && selectedImage) {
+      const formData = new FormData();
+      formData.append("file", selectedImage);
+
+      setIsLoading(true);
+      try {
+        const response = await changeProfile(selectedHost._id, formData);
+        if (response?.profilePhotoUrl) {
+          const updatedHost = {
+            ...selectedHost,
+            profilePic: response.profilePhotoUrl,
+          };
+          dispatch(updateHost(updatedHost));
+          setSelectedHost(updatedHost);
+          setForm((prev) => ({
+            ...prev,
+            profilePic: response.profilePhotoUrl,
+          }));
+          toast.success("Profile image updated successfully");
+          setPreviewImage(null);
+          setSelectedImage(null);
+          setEditForm(null);
+        } else {
+          toast.error("Failed to update profile photo");
+        }
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          toast.error(error.message || "Failed to update profile");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const handleDelete = async (hostId: string) => {
+    try {
+      await deleteHost(hostId);
+      const updatedHosts = await getAllHosts();
+      dispatch(setAllHosts(updatedHosts));
+      setSelectedHost(null);
+      toast.success("Host account deleted");
+      navigate("/admin/hosts");
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        toast.error("Host account delete failed");
+        logger.error({ hostId, error: error }, "Host account delete failed");
+      }
+      console.log(error)
+    }
+  };
+
+  const filteredHosts = hosts
+    .filter((host) => {
+      const query = searchQuery.toLowerCase();
+      return (
+        host.name.toLowerCase().includes(query) ||
+        host.email.toLowerCase().includes(query) ||
+        host.role?.toLowerCase().includes(query)
+      );
+    })
+    .filter((host) => {
+      switch (sort) {
+        case "Blocked":
+          return host.isBlocked;
+        case "Unblocked":
+          return !host.isBlocked;
+        case "Active":
+          return host.isActive;
+        case "Admin":
+          return host.role?.toLowerCase() === "host";
+        default:
+          return true;
+      }
+    })
+    .sort((a, b) => {
+      switch (sort) {
+        case "name":
+          return a.name.localeCompare(b.name);
+        case "name-desc":
+          return b.name.localeCompare(a.name); // Z-A
+        case "createdAt":
+          return (
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          );
+        default:
+          return 0;
+      }
+    });
 
   if (loading)
-    return <Loader/>
+    return (
+      <div className="text-center font-bold px-20 py-20">
+        <Loader size={64} color="#000" />
+      </div>
+    );
   if (error)
     return <div className="text-center font-bold px-4 py-4">{error}</div>;
-
   return (
     <AdminLayout>
       <div className="flex flex-col md:flex-row h-screen bg-main_white rounded-md font-prompt">
@@ -221,7 +337,20 @@ const AdminHosts = () => {
                 />
                 <LuUserSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm md:text-base" />
               </div>
-              <FaSort className="text-base md:text-xl cursor-pointer" />
+              {sort && (
+                <button
+                  onClick={() => setSort("")}
+                  className="text-[9px] md:text-sm bg-black text-white hover:bg-white hover:text-black p-2 border md:px-3 md:py-2 rounded"
+                >
+                  Clear
+                </button>
+              )}
+              <div className="flex items-center gap-2">
+                <Dropdown
+                  options={HostSortOptions}
+                  onSelect={(value: string) => setSort(value)}
+                />
+              </div>
             </div>
           </div>
           <div className="relative w-full overflow-x-auto">
@@ -233,12 +362,12 @@ const AdminHosts = () => {
                       <VscListSelection />
                     </div>
                   </th>
-                  <th className="px-4 py-2">
+                  <th className="px-4 py-4">
                     <div className="flex justify-center">Person</div>
                   </th>
-                  <th className="px-4 py-2">Name</th>
-                  <th className="px-4 py-2">Email</th>
-                  <th className="px-4 py-2">More</th>
+                  <th className="px-4 py-4">Name</th>
+                  <th className="px-4 py-4">Email</th>
+                  <th className="px-4 py-4">More</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200 text-center">
@@ -247,23 +376,29 @@ const AdminHosts = () => {
                     key={host._id}
                     className="cursor-pointer hover:bg-gray-100 transition-all duration-200"
                   >
-                    <td className="px-4 py-2">{index + 1}</td>
-                    <td className="flex justify-center gap-2">
+                    <td className="px-4 py-4">{index + 1}</td>
+                    <td className="flex justify-center gap-2 py-4">
                       <img
-                        src={host.profile_pic || Images.casual_user}
+                        src={
+                          host.profilePic
+                            ? `${import.meta.env.VITE_PROFILE_URL}${
+                                host.profilePic
+                              }`
+                            : Images.casual_user
+                        }
                         alt="Profile"
-                        className="w-8 h-8 rounded-full"
+                        className="w-8 h-8 rounded-full border"
                       />
                     </td>
-                    <td className="px-4 py-2 text-[10px] lg:text-sm">
+                    <td className="px-4 py-4 text-[10px] lg:text-sm">
                       <span className="text-[10px] lg:text-sm">
                         {host.name}
                       </span>
                     </td>
-                    <td className="px-4 py-2 text-[10px] lg:text-sm">
+                    <td className="px-4 py-4 text-[10px] lg:text-sm">
                       {host.email}
                     </td>
-                    <td className="px-4 py-2">
+                    <td className="px-4 py-4">
                       <div className="flex justify-center">
                         <IoMdArrowForward
                           className="text-black h-5 w-5 lg:h-7 lg:w-7"
@@ -295,9 +430,15 @@ const AdminHosts = () => {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:px-5 lg:py-5 px-4 py-4 font-prompt ">
               <div className="flex lg:items-start items-center">
                 <img
-                  src={Images.casual_user}
+                  src={
+                    selectedHost.profilePic
+                      ? `${import.meta.env.VITE_PROFILE_URL}${
+                          selectedHost.profilePic
+                        }`
+                      : Images.casual_user
+                  }
                   alt=""
-                  className="h-20 w-20 mr-4"
+                  className="h-20 w-20 mr-4 border rounded-full "
                 />
                 <div className="text-sm lg:text-[15px]">
                   <p>
@@ -314,12 +455,27 @@ const AdminHosts = () => {
               <div className="flex flex-col justify-center lg:items-center items-center text-sm">
                 <p
                   className={`${
-                    selectedHost.isActive ? "text-green-500" : "text-red-500"
+                    selectedHost.isActive ? "text-green-500" : "text-red-600"
                   } font-semibold text-sm`}
                 >
                   {selectedHost.isActive ? "Active" : "Not Active"}
                 </p>
-                <p>Verified</p>
+                <p
+                  className={`${
+                    selectedHost.isVerified
+                      ? "text-main_color"
+                      : "text-yellow-500"
+                  } font-semibold text-sm`}
+                >
+                  {selectedHost.isVerified ? "verfied" : "Not verfied"}
+                </p>
+                <p
+                  className={`${
+                    selectedHost.isBlocked ? "text-red-600" : "text-black"
+                  } font-semibold text-sm`}
+                >
+                  {selectedHost.isBlocked ? "Blocked" : "Unblock"}
+                </p>
               </div>
               <div className="flex flex-col justify-center lg:items-end items-center text-sm">
                 <p>
@@ -334,17 +490,23 @@ const AdminHosts = () => {
               <div className="flex flex-col justify-center lg:items-end items-center text-sm">
                 <div className="flex md:flex-col flex-row gap-1">
                   <button
-                    className="border px-3 p-2 rounded text-sm bg-yellow-500 hover:bg-yellow-600 text-white flex gap-1 items-center"
+                    className="border px-3 p-2 rounded text-sm bg-blue-500 hover:bg-blue-600 text-white flex gap-1 items-center"
                     onClick={() => setEditForm(selectedHost)}
                   >
                     Edit <AiTwotoneEdit className="w-4 h-4" />
                   </button>
                   <button
-                    className="border px-3 p-2 rounded text-sm bg-red-600 hover:bg-red-700 text-white flex gap-1 items-center"
+                    className="border px-3 p-2 rounded text-sm bg-yellow-500 hover:bg-yellow-600 text-white flex gap-1 items-center"
                     onClick={() => setConfirmAction(true)}
                   >
                     {selectedHost.isBlocked ? "Unblock" : "Block"}{" "}
                     <MdBlock className="w-4 h-4" />
+                  </button>
+                  <button
+                    className="border p-2 rounded text-sm bg-red-600 hover:bg-red-700 text-white flex items-center justify-center"
+                    onClick={() => handleDelete(selectedHost._id)}
+                  >
+                    <FaTrashRestoreAlt className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -468,28 +630,53 @@ const AdminHosts = () => {
         {editForm && (
           <>
             <div className="px-3 py-4 md:px-6 md:py-2 font-prompt pb-20">
-              <form onSubmit={handleEditForm} className="grid gap-5">
-                <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center py-3">
+                {isLoading ? (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-8 h-8 border-4 border-t-transparent border-blue-500 rounded-full animate-spin"></div>
+                  </div>
+                ) : (
                   <img
-                    src={selectedHost?.profile_pic || Images.default_profile}
+                    src={
+                      previewImage ||
+                      (selectedHost?.profilePic
+                        ? `${import.meta.env.VITE_PROFILE_URL}${
+                            selectedHost.profilePic
+                          }`
+                        : Images.default_profile)
+                    }
                     alt="Profile picture"
-                    className="w-16 md:w-24 h-16 md:h-24 rounded-full object-cover"
+                    className="w-16 md:w-24 h-16 md:h-24 rounded-full object-cover border"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        Images.default_profile;
+                    }}
                   />
-                  <label
-                    htmlFor="profilePicInput"
-                    className="mt-2 text-blue-600 text-sm underline cursor-pointer hover:text-blue-800 focus:text-blue-800 transition-colors"
+                )}
+                <label
+                  htmlFor="profilePic"
+                  className="mt-2 text-blue-600 md:text-sm text-[11px] underline cursor-pointer hover:text-blue-800 focus:text-blue-800 transition-colors py-2 "
+                >
+                  Change
+                  <input
+                    id="profilePic"
+                    type="file"
+                    accept="image/*"
+                    name="profilePic"
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
+                </label>
+                {selectedImage && (
+                  <button
+                    className="bg-[#6c63ff] text-white hover:bg-[#564eef] px-3 py-1 md:py-2 rounded md:text-sm text-[11px] font-semibold mb-3"
+                    onClick={handleSaveImage}
                   >
-                    Change
-                    <input
-                      id="profilePicInput"
-                      type="file"
-                      accept="image/*"
-                      name="profilePic"
-                      className="hidden"
-                    />
-                  </label>
-                </div>
-
+                    {isLoading ? "Saving..." : "Save"}
+                  </button>
+                )}
+              </div>
+              <form onSubmit={handleEditForm} className="grid gap-5">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                   <div className="flex flex-col gap-1">
                     <label htmlFor="Name" className={`text-sm font-light px-1`}>
@@ -663,17 +850,17 @@ const AdminHosts = () => {
                         type="text"
                         id="isVerified"
                         className="border p-2 md:p-3 rounded-md w-full"
-                        value={form.isVerfied ? "Verified" : "Not verified"}
+                        value={form.isVerified ? "verified" : "unverified"}
                         disabled
                       />
                       <select
-                        name="isVerfied"
+                        name="isVerified"
                         className="border p-2 md:p-3 rounded-md w-full"
-                        value={form.isVerfied ? "verified" : "not verified"}
+                        value={form.isVerified ? "verified" : "unverified"}
                         onChange={handleInputChange}
                       >
                         <option value="verified">verified</option>
-                        <option value="notverified">not verified</option>
+                        <option value="unverified">unverified</option>
                       </select>
                     </div>
                   </div>
@@ -760,7 +947,9 @@ const AdminHosts = () => {
                 </div>
                 <div className="flex justify-end md:py-9">
                   <button
-                    className={`px-4 py-2 border hover:bg-slate-700 ${submitting ? "bg-slate-700" : "bg-black"} text-white rounded-md`}
+                    className={`py-2 border hover:bg-slate-700 ${
+                      submitting ? "bg-slate-700" : "bg-black"
+                    } text-white rounded-md md:text-sm text-[11px] px-3`}
                     type="submit"
                     disabled={submitting}
                   >

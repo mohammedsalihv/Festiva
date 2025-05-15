@@ -35,4 +35,22 @@ export class UserManagementRepository implements IUserManagementRepository {
 
     return UserModal.find().exec();
   }
+
+  async changeProfile(userId: string, imageUrl: string): Promise<IUser> {
+    const updatedUser = await UserModal.findByIdAndUpdate(
+      userId,
+      { profilePic: imageUrl },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      throw new Error("User not found or update failed");
+    }
+    return updatedUser;
+  }
+
+  async deleteUser(userId: string): Promise<boolean> {
+    const response = await UserModal.findByIdAndDelete({ _id: userId });
+    return response !== null;
+  }
 }

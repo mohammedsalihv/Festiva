@@ -26,13 +26,54 @@ export class HostManagementUseCase {
     return response;
   }
 
-   async editHost(hostId: string, form: EditHostPayload): Promise<IHost[]> {
-      const response = await this.HostManagementRepository.editHost(hostId, form);
-    
-      if (!response || response.length === 0) {
-        throw new CustomError("Host update failed", 500);
-      }
-    
-      return response;
+  async editHost(hostId: string, form: EditHostPayload): Promise<IHost[]> {
+    const response = await this.HostManagementRepository.editHost(hostId, form);
+
+    if (!response || response.length === 0) {
+      throw new CustomError("Host update failed", 500);
     }
+
+    return response;
+  }
+
+  async changeProfile(
+    hostId: string,
+    image: Express.Multer.File
+  ): Promise<IHost> {
+    if (!image) {
+      throw new CustomError("No image file provided", 400);
+    }
+
+    if (!hostId) {
+      throw new CustomError("Host ID required", 400);
+    }
+
+    const allowedMimeTypes = ["image/jpeg", "image/png", "image/gif"];
+    if (!allowedMimeTypes.includes(image.mimetype)) {
+      throw new CustomError(
+        "Invalid file type. Only JPEG, PNG, and GIF are allowed.",
+        400
+      );
+    }
+
+    const imageName = image.filename;
+    const imageUrl = `uploads/singleImages/${imageName}`;
+    const response = await this.HostManagementRepository.changeProfile(
+      hostId,
+      imageUrl
+    );
+
+    if (!response) {
+      throw new CustomError("Profile photo update failed", 401);
+    }
+    return response;
+  }
+
+  async deleteHost(hostId: string): Promise<{ message: string }> {
+    const result = await this.HostManagementRepository.deleteHost(hostId);
+    if (!result) {
+      throw new CustomError("Deleting failed", 500);
+    }
+    return { message: "Host account deleted" };
+  }
 }

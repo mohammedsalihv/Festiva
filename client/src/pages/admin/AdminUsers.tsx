@@ -4,33 +4,44 @@ import { useState, useEffect, FormEvent } from "react";
 import { RiCloseFill } from "react-icons/ri";
 import { VscListSelection } from "react-icons/vsc";
 import { LuUserSearch } from "react-icons/lu";
-import { FaSort } from "react-icons/fa";
 import { AiTwotoneEdit } from "react-icons/ai";
 import Pagination from "@/components/Pagination";
 import { MdBlock } from "react-icons/md";
 import {
   editUserDetails,
   getAllUsers,
+  changeProfile,
+  blockUnblockUser,
+  deleteUser
 } from "@/services/admin/userManagement.services";
-import { setAllUsers } from "@/redux/Slice/admin/userManagementSlice";
+import {
+  setAllUsers,
+  updateUser,
+} from "@/redux/Slice/admin/userManagementSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { User, EditUserPayload } from "@/utils/types";
+import { User, EditUserPayload, UserSortOptions } from "@/utils/types";
 import { AxiosError } from "axios";
 import { CgUnblock } from "react-icons/cg";
 import logger from "@/utils/logger";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
-import { blockUnblockUser } from "@/services/admin/userManagement.services";
 import { toast } from "react-toastify";
 import Drawer from "@/components/Drawer";
 import Loader from "@/components/Loader";
 import { useNavigate } from "react-router-dom";
+import Dropdown from "@/components/Dropdown";
+import { FaTrashRestoreAlt } from "react-icons/fa";
 
 const AdminUsers = () => {
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [sort, setSort] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
   const [confirmAction, setConfirmAction] = useState(false);
   const [editForm, setEditForm] = useState<typeof selectedUser | null>(null);
   const [page, setPage] = useState(1);
@@ -45,17 +56,20 @@ const AdminUsers = () => {
     lastname: selectedUser?.lastname || "",
     phone: selectedUser?.phone || "",
     role: selectedUser?.role || "",
+    profilePic: selectedUser?.profilePic || "",
     isActive: selectedUser?.isActive || false,
     isBlocked: selectedUser?.isBlocked || false,
   });
 
   useEffect(() => {
+    console.log(selectedUser);
     if (selectedUser) {
       setForm({
         firstname: selectedUser.firstname || "",
         lastname: selectedUser.lastname || "",
         phone: selectedUser.phone || "",
         role: selectedUser.role || "",
+        profilePic: selectedUser?.profilePic || "",
         isActive: selectedUser.isActive || false,
         isBlocked: selectedUser.isBlocked || false,
       });
@@ -155,6 +169,7 @@ const AdminUsers = () => {
           lastname: form.lastname,
           phone: form.phone,
           role: form.role,
+          profilePic: form.profilePic,
           isActive: form.isActive,
           isBlocked: form.isBlocked,
         };
@@ -180,6 +195,119 @@ const AdminUsers = () => {
     }, 2000);
   };
 
+  const handleSaveImage = async () => {
+    if (selectedImage && selectedUser) {
+      const formData = new FormData();
+      formData.append("file", selectedImage);
+
+      setIsLoading(true);
+      try {
+        const response = await changeProfile(selectedUser._id, formData);
+        if (response?.profilePhotoUrl) {
+          const updatedUser = {
+            ...selectedUser,
+            profilePic: response.profilePhotoUrl,
+          };
+
+          dispatch(updateUser(updatedUser));
+
+          setSelectedUser(updatedUser);
+
+          setForm((prev) => ({
+            ...prev,
+            profilePic: response.profilePhotoUrl,
+          }));
+
+          toast.success("Profile image updated successfully");
+          setPreviewImage(null);
+          setSelectedImage(null);
+          setEditForm(null);
+        } else {
+          toast.error("Failed to update profile photo");
+        }
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          toast.error(error.message || "Failed to update profile");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.match("image.*")) {
+        toast.error("Please select an image file");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size should be less than 5MB");
+        return;
+      }
+      setSelectedImage(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
+    const handleDelete = async (hostId: string) => {
+      try {
+        await deleteUser(hostId);
+        const updatedUser = await getAllUsers();
+        dispatch(setAllUsers(updatedUser));
+        setSelectedUser(null);
+        toast.success("User account deleted");
+        navigate("/admin/users");
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          toast.error("User account delete failed");
+          logger.error({ hostId, error: error }, "User account delete failed");
+        }
+        console.log(error)
+      }
+    };
+  
+
+  const filteredUsers = userData
+    .filter((user) => {
+      const query = searchQuery.toLowerCase();
+      return (
+        user.firstname.toLowerCase().includes(query) ||
+        user.lastname.toLowerCase().includes(query) ||
+        user.email.toLowerCase().includes(query) ||
+        user.role.toLowerCase().includes(query)
+      );
+    })
+    .filter((user) => {
+      switch (sort) {
+        case "Blocked":
+          return user.isBlocked;
+        case "Unblocked":
+          return !user.isBlocked;
+        case "Active":
+          return user.isActive;
+        case "Admin":
+          return user.role.toLowerCase() === "admin";
+        default:
+          return true;
+      }
+    })
+    .sort((a, b) => {
+      switch (sort) {
+        case "name":
+          return a.firstname.localeCompare(b.firstname); // A-Z
+        case "name-desc":
+          return b.firstname.localeCompare(a.firstname); // Z-A
+        case "createdAt":
+          return (
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          );
+        default:
+          return 0;
+      }
+    });
+
   if (loading)
     return (
       <div className="text-center font-bold px-20 py-20">
@@ -203,19 +331,35 @@ const AdminUsers = () => {
           } overflow-hidden p-4`}
         >
           <div className="flex justify-between items-center mb-10 mt-5 px-2">
-            <h2 className="text-lg md:text-xl font-semibold">Peoples</h2>
-            <div className="flex items-center gap-2">
+            <h2 className="text-sm md:text-xl font-semibold">Peoples</h2>
+            <div className="flex items-center gap-2 relative">
               <div className="relative w-40 sm:w-52 md:w-64">
                 <input
                   type="text"
-                  className="pl-8 pr-2 py-2 border rounded w-full text-sm md:text-base"
-                  placeholder="Search by name, email"
+                  className="pl-8 pr-2 py-3 border rounded w-full text-sm md:text-base"
+                  placeholder="Search by name, email, role"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <LuUserSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm md:text-base" />
               </div>
-              <FaSort className="text-base md:text-xl cursor-pointer" />
+              {sort && (
+                <button
+                  onClick={() => setSort("")}
+                  className="text-[9px] md:text-sm bg-black text-white hover:bg-white hover:text-black p-2 border md:px-3 md:py-2 rounded"
+                >
+                  Clear
+                </button>
+              )}
+              <div className="flex items-center gap-2">
+                <Dropdown
+                  options={UserSortOptions}
+                  onSelect={(value: string) => setSort(value)}
+                />
+              </div>
             </div>
           </div>
+
           <div className="relative w-full overflow-x-auto">
             <table className="min-w-full table-auto divide-y divide-gray-200">
               <thead className="bg-gray-50 text-center">
@@ -225,17 +369,17 @@ const AdminUsers = () => {
                       <VscListSelection />
                     </div>
                   </th>
-                  <th className="px-4 py-2">
+                  <th className="px-4 py-4">
                     <div className="flex justify-center">Person</div>
                   </th>
-                  <th className="px-4 py-2">Firstname</th>
-                  <th className="px-4 py-2">Lastname</th>
-                  <th className="px-4 py-2">Email</th>
-                  <th className="px-4 py-2">Role</th>
+                  <th className="px-4 py-4">Firstname</th>
+                  <th className="px-4 py-4">Lastname</th>
+                  <th className="px-4 py-4">Email</th>
+                  <th className="px-4 py-4">Role</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200 text-center">
-                {userData
+                {filteredUsers
                   .filter((user) => user !== null)
                   .map((user) => (
                     <tr
@@ -250,25 +394,31 @@ const AdminUsers = () => {
                           readOnly
                         />
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-4">
                         <div className="flex justify-center">
                           <img
-                            src={Images.default_profile}
+                            src={
+                              user?.profilePic
+                                ? `${import.meta.env.VITE_PROFILE_URL}${
+                                    user.profilePic
+                                  }`
+                                : Images.default_profile
+                            }
                             alt="Profile"
-                            className="w-8 h-8 rounded-full"
+                            className="w-8 h-8 rounded-full border"
                           />
                         </div>
                       </td>
-                      <td className="px-4 py-2 text-[10px] lg:text-sm">
+                      <td className="px-4 py-4 text-[10px] lg:text-sm">
                         {user.firstname || "N/A"}
                       </td>
-                      <td className="px-4 py-2 text-[10px] lg:text-sm">
+                      <td className="px-4 py-4 text-[10px] lg:text-sm">
                         {user.lastname || "N/A"}
                       </td>
-                      <td className="px-4 py-2 text-[10px] lg:text-sm">
+                      <td className="px-4 py-4 text-[10px] lg:text-sm">
                         {user.email || "N/A"}
                       </td>
-                      <td className="px-4 py-2 text-[10px] lg:text-sm">
+                      <td className="px-4 py-4 text-[10px] lg:text-sm">
                         {user.role || "N/A"}
                       </td>
                     </tr>
@@ -290,9 +440,15 @@ const AdminUsers = () => {
             </div>
             <div className="p-4 space-y-3">
               <img
-                src={Images.default_profile}
+                src={
+                  selectedUser?.profilePic
+                    ? `${import.meta.env.VITE_PROFILE_URL}${
+                        selectedUser.profilePic
+                      }`
+                    : Images.default_profile
+                }
                 alt="Profile"
-                className="w-24 h-24 mb-4 rounded-full"
+                className="w-24 h-24 mb-4 rounded-full border"
               />
               <p className="text-[12px] lg:text-sm">
                 <strong>Name:</strong> {selectedUser.firstname || "N/A"}{" "}
@@ -328,7 +484,7 @@ const AdminUsers = () => {
               </p>
               <div className="flex flex-row gap-2">
                 <button
-                  className="px-3 p-1 border rounded bg-yellow-500 hover:bg-yellow-600 text-white flex items-center gap-1"
+                  className="px-3 p-1 border rounded bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-1"
                   onClick={() => setEditForm(selectedUser)}
                 >
                   Edit
@@ -336,7 +492,7 @@ const AdminUsers = () => {
                 </button>
                 {selectedUser.isBlocked ? (
                   <button
-                    className="px-3 p-1 border rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-1"
+                    className="px-3 p-1 border rounded bg-green-500 hover:bg-green-600 text-white flex items-center gap-1"
                     onClick={() => setConfirmAction(true)}
                   >
                     Unblock
@@ -344,13 +500,19 @@ const AdminUsers = () => {
                   </button>
                 ) : (
                   <button
-                    className="px-3 p-1 border rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-1"
+                    className="px-3 p-1 border rounded bg-yellow-500 hover:bg-yellow-600 text-white flex items-center gap-1"
                     onClick={() => setConfirmAction(true)}
                   >
                     Block
                     <MdBlock className="w-4 h-4" />
                   </button>
                 )}
+                  <button
+                    className="px-3 p-1 border rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-1"
+                    onClick={() => handleDelete(selectedUser._id)}
+                  >
+                    <FaTrashRestoreAlt className="w-4 h-4" />
+                  </button>
               </div>
             </div>
             <ConfirmDialog
@@ -387,28 +549,53 @@ const AdminUsers = () => {
         {editForm && (
           <>
             <div className="px-3 py-10 md:px-11 md:py-1 font-prompt">
-              <form onSubmit={handleEditForm} className="grid gap-5">
-                <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center py-2">
+                {isLoading ? (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-8 h-8 border-4 border-t-transparent border-blue-500 rounded-full animate-spin"></div>
+                  </div>
+                ) : (
                   <img
-                    src={Images.default_profile}
+                    src={
+                      previewImage ||
+                      (selectedUser?.profilePic
+                        ? `${import.meta.env.VITE_PROFILE_URL}${
+                            selectedUser.profilePic
+                          }`
+                        : Images.default_profile)
+                    }
                     alt="Profile picture"
-                    className="w-16 md:w-24 h-16 md:h-24 rounded-full object-cover"
+                    className="w-16 md:w-24 h-16 md:h-24 rounded-full object-cover border"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        Images.default_profile;
+                    }}
                   />
-                  <label
-                    htmlFor="profilePicInput"
-                    className="mt-2 text-blue-600 text-sm underline cursor-pointer hover:text-blue-800 focus:text-blue-800 transition-colors"
-                  >
-                    Change
-                    <input
-                      id="profilePicInput"
-                      type="file"
-                      accept="image/*"
-                      name="profilePic"
-                      className="hidden"
-                    />
-                  </label>
-                </div>
+                )}
 
+                <label
+                  htmlFor="profileImage"
+                  className="mt-2 text-blue-600 text-sm underline cursor-pointer hover:text-blue-800 focus:text-blue-800 transition-colors"
+                >
+                  Change
+                  <input
+                    id="profileImage"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
+                </label>
+                {selectedImage && (
+                  <button
+                    className="bg-[#6c63ff] text-white hover:bg-[#564eef] px-4 py-2 rounded text-sm font-semibold"
+                    onClick={handleSaveImage}
+                  >
+                    Save
+                  </button>
+                )}
+              </div>
+              <form onSubmit={handleEditForm} className="grid gap-5">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="flex flex-col gap-1">
                     <label

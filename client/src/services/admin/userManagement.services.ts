@@ -10,7 +10,7 @@ import logger from "@/utils/logger";
 
 export const getAllUsers = async () => {
   try {
-    const response = await axiosInstance.get<GetUsersResponse>("/getAllUsers");
+    const response = await axiosInstance.get<GetUsersResponse>("/users");
     return response.data.data;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
@@ -93,5 +93,42 @@ export const editUserDetails = async (
 
     logger.error({ userId, error: message }, "Edit user failed");
     throw new Error(`Edit user failed: ${message}`);
+  }
+};
+
+
+export const changeProfile = async (userId: string, formData: FormData) => {
+  try {
+    const response = await axiosInstance.put(`users/changeprofile/${userId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data.data;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      console.error(
+        "Change profile photo failed:",
+        error.response?.data || error.message
+      );
+      throw new Error(error.response?.data?.message || "Failed to update profile");
+    }
+    throw new Error("Failed to update profile");
+  }
+};
+
+export const deleteUser = async (userId: string) => {
+  try {
+    const response = await axiosInstance.delete(`users/${userId}`);
+    return response.data.data;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      console.error(
+        "User account deleting failed:",
+        error.response?.data || error.message
+      );
+      throw new Error(error.response?.data?.message || "Failed to delete");
+    }
+    throw new Error("Failed to delete");
   }
 };

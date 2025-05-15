@@ -6,9 +6,9 @@ export interface IHost{
     password?: string;
     location?: string;
     role?:string;
-    profile_pic?: string;
+    profilePic?: string;
     isBlocked?:boolean;
-    isVerfied?:boolean;
+    isVerified?:boolean;
     isSubscriber?:boolean;
     isActive?:boolean;
     listedAssets?:number;

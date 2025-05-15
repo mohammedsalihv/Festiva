@@ -18,12 +18,11 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
+        
         <Route path="/*" element={<PublicRoutes />} />
         <Route path="/notfound" element={<NotFound />} />
         
 
-        {/* Shared Access Routes (for both users and hosts) */}
         <Route
           path="/host/landing"
           element={
@@ -35,7 +34,6 @@ const App: React.FC = () => {
         <Route path="/host/login" element={<HostLogin />} />
         <Route path="/host/register" element={<HostRegister />} />
 
-        {/* Protected User Routes */}
         <Route
           path="/user/*"
           element={
@@ -45,7 +43,6 @@ const App: React.FC = () => {
           }
         />
 
-        {/* Protected Host-only Routes */}
         <Route
           path="/host/*"
           element={

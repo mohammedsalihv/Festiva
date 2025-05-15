@@ -5,7 +5,7 @@ export interface EditHostPayload {
     isActive: boolean;
     isBlocked: boolean;
     location:string;
-    isVerfied:boolean;
+    isVerified:boolean;
     isSubscriber:boolean;
     listedAssets:number;
     totalRequests:number;

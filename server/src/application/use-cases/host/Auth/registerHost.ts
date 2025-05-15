@@ -32,7 +32,7 @@ export class RegsiterHost {
       phone: hostData.phone || "",
       role: "host",
       location: hostData.location,
-      profile_pic: hostData.profile_pic,
+      profilePic: hostData.profilePic,
     };
 
     const createdHost = await this.hostRepository.createHost(newHost);
@@ -54,7 +54,7 @@ export class RegsiterHost {
         email: createdHost.email!,
         phone: createdHost.phone!,
         location: createdHost.location!,
-        profile_pic: createdHost.profile_pic || "",
+        profile_pic: createdHost.profilePic || "",
         role: createdHost.role || "host",
       },
     };

@@ -5,7 +5,7 @@ export interface RegisterHostDTO {
   password: string;
   location: string;
   role?: string;
-  profile_pic?: string;
+  profilePic?: string;
   isBlocked?: boolean;
   isVerfied?: boolean;
   isSubscriber?: boolean;

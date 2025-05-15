@@ -2,16 +2,18 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {
   userInfo: {
-    id:string;
-    accessToken: string;
-    email: string;
+    id: string;
     firstname: string;
     lastname: string;
+    email: string;
     phone: string;
+    role: string;
+    profilePic?: string;
+    isBlocked?: boolean;
+    isActive?: boolean;
+    timestamp?: Date;
+    accessToken: string;
     refreshToken: string;
-    role: "admin" | "user";
-    profilePhoto?: string;
-    isVerified?: boolean;
   } | null;
 }
 
@@ -25,7 +27,10 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUserDetails: (state, action: PayloadAction<Partial<UserState["userInfo"]>>) => {
+    setUserDetails: (
+      state,
+      action: PayloadAction<Partial<UserState["userInfo"]>>
+    ) => {
       if (state.userInfo) {
         state.userInfo = {
           ...state.userInfo,

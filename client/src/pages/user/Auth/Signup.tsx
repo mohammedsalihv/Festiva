@@ -7,7 +7,10 @@ import { Checkbox } from "@/components/Checkbox";
 import { Button } from "@/components/Button";
 import { useState, ChangeEvent, FormEvent } from "react";
 import { sendOtp } from "@/services/user/userAuthService";
-import { validateSignupForm, FormState } from "@/utils/validations/user/Auth/signupValidation";
+import {
+  validateSignupForm,
+  FormState,
+} from "@/utils/validations/user/Auth/signupValidation";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import CustomToastContainer from "../../../reusable-components/Messages/ToastContainer";
@@ -78,9 +81,12 @@ const Signup = () => {
     const { isValid, errors: validationErrors } = validateSignupForm(form);
     if (!isValid) {
       setErrors(validationErrors);
+      toast.error("Please correct the errors in the form.");
+      setTimeout(() => {
+        setErrors({});
+      }, 5000);
       return;
     }
-
     sendOtpMutation({ email: form.email });
   };
 
@@ -194,11 +200,17 @@ const Signup = () => {
                       onChange={handleChange}
                       value={form.password}
                     />
-                    {errors.password && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.password}
-                      </p>
-                    )}
+                    <p
+                      className={`text-xs mt-1 ${
+                        errors.password
+                          ? "text-red-700 font-bold"
+                          : "text-red-500"
+                      }`}
+                    >
+                      {errors.password
+                        ? errors.password
+                        : "Password must include uppercase, lowercase, number, and special character"}
+                    </p>
                   </div>
                   <div className="space-y-1">
                     <Label
@@ -214,11 +226,17 @@ const Signup = () => {
                       onChange={handleChange}
                       value={form.confirmPassword}
                     />
-                    {errors.confirmPassword && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errors.confirmPassword}
-                      </p>
-                    )}
+                    <p
+                      className={`text-xs mt-1 ${
+                        errors.confirmPassword
+                          ? "text-red-700 font-bold"
+                          : "text-red-500"
+                      }`}
+                    >
+                      {errors.confirmPassword
+                        ? errors.confirmPassword
+                        : "Password must include uppercase, lowercase, number, and special character"}
+                    </p>
                   </div>
                 </div>
                 <div className="flex flex-col sm:flex-row items-start justify-between w-full gap-4 md:mt-auto">
@@ -236,7 +254,9 @@ const Signup = () => {
                             }));
                           }
                         }}
-                        className={`h-4 w-4 ${errors.terms ? "border-red-500" : ""}`}
+                        className={`h-4 w-4 ${
+                          errors.terms ? "border-red-500" : ""
+                        }`}
                       />
                       <label
                         htmlFor="terms"
@@ -255,7 +275,9 @@ const Signup = () => {
                       </label>
                     </div>
                     {errors.terms && (
-                      <p className="text-sm max-sm:text-xs text-red-500">{errors.terms}</p>
+                      <p className="text-sm max-sm:text-xs text-red-500">
+                        {errors.terms}
+                      </p>
                     )}
                   </div>
                   <div className="w-full sm:w-auto bg-main_color rounded-md h-12">

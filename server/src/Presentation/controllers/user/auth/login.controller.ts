@@ -24,6 +24,10 @@ export class LoginController {
           phone: user.phone,
           email: user.email,
           role: user.role,
+          profilePic:user.profilePic,
+          isBlocked:user.isBlocked,
+          isActive:user.isActive,
+          timestamp:user.timestamp
         },
         accessToken,
         refreshToken,

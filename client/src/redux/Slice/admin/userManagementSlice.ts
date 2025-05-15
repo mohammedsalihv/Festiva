@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {User} from "@/utils/types"
+import { User } from "@/utils/types";
 
 interface UserState {
   users: User[];
@@ -16,8 +16,15 @@ const userManagementSlice = createSlice({
     setAllUsers: (state, action: PayloadAction<User[]>) => {
       state.users = action.payload;
     },
+    updateUser: (state, action: PayloadAction<User>) => {
+      const updatedUser = action.payload;
+      const index = state.users.findIndex(user => user._id === updatedUser._id);
+      if (index !== -1) {
+        state.users[index] = updatedUser;
+      }
+    },
   },
 });
 
-export const { setAllUsers } = userManagementSlice.actions;
+export const { setAllUsers, updateUser } = userManagementSlice.actions;
 export default userManagementSlice.reducer;

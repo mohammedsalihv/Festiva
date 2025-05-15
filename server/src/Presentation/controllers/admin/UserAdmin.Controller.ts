@@ -2,6 +2,10 @@ import { Request, Response } from "express";
 import { UserManagementUseCase } from "../../../application/use-cases/admin/UserManagement.usecase";
 import logger from "../../../utils/logger";
 
+interface MulterRequest extends Request {
+  file: Express.Multer.File;
+}
+
 export class UserAdminController {
   constructor(private userManagementUseCase: UserManagementUseCase) {}
 
@@ -79,6 +83,91 @@ export class UserAdminController {
       res.status(500).json({
         success: false,
         message: "Failed to update user details",
+      });
+    }
+  }
+
+  async changeProfile(req: MulterRequest, res: Response) {
+    try {
+      const userId = req.params.userId;
+      const image = req.file;
+
+      if (!image) {
+        return res.status(400).json({
+          success: false,
+          message: "No image file uploaded.",
+        });
+      }
+
+      if (!userId) {
+        return res.status(401).json({
+          success: false,
+          message: "Unauthorized. No user ID found in request.",
+        });
+      }
+
+      const updatedUser = await this.userManagementUseCase.changeProfile(
+        userId,
+        image
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Profile image changed!",
+        data: {
+          profilePhotoUrl: updatedUser.profilePic,
+          ...updatedUser,
+        },
+      });
+    } catch (error: any) {
+      logger.error("Profile change Error:", error);
+
+      if (error.message === "User not found") {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+
+      res.status(500).json({
+        success: false,
+        message: error.message || "Internal server error",
+      });
+    }
+  }
+
+
+  async deleteUser(req: Request, res: Response): Promise<void> {
+    const { userId } = req.params;
+
+    if (!userId) {
+      res.status(400).json({
+        success: false,
+        message: "Missing or invalid userId",
+      });
+      return;
+    }
+
+    try {
+      const isDeleted = await this.userManagementUseCase.deleteUser(userId);
+
+      if (!isDeleted) {
+        res.status(404).json({
+          success: false,
+          message: "User not found or already deleted",
+        });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "User account deleted successfully",
+      });
+    } catch (error) {
+      logger.error(String(error), "Error deleting user");
+      res.status(500).json({
+        success: false,
+        message: "Error while deleting the account",
       });
     }
   }

@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { UserProfile } from "../../../../application/use-cases/user/Pages/Profile/changeProfile-usecase";
 import logger from "../../../../utils/logger";
 
-
 interface MulterRequest extends Request {
   file: Express.Multer.File;
 }
@@ -14,12 +13,12 @@ export class UserProfileController {
     try {
       const userId = req.params.userId;
       const image = req.file;
-  
-      if(!image){
+
+      if (!image) {
         return res.status(400).json({
-          success:false,
+          success: false,
           message: "No image file uploaded.",
-        })
+        });
       }
 
       if (!userId) {
@@ -29,11 +28,18 @@ export class UserProfileController {
         });
       }
 
-      await this.changeProfileUseCase.execute(userId, image);
+      const updatedUser = await this.changeProfileUseCase.execute(
+        userId,
+        image
+      );
 
       res.status(200).json({
         success: true,
         message: "Profile image changed!",
+        data: {
+          profilePhotoUrl: updatedUser.profilePic,
+          ...updatedUser,
+        },
       });
     } catch (error: any) {
       logger.error("Profile change Error:", error);

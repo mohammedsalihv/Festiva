@@ -42,10 +42,9 @@ export interface User {
   isVerified: boolean;
   phone: string;
   password?: string; 
-  profilePic: string | File;
+  profilePic?: string;
   role: "admin" | "user";
   timestamp: string;
-  __v?: number;
 }
 
 export interface Host {
@@ -56,16 +55,16 @@ export interface Host {
   password: string;
   location: string;
   role?: string;
-  profile_pic?: string;
+  profilePic?: string;
   isBlocked?: boolean;
-  isVerfied?: boolean;
+  isVerified?: boolean;
   isSubscriber?: boolean;
   isActive?: boolean;
   listedAssets?: number;
   totalRequests?: number;
   acceptedRequests?: number;
   rejectedRequests?: number;
-  timestamp?:Date;
+  timestamp:string;
 }
 
 
@@ -89,6 +88,7 @@ export interface EditUserPayload {
   lastname: string;
   phone: string;
   role: string;
+  profilePic:string;
   isActive: boolean;
   isBlocked: boolean;
 }
@@ -106,7 +106,8 @@ export interface EditHostPayload {
   isActive: boolean;
   isBlocked: boolean;
   location:string;
-  isVerfied:boolean;
+  isVerified:boolean;
+  profilePic:string;
   isSubscriber:boolean;
   listedAssets:number;
   totalRequests:number;
@@ -134,3 +135,24 @@ export interface BlockHostResponse {
   message?: string;
   success: boolean;
 }
+
+
+export const UserSortOptions = [
+  { label: "Firstname (A-Z)", value: "name" },
+  { label: "Firstname (Z-A)", value: "name-desc" },
+  { label: "Created Date", value: "createdAt" },
+  { label: "Only Blocked", value: "Blocked" },
+  { label: "Only Unblocked", value: "Unblocked" },
+  { label: "Only Active", value: "Active" },
+  { label: "Only Admins", value: "Admin" },
+];
+
+export const HostSortOptions = [
+  { label: "Name (A-Z)", value: "name" },
+  { label: "Name (Z-A)", value: "name-desc" },
+  { label: "Created Date", value: "createdAt" },
+  { label: "Only Blocked", value: "Blocked" },
+  { label: "Only Unblocked", value: "Unblocked" },
+  { label: "Only Active", value: "Active" },
+  { label: "Only hosts", value: "host" },
+];

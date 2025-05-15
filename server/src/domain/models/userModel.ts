@@ -12,8 +12,6 @@ const UserSchema = new Schema<IUser>({
   isActive: { type: Boolean, default: true },
   isBlocked: { type: Boolean, default: false },
   googleId: { type: String },
-  gender: { type: String },
-  country: { type: String },
   timestamp: { type: Date, default: Date.now },
 });
 

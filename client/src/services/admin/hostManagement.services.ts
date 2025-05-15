@@ -10,7 +10,7 @@ import logger from "@/utils/logger";
 
 export const getAllHosts = async () => {
   try {
-    const response = await axiosInstance.get<GetHostsResponse>("/getAllHosts");
+    const response = await axiosInstance.get<GetHostsResponse>("/hosts");
     return response.data.data;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
@@ -25,6 +25,8 @@ export const getAllHosts = async () => {
     }
   }
 };
+
+
 
 export const blockUnblockHost = async (
   hostId: string,
@@ -65,6 +67,7 @@ export const blockUnblockHost = async (
   }
 };
 
+
 export const editHostDetails = async (
   hostId: string,
   formData: EditHostPayload
@@ -94,5 +97,44 @@ export const editHostDetails = async (
 
     logger.error({ hostId, error: message }, "Edit host failed");
     throw new Error(`Edit host failed: ${message}`);
+  }
+};
+
+
+export const changeProfile = async (hostId: string, formData: FormData) => {
+  try {
+    const response = await axiosInstance.put(`hosts/changeprofile/${hostId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data.data;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      console.error(
+        "Change profile photo failed:",
+        error.response?.data || error.message
+      );
+      throw new Error(error.response?.data?.message || "Failed to update profile");
+    }
+    throw new Error("Failed to update profile");
+  }
+};
+
+
+
+export const deleteHost = async (hostId: string) => {
+  try {
+    const response = await axiosInstance.delete(`hosts/${hostId}`);
+    return response.data.data;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      console.error(
+        "Host account deleting failed:",
+        error.response?.data || error.message
+      );
+      throw new Error(error.response?.data?.message || "Failed to delete");
+    }
+    throw new Error("Failed to delete");
   }
 };

@@ -20,7 +20,7 @@ export class HostManagementRepostory implements IHostManagementRepository {
       "isActive",
       "isBlocked",
       "location",
-      "isVerfied",
+      "isVerified",
       "isSubscriber",
       "listedAssets",
       "totalRequests",
@@ -39,5 +39,23 @@ export class HostManagementRepostory implements IHostManagementRepository {
     }
 
     return HostModel.find().exec();
+  }
+
+  async changeProfile(hostId: string, imageUrl: string): Promise<IHost> {
+    const updateHost = await HostModel.findByIdAndUpdate(
+      hostId,
+      { profilePic: imageUrl },
+      { new: true }
+    );
+
+    if (!updateHost) {
+      throw new Error("Update failed");
+    }
+    return updateHost;
+  }
+
+  async deleteHost(hostId: string): Promise<boolean> {
+    const response = await HostModel.findByIdAndDelete({ _id: hostId });
+    return response !== null;
   }
 }
