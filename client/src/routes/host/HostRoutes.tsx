@@ -10,16 +10,13 @@ import CarForm from "@/forms/host/serviceForms/CarRents/CarForm";
 import CarFeatures from "@/forms/host/serviceForms/CarRents/CarFeatures";
 import CateringForm from "@/forms/host/serviceForms/Caters/CateringForm";
 import PhotoVideoForm from "@/forms/host/serviceForms/Studio/PhotoVideoForm";
-import NotFound from "@/components/NotFound";
-
-
+import ErrorAlert from "@/components/ErrorAlert";
 
 const HostRoutes: React.FC = () => {
   return (
     <Routes>
       <Route path="dashboard" element={<HostDashboard />} />
-      
-      {/* Service Management */}
+
       <Route path="kind-of-service" element={<KindOfService />} />
       <Route path="location-details" element={<LocationForm />} />
       <Route path="venue-service" element={<VenueForm />} />
@@ -29,10 +26,8 @@ const HostRoutes: React.FC = () => {
       <Route path="car-features" element={<CarFeatures />} />
       <Route path="catering-service" element={<CateringForm />} />
       <Route path="photo-video-service" element={<PhotoVideoForm />} />
-      
-      
-      {/* Catch-all route */}
-      <Route path="*" element={<NotFound />} />
+
+      <Route path="*" element={<ErrorAlert statusCode={404} />} />
     </Routes>
   );
 };

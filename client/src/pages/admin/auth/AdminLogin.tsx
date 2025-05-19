@@ -40,7 +40,7 @@ const AdminLogin: React.FC = () => {
 
   const mutation = useMutation({
     mutationFn: adminLogin,
-  
+
     onSuccess: (data) => {
       const adminData = {
         id: data.admin.id,
@@ -52,14 +52,14 @@ const AdminLogin: React.FC = () => {
         accessToken: data.admin.accessToken,
         refreshToken: data.admin.refreshToken,
       };
-  
+
       if (data.success) {
         toast.success("Login Successful!");
         dispatch(setAdminDetails(adminData));
         navigate("/admin/dashboard");
       }
     },
-  
+
     onError: (error: AxiosError<{ message?: string }>) => {
       if (error.response) {
         const { data } = error.response;
@@ -71,7 +71,6 @@ const AdminLogin: React.FC = () => {
       }
     },
   });
-  
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -122,9 +121,9 @@ const AdminLogin: React.FC = () => {
                   isEmailFocused
                 )}`}
               />
-                {errors.email && (
-                    <p className="text-red-600 text-xs mt-1">{errors.email}</p>
-                  )}
+              {errors.email && (
+                <p className="text-red-600 text-xs mt-1">{errors.email}</p>
+              )}
             </div>
             <div className="relative">
               <Lock className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
@@ -142,13 +141,13 @@ const AdminLogin: React.FC = () => {
                 )}`}
               />
               {errors.password && (
-                    <p className="text-red-600 text-xs mt-1">{errors.password}</p>
-                  )}
+                <p className="text-red-600 text-xs mt-1">{errors.password}</p>
+              )}
             </div>
             <div className="text-right">
-              <a href="#" className="text-sm text-blue-600 hover:underline">
+              {/*  <a href="#" className="text-sm text-blue-600 hover:underline">
                 Forgot password?
-              </a>
+              </a>*/}
             </div>
             <button
               onClick={handleLogin}

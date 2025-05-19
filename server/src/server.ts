@@ -5,7 +5,6 @@ import logger from "./utils/logger";
 logger
 dotenv.config()
 
-
 const PORT = process.env.PORT || 4000;
 
 connectDB()

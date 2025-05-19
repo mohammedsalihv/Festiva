@@ -10,7 +10,6 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    console.log("🔍 Request URL:", `${config.baseURL ?? ""}${config.url}`);
     const state = store.getState();
     const token = state.admin.adminInfo?.accessToken;
     if (token) config.headers.Authorization = `Bearer ${token}`;

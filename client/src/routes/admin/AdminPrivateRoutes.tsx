@@ -16,7 +16,7 @@ const AdminPrivateRoute: React.FC<AdminPrivateRouteProps> = ({ children }) => {
   }
 
   if (adminInfo.role !== "admin") {
-    return <Navigate to="/notfound" replace />;
+    return <Navigate to="/error" replace />;
   }
 
   return children

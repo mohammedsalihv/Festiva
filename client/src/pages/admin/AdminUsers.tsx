@@ -9,7 +9,7 @@ import Pagination from "@/components/Pagination";
 import { MdBlock } from "react-icons/md";
 import {
   editUserDetails,
-  getAllUsers,
+  AllUsers,
   changeProfile,
   blockUnblockUser,
   deleteUser
@@ -31,6 +31,7 @@ import Loader from "@/components/Loader";
 import { useNavigate } from "react-router-dom";
 import Dropdown from "@/components/Dropdown";
 import { FaTrashRestoreAlt } from "react-icons/fa";
+import ErrorAlert from "@/components/ErrorAlert";
 
 const AdminUsers = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -110,12 +111,12 @@ const AdminUsers = () => {
     (async () => {
       try {
         setLoading(true);
-        const data = await getAllUsers();
+        const data = await AllUsers();
         dispatch(setAllUsers(data));
       } catch (error: unknown) {
         if (error instanceof AxiosError) {
           console.error("Axios error:", error.response?.data || error.message);
-          setError("Failed to load users");
+          setError(error.response?.data || error.message);
         } else {
           console.error("Unexpected error:", error);
           setError("An unexpected error occurred");
@@ -129,7 +130,7 @@ const AdminUsers = () => {
   const handleBlockOrUnblock = async (userId: string, isBlocked: boolean) => {
     try {
       const response = await blockUnblockUser(userId, isBlocked);
-      const updatedUsers = await getAllUsers();
+      const updatedUsers = await AllUsers();
       dispatch(setAllUsers(updatedUsers));
       setSelectedUser(updatedUsers.find((u) => u._id === userId) || null);
       toast.success(response.message);
@@ -177,7 +178,7 @@ const AdminUsers = () => {
         const res = await editUserDetails(selectedUser._id, payload);
         toast.success(res.message);
 
-        const updatedUsers = await getAllUsers().catch((err) => {
+        const updatedUsers = await AllUsers().catch((err) => {
           console.error("Failed to fetch users:", err);
           return [];
         });
@@ -254,7 +255,7 @@ const AdminUsers = () => {
     const handleDelete = async (hostId: string) => {
       try {
         await deleteUser(hostId);
-        const updatedUser = await getAllUsers();
+        const updatedUser = await AllUsers();
         dispatch(setAllUsers(updatedUser));
         setSelectedUser(null);
         toast.success("User account deleted");
@@ -316,11 +317,9 @@ const AdminUsers = () => {
     );
 
   if (error)
-    return (
-      <div className="flex items-center justify-center flex-col font-bold px-20 py-40 mt-20">
-        <Loader size={64} color="#000" />
-      </div>
-    );
+    return <ErrorAlert statusCode={error?.status } message={error?.message} />
+
+
 
   return (
     <AdminLayout>

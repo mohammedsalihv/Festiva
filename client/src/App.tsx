@@ -11,18 +11,15 @@ import HostPrivateRoute from "./routes/host/HostPrivateRoute";
 import UserPrivateRoute from "./routes/Protect/UserPrivateRoute";
 import SharedAccessRoute from "./routes/Protect/SharedAccessRoute";
 import AdminPrivateRoute from "./routes/admin/AdminPrivateRoutes";
-import NotFound from "./components/NotFound";
 import AdminLogin from "./pages/admin/auth/AdminLogin";
+import RobotError from "./components/ErrorAlert";
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        
         <Route path="/*" element={<PublicRoutes />} />
-        <Route path="/notfound" element={<NotFound />} />
-        
-
+        <Route path="/error" element={<RobotError statusCode={404} />} />
         <Route
           path="/host/landing"
           element={

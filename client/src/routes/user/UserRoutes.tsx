@@ -7,8 +7,8 @@ import Otp from "@/pages/user/Auth/Otp";
 import Home from "@/pages/user/Home";
 import MyBookings from "@/pages/user/MyBookings";
 import Profile from "@/pages/user/Profile";
-import NotFound from "@/components/NotFound";
 import PrivateRoute from "@/routes/Protect/PrivateRoute";
+import ErrorAlert from "@/components/ErrorAlert";
 
 const UserRoutes: React.FC = () => {
   return (
@@ -25,12 +25,7 @@ const UserRoutes: React.FC = () => {
           </PrivateRoute>
         }
       />
-      <Route
-        path="/profile"
-        element={
-            <Profile />
-        }
-      />
+      <Route path="/profile" element={<Profile />} />
       <Route
         path="/bookings"
         element={
@@ -39,7 +34,7 @@ const UserRoutes: React.FC = () => {
           </PrivateRoute>
         }
       />
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={<ErrorAlert statusCode={404} />} />
     </Routes>
   );
 };

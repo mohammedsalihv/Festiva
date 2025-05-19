@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/server.ts",
-    "dev": "nodemon src/server.ts"
-  },
+  "start": "ts-node -r dotenv/config src/server.ts",
+  "dev": "nodemon --exec ts-node -r dotenv/config src/server.ts"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",

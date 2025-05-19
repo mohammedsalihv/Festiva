@@ -21,16 +21,6 @@ export interface GoogleLoginData {
   sub: string;
 }
 
-// interface ProfileResponse {
-//   success: boolean;
-//   message: string;
-//   user: {
-//     id: string;
-
-//   };
-//   accessToken?: string; // Optional, so it can be string | undefined
-//   refreshToken?: string; // Optional, so it can be string | undefined
-// }
 
 export const registerUser = async (data: SignupData) => {
   const response = await axiosInstance.post("/auth/signup", data);
@@ -58,11 +48,6 @@ export const sendOtp = async ({ email }: { email: string }) => {
   return response.data;
 };
 
-export const googleLogin = async (data: GoogleLoginData) => {
-  const response = await axiosInstance.post("/auth/google-login", data);
-  return response.data;
-};
-
 export const verifyOtp = async ({
   email,
   otp,
@@ -74,40 +59,19 @@ export const verifyOtp = async ({
   return response.data;
 };
 
-// export const profileData = async (): Promise<ProfileResponse> => {
-//   try {
-//     // Make the request to auth/profile
-//     const response = await axiosInstance.get<ProfileResponse>("auth/profile");
 
-//     // Update Redux store with new user details and tokens (if provided)
-//     const { user, accessToken, refreshToken } = response.data;
-//     if (user || accessToken || refreshToken) {
-//       store.dispatch(
-//         setUserDetails({
-//           ...user,
-//           accessToken,
-//           refreshToken,
-//         })
-//       );
-//     }
-
-//     return response.data;
-//   } catch (error: any) {
-//     // Handle specific error cases based on backend response
-//     if (error.response) {
-//       const { status, data } = error.response;
-//       if (status === 401) {
-//         // The interceptor should handle 401 errors and refresh the token
-//         // If we reach here, refresh likely failed, and logoutUser was dispatched
-//         throw new Error("Session expired. Please log in again.");
-//       } else if (status === 404) {
-//         throw new Error("User not found.");
-//       } else if (status === 403) {
-//         throw new Error("User is blocked. Please contact support.");
-//       } else {
-//         throw new Error(data.message || "Failed to fetch profile data.");
-//       }
-//     }
-//     throw new Error(error.message || "Network error. Please try again.");
-//   }
-// };
+export const GoogleLogin = async (data: GoogleLoginData) => {
+  try {
+    const response = await axiosInstance.post("/auth/google-login", data);
+    return response.data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error("google login failed:", error.response?.data || error.message);
+    } else if (error instanceof Error) {
+      console.error("google login:", error.message);
+    } else {
+      console.error("google login: Unknown error", error);
+    }
+    throw error;
+  }
+};

@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import logger from "../../../utils/logger";
 import { userProfileController } from "../../../infrastructure/frameworks/DependencyInjection/user/page.dependancyContainer";
 import { singleImageUpload } from "../../../middlewares/multer";
+import { authenticateToken } from "../../../middlewares/auth";
 
 export interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -9,7 +10,7 @@ export interface MulterRequest extends Request {
 
 const userRoutes = express.Router();
 
-userRoutes.put("/changeprofile/:userId", singleImageUpload , async (req, res) => {
+userRoutes.put("/changeprofile/:userId", authenticateToken , singleImageUpload , async (req, res) => {
   try {
     await userProfileController.changeProfile(req as MulterRequest, res);
   } catch (error) {

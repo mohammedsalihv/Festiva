@@ -8,7 +8,7 @@ import {
 } from "@/utils/types";
 import logger from "@/utils/logger";
 
-export const getAllUsers = async () => {
+export const AllUsers = async () => {
   try {
     const response = await axiosInstance.get<GetUsersResponse>("/users");
     return response.data.data;
