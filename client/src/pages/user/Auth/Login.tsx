@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
-import { LoginUser, GoogleLogin } from "@/services/user/userAuthService";
+import { LoginUser, googleLogin } from "@/services/user/userAuthService";
 import { setUserDetails } from "@/redux/Slice/user/userSlice";
 import { AxiosError } from "axios";
 import {
@@ -18,18 +18,14 @@ import {
 } from "@/utils/validations/user/Auth/loginValidation";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import jwtDecode from 'jwt-decode';
-import { useGoogleLogin } from "@react-oauth/google";
-import logger from "@/utils/logger";
+import { useGoogleLogin , GoogleLogin} from "@react-oauth/google";
+
 
 interface ErrorState {
   email?: string;
   password?: string;
 }
 
-interface GoogleLoginData {
-  idToken: string;
-}
 
 
 const Login = () => {
@@ -114,7 +110,7 @@ const Login = () => {
   };
 
  const googleLoginMutation = useMutation({
-  mutationFn: GoogleLogin,
+  mutationFn: googleLogin,
   onSuccess: (data) => {
     const user = data.user;
     const userData = {
@@ -256,6 +252,9 @@ const googleLogin = useGoogleLogin({
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
               </div>
               <div className="flex items-center justify-center space-x-4">
+                   <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
+                  <GoogleLogin onSuccess={googleLogin}/>
+                </button>
                 <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
                   <FcGoogle className="w-6 h-6" onClick={() => googleLogin()}/>
                 </button>
