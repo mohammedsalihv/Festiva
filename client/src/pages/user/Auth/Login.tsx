@@ -16,15 +16,21 @@ import {
   validateLoginForm,
   FormState,
 } from "@/utils/validations/user/Auth/loginValidation";
-import { useGoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
-import {
-  DecodedToken,
-  GoogleLoginData,
-  ErrorState,
-} from "@/utils/Types/user/authTypes";
+import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { Spinner } from "@/components/Spinner";
+import jwtDecode from 'jwt-decode';
+import { useGoogleLogin } from "@react-oauth/google";
+import logger from "@/utils/logger";
+
+interface ErrorState {
+  email?: string;
+  password?: string;
+}
+
+interface GoogleLoginData {
+  idToken: string;
+}
+
 
 const Login = () => {
   const [loginForm, setLoginForm] = useState<FormState>({
@@ -116,40 +122,32 @@ const Login = () => {
     mutation.mutate(loginForm);
   };
 
-  const googleLoginMutation = useMutation({
-    mutationFn: googleLogin,
-    onSuccess: (data) => {
-      const user = data.user;
-      const userData = {
-        id: user.id,
-        email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        phone: user.phone,
-        role: user.role,
-        accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
-      };
-
-      dispatch(setUserDetails(userData));
-      toast.success("Google login successful!");
-      navigate("/user/home");
-    },
-    onError: (error: AxiosError) => {
-      if (error.response) {
-        const status = error.response.status;
-        const data = error.response.data as { message?: string };
-
-        if (status === 403) {
-          toast.error(data.message || "Google login not allowed");
-        } else {
-          toast.error(data.message || "Google login failed");
-        }
-      } else {
-        toast.error("Network error during Google login");
-      }
-    },
-  });
+ const googleLoginMutation = useMutation({
+  mutationFn: GoogleLogin,
+  onSuccess: (data) => {
+    const user = data.user;
+    const userData = {
+      id: user.id,
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      phone: user.phone,
+      role: user.role,
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken,
+    };
+    dispatch(setUserDetails(userData));
+    toast.success("Login successful!");
+    navigate("/user/home");
+  },
+  onError: (error: AxiosError) => {
+    if (error.response && error.response.status === 403) {
+      toast.error((error.response.data as { message: string }).message);
+    } else {
+      toast.error("Google login failed. Please try again.");
+    }
+  },
+});
 
   const handleGoogleLogin = (tokenResponse: {
     access_token?: string;
@@ -342,22 +340,11 @@ const Login = () => {
               </div>
 
               <div className="flex items-center justify-center space-x-4">
-                <button
-                  ref={googleButtonRef}
-                  onClick={handleGoogleClick}
-                  disabled={googleLoginMutation.isPending}
-                  className={`flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300 ${
-                    googleLoginMutation.isPending
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                  }`}
-                  aria-label="Login with Google"
-                >
-                  {googleLoginMutation.isPending ? (
-                    <Spinner size="sm" />
-                  ) : (
-                    <FcGoogle className="w-6 h-6" />
-                  )}
+                <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
+                  <FcGoogle className="w-6 h-6" onClick={() => googleLogin()}/>
+                </button>
+                <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
+                  <FaGithub className="w-6 h-6" />
                 </button>
               </div>
             </CardContent>
