@@ -1,4 +1,4 @@
-import {IOTPVerifyRepository} from '../../../../domain/entities/repositoryInterface/user/verifyOtprepository.interface'
+import {IOTPVerifyRepository} from '../../../../domain/entities/repositoryInterface/user/interface.verifyOtprepository'
 import CustomError from '../../../../utils/CustomError';
 
 export class VerifyOtp {

@@ -28,7 +28,7 @@ const HostHeader: React.FC = () => {
   return (
     <header className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
       <div className="flex items-center gap-6">
-        <h1 className="text-lg font-medium text-gray-800">Revenue Overview</h1>
+        <h1 className="text-lg font-medium text-gray-800"></h1>
         <nav className="hidden md:flex items-center gap-4 text-sm text-gray-500">
         <a href="/host/dashboard" className="hover:text-black transition">
            Dashboard

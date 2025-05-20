@@ -1,4 +1,4 @@
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/loginRepository.interface";
+import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/interface.loginRepository";
 import { IUser } from "../../../../domain/entities/modelInterface/user.interface";
 import { UserModal } from "../../../../domain/models/userModel";
 

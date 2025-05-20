@@ -23,7 +23,11 @@ import {
 } from "@/redux/Slice/admin/hostManagementSlice";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { Host, EditHostPayload, HostSortOptions } from "@/utils/types";
+import {
+  EditHostPayload,
+  HostSortOptions,
+} from "@/utils/Types/admin/hostManagementTypes";
+import { Host } from "@/utils/Types/host/authTypes";
 import { RootState } from "@/redux/store";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { MdBlock } from "react-icons/md";
@@ -144,7 +148,7 @@ const AdminHosts = () => {
       const response = await blockUnblockHost(hostId, isBlocked);
       const updatedHosts = await getAllHosts();
       dispatch(setAllHosts(updatedHosts));
-      setSelectedHost(updatedHosts.find((h) => h._id === hostId) || null);
+      setSelectedHost(updatedHosts.find((h: Host) => h._id === hostId) || null);
       toast.success(response.message);
     } catch (error: unknown) {
       const errorMessage =
@@ -193,7 +197,7 @@ const AdminHosts = () => {
         const updatedHosts = await getAllHosts();
         dispatch(setAllHosts(updatedHosts));
         setSelectedHost(
-          updatedHosts.find((h) => h._id === selectedHost._id) || null
+          updatedHosts.find((h: Host) => h._id === selectedHost._id) || null
         );
         setEditForm(null);
         navigate("/admin/hosts");
@@ -270,7 +274,7 @@ const AdminHosts = () => {
         toast.error("Host account delete failed");
         logger.error({ hostId, error: error }, "Host account delete failed");
       }
-      console.log(error)
+      console.log(error);
     }
   };
 

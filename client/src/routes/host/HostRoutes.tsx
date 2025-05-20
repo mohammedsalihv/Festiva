@@ -16,7 +16,6 @@ const HostRoutes: React.FC = () => {
   return (
     <Routes>
       <Route path="dashboard" element={<HostDashboard />} />
-
       <Route path="kind-of-service" element={<KindOfService />} />
       <Route path="location-details" element={<LocationForm />} />
       <Route path="venue-service" element={<VenueForm />} />

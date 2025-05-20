@@ -1,5 +1,5 @@
 import { IUser } from "../../../../../domain/entities/modelInterface/user.interface";
-import { IUserProfileRepository } from "../../../../../domain/entities/repositoryInterface/user/userProfile.interface";
+import { IUserProfileRepository } from "../../../../../domain/entities/repositoryInterface/user/interface.userProfile";
 import CustomError from "../../../../../utils/CustomError";
 
 export class UserProfile {

@@ -1,5 +1,5 @@
 import { IUser } from "../../../../domain/entities/modelInterface/user.interface";
-import { IUserRegisterRepository } from "../../../../domain/entities/repositoryInterface/user/userRegisterRepository.interface";
+import { IUserRegisterRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userRegisterRepository";
 import { UserModal } from "../../../../domain/models/userModel";
 
 export class UserRegisterRepository implements IUserRegisterRepository {

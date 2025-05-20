@@ -15,14 +15,14 @@ const HostLandingHeader = () => {
               {userInfo ? (
                 <a
                   href="/user/home"
-                  className="text-sm px-3 py-1 font-JosephicSans font-semibold text-black hover:text-main_color whitespace-nowrap"
+                  className="text-sm px-3 py-1 font-JosephicSans font-semibold text-black hover:text-red-500 whitespace-nowrap"
                 >
                   Switch to user
                 </a>
               ) : (
                 <a
                   href="/login"
-                  className="text-sm px-3 py-1 font-JosephicSans font-semibold text-black hover:text-main_color whitespace-nowrap"
+                  className="text-sm px-3 py-1 font-JosephicSans font-semibold text-black hover:text-red-500 whitespace-nowrap"
                 >
                   Switch to user
                 </a>
@@ -31,9 +31,17 @@ const HostLandingHeader = () => {
             <li>
               <a
                 href="/host/dashboard"
-                className="text-sm px-3 py-1 font-JosephicSans font-semibold text-black hover:text-main_color"
+                className="text-sm px-3 py-1 font-JosephicSans font-semibold text-black hover:text-red-500"
               >
                 Dashboard
+              </a>
+            </li>
+            <li>
+              <a
+                href="/host/login"
+                className="text-sm px-3 py-2 font-JosephicSans font-semibold text-black hover:text-white border rounded-md hover:bg-red-500 "
+              >
+                Login
               </a>
             </li>
           </ul>

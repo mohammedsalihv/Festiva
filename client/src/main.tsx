@@ -10,6 +10,7 @@ import App from "./App.tsx";
 const queryClient = new QueryClient();
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
+
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <GoogleOAuthProvider clientId={clientId}>

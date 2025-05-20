@@ -9,7 +9,6 @@ import HostLogin from "./pages/host/Auth/HostLogin";
 import HostRegister from "./pages/host/Auth/HostRegister";
 import HostPrivateRoute from "./routes/host/HostPrivateRoute";
 import UserPrivateRoute from "./routes/Protect/UserPrivateRoute";
-import SharedAccessRoute from "./routes/Protect/SharedAccessRoute";
 import AdminPrivateRoute from "./routes/admin/AdminPrivateRoutes";
 import AdminLogin from "./pages/admin/auth/AdminLogin";
 import RobotError from "./components/ErrorAlert";
@@ -20,14 +19,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/*" element={<PublicRoutes />} />
         <Route path="/error" element={<RobotError statusCode={404} />} />
-        <Route
-          path="/host/landing"
-          element={
-            <SharedAccessRoute>
-              <HostLanding />
-            </SharedAccessRoute>
-          }
-        />
+        <Route path="/host/landing" element={<HostLanding />} />
         <Route path="/host/login" element={<HostLogin />} />
         <Route path="/host/register" element={<HostRegister />} />
 

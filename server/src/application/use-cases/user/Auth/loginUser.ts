@@ -1,4 +1,4 @@
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/loginRepository.interface";
+import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/interface.loginRepository";
 import CustomError from "../../../../utils/CustomError";
 import { TokenService } from "../../../../application/services/service.token";
 import bcrypt from "bcrypt";

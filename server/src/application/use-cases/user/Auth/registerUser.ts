@@ -3,7 +3,7 @@ import { RegisterUserDTO } from "../../../../config/DTO/userDto";
 import ErrorHandler from "../../../../utils/CustomError";
 import { IUser } from "../../../../domain/entities/modelInterface/user.interface";
 import { TokenService } from "../../../services/service.token";
-import { IUserRegisterRepository } from "../../../../domain/entities/repositoryInterface/user/userRegisterRepository.interface";
+import { IUserRegisterRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userRegisterRepository";
 
 export class RegisterUser {
   constructor(private userRepository: IUserRegisterRepository) {}

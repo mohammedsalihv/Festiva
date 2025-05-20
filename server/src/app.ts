@@ -63,8 +63,6 @@ app.use(
 
 
 
-
-
 app.use('/api/user/auth', userAuthRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/host/auth', hostAuthRoutes);

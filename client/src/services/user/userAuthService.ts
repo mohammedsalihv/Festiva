@@ -1,5 +1,4 @@
 import axiosInstance from "@/config/user/userAxiosInstence";
-import axios from "axios";
 
 export interface SignupData {
   firstname: string;
@@ -21,26 +20,14 @@ export interface GoogleLoginData {
   sub: string;
 }
 
-
 export const registerUser = async (data: SignupData) => {
   const response = await axiosInstance.post("/auth/signup", data);
   return response.data;
 };
 
 export const LoginUser = async (data: LoginData) => {
-  try {
-    const response = await axiosInstance.post("/auth/login", data);
-    return response.data;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      console.error("Login failed:", error.response?.data || error.message);
-    } else if (error instanceof Error) {
-      console.error("Login failed:", error.message);
-    } else {
-      console.error("Login failed: Unknown error", error);
-    }
-    throw error;
-  }
+  const response = await axiosInstance.post("/auth/login", data);
+  return response.data;
 };
 
 export const sendOtp = async ({ email }: { email: string }) => {
@@ -59,19 +46,7 @@ export const verifyOtp = async ({
   return response.data;
 };
 
-
-export const GoogleLogin = async (data: GoogleLoginData) => {
-  try {
-    const response = await axiosInstance.post("/auth/google-login", data);
-    return response.data;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error)) {
-      console.error("google login failed:", error.response?.data || error.message);
-    } else if (error instanceof Error) {
-      console.error("google login:", error.message);
-    } else {
-      console.error("google login: Unknown error", error);
-    }
-    throw error;
-  }
+export const googleLogin = async (data: GoogleLoginData) => {
+  const response = await axiosInstance.post("/auth/google-login", data);
+  return response.data;
 };

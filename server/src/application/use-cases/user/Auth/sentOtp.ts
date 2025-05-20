@@ -1,4 +1,4 @@
-import { IOTPRepository } from "../../../../domain/entities/repositoryInterface/user/otpRepository.interface";
+import { IOTPRepository } from "../../../../domain/entities/repositoryInterface/user/interface.otpRepository";
 import { generateOTP } from "../../../../utils/otpGenerator";
 
 export class SendOTP {

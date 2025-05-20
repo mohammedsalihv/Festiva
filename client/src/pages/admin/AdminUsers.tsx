@@ -12,7 +12,7 @@ import {
   AllUsers,
   changeProfile,
   blockUnblockUser,
-  deleteUser
+  deleteUser,
 } from "@/services/admin/userManagement.services";
 import {
   setAllUsers,
@@ -20,7 +20,11 @@ import {
 } from "@/redux/Slice/admin/userManagementSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { User, EditUserPayload, UserSortOptions } from "@/utils/types";
+import {
+  EditUserPayload,
+  UserSortOptions,
+} from "@/utils/Types/admin/userManagementTypes";
+import { User } from "@/utils/Types/user/authTypes";
 import { AxiosError } from "axios";
 import { CgUnblock } from "react-icons/cg";
 import logger from "@/utils/logger";
@@ -132,7 +136,7 @@ const AdminUsers = () => {
       const response = await blockUnblockUser(userId, isBlocked);
       const updatedUsers = await AllUsers();
       dispatch(setAllUsers(updatedUsers));
-      setSelectedUser(updatedUsers.find((u) => u._id === userId) || null);
+      setSelectedUser(updatedUsers.find((u: User) => u._id === userId) || null);
       toast.success(response.message);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -184,7 +188,7 @@ const AdminUsers = () => {
         });
         dispatch(setAllUsers(updatedUsers));
         setSelectedUser(
-          updatedUsers.find((u) => u._id === selectedUser._id) || null
+          updatedUsers.find((u: User) => u._id === selectedUser._id) || null
         );
         setEditForm(null);
         navigate("/admin/users");
@@ -252,23 +256,22 @@ const AdminUsers = () => {
     }
   };
 
-    const handleDelete = async (hostId: string) => {
-      try {
-        await deleteUser(hostId);
-        const updatedUser = await AllUsers();
-        dispatch(setAllUsers(updatedUser));
-        setSelectedUser(null);
-        toast.success("User account deleted");
-        navigate("/admin/users");
-      } catch (error: unknown) {
-        if (error instanceof AxiosError) {
-          toast.error("User account delete failed");
-          logger.error({ hostId, error: error }, "User account delete failed");
-        }
-        console.log(error)
+  const handleDelete = async (hostId: string) => {
+    try {
+      await deleteUser(hostId);
+      const updatedUser = await AllUsers();
+      dispatch(setAllUsers(updatedUser));
+      setSelectedUser(null);
+      toast.success("User account deleted");
+      navigate("/admin/users");
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        toast.error("User account delete failed");
+        logger.error({ hostId, error: error }, "User account delete failed");
       }
-    };
-  
+      console.log(error);
+    }
+  };
 
   const filteredUsers = userData
     .filter((user) => {
@@ -297,9 +300,9 @@ const AdminUsers = () => {
     .sort((a, b) => {
       switch (sort) {
         case "name":
-          return a.firstname.localeCompare(b.firstname); // A-Z
+          return a.firstname.localeCompare(b.firstname);
         case "name-desc":
-          return b.firstname.localeCompare(a.firstname); // Z-A
+          return b.firstname.localeCompare(a.firstname);
         case "createdAt":
           return (
             new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
@@ -316,10 +319,7 @@ const AdminUsers = () => {
       </div>
     );
 
-  if (error)
-    return <ErrorAlert statusCode={error?.status } message={error?.message} />
-
-
+  if (error) return <ErrorAlert statusCode={error} message={error} />;
 
   return (
     <AdminLayout>
@@ -506,12 +506,12 @@ const AdminUsers = () => {
                     <MdBlock className="w-4 h-4" />
                   </button>
                 )}
-                  <button
-                    className="px-3 p-1 border rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-1"
-                    onClick={() => handleDelete(selectedUser._id)}
-                  >
-                    <FaTrashRestoreAlt className="w-4 h-4" />
-                  </button>
+                <button
+                  className="px-3 p-1 border rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-1"
+                  onClick={() => handleDelete(selectedUser._id)}
+                >
+                  <FaTrashRestoreAlt className="w-4 h-4" />
+                </button>
               </div>
             </div>
             <ConfirmDialog

@@ -4,33 +4,27 @@ import { Card, CardContent } from "@/components/Card";
 import { Input } from "@/components/Input";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/Button";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
-import { LoginUser, GoogleLogin } from "@/services/user/userAuthService";
+import { LoginUser, googleLogin } from "@/services/user/userAuthService";
 import { setUserDetails } from "@/redux/Slice/user/userSlice";
 import { AxiosError } from "axios";
 import {
   validateLoginForm,
   FormState,
 } from "@/utils/validations/user/Auth/loginValidation";
-import { FaGithub } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
-import jwtDecode from 'jwt-decode';
 import { useGoogleLogin } from "@react-oauth/google";
-import logger from "@/utils/logger";
-
-interface ErrorState {
-  email?: string;
-  password?: string;
-}
-
-interface GoogleLoginData {
-  idToken: string;
-}
-
+import { jwtDecode } from "jwt-decode";
+import {
+  DecodedToken,
+  GoogleLoginData,
+  ErrorState,
+} from "@/utils/Types/user/authTypes";
+import { FcGoogle } from "react-icons/fc";
+import { Spinner } from "@/components/Spinner";
 
 const Login = () => {
   const [loginForm, setLoginForm] = useState<FormState>({
@@ -43,6 +37,7 @@ const Login = () => {
   const [errors, setErrors] = useState<ErrorState>({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const googleButtonRef = useRef<HTMLButtonElement>(null);
 
   const getInputBorderClass = (value: string, isFocused: boolean) => {
     if (value.trim() !== "" || isFocused) {
@@ -54,6 +49,11 @@ const Login = () => {
   const mutation = useMutation({
     mutationFn: LoginUser,
     onSuccess: (data) => {
+      if (!data.success) {
+        toast.error("Login failed. Please check your credentials.");
+        return;
+      }
+
       const userData = {
         id: data.user.id,
         firstname: data.user.firstname,
@@ -69,23 +69,29 @@ const Login = () => {
         refreshToken: data.refreshToken,
       };
 
-      if (data.success) {
-        setTimeout(() => {
-          toast.success(" Login Successful!");
-        }, 500);
-        dispatch(setUserDetails(userData));
-        navigate("/user/home");
-      } else {
-        toast.error("Login failed. Please check your credentials.");
-      }
+      toast.success("Login Successful!");
+      dispatch(setUserDetails(userData));
+      navigate("/user/home");
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       if (error.response) {
-        const { data } = error.response;
-        const errorMessage = data?.message;
-        toast.error(errorMessage);
+        const { data, status } = error.response;
+
+        switch (status) {
+          case 401:
+            toast.error("Invalid email or password");
+            break;
+          case 403:
+            toast.error("Account suspended. Please contact support");
+            break;
+          case 429:
+            toast.warning("Too many attempts. Try again later");
+            break;
+          default:
+            toast.error(data?.message || "Login failed");
+        }
       } else {
-        toast.warning("Network error. Please check your connection.");
+        toast.error("Network error. Please check your connection");
       }
     },
   });
@@ -103,83 +109,133 @@ const Login = () => {
     const { isValid, errors: validationErrors } = validateLoginForm(loginForm);
     if (!isValid) {
       setErrors(validationErrors);
-      toast.error("Please correct the errors in the form.");
-      setTimeout(() => {
-        setErrors({});
-      }, 5000);
+      toast.error("Please correct the form errors");
       return;
     }
 
     mutation.mutate(loginForm);
   };
 
- const googleLoginMutation = useMutation({
-  mutationFn: GoogleLogin,
-  onSuccess: (data) => {
-    const user = data.user;
-    const userData = {
-      id: user.id,
-      email: user.email,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      phone: user.phone,
-      role: user.role,
-      accessToken: data.accessToken,
-      refreshToken: data.refreshToken,
-    };
-    dispatch(setUserDetails(userData));
-    toast.success("Login successful!");
-    navigate("/user/home");
-  },
-  onError: (error: AxiosError) => {
-    if (error.response && error.response.status === 403) {
-      toast.error((error.response.data as { message: string }).message);
-    } else {
-      toast.error("Google login failed. Please try again.");
-    }
-  },
-});
+  const googleLoginMutation = useMutation({
+    mutationFn: googleLogin,
+    onSuccess: (data) => {
+      const user = data.user;
+      const userData = {
+        id: user.id,
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        phone: user.phone,
+        role: user.role,
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+      };
 
+      dispatch(setUserDetails(userData));
+      toast.success("Google login successful!");
+      navigate("/user/home");
+    },
+    onError: (error: AxiosError) => {
+      if (error.response) {
+        const status = error.response.status;
+        const data = error.response.data as { message?: string };
 
-const googleLogin = useGoogleLogin({
-  onSuccess: (tokenResponse) => {
-    const idToken = (tokenResponse as any).id_token || (tokenResponse as any).access_token;
+        if (status === 403) {
+          toast.error(data.message || "Google login not allowed");
+        } else {
+          toast.error(data.message || "Google login failed");
+        }
+      } else {
+        toast.error("Network error during Google login");
+      }
+    },
+  });
 
-    if (!idToken) {
-      toast.error("Google login failed. No ID token received.");
+  const handleGoogleLogin = (tokenResponse: {
+    access_token?: string;
+    id_token?: string;
+  }) => {
+    if (!tokenResponse.id_token) {
+      toast.error("Google login failed: No ID token received");
       return;
     }
 
-    const googleLoginData = {
-      idToken,
-    };
+    try {
+      const decodeToken = jwtDecode<DecodedToken>(tokenResponse.id_token);
+      const googleLoginData: GoogleLoginData = {
+        name: decodeToken.name || "",
+        email: decodeToken.email || "",
+        sub: decodeToken.sub,
+      };
+      googleLoginMutation.mutate(googleLoginData);
+    } catch (error) {
+      console.error("Token decoding error:", error);
+      toast.error("Failed to process Google credentials");
+    }
+  };
 
-    googleLoginMutation.mutate(googleLoginData);
-  },
-  onError: () => toast.error("Google login failed."),
-  flow: "implicit",
-});
+  const handleGoogleClick = () => {
+    // Check for popup blockers
+    const popup = window.open("", "_blank");
+    if (!popup || popup.closed || typeof popup.closed === "undefined") {
+      toast.warning(
+        <div>
+          <p>Please allow popups for Google login</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-2 text-blue-500 underline"
+          >
+            Refresh and try again
+          </button>
+        </div>,
+        { autoClose: false }
+      );
+      return;
+    }
+    popup.close();
+    googleLoginTrigger();
+  };
 
-
-
+  const googleLoginTrigger = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: handleGoogleLogin,
+    onError: (error) => {
+      toast.error(`Google login failed: ${error.error || "Unknown error"}`);
+    },
+    onNonOAuthError: (error) => {
+      console.error("Non-OAuth Error:", error);
+      toast.error("Login error: " + error.type);
+    },
+  });
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <CustomToastContainer />
 
-      <Card className="w-full h-screen grid grid-cols-1 md:grid-cols-2">
+      <Card className="w-full h-screen grid grid-cols-1 md:grid-cols-2 shadow-lg">
         <div
           className="flex items-center justify-center bg-cover bg-center w-full h-64 sm:h-72 md:h-auto relative"
-          style={{ backgroundImage: `url(${Images.login_bg})` }}
+          style={{
+            backgroundImage: `url(${
+              Images.login_bg || "/default-login-bg.jpg"
+            })`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
         >
           <div className="absolute inset-0 bg-gradient-to-l from-black/80 to-transparent"></div>
         </div>
+
         <Card className="bg-white flex items-center justify-center">
           <div className="w-full max-w-md bg-white p-6 sm:p-8">
             <CardContent className="space-y-6">
               <div className="text-center space-y-2">
                 <h1 className="text-2xl font-bold text-charcoal">Login</h1>
+                <p className="text-sm text-gray-500">
+                  Welcome back! Please enter your details
+                </p>
               </div>
+
               <div className="space-y-1">
                 <Label htmlFor="email" className="text-sm font-medium">
                   Email
@@ -189,7 +245,14 @@ const googleLogin = useGoogleLogin({
                     errors.email ? "border-b border-red-500" : "border-b-2"
                   } ${getInputBorderClass(loginForm.email, isEmailFocused)}`}
                 >
-                  <img className="w-6 h-6 mr-2" src={Images.mail} alt="" />
+                  <img
+                    className="w-6 h-6 mr-2"
+                    src={Images.mail || "/mail-icon.svg"}
+                    alt="Email icon"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/mail-icon.svg";
+                    }}
+                  />
                   <Input
                     id="email"
                     type="email"
@@ -197,26 +260,37 @@ const googleLogin = useGoogleLogin({
                     onFocus={() => setIsEmailFocused(true)}
                     onBlur={() => setIsEmailFocused(false)}
                     onChange={handleChange}
-                    className={`w-full bg-transparent px-3 py-2 transition-all duration-300  focus:outline-none border-none ${
-                      errors.email ? "border-b border-red-500" : ""
+                    className={`w-full bg-transparent px-3 py-2 transition-all duration-300 focus:outline-none border-none ${
+                      errors.email ? "placeholder-red-300" : ""
                     }`}
+                    placeholder={errors.email ? "" : "Enter your email"}
                   />
                 </div>
                 {errors.email && (
                   <p className="text-red-600 text-xs mt-1">{errors.email}</p>
                 )}
               </div>
+
               <div className="space-y-1">
                 <Label htmlFor="password" className="text-sm font-medium">
                   Password
                 </Label>
                 <div
-                  className={`w-full rounded-sm transition-all duration-300 flex items-center border-b-2 ${getInputBorderClass(
+                  className={`w-full rounded-sm transition-all duration-300 flex items-center ${
+                    errors.password ? "border-b border-red-500" : "border-b-2"
+                  } ${getInputBorderClass(
                     loginForm.password,
                     isPasswordFocused
                   )}`}
                 >
-                  <img className="w-8 h-6 mr-2" src={Images.lock} alt="" />
+                  <img
+                    className="w-6 h-6 mr-2"
+                    src={Images.lock || "/lock-icon.svg"}
+                    alt="Password icon"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "/lock-icon.svg";
+                    }}
+                  />
                   <Input
                     id="password"
                     type="password"
@@ -225,42 +299,65 @@ const googleLogin = useGoogleLogin({
                     onBlur={() => setIsPasswordFocused(false)}
                     onChange={handleChange}
                     className="w-full bg-transparent px-3 py-2 transition-all duration-300 border-none focus:outline-none"
+                    placeholder={errors.password ? "" : "Enter your password"}
                   />
                 </div>
                 {errors.password && (
                   <p className="text-red-600 text-xs mt-1">{errors.password}</p>
                 )}
               </div>
-              <div>
+
+              <div className="pt-2">
                 <Button
                   onClick={handleLogin}
-                  className="my-3 text-white w-full h-12 text-lg bg-main_color hover:bg-[#7848F4]"
+                  disabled={mutation.isPending}
+                  className="my-3 text-white w-full h-12 text-lg bg-main_color hover:bg-[#7848F4] disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  {mutation.isPending ? "Logging in..." : "Login"}
+                  {mutation.isPending ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Spinner size="sm" /> Logging in...
+                    </span>
+                  ) : (
+                    "Login"
+                  )}
                 </Button>
-                <div className="text-center text-sm text-gray-600 font-JosephicSans">
+
+                <div className="text-center text-sm text-gray-600">
                   Don't have an account?{" "}
                   <button
                     onClick={() => navigate("/signup")}
-                    className="text-[#7848F4] font-medium hover:underline"
+                    className="text-[#7848F4] font-medium hover:underline focus:outline-none"
                   >
                     Sign up
                   </button>
                 </div>
               </div>
+
               <div className="flex items-center justify-center my-6">
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
-                <span className="mx-4 whitespace-nowrap text-sm text-neutral-500 font-JosephicSans">
+                <span className="mx-4 whitespace-nowrap text-sm text-neutral-500">
                   or login with
                 </span>
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
               </div>
+
               <div className="flex items-center justify-center space-x-4">
-                <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
-                  <FcGoogle className="w-6 h-6" onClick={() => googleLogin()}/>
-                </button>
-                <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
-                  <FaGithub className="w-6 h-6" />
+                <button
+                  ref={googleButtonRef}
+                  onClick={handleGoogleClick}
+                  disabled={googleLoginMutation.isPending}
+                  className={`flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300 ${
+                    googleLoginMutation.isPending
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                  aria-label="Login with Google"
+                >
+                  {googleLoginMutation.isPending ? (
+                    <Spinner size="sm" />
+                  ) : (
+                    <FcGoogle className="w-6 h-6" />
+                  )}
                 </button>
               </div>
             </CardContent>
