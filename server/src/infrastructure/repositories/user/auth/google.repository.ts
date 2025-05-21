@@ -16,3 +16,4 @@ export class GoogleAuthRepository implements IUserGoogleRepository {
     return await UserModal.findByIdAndUpdate(id, updates, { new: true });
   }
 }
+

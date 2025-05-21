@@ -16,14 +16,13 @@ import {
   validateLoginForm,
   FormState,
 } from "@/utils/validations/user/Auth/loginValidation";
-import { FcGoogle } from "react-icons/fc";
-import { useGoogleLogin } from "@react-oauth/google";
-
-
-interface ErrorState {
-  email?: string;
-  password?: string;
-}
+import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+import {
+  DecodedToken,
+  ErrorState,
+  GoogleLoginData,
+} from "@/utils/Types/user/authTypes";
 
 const Login = () => {
   const [loginForm, setLoginForm] = useState<FormState>({
@@ -107,41 +106,56 @@ const Login = () => {
     mutation.mutate(loginForm);
   };
 
- const responseGoogle = async (authResult) => {
-  console.log("Google auth result:", authResult); // Check if authResult.code exists
-  try {
-    if (authResult.code) {
-      const result = await googleLogin(authResult.code);
-      const user = result.user;
-      const token = result.accessToken;
-
-      const userDetails = {
-        ...user,
-        token,
+  const googleLoginMutation = useMutation({
+    mutationFn: googleLogin,
+    onSuccess: (data) => {
+      const userData = {
+        id: data.user._id,
+        firstname: data.user.firstname,
+        lastname: data.user.lastname,
+        email: data.user.email,
+        role: data.user.role,
+        phone: data.user.phone,
+        profilePic: data.user.profilePic,
+        isActive: data.user.isActive,
+        isBlocked: data.user.isBlocked,
+        timestamp: data.user.timestamp,
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
       };
+      dispatch(setUserDetails(userData));
+      toast.success("Google Login successful!");
+      navigate("/landing");
+    },
+    onError: (error: unknown) => {
+      if (error instanceof AxiosError) {
+        if (error.response && error.response.status === 403) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("Google login failed. Please try again.");
+        }
+      }
+    },
+  });
 
-      dispatch(setUserDetails(userDetails));
-      toast.success("Login Successful!");
-      navigate("/user/home");
-    } else {
-      console.log("No code in authResult:", authResult);
-      throw new Error("No auth code received from Google login");
+  const handleGoogleLogin = (credentialResponse: CredentialResponse) => {
+    if (!credentialResponse.credential) {
+      toast.error("Google login failed. No credentials received.");
+      return;
     }
-  } catch (e) {
-    console.error("Error while Google Login...", e);
-    toast.error("Login failed. Please try again.");
-  }
-};
 
- const GoogleLogin = useGoogleLogin({
-  onSuccess: responseGoogle,
-  onError: (error) => {
-    console.error("Google login error:", error);
-    toast.error("Google login failed");
-  },
-  flow: "auth-code",
-  redirect_uri: "http://localhost:5173/user/home",
-});
+    const decodedToken: DecodedToken = jwtDecode<DecodedToken>(
+      credentialResponse.credential
+    );
+
+    const googleLoginData: GoogleLoginData = {
+      name: decodedToken.name,
+      email: decodedToken.email,
+      sub: decodedToken.sub,
+    };
+
+    googleLoginMutation.mutate(googleLoginData);
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -269,9 +283,10 @@ const Login = () => {
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
               </div>
               <div className="flex items-center justify-center space-x-4">
-                <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
-                  <FcGoogle className="w-6 h-6" onClick={GoogleLogin} />
-                </button>
+                 <GoogleLogin
+                    onSuccess={handleGoogleLogin}
+                    onError={() => toast.error("Google login failed")}
+                  />
               </div>
             </CardContent>
           </div>

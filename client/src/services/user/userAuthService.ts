@@ -1,5 +1,5 @@
 import axiosInstance from "@/config/user/userAxiosInstence";
-import { GoogleLoginResponse } from "@/utils/Types/user/authTypes";
+import { GoogleLoginData } from "@/utils/Types/user/authTypes";
 
 export interface SignupData {
   firstname: string;
@@ -41,7 +41,7 @@ export const verifyOtp = async ({
   return response.data;
 };
 
-export const googleLogin = async (code: string): Promise<GoogleLoginResponse> => {
-  const response = await axiosInstance.post<GoogleLoginResponse>("/auth/google-login",  { code }, { withCredentials: true });
+export const googleLogin = async (data: GoogleLoginData) => {
+  const response = await axiosInstance.post("/auth/google-login", data);
   return response.data;
 };
