@@ -11,7 +11,7 @@ interface UserState {
     profilePic?: string;
     isBlocked?: boolean;
     isActive?: boolean;
-    timestamp?: Date;
+    timestamp?: string | Date;
     accessToken: string;
     refreshToken: string;
   } | null;

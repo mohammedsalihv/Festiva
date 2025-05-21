@@ -39,3 +39,20 @@ export interface DecodedToken {
   sub: string;
   [key: string]: unknown;
 }
+
+export type GoogleAuthResult = {
+  code?: string;
+  [key: string]: unknown;
+};
+
+export interface GoogleUser {
+  email: string;
+  name: string;
+  image: string;
+}
+
+export interface GoogleLoginResponse {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+}

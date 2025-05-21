@@ -2,6 +2,7 @@ import { IUser } from "../../../domain/entities/modelInterface/user.interface";
 import { IUserManagementRepository } from "../../../domain/entities/repositoryInterface/admin/userManagement.interface";
 import { UserModal } from "../../../domain/models/userModel";
 import { pickDefinedFields } from "../../../utils/pickDefinedFields";
+import { EditUserPayload } from "../../../domain/entities/modelInterface/editUser.interface";
 
 export class UserManagementRepository implements IUserManagementRepository {
   async findAll(): Promise<IUser[]> {
@@ -13,7 +14,8 @@ export class UserManagementRepository implements IUserManagementRepository {
     return response.modifiedCount > 0;
   }
 
-  async editUser(userId: string, form: Partial<IUser>): Promise<IUser[]> {
+  async editUser(userId: string, form: EditUserPayload)
+: Promise<IUser[]> {
     const allowedFields = [
       "firstname",
       "lastname",

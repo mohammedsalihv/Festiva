@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/Card";
 import { Input } from "@/components/Input";
 import { Label } from "@radix-ui/react-label";
 import { Button } from "@/components/Button";
-import { ChangeEvent, useState, useRef } from "react";
+import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -16,34 +16,25 @@ import {
   validateLoginForm,
   FormState,
 } from "@/utils/validations/user/Auth/loginValidation";
-import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import jwtDecode from 'jwt-decode';
 import { useGoogleLogin } from "@react-oauth/google";
-import logger from "@/utils/logger";
+
 
 interface ErrorState {
   email?: string;
   password?: string;
 }
 
-interface GoogleLoginData {
-  idToken: string;
-}
-
-
 const Login = () => {
   const [loginForm, setLoginForm] = useState<FormState>({
     email: "",
     password: "",
   });
-
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [errors, setErrors] = useState<ErrorState>({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const googleButtonRef = useRef<HTMLButtonElement>(null);
 
   const getInputBorderClass = (value: string, isFocused: boolean) => {
     if (value.trim() !== "" || isFocused) {
@@ -51,7 +42,6 @@ const Login = () => {
     }
     return "border-b-2 border-gray-300 hover:border-gray-500";
   };
-
   const mutation = useMutation({
     mutationFn: LoginUser,
     onSuccess: (data) => {
@@ -59,7 +49,6 @@ const Login = () => {
         toast.error("Login failed. Please check your credentials.");
         return;
       }
-
       const userData = {
         id: data.user.id,
         firstname: data.user.firstname,
@@ -74,7 +63,6 @@ const Login = () => {
         accessToken: data.accessToken,
         refreshToken: data.refreshToken,
       };
-
       toast.success("Login Successful!");
       dispatch(setUserDetails(userData));
       navigate("/user/home");
@@ -82,7 +70,6 @@ const Login = () => {
     onError: (error: AxiosError<{ message?: string }>) => {
       if (error.response) {
         const { data, status } = error.response;
-
         switch (status) {
           case 401:
             toast.error("Invalid email or password");
@@ -105,7 +92,6 @@ const Login = () => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setLoginForm((prev) => ({ ...prev, [id]: value }));
-
     if (errors[id as keyof ErrorState]) {
       setErrors((prev) => ({ ...prev, [id]: "" }));
     }
@@ -118,98 +104,48 @@ const Login = () => {
       toast.error("Please correct the form errors");
       return;
     }
-
     mutation.mutate(loginForm);
   };
 
- const googleLoginMutation = useMutation({
-  mutationFn: GoogleLogin,
-  onSuccess: (data) => {
-    const user = data.user;
-    const userData = {
-      id: user.id,
-      email: user.email,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      phone: user.phone,
-      role: user.role,
-      accessToken: data.accessToken,
-      refreshToken: data.refreshToken,
-    };
-    dispatch(setUserDetails(userData));
-    toast.success("Login successful!");
-    navigate("/user/home");
-  },
-  onError: (error: AxiosError) => {
-    if (error.response && error.response.status === 403) {
-      toast.error((error.response.data as { message: string }).message);
-    } else {
-      toast.error("Google login failed. Please try again.");
-    }
-  },
-});
+ const responseGoogle = async (authResult) => {
+  console.log("Google auth result:", authResult); // Check if authResult.code exists
+  try {
+    if (authResult.code) {
+      const result = await googleLogin(authResult.code);
+      const user = result.user;
+      const token = result.accessToken;
 
-  const handleGoogleLogin = (tokenResponse: {
-    access_token?: string;
-    id_token?: string;
-  }) => {
-    if (!tokenResponse.id_token) {
-      toast.error("Google login failed: No ID token received");
-      return;
-    }
-
-    try {
-      const decodeToken = jwtDecode<DecodedToken>(tokenResponse.id_token);
-      const googleLoginData: GoogleLoginData = {
-        name: decodeToken.name || "",
-        email: decodeToken.email || "",
-        sub: decodeToken.sub,
+      const userDetails = {
+        ...user,
+        token,
       };
-      googleLoginMutation.mutate(googleLoginData);
-    } catch (error) {
-      console.error("Token decoding error:", error);
-      toast.error("Failed to process Google credentials");
-    }
-  };
 
-  const handleGoogleClick = () => {
-    // Check for popup blockers
-    const popup = window.open("", "_blank");
-    if (!popup || popup.closed || typeof popup.closed === "undefined") {
-      toast.warning(
-        <div>
-          <p>Please allow popups for Google login</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="mt-2 text-blue-500 underline"
-          >
-            Refresh and try again
-          </button>
-        </div>,
-        { autoClose: false }
-      );
-      return;
+      dispatch(setUserDetails(userDetails));
+      toast.success("Login Successful!");
+      navigate("/user/home");
+    } else {
+      console.log("No code in authResult:", authResult);
+      throw new Error("No auth code received from Google login");
     }
-    popup.close();
-    googleLoginTrigger();
-  };
+  } catch (e) {
+    console.error("Error while Google Login...", e);
+    toast.error("Login failed. Please try again.");
+  }
+};
 
-  const googleLoginTrigger = useGoogleLogin({
-    flow: "auth-code",
-    onSuccess: handleGoogleLogin,
-    onError: (error) => {
-      toast.error(`Google login failed: ${error.error || "Unknown error"}`);
-    },
-    onNonOAuthError: (error) => {
-      console.error("Non-OAuth Error:", error);
-      toast.error("Login error: " + error.type);
-    },
-  });
+ const GoogleLogin = useGoogleLogin({
+  onSuccess: responseGoogle,
+  onError: (error) => {
+    console.error("Google login error:", error);
+    toast.error("Google login failed");
+  },
+  flow: "auth-code",
+  redirect_uri: "http://localhost:5173/user/home",
+});
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <CustomToastContainer />
-
       <Card className="w-full h-screen grid grid-cols-1 md:grid-cols-2 shadow-lg">
         <div
           className="flex items-center justify-center bg-cover bg-center w-full h-64 sm:h-72 md:h-auto relative"
@@ -223,7 +159,6 @@ const Login = () => {
         >
           <div className="absolute inset-0 bg-gradient-to-l from-black/80 to-transparent"></div>
         </div>
-
         <Card className="bg-white flex items-center justify-center">
           <div className="w-full max-w-md bg-white p-6 sm:p-8">
             <CardContent className="space-y-6">
@@ -233,7 +168,6 @@ const Login = () => {
                   Welcome back! Please enter your details
                 </p>
               </div>
-
               <div className="space-y-1">
                 <Label htmlFor="email" className="text-sm font-medium">
                   Email
@@ -268,7 +202,6 @@ const Login = () => {
                   <p className="text-red-600 text-xs mt-1">{errors.email}</p>
                 )}
               </div>
-
               <div className="space-y-1">
                 <Label htmlFor="password" className="text-sm font-medium">
                   Password
@@ -304,7 +237,6 @@ const Login = () => {
                   <p className="text-red-600 text-xs mt-1">{errors.password}</p>
                 )}
               </div>
-
               <div className="pt-2">
                 <Button
                   onClick={handleLogin}
@@ -313,13 +245,12 @@ const Login = () => {
                 >
                   {mutation.isPending ? (
                     <span className="flex items-center justify-center gap-2">
-                      <Spinner size="sm" /> Logging in...
+                      Logging in...
                     </span>
                   ) : (
                     "Login"
                   )}
                 </Button>
-
                 <div className="text-center text-sm text-gray-600">
                   Don't have an account?{" "}
                   <button
@@ -330,7 +261,6 @@ const Login = () => {
                   </button>
                 </div>
               </div>
-
               <div className="flex items-center justify-center my-6">
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
                 <span className="mx-4 whitespace-nowrap text-sm text-neutral-500">
@@ -338,13 +268,9 @@ const Login = () => {
                 </span>
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
               </div>
-
               <div className="flex items-center justify-center space-x-4">
                 <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
-                  <FcGoogle className="w-6 h-6" onClick={() => googleLogin()}/>
-                </button>
-                <button className="flex items-center justify-center w-12 h-12 rounded-full border border-neutral-300 hover:border-neutral-500 transition duration-300">
-                  <FaGithub className="w-6 h-6" />
+                  <FcGoogle className="w-6 h-6" onClick={GoogleLogin} />
                 </button>
               </div>
             </CardContent>

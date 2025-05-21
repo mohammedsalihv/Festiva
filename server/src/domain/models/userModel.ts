@@ -1,18 +1,18 @@
-import mongoose, {Schema} from "mongoose"
-import { IUser } from "../entities/modelInterface/user.interface"
+import mongoose, { Schema } from "mongoose";
+import { IUser } from "../entities/modelInterface/user.interface";
 
 const UserSchema = new Schema<IUser>({
-  firstname: { type: String, required: true },
-  lastname: { type: String },
-  email: { type: String, required: true },
-  password: { type: String ,required: true },
-  phone: { type: String },
-  profilePic: { type:String },
-  role: { type: String, enum: ["admin", "user"], default: "user" },
-  isActive: { type: Boolean, default: true },
-  isBlocked: { type: Boolean, default: false },
-  googleId: { type: String },
-  timestamp: { type: Date, default: Date.now },
+  firstname: { type: String, required: false }, 
+  lastname: { type: String, required: false },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: false }, 
+  phone: { type: String, required: false },
+  profilePic: { type: String, required: false },
+  role: { type: String, enum: ["admin", "user"], default: "user", required: true },
+  isActive: { type: Boolean, default: true, required: true },
+  isBlocked: { type: Boolean, default: false, required: true },
+  googleId: { type: String, required: false },
+  timestamp: { type: Date, default: Date.now, required: true },
 });
 
 export const UserModal = mongoose.model<IUser>("User", UserSchema);

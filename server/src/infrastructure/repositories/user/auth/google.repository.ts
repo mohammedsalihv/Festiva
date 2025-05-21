@@ -4,13 +4,15 @@ import { UserModal } from "../../../../domain/models/userModel";
 
 export class GoogleAuthRepository implements IUserGoogleRepository {
   async findByEmail(email: string): Promise<IUser | null> {
-    return UserModal.findOne({ email });
+    return await UserModal.findOne({ email });
   }
+
   async createUser(user: IUser): Promise<IUser> {
     const newUser = new UserModal(user);
     return await newUser.save();
   }
+
   async updateUser(id: string, updates: Partial<IUser>): Promise<IUser | null> {
-    return UserModal.findByIdAndUpdate(id, updates, { new: true });
+    return await UserModal.findByIdAndUpdate(id, updates, { new: true });
   }
 }
