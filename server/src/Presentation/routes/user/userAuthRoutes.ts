@@ -11,9 +11,6 @@ import logger from "../../../utils/logger";
 
 const userAuthRoutes = express.Router();
 
-
-
-
 userAuthRoutes.post("/signup", userController.register);
 userAuthRoutes.post("/send-otp", async (req, res) => {
   try {
