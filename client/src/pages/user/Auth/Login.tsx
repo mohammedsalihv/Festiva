@@ -84,6 +84,7 @@ const Login = () => {
         }
       } else {
         toast.error("Network error. Please check your connection");
+        console.log(error)
       }
     },
   });

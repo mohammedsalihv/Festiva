@@ -2,25 +2,57 @@ import React, {useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import { useMutation } from "@tanstack/react-query";
 import { Images } from "@/assets";
 import { RootState } from "@/redux/store";
 import { setUserDetails, logoutUser } from "@/redux/Slice/user/userSlice";
 import { changeProfile } from "@/services/user/userService";
+import { sendOtp } from "@/services/user/userAuthService";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { AxiosError } from "axios";
 
 const Profile: React.FC = () => {
+  const profile = useSelector((state: RootState) => state.user.userInfo);
   const [activeTab, setActiveTab] = useState("Profile Information");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const [isEditing , setIsEditing] = useState(false)
+  const [email , setEmail]  = useState(profile?.email || "")
+  const [originalEmail , setOriginalEmail] = useState(false)
+  const [editProfileForm , setEditProfileForm] = useState({
+    firstname: profile?.firstname || "",
+  lastname: profile?.lastname || "",
+  email: profile?.email || "",
+  phone: profile?.phone || ""
+  })
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-   const profile = useSelector((state: RootState) => state.user.userInfo);
+ 
+  // const handleSaveProfile = () =>{
+    
+  // }
+
+  // const {mutate : sendOtpMutation , isPending : sendingOtp} = useMutation({
+  //     mutationFn:sendOtp,
+  //     onSuccess: () =>{
+  //       toast.success("OTP sent successfully!");
+  //       navigate("/otp-verification", { state: { userData: editProfileForm } });
+  //     },
+  //     onError:(error)=>{
+  //        console.error("OTP Sending Error:", error);
+  //        toast.error(error.message || "Failed to send OTP. Please try again.");
+  //     }
+  // })
+
+  const handleChangeProfile = (e:React.ChangeEvent<HTMLInputElement>) =>{
+    const {name , value} = e.target;
+    setEditProfileForm(prev => ({...prev,[name]:value}))
+
+  }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -172,36 +204,44 @@ const Profile: React.FC = () => {
                   <div className="flex flex-col lg:flex-row gap-4">
                     <input
                       type="text"
+                      name="firstname"
                       placeholder="First Name"
                       value={profile?.firstname || ""}
                       className="border-b-2 p-2 rounded w-full text-[16px]"
-                      readOnly
-                      disabled
+                      readOnly={!isEditing}
+                      disabled={!isEditing}
+                      onChange={handleChangeProfile}
                     />
                     <input
                       type="text"
+                      name="lastname"
                       placeholder="Last Name"
                       value={profile?.lastname || ""}
                       className="border-b-2 p-2 rounded w-full text-[16px]"
-                      readOnly
-                      disabled
+                      readOnly={!isEditing}
+                      disabled={!isEditing}
+                      onChange={handleChangeProfile}
                     />
                   </div>
                   <input
                     type="email"
+                    name="email"
                     placeholder="Email"
                     value={profile?.email || ""}
                     className="border-b-2 p-2 rounded w-full text-[16px]"
-                    readOnly
-                    disabled
+                    readOnly={!isEditing}
+                    disabled={!isEditing}
+                    onChange={handleChangeProfile}
                   />
                   <input
                     type="tel"
+                    name="phone"
                     placeholder="Phone"
                     value={profile?.phone || ""}
                     className="border-b-2 p-2 rounded w-full text-[16px]"
-                    readOnly
-                    disabled
+                    readOnly={!isEditing}
+                    disabled={!isEditing}
+                    onChange={handleChangeProfile}
                   />
                   <div className="flex justify-end">
                     <button className="bg-[#6c63ff] hover:bg-[#564eef] text-white px-4 py-2 rounded text-sm font-semibold">

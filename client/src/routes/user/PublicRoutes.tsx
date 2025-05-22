@@ -1,5 +1,4 @@
 import Login from "@/pages/user/Auth/Login";
-import Otp from "@/pages/user/Auth/Otp";
 import Signup from "@/pages/user/Auth/Signup";
 import { Routes, Route } from "react-router-dom";
 import Landing from "@/pages/user/Landing";
@@ -23,14 +22,6 @@ const PublicRoutes = () => (
       element={
         <PublicOnlyRoute>
           <Signup />
-        </PublicOnlyRoute>
-      }
-    />
-    <Route
-      path="/otp-verification"
-      element={
-        <PublicOnlyRoute>
-          <Otp />
         </PublicOnlyRoute>
       }
     />
