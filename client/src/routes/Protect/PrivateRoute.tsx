@@ -18,8 +18,8 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, allowedRoles }) =
   const isAuthenticated = !!accessToken;
 
   if (!isAuthenticated) {
-    console.log("Not authenticated, redirecting to login...");
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    console.log("Not authenticated, redirecting to landing...");
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(role!)) {

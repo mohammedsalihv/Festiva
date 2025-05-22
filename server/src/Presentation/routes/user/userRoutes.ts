@@ -10,16 +10,22 @@ export interface MulterRequest extends Request {
 
 const userRoutes = express.Router();
 
-userRoutes.put("/changeprofile/:userId", authenticateToken , singleImageUpload , async (req, res) => {
-  try {
-    await userProfileController.changeProfile(req as MulterRequest, res);
-  } catch (error) {
-    logger.info(error);
-    res.status(500).json({
-      message: "An error occurred while changing the profile",
-    });
+userRoutes.put(
+  "/setProfilePhoto",
+  authenticateToken,
+  singleImageUpload,
+  async (req, res) => {
+    try {
+      await userProfileController.updateProfilePicture(req as MulterRequest, res);
+    } catch (error) {
+      logger.info(error);
+      res.status(500).json({
+        message: "An error occurred while changing the profile",
+      });
+    }
   }
-});
+);
+
 
 
 export default userRoutes;

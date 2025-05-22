@@ -1,17 +1,19 @@
 import { Request, Response } from "express";
 import { UserProfile } from "../../../../application/use-cases/user/Pages/Profile/changeProfile-usecase";
 import logger from "../../../../utils/logger";
+import { JwtPayload } from "jsonwebtoken";
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
+  auth?: JwtPayload & { id: string; role?: string };
 }
 
 export class UserProfileController {
   constructor(private changeProfileUseCase: UserProfile) {}
 
-  async changeProfile(req: MulterRequest, res: Response) {
+  async updateProfilePicture(req: MulterRequest, res: Response) {
     try {
-      const userId = req.params.userId;
+      const userId = req.auth?.id;
       const image = req.file;
 
       if (!image) {
@@ -50,7 +52,6 @@ export class UserProfileController {
           message: "User not found",
         });
       }
-
       res.status(500).json({
         success: false,
         message: error.message || "Internal server error",

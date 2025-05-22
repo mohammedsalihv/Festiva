@@ -1,9 +1,12 @@
 import { Request, Response } from "express";
 import { UserManagementUseCase } from "../../../application/use-cases/admin/UserManagement.usecase";
 import logger from "../../../utils/logger";
+import { JwtPayload } from "jsonwebtoken";
+import { AuthRequest } from "../../../domain/entities/controlInterface/authType";
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
+  auth?: JwtPayload & { id: string; role?: string };
 }
 
 export class UserAdminController {
@@ -26,8 +29,8 @@ export class UserAdminController {
     }
   }
 
-  async blockOrUnblockUser(req: Request, res: Response): Promise<void> {
-    const { userId } = req.params;
+  async blockOrUnblockUser(req: AuthRequest, res: Response): Promise<void> {
+    const userId = req.auth?.id;
     const { isBlocked } = req.body;
 
     if (!userId || typeof isBlocked !== "boolean") {
@@ -59,8 +62,8 @@ export class UserAdminController {
     }
   }
 
-  async editUser(req: Request, res: Response): Promise<void> {
-    const { userId } = req.params;
+  async editUser(req: AuthRequest, res: Response): Promise<void> {
+    const userId = req.auth?.id;
     const formData = req.body;
 
     if (!userId || !formData) {
@@ -89,7 +92,7 @@ export class UserAdminController {
 
   async changeProfile(req: MulterRequest, res: Response) {
     try {
-      const userId = req.params.userId;
+      const userId = req.auth?.userId;
       const image = req.file;
 
       if (!image) {
@@ -136,9 +139,8 @@ export class UserAdminController {
     }
   }
 
-
-  async deleteUser(req: Request, res: Response): Promise<void> {
-    const { userId } = req.params;
+  async deleteUser(req: AuthRequest, res: Response): Promise<void> {
+    const userId = req.auth?.id;
 
     if (!userId) {
       res.status(400).json({

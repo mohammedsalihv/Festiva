@@ -45,8 +45,7 @@ const Profile: React.FC = () => {
 
       setIsLoading(true);
       try {
-        const response = await changeProfile(profile.id, formData);
-        console.log(response)
+        const response = await changeProfile(formData);
         if (response?.profilePhotoUrl) {
           dispatch(
             setUserDetails({

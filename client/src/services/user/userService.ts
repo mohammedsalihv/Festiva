@@ -1,9 +1,9 @@
 import axiosInstance from "@/config/user/userAxiosInstence";
 import { AxiosError } from "axios";
 
-export const changeProfile = async (userId: string, formData: FormData) => {
+export const changeProfile = async (formData: FormData) => {
   try {
-    const response = await axiosInstance.put(`/changeprofile/${userId}`, formData, {
+    const response = await axiosInstance.put(`/setProfilePhoto`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

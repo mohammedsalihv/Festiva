@@ -64,7 +64,7 @@ const Login = () => {
       };
       toast.success("Login Successful!");
       dispatch(setUserDetails(userData));
-      navigate("/user/home");
+      navigate("/user/home", { replace: true });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       if (error.response) {
