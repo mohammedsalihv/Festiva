@@ -17,11 +17,11 @@ import { GoogleLogin } from "../../../../application/use-cases/user/Auth/googleL
 
 //repositories
 
-import { UserRegisterRepository } from "../../../repositories/user/auth/userRegister.repository";
-import { OTPRepository } from "../../../repositories/user/auth/otp.repository";
-import { OTPrepository } from "../../../repositories/user/auth/verifyOtp.repository";
-import { LoginRepository } from "../../../repositories/user/auth/login.repository";
-import { GoogleAuthRepository } from "../../../repositories/user/auth/google.repository";
+import { UserRegisterRepository } from "../../../repositories/user/auth/repository.userSignup";
+import { OTPRepository } from "../../../repositories/user/auth/repository.otp";
+import { OTPrepository } from "../../../repositories/user/auth/repository.verifyOtp";
+import { LoginRepository } from "../../../repositories/user/auth/repository.userLogin";
+import { GoogleAuthRepository } from "../../../repositories/user/auth/repository.userGoogle";
 
 
 

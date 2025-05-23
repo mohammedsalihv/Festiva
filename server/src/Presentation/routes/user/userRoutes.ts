@@ -4,6 +4,7 @@ import { userProfileController } from "../../../infrastructure/frameworks/Depend
 import { singleImageUpload } from "../../../middlewares/multer";
 import { authenticateToken } from "../../../middlewares/auth";
 
+
 export interface MulterRequest extends Request {
   file: Express.Multer.File;
 }
@@ -26,6 +27,6 @@ userRoutes.put(
   }
 );
 
-userRoutes.post("/profileModify", userProfileController.profileEdit.bind(userProfileController));
+userRoutes.post("/profileModify", authenticateToken , userProfileController.profileEdit.bind(userProfileController));
 
 export default userRoutes;

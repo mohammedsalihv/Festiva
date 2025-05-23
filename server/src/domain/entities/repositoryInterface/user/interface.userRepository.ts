@@ -1,4 +1,4 @@
 import { IUser } from "../../modelInterface/user.interface";
-export interface IUserLoginRepository {
+export interface IUserRepository {
   findByEmail(email: string): Promise<IUser | null>;
 }

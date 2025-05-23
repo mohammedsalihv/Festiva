@@ -2,8 +2,8 @@ import { venueController } from "../../../../Presentation/controllers/host/servi
 
 import { addVenueUseCase } from "../../../../application/use-cases/host/service/venueUseCase";
 
-import { venueRepository } from "../../../repositories/host/service/venue.repository";
-import { LocationRepository } from "../../../repositories/host/service/location.repository";
+import { venueRepository } from "../../../repositories/host/service/repository.venueService";
+import { LocationRepository } from "../../../repositories/host/service/repository.assetLocation";
 
 const VenueRepository = new venueRepository();
 const LocationRepositoryInstance = new LocationRepository();

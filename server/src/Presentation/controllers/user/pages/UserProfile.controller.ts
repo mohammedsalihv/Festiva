@@ -60,7 +60,6 @@ export class UserProfileController {
   async profileEdit(req: AuthRequest, res: Response): Promise<void> {
     const userId = req.auth?.id;
     const formData = req.body;
-
     if (!userId) {
       res.status(400).json({
         success: false,
@@ -75,7 +74,6 @@ export class UserProfileController {
       });
       return;
     }
-
     try {
       const response = await this.userProfileUseCase.profileEdit(
         userId,

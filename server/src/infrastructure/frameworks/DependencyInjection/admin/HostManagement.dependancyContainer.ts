@@ -2,7 +2,7 @@ import { HostAdminController } from "../../../../Presentation/controllers/admin/
 
 import { HostManagementUseCase } from "../../../../application/use-cases/admin/HostManagement.usecase";
 
-import { HostManagementRepostory } from "../../../repositories/admin/HostManagement.repository";
+import { HostManagementRepostory } from "../../../repositories/admin/repository.hostManagement";
 
 const hostManagementRepostory = new HostManagementRepostory();
 const hostManagementUseCase = new HostManagementUseCase(hostManagementRepostory);

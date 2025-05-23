@@ -1,10 +1,10 @@
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/interface.loginRepository";
+import { IUserLoginRepository } from "../../../../domain/entities/repositoryInterface/user/interface.loginRepository";
 import CustomError from "../../../../utils/CustomError";
 import { TokenService } from "../../../../application/services/service.token";
 import bcrypt from "bcrypt";
 
 export class LoginUser {
-  constructor(private userRepository: IUserRepository) {}
+  constructor(private userRepository: IUserLoginRepository) {}
 
   async execute(
     email: string,

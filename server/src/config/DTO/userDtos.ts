@@ -23,6 +23,6 @@ export interface UserDetailsDTO {
   export interface profileEditDTO {
     firstname: string;
     lastname: string;
-    email: string;
+    email?: string;
     phone?: string;
   }

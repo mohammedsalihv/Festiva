@@ -9,7 +9,7 @@ import { LoginAdmin } from "../../../../application/use-cases/admin/Auth/loginAd
 
 // repositories
 
-import { adminLoginRepository } from "../../../repositories/admin/auth/adminLogin.repository";
+import { adminLoginRepository } from "../../../repositories/admin/auth/repository.adminLogin";
 
 
 // Instantiating Repositories

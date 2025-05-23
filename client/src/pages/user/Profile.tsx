@@ -48,20 +48,22 @@ const Profile: React.FC = () => {
   };
 
   const handleTriggerSave = async () => {
-    if (profile?.email !== editProfileForm.email) {
+    const emailChanged = profile?.email !== editProfileForm.email;
+
+    if (emailChanged) {
       sendOtpMutation({ email: editProfileForm.email });
     } else {
       try {
-        await profileEdit(editProfileForm);
-        toast.success("profile updated!");
-        setIsEditing(false);
-        navigate("/user/profile");
+        const { email, ...formToSubmit } = editProfileForm;
+        const response = await profileEdit(formToSubmit);
+        dispatch(setUserDetails(response.data));
+        toast.success("Profile updated!");
+        console.log(`Profile changed of ${email}`);
       } catch (error: unknown) {
         if (error instanceof AxiosError) {
-          console.log(error.response?.data);
           toast.error("Failed to update");
         }
-        console.log(error)
+      } finally {
         setIsEditing(false);
       }
     }

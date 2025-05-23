@@ -11,8 +11,8 @@ import { LoginHost } from "../../../../application/use-cases/host/Auth/loginHost
 
 // repositories
 
-import { HostLoginRepository } from "../../../repositories/host/auth/hostLogin.repository";
-import { HostRepository } from "../../../repositories/host/auth/hostRegister.repository";
+import { HostLoginRepository } from "../../../repositories/host/auth/repository.hostLogin";
+import { HostRepository } from "../../../repositories/host/auth/repository.hostSignup";
 
 // Instantiating Repositories
 
