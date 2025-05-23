@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -11,6 +11,9 @@ import { sendOtp } from "@/services/user/userAuthService";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { AxiosError } from "axios";
+import { profileEdit } from "@/services/user/userService";
+import Otp from "@/components/Otp";
+import { verifyOtp } from "@/services/user/userAuthService";
 
 const Profile: React.FC = () => {
   const profile = useSelector((state: RootState) => state.user.userInfo);
@@ -19,40 +22,125 @@ const Profile: React.FC = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
-  const [isEditing , setIsEditing] = useState(false)
-  const [email , setEmail]  = useState(profile?.email || "")
-  const [originalEmail , setOriginalEmail] = useState(false)
-  const [editProfileForm , setEditProfileForm] = useState({
+  const [isEditing, setIsEditing] = useState(false);
+  const [showOtp, setShowOtp] = useState(false);
+  const [otpError, setOtpError] = useState("");
+  const firstInputRef = useRef<HTMLInputElement>(null);
+  const [editProfileForm, setEditProfileForm] = useState({
     firstname: profile?.firstname || "",
-  lastname: profile?.lastname || "",
-  email: profile?.email || "",
-  phone: profile?.phone || ""
-  })
+    lastname: profile?.lastname || "",
+    email: profile?.email || "",
+    phone: profile?.phone || "",
+  });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
- 
-  // const handleSaveProfile = () =>{
-    
-  // }
 
-  // const {mutate : sendOtpMutation , isPending : sendingOtp} = useMutation({
-  //     mutationFn:sendOtp,
-  //     onSuccess: () =>{
-  //       toast.success("OTP sent successfully!");
-  //       navigate("/otp-verification", { state: { userData: editProfileForm } });
-  //     },
-  //     onError:(error)=>{
-  //        console.error("OTP Sending Error:", error);
-  //        toast.error(error.message || "Failed to send OTP. Please try again.");
-  //     }
-  // })
+  const handleTriggerEdit = () => {
+    setIsEditing(true);
+    setTimeout(() => {
+      firstInputRef.current?.focus();
+    }, 0);
+  };
 
-  const handleChangeProfile = (e:React.ChangeEvent<HTMLInputElement>) =>{
-    const {name , value} = e.target;
-    setEditProfileForm(prev => ({...prev,[name]:value}))
+  const handleSaveProfile = () => {
+    editProfileMutate(editProfileForm);
+  };
 
-  }
+  const handleTriggerSave = async () => {
+    if (profile?.email !== editProfileForm.email) {
+      sendOtpMutation({ email: editProfileForm.email });
+    } else {
+      try {
+        await profileEdit(editProfileForm);
+        toast.success("profile updated!");
+        setIsEditing(false);
+        navigate("/user/profile");
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          console.log(error.response?.data);
+          toast.error("Failed to update");
+        }
+        console.log(error)
+        setIsEditing(false);
+      }
+    }
+  };
+
+  const { mutate: sendOtpMutation } = useMutation({
+    mutationFn: sendOtp,
+    onSuccess: () => {
+      toast.success("OTP sent successfully!");
+      setShowOtp(true);
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      console.log(error);
+      toast.error(
+        error.response?.data?.message || "Failed to send OTP. Please try again."
+      );
+    },
+  });
+
+  const { mutate: verifyOtpMutation, isPending: verifyingOtp } = useMutation({
+    mutationFn: verifyOtp,
+    onSuccess: () => {
+      handleSaveProfile();
+      setShowOtp(false);
+      setIsEditing(false);
+      setOtpError("");
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      setOtpError(
+        error.response?.data?.message || "Invalid OTP. Please try again."
+      );
+    },
+  });
+
+  const { mutate: resendOtpMutation, isPending: resendingOtp } = useMutation({
+    mutationFn: sendOtp,
+    onMutate: () => {
+      toast.dismiss("resend-toast");
+      toast.loading("Sending OTP...", { toastId: "resend-toast" });
+    },
+    onSuccess: () => {
+      toast.dismiss("resend-toast");
+      toast.success("OTP resent successfully!", { autoClose: 3000 });
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      toast.dismiss("resend-toast");
+      toast.error(error.response?.data?.message || "Failed to resend OTP");
+    },
+  });
+
+  const { mutate: editProfileMutate, isPending: editing } = useMutation({
+    mutationFn: profileEdit,
+    onSuccess: () => {
+      setTimeout(() => {
+        toast.success("profile updated!");
+      }, 500);
+      navigate("/user/profile");
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      toast.error(
+        error.response?.data?.message ||
+          "Profile editing failed. Please try again."
+      );
+    },
+  });
+
+  const handleVerifyOtp = (otp: string) => {
+    setOtpError("");
+    verifyOtpMutation({ email: editProfileForm.email, otp });
+  };
+
+  const handleResendOtp = () => {
+    resendOtpMutation({ email: editProfileForm.email });
+  };
+
+  const handleChangeProfile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEditProfileForm((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -203,11 +291,12 @@ const Profile: React.FC = () => {
                   <p className="text-sm md:text-lg font-bold">Personal data</p>
                   <div className="flex flex-col lg:flex-row gap-4">
                     <input
+                      ref={firstInputRef}
                       type="text"
                       name="firstname"
                       placeholder="First Name"
-                      value={profile?.firstname || ""}
-                      className="border-b-2 p-2 rounded w-full text-[16px]"
+                      value={editProfileForm.firstname}
+                      className="border-b-2 p-2 rounded w-full text-[18px]"
                       readOnly={!isEditing}
                       disabled={!isEditing}
                       onChange={handleChangeProfile}
@@ -216,8 +305,8 @@ const Profile: React.FC = () => {
                       type="text"
                       name="lastname"
                       placeholder="Last Name"
-                      value={profile?.lastname || ""}
-                      className="border-b-2 p-2 rounded w-full text-[16px]"
+                      value={editProfileForm.lastname}
+                      className="border-b-2 p-2 rounded w-full text-[18px]"
                       readOnly={!isEditing}
                       disabled={!isEditing}
                       onChange={handleChangeProfile}
@@ -227,8 +316,8 @@ const Profile: React.FC = () => {
                     type="email"
                     name="email"
                     placeholder="Email"
-                    value={profile?.email || ""}
-                    className="border-b-2 p-2 rounded w-full text-[16px]"
+                    value={editProfileForm.email}
+                    className="border-b-2 p-2 rounded w-full text-[18px]"
                     readOnly={!isEditing}
                     disabled={!isEditing}
                     onChange={handleChangeProfile}
@@ -237,16 +326,29 @@ const Profile: React.FC = () => {
                     type="tel"
                     name="phone"
                     placeholder="Phone"
-                    value={profile?.phone || ""}
-                    className="border-b-2 p-2 rounded w-full text-[16px]"
+                    value={editProfileForm?.phone}
+                    className="border-b-2 p-2 rounded w-full text-[18px]"
                     readOnly={!isEditing}
                     disabled={!isEditing}
                     onChange={handleChangeProfile}
                   />
                   <div className="flex justify-end">
-                    <button className="bg-[#6c63ff] hover:bg-[#564eef] text-white px-4 py-2 rounded text-sm font-semibold">
-                      Edit
-                    </button>
+                    {!showOtp &&
+                      (isEditing ? (
+                        <button
+                          onClick={handleTriggerSave}
+                          className="bg-main_color hover:bg-[#564eef] text-white px-4 py-2 rounded text-sm font-semibold"
+                        >
+                          Save changes
+                        </button>
+                      ) : (
+                        <button
+                          onClick={handleTriggerEdit}
+                          className="bg-white border border-main_color hover:bg-[#564eef] hover:text-white text-black px-4 py-2 rounded text-sm font-semibold"
+                        >
+                          Edit
+                        </button>
+                      ))}
                   </div>
                 </div>
                 <div className="w-full lg:w-1/2 space-y-3">
@@ -269,7 +371,7 @@ const Profile: React.FC = () => {
                     className="border-b-2 p-2 rounded w-full text-[16px]"
                   />
                   <div className="flex justify-end">
-                    <button className="bg-[#6c63ff] hover:bg-[#564eef] text-white px-4 py-2 rounded text-sm font-semibold">
+                    <button className="bg-white border border-main_color hover:bg-[#564eef] hover:text-white text-black px-4 py-2 rounded text-sm font-semibold">
                       Change
                     </button>
                   </div>
@@ -292,6 +394,16 @@ const Profile: React.FC = () => {
             </div>
           )}
         </div>
+        {showOtp && (
+          <Otp
+            email={editProfileForm.email}
+            onVerify={handleVerifyOtp}
+            onResend={handleResendOtp}
+            loading={verifyingOtp || editing || resendingOtp}
+            errorMessage={otpError}
+            resendTimeOut={60}
+          />
+        )}
       </div>
 
       <ConfirmDialog

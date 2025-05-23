@@ -97,8 +97,6 @@ const Otp = ({
             We've sent a 6-digit OTP to{" "}
             <span className="font-semibold">{email}</span>
           </p>
-         
-
           <form onSubmit={handleSubmit}>
             <div className="flex justify-center space-x-2 md:space-x-4 mb-4">
               {[...Array(6)].map((_, index) => (

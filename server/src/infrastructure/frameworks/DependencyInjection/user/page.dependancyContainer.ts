@@ -1,6 +1,5 @@
 import { UserProfileController } from "../../../../Presentation/controllers/user/pages/UserProfile.controller";
-import { UserProfile } from "../../../../application/use-cases/user/Pages/Profile/changeProfile-usecase";
-
+import { UserProfile } from "../../../../application/use-cases/user/Pages/Profile/userProfile-usecase";
 import { UserProfileRepository } from "../../../repositories/user/pages/userProfile.repository";
 
 

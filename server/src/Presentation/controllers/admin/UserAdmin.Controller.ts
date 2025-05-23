@@ -12,7 +12,7 @@ interface MulterRequest extends Request {
 export class UserAdminController {
   constructor(private userManagementUseCase: UserManagementUseCase) {}
 
-  async getUsers(req: Request, res: Response): Promise<void> {
+  async Users(req: Request, res: Response): Promise<void> {
     try {
       const users = await this.userManagementUseCase.execute();
       res.status(200).json({

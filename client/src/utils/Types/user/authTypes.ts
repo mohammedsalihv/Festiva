@@ -18,6 +18,21 @@ export interface ErrorState {
   password?: string;
 }
 
+export interface SignupData {
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface LoginData {
+  email: string;
+  password: string;
+}
+
+
 export type GoogleLoginData = {
   name: string;
   email: string;

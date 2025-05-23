@@ -22,7 +22,7 @@ userAuthRoutes.post("/send-otp", async (req, res) => {
     logger.info(error);
   }
 });
-userAuthRoutes.post("/verify_otp", verifyOtpController.verifyOTP);
+userAuthRoutes.post("/verifyOtp", verifyOtpController.verifyOTP);
 userAuthRoutes.post("/login", async (req, res) => {
   try {
     await loginController.login(req, res);

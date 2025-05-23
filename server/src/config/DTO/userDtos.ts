@@ -10,3 +10,19 @@ export interface UserDetailsDTO {
     isVerified: boolean;
     phone: string;
   }
+
+  export interface RegisterUserDTO {
+    firstname: string;
+    lastname: string;
+    email: string;
+    phone?: string;
+    password: string;
+  }
+  
+
+  export interface profileEditDTO {
+    firstname: string;
+    lastname: string;
+    email: string;
+    phone?: string;
+  }

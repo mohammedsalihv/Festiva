@@ -92,22 +92,22 @@ const Header = () => {
                   className="w-10 h-10 rounded-full cursor-pointer border border-white bg-white"
                 />
                 {dropDown && (
-                  <div className="absolute right-0 mt-2 w-40 bg-white z-50 shadow-lg rounded-md">
+                  <div className="absolute right-0 mt-2 w-36 bg-white border z-50 shadow-lg rounded-md font-JosephicSans py-2">
                     <button
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-black"
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-md text-black"
                       onClick={() => navigate("/user/profile")}
                     >
                       Profile
                     </button>
                     <button
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-black"
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-md text-black"
                       onClick={() => navigate("/user/bookings")}
                     >
                       My bookings
                     </button>
                     <button
                       onClick={() => setConfirmLogout(true)}
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-black"
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-md text-black"
                     >
                       Logout
                     </button>

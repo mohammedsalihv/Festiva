@@ -17,7 +17,7 @@ adminRoutes.get(
   "/users",
   authenticateToken,
    isAdmin,
-  userAdminController.getUsers.bind(userAdminController)
+  userAdminController.Users.bind(userAdminController)
 );
 adminRoutes.patch(
   "/users/:userId/blockUnblock",

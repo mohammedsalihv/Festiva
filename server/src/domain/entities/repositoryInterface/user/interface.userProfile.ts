@@ -1,6 +1,8 @@
 import { IUser } from "../../modelInterface/user.interface";
+import { profileEditDTO } from "../../../../config/DTO/userDtos";
 
 export interface IUserProfileRepository {
-  changeProfile(userId: string, imageFilename: string): Promise<IUser>;
+  setProfilePic(userId: string, imageFilename: string): Promise<IUser>;
+  profileEdit(userId:string,form:profileEditDTO):Promise<IUser>
 }
 

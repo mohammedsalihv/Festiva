@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { UserProfile } from "../../../../application/use-cases/user/Pages/Profile/changeProfile-usecase";
+import { UserProfile } from "../../../../application/use-cases/user/Pages/Profile/userProfile-usecase";
 import logger from "../../../../utils/logger";
 import { JwtPayload } from "jsonwebtoken";
+import { AuthRequest } from "../../../../domain/entities/controlInterface/authType";
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -9,9 +10,9 @@ interface MulterRequest extends Request {
 }
 
 export class UserProfileController {
-  constructor(private changeProfileUseCase: UserProfile) {}
+  constructor(private userProfileUseCase: UserProfile) {}
 
-  async updateProfilePicture(req: MulterRequest, res: Response) {
+  async setProfilePic(req: MulterRequest, res: Response) {
     try {
       const userId = req.auth?.id;
       const image = req.file;
@@ -30,10 +31,7 @@ export class UserProfileController {
         });
       }
 
-      const updatedUser = await this.changeProfileUseCase.execute(
-        userId,
-        image
-      );
+      const updatedUser = await this.userProfileUseCase.execute(userId, image);
 
       res.status(200).json({
         success: true,
@@ -55,6 +53,44 @@ export class UserProfileController {
       res.status(500).json({
         success: false,
         message: error.message || "Internal server error",
+      });
+    }
+  }
+
+  async profileEdit(req: AuthRequest, res: Response): Promise<void> {
+    const userId = req.auth?.id;
+    const formData = req.body;
+
+    if (!userId) {
+      res.status(400).json({
+        success: false,
+        message: "Missing userId",
+      });
+      return;
+    }
+     if (!formData) {
+      res.status(400).json({
+        success: false,
+        message: "Missing form data",
+      });
+      return;
+    }
+
+    try {
+      const response = await this.userProfileUseCase.profileEdit(
+        userId,
+        formData
+      );
+      res.status(200).json({
+        message: "Profile updated!",
+        success: true,
+        data: response,
+      });
+    } catch (error) {
+      logger.error(String(error), "Error updating profile");
+      res.status(500).json({
+        success: false,
+        message: "Failed to update profile",
       });
     }
   }

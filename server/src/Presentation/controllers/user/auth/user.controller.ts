@@ -1,5 +1,5 @@
 import { Request , Response } from "express";
-import { RegisterUserDTO } from "../../../../config/DTO/userDto";
+import { RegisterUserDTO } from "../../../../config/DTO/userDtos";
 import { RegisterUser } from "../../../../application/use-cases/user/Auth/registerUser";
 
 export class UserController{

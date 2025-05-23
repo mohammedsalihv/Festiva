@@ -1,5 +1,6 @@
 import axiosInstance from "@/config/user/userAxiosInstence";
 import { AxiosError } from "axios";
+import { profileModify } from "@/utils/Types/user/profileTypes";
 
 export const changeProfile = async (formData: FormData) => {
   try {
@@ -15,4 +16,10 @@ export const changeProfile = async (formData: FormData) => {
     }
     throw new Error("Failed to update profile");
   }
+};
+
+
+export const profileEdit = async (data: profileModify) => {
+  const response = await axiosInstance.post("/profileModify", data);
+  return response.data;
 };

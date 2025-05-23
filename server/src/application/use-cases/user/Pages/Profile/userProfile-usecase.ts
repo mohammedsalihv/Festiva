@@ -1,6 +1,7 @@
 import { IUser } from "../../../../../domain/entities/modelInterface/user.interface";
 import { IUserProfileRepository } from "../../../../../domain/entities/repositoryInterface/user/interface.userProfile";
 import CustomError from "../../../../../utils/CustomError";
+import { profileEditDTO } from "../../../../../config/DTO/userDtos";
 
 export class UserProfile {
   constructor(private UserProfileRepository: IUserProfileRepository) {}
@@ -19,7 +20,7 @@ export class UserProfile {
     const imageName = image.filename;
     const imageUrl = `uploads/singleImages/${imageName}`;
 
-    const response = await this.UserProfileRepository.changeProfile(
+    const response = await this.UserProfileRepository.setProfilePic(
       userId,
       imageUrl
     );
@@ -27,6 +28,21 @@ export class UserProfile {
     if (!response) {
       throw new CustomError("Profile photo update failed", 401);
     }
+    return response;
+  }
+
+  async profileEdit(userId: string, form: profileEditDTO): Promise<IUser> {
+    if (!userId) {
+      throw new CustomError("User ID is required", 400);
+    }
+    if (!form) {
+      throw new CustomError("Edited data is required", 400);
+    }
+    const response = await this.UserProfileRepository.profileEdit(userId, form);
+    if (!response) {
+      throw new CustomError("User update failed", 500);
+    }
+
     return response;
   }
 }

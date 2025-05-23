@@ -1,19 +1,6 @@
 import axiosInstance from "@/config/user/userAxiosInstence";
-import { GoogleLoginData } from "@/utils/Types/user/authTypes";
+import { GoogleLoginData , SignupData , LoginData} from "@/utils/Types/user/authTypes";
 
-export interface SignupData {
-  firstname: string;
-  lastname: string;
-  email: string;
-  phone: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export interface LoginData {
-  email: string;
-  password: string;
-}
 
 export const registerUser = async (data: SignupData) => {
   const response = await axiosInstance.post("/auth/signup", data);

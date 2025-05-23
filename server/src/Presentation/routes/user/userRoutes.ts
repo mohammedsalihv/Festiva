@@ -16,7 +16,7 @@ userRoutes.put(
   singleImageUpload,
   async (req, res) => {
     try {
-      await userProfileController.updateProfilePicture(req as MulterRequest, res);
+      await userProfileController.setProfilePic(req as MulterRequest, res);
     } catch (error) {
       logger.info(error);
       res.status(500).json({
@@ -26,6 +26,6 @@ userRoutes.put(
   }
 );
 
-
+userRoutes.post("/profileModify", userProfileController.profileEdit.bind(userProfileController));
 
 export default userRoutes;

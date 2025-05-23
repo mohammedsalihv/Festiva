@@ -1,5 +1,5 @@
 import { hash } from "../../../../utils/passwordHash";
-import { RegisterUserDTO } from "../../../../config/DTO/userDto";
+import { RegisterUserDTO } from "../../../../config/DTO/userDtos";
 import ErrorHandler from "../../../../utils/CustomError";
 import { IUser } from "../../../../domain/entities/modelInterface/user.interface";
 import { TokenService } from "../../../services/service.token";
