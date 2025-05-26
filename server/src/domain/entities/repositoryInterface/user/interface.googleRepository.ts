@@ -1,6 +1,10 @@
-import { IUser } from "../../modelInterface/user.interface";
+import { IUser } from "../../modelInterface/interface.user";
+import { responseUserDTO } from "../../../../config/DTO/user/dto.user";
 export interface IUserGoogleRepository {
-  findByEmail(email: string): Promise<IUser | null>;
-  updateUser(id: string, updates: Partial<IUser>): Promise<IUser | null>;
-  createUser(user: IUser): Promise<IUser>;
+  findByEmail(email: string): Promise<responseUserDTO | null>;
+  updateUser(
+    id: string,
+    updates: Partial<IUser>
+  ): Promise<responseUserDTO | null>;
+  createUser(user: IUser): Promise<responseUserDTO>;
 }

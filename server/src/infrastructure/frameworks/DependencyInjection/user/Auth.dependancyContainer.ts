@@ -1,6 +1,7 @@
 // controllers
 
 import { UserController } from "../../../../Presentation/controllers/user/auth/user.controller";
+import { UserRegisterController } from "../../../../Presentation/controllers/user/auth/register.controller";
 import { OTPController } from "../../../../Presentation/controllers/user/auth/otp.controller";
 import { VerifyOtpController } from "../../../../Presentation/controllers/user/auth/verifyOtp.controller";
 import { RefreshTokenController } from "../../../../Presentation/controllers/user/auth/refreshToken.controller";
@@ -14,6 +15,8 @@ import { VerifyOtp } from "../../../../application/use-cases/user/Auth/verifyOtp
 import { SendOTP } from "../../../../application/use-cases/user/Auth/sentOtp";
 import { LoginUser } from "../../../../application/use-cases/user/Auth/loginUser";
 import { GoogleLogin } from "../../../../application/use-cases/user/Auth/googleLogin";
+import { ResetPassword } from "../../../../application/use-cases/user/Auth/resetPassowrd";
+
 
 //repositories
 
@@ -22,40 +25,43 @@ import { OTPRepository } from "../../../repositories/user/auth/repository.otp";
 import { OTPrepository } from "../../../repositories/user/auth/repository.verifyOtp";
 import { LoginRepository } from "../../../repositories/user/auth/repository.userLogin";
 import { GoogleAuthRepository } from "../../../repositories/user/auth/repository.userGoogle";
-
-
-
-
-
+import { UserRepository } from "../../../repositories/user/pages/repository.user";
 
 // Instantiating Repositories
 
 const userRegisterRepository = new UserRegisterRepository();
 const otpRepository = new OTPRepository();
 const loginRepository = new LoginRepository();
+const userRepository = new UserRepository();
 const verifyOtpRepository = new OTPrepository();
 const googleAuthRepository = new GoogleAuthRepository();
+
 
 // Instantiate use cases
 const registerUser = new RegisterUser(userRegisterRepository);
 const SendOTPUseCase = new SendOTP(otpRepository);
-const loginUser = new LoginUser(loginRepository);
+const loginUser = new LoginUser(loginRepository, userRepository);
 const verifyOtp = new VerifyOtp(verifyOtpRepository);
 const googleLoginUseCase = new GoogleLogin(googleAuthRepository);
+const resetPassword = new ResetPassword(userRepository)
+
+
 
 // Instantiate controllers
-const userController = new UserController(registerUser);
+const userRegisterController = new UserRegisterController(registerUser);
 const otpController = new OTPController(SendOTPUseCase);
 const loginController = new LoginController(loginUser);
 const refreshTokenController = new RefreshTokenController();
 const verifyOtpController = new VerifyOtpController(verifyOtp);
 const googleController = new GoogleController(googleLoginUseCase);
+const userController = new UserController(resetPassword)
 
 export {
   userController,
+  userRegisterController,
   otpController,
   verifyOtpController,
   refreshTokenController,
   loginController,
-  googleController
+  googleController,
 };

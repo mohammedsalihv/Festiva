@@ -9,21 +9,21 @@ import { LoginAdmin } from "../../../../application/use-cases/admin/Auth/loginAd
 
 // repositories
 
-import { adminLoginRepository } from "../../../repositories/admin/auth/repository.adminLogin";
-
+import { AdminRepository } from "../../../repositories/admin/auth/repository.admin";
+import { AdminLoginRepository } from "../../../repositories/admin/auth/repository.adminLogin";
 
 // Instantiating Repositories
 
-const AdminLoginRepository = new adminLoginRepository();
+const adminLoginRepository = new AdminLoginRepository();
+const adminRepository = new AdminRepository();
 
 // Instantiating use-case
 
-const loginAdmin = new LoginAdmin(AdminLoginRepository);
-
+const loginAdmin = new LoginAdmin(adminLoginRepository, adminRepository);
 
 // Instantiating controllers
 
 const adminLoginController = new AdminLoginController(loginAdmin);
 const refreshTokenController = new RefreshTokenController();
 
-export {  adminLoginController, refreshTokenController };
+export { adminLoginController, refreshTokenController };

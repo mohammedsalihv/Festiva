@@ -1,5 +1,5 @@
 import mongoose, { Schema, Types } from "mongoose";
-import { IVenue } from "../entities/modelInterface/venue.interface";
+import { IVenue } from "../entities/serviceInterface/interface.venue";
 
 const venueSchema = new Schema<IVenue>(
   {

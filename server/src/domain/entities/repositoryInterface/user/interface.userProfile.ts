@@ -1,8 +1,8 @@
-import { IUser } from "../../modelInterface/user.interface";
-import { profileEditDTO } from "../../../../config/DTO/userDtos";
+import { profileEditDTO } from "../../../../config/DTO/user/dto.user";
+import { responseUserDTO } from "../../../../config/DTO/user/dto.user";
 
 export interface IUserProfileRepository {
-  setProfilePic(userId: string, imageFilename: string): Promise<IUser>;
-  profileEdit(userId:string,form:profileEditDTO):Promise<IUser>
+  setProfilePic(userId: string, imageFilename: string): Promise<responseUserDTO>;
+  profileEdit(userId: string, form: profileEditDTO): Promise<responseUserDTO>;
+  changePassword(userId: string, hashedPassword: string): Promise<responseUserDTO>;
 }
-

@@ -1,6 +1,6 @@
 // src/middleware/errorMiddleware.ts
 import { Request, Response, NextFunction } from "express";
-import { ERROR_MESSAGES, ERROR_CODES } from "../config/errorConstants";
+import { ERROR_MESSAGES, ERROR_CODES } from "../config/Error/errorConstants"
 
 const errorMiddleware = (
   err: any,

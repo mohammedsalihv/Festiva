@@ -1,29 +1,25 @@
 import { hash } from "../../../../utils/passwordHash";
-import { RegisterHostDTO } from "../../../../config/DTO/hostDto";
+import {
+  registerHostDTO,
+  HostDetailsDTO,
+} from "../../../../config/DTO/host/dto.host";
 import ErrorHandler from "../../../../utils/CustomError";
-import { IHost } from "../../../../domain/entities/modelInterface/host.interface";
+import { IHost } from "../../../../domain/entities/modelInterface/interface.host";
 import { TokenService } from "../../../services/service.token";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostRepository.interface";
+import { IHostRegisterRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostRegisterRepository";
+import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostRepository";
 
 export class RegsiterHost {
-  constructor(private hostRepository: IHostRepository) {}
+  constructor(
+    private hostRegisterRepository: IHostRegisterRepository,
+    private hostRepository: IHostRepository
+  ) {}
 
-  async execute(hostData: RegisterHostDTO): Promise<{
-    accessToken: string;
-    refreshToken: string;
-    host: {
-      id: string;
-      name: string;
-      email: string;
-      phone: string;
-      location: string;
-      profile_pic: string;
-      role: string;
-    };
-  }> {
+  async execute(hostData: registerHostDTO): Promise<HostDetailsDTO> {
     const { email, password } = hostData;
     const existingHost = await this.hostRepository.findByEmail(email);
     if (existingHost) throw new ErrorHandler("Email already exists", 400);
+
     const hashedPassword = await hash(password);
     const newHost: IHost = {
       name: hostData.name || "",
@@ -35,13 +31,13 @@ export class RegsiterHost {
       profilePic: hostData.profilePic,
     };
 
-    const createdHost = await this.hostRepository.createHost(newHost);
+    const createdHost = await this.hostRegisterRepository.createHost(newHost);
     const accessToken = TokenService.generateAccessToken({
-      id: createdHost._id!,
+      id: createdHost.id!,
       role: createdHost.role,
     });
     const refreshToken = TokenService.generateRefreshToken({
-      id: createdHost._id!,
+      id: createdHost.id!,
       role: createdHost.role,
     });
 
@@ -49,12 +45,12 @@ export class RegsiterHost {
       accessToken,
       refreshToken,
       host: {
-        id: createdHost._id!,
+        id: createdHost.id!,
         name: createdHost.name!,
         email: createdHost.email!,
         phone: createdHost.phone!,
         location: createdHost.location!,
-        profile_pic: createdHost.profilePic || "",
+        profilePic: createdHost.profilePic || "",
         role: createdHost.role || "host",
       },
     };

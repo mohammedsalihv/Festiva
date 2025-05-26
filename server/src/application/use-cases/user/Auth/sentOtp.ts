@@ -2,7 +2,7 @@ import { IOTPRepository } from "../../../../domain/entities/repositoryInterface/
 import { generateOTP } from "../../../../utils/otpGenerator";
 
 export class SendOTP {
-  private RESEND_WAIT_TIME = 60 * 1000; // 1 minute in milliseconds
+  private RESEND_WAIT_TIME = 60 * 1000;
 
   constructor(private otpRepository: IOTPRepository) {}
 
@@ -16,11 +16,9 @@ export class SendOTP {
         return { success: false, message: "OTP already sent. Please wait 1 minute before requesting again." };
       }
 
-      // Delete expired OTP before generating a new one
       await this.otpRepository.deleteOTP(email);
     }
 
-    // Generate new OTP
     const otp = generateOTP();
     await this.otpRepository.createOTP({ email, otp });
 

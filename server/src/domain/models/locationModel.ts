@@ -1,5 +1,5 @@
 import mongoose , {Schema , model} from "mongoose";
-import { ILocation } from "../entities/modelInterface/location.interface";
+import { ILocation } from "../entities/serviceInterface/interface.location";
 
 
 const locationSchema = new Schema<ILocation>({

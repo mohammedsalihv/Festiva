@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { addVenueDTO } from "../../../../config/DTO/venueDto";
+import { addVenueDTO } from "../../../../config/DTO/host/dto.venue";
 import { addVenueUseCase } from "../../../../application/use-cases/host/service/venueUseCase";
-import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/locationRepostory";
+import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/interface.locationRepostory";
 import ErrorHandler from "../../../../utils/CustomError";
 
 export class venueController {

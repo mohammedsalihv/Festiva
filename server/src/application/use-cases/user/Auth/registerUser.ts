@@ -1,25 +1,17 @@
 import { hash } from "../../../../utils/passwordHash";
-import { RegisterUserDTO } from "../../../../config/DTO/userDtos";
+import {
+  registerUserDTO,
+  UserDetailsDTO,
+} from "../../../../config/DTO/user/dto.user";
 import ErrorHandler from "../../../../utils/CustomError";
-import { IUser } from "../../../../domain/entities/modelInterface/user.interface";
+import { IUser } from "../../../../domain/entities/modelInterface/interface.user";
 import { TokenService } from "../../../services/service.token";
 import { IUserRegisterRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userRegisterRepository";
 
 export class RegisterUser {
   constructor(private userRepository: IUserRegisterRepository) {}
 
-  async execute(userData: RegisterUserDTO): Promise<{
-    accessToken: string;
-    refreshToken: string;
-    user: {
-      id: string;
-      firstname: string;
-      lastname: string;
-      email: string;
-      phone: string;
-      role: string;
-    };
-  }> {
+  async execute(userData: registerUserDTO): Promise<UserDetailsDTO> {
     const { email, password } = userData;
 
     const existingUser = await this.userRepository.findByEmail(email);
@@ -42,11 +34,11 @@ export class RegisterUser {
     const createdUser = await this.userRepository.createUser(newUser);
 
     const accessToken = TokenService.generateAccessToken({
-      id: createdUser._id!,
+      id: createdUser.id!,
       role: createdUser.role,
     });
     const refreshToken = TokenService.generateRefreshToken({
-      id: createdUser._id!,
+      id: createdUser.id!,
       role: createdUser.role,
     });
 
@@ -54,12 +46,16 @@ export class RegisterUser {
       accessToken,
       refreshToken,
       user: {
-        id: createdUser._id!,
+        id: createdUser.id!,
         firstname: createdUser.firstname!,
-        lastname: createdUser.lastname!, // Add !
+        lastname: createdUser.lastname!,
         email: createdUser.email!,
         phone: createdUser.phone!,
-        role: createdUser.role || "user" || "host",
+        role: createdUser.role || "user",
+        profilePic: createdUser.profilePic,
+        isBlocked: createdUser.isBlocked,
+        isActive: createdUser.isActive,
+        timestamp: createdUser.timestamp,
       },
     };
   }

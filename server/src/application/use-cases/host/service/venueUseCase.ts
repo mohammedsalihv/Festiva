@@ -1,8 +1,8 @@
-import { IVenueRepository } from "../../../../domain/entities/repositoryInterface/host/venueRepository";
+import { IVenueRepository } from "../../../../domain/entities/repositoryInterface/host/interface.venueRepository";
 import ErrorHandler from "../../../../utils/CustomError";
-import { addVenueDTO } from "../../../../config/DTO/venueDto";
+import { addVenueDTO } from "../../../../config/DTO/host/dto.venue";
 import { Types } from "mongoose";
-import { IVenue } from "../../../../domain/entities/modelInterface/venue.interface"; // Fixed typo
+import { IVenue } from "../../../../domain/entities/serviceInterface/interface.venue"; // Fixed typo
 
 export class addVenueUseCase {
   constructor(private venueRepository: IVenueRepository) {}

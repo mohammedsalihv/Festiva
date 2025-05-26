@@ -29,4 +29,7 @@ userRoutes.put(
 
 userRoutes.post("/profileModify", authenticateToken , userProfileController.profileEdit.bind(userProfileController));
 
+
+
+
 export default userRoutes;

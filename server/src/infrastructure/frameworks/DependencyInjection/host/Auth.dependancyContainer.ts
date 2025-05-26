@@ -12,17 +12,19 @@ import { LoginHost } from "../../../../application/use-cases/host/Auth/loginHost
 // repositories
 
 import { HostLoginRepository } from "../../../repositories/host/auth/repository.hostLogin";
-import { HostRepository } from "../../../repositories/host/auth/repository.hostSignup";
+import { HostRegisterRepository } from "../../../repositories/host/auth/repository.hostRegister";
+import { HostRepository } from "../../../repositories/host/auth/repository.host";
 
 // Instantiating Repositories
 
-const hostRepository = new HostRepository();
+const hostRegisterRepository = new HostRegisterRepository();
 const hostLoginRepository = new HostLoginRepository();
+const hostRepository = new HostRepository();
 
 // Instantiating use-case
 
-const registerHost = new RegsiterHost(hostRepository);
-const loginHost = new LoginHost(hostLoginRepository);
+const registerHost = new RegsiterHost(hostRegisterRepository , hostRepository);
+const loginHost = new LoginHost(hostLoginRepository,hostRepository);
 
 // Instantiating controllers
 

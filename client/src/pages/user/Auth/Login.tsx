@@ -9,7 +9,11 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
-import { LoginUser, googleLogin } from "@/services/user/userAuthService";
+import {
+  LoginUser,
+  googleLogin,
+  validateEmail,
+} from "@/services/user/userAuthService";
 import { setUserDetails } from "@/redux/Slice/user/userSlice";
 import { AxiosError } from "axios";
 import {
@@ -23,6 +27,9 @@ import {
   ErrorState,
   GoogleLoginData,
 } from "@/utils/Types/user/authTypes";
+import EmailVerification from "@/reusable-components/user/Auth/EmailVerification";
+import logger from "@/utils/logger";
+import ResetPassword from "@/reusable-components/user/Auth/ResetPassword";
 
 const Login = () => {
   const [loginForm, setLoginForm] = useState<FormState>({
@@ -32,8 +39,45 @@ const Login = () => {
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [errors, setErrors] = useState<ErrorState>({});
+  const [emailForReset, setEmailForReset] = useState("");
+  const [showEmailComp, setShowEmailComp] = useState(false);
+  const [showResetPasswordComp, setshowResetPasswordComp] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const handleForgotPassword = () => {
+    setShowEmailComp(true);
+  };
+
+  const handleValidateEmail = async (email: string) => {
+    try {
+      await validateEmail(email);
+       toast.success(
+      "Email verifeid"
+    );
+      setEmailForReset(email);
+      setShowEmailComp(false);
+      setshowResetPasswordComp(true);
+    
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        logger.error(error?.response?.status);
+        toast.error("Email not valid");
+      }
+    }
+  };
+
+  const handlePasswordResetSuccess = () => {
+     toast.success(
+      "Password reset successfully. You can now login with your new password."
+    );
+    setshowResetPasswordComp(false);
+   
+  };
+
+  const handleCloseEmailVerification = () => {
+    setShowEmailComp(false);
+  };
 
   const getInputBorderClass = (value: string, isFocused: boolean) => {
     if (value.trim() !== "" || isFocused) {
@@ -84,7 +128,7 @@ const Login = () => {
         }
       } else {
         toast.error("Network error. Please check your connection");
-        console.log(error)
+        console.log(error);
       }
     },
   });
@@ -251,12 +295,19 @@ const Login = () => {
                 {errors.password && (
                   <p className="text-red-600 text-xs mt-1">{errors.password}</p>
                 )}
+                <p
+                  onClick={handleForgotPassword}
+                  className="text-right text-medium font-JosephicSans text-main_color cursor-pointer hover:text-[#7043e1]"
+                >
+                  Forgot password?
+                </p>
               </div>
+
               <div className="pt-2">
                 <Button
                   onClick={handleLogin}
                   disabled={mutation.isPending}
-                  className="my-3 text-white w-full h-12 text-lg bg-main_color hover:bg-[#7848F4] disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="my-3 text-white w-full h-12 text-lg bg-main_color hover:bg-[#7043e1] disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {mutation.isPending ? (
                     <span className="flex items-center justify-center gap-2">
@@ -284,15 +335,29 @@ const Login = () => {
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
               </div>
               <div className="flex items-center justify-center space-x-4">
-                 <GoogleLogin
-                    onSuccess={handleGoogleLogin}
-                    onError={() => toast.error("Google login failed")}
-                  />
+                <GoogleLogin
+                  onSuccess={handleGoogleLogin}
+                  onError={() => toast.error("Google login failed")}
+                />
               </div>
             </CardContent>
           </div>
         </Card>
       </Card>
+      {showEmailComp && (
+        <EmailVerification
+          handleSubmit={handleValidateEmail}
+          errorMessage=""
+          onClose={handleCloseEmailVerification}
+        />
+      )}
+      {showResetPasswordComp && (
+        <ResetPassword
+          email={emailForReset}
+          onSuccess={handlePasswordResetSuccess}
+          onClose={() => setshowResetPasswordComp(false)}
+        />
+      )}
     </div>
   );
 };

@@ -1,12 +1,12 @@
-import { IUser } from "../../../domain/entities/modelInterface/user.interface";
-import { IUserManagementRepository } from "../../../domain/entities/repositoryInterface/admin/userManagement.interface";
+import { responseUserDTO } from "../../../config/DTO/user/dto.user";
+import { IUserManagementRepository } from "../../../domain/entities/repositoryInterface/admin/interface.userManagement";
 import CustomError from "../../../utils/CustomError";
-import { EditUserPayload } from "../../../domain/entities/modelInterface/editUser.interface";
+import { EditUserPayload } from "../../../domain/entities/adminInterface/interface.editUser";
 
 export class UserManagementUseCase {
   constructor(private userManagementRepository: IUserManagementRepository) {}
 
-  async execute(): Promise<IUser[]> {
+  async execute(): Promise<responseUserDTO[]> {
     const users = await this.userManagementRepository.findAll();
 
     if (!users || users.length === 0) {
@@ -28,7 +28,7 @@ export class UserManagementUseCase {
     return response;
   }
 
-  async editUser(userId: string, form: EditUserPayload): Promise<IUser[]> {
+  async editUser(userId: string, form: EditUserPayload): Promise<responseUserDTO[]> {
     const response = await this.userManagementRepository.editUser(userId, form);
 
     if (!response || response.length === 0) {
@@ -38,7 +38,7 @@ export class UserManagementUseCase {
     return response;
   }
 
-  changeProfile(userId: string, image: Express.Multer.File): Promise<IUser> {
+  changeProfile(userId: string, image: Express.Multer.File): Promise<responseUserDTO> {
     if (!image) {
       throw new CustomError("No image file provided", 400);
     }

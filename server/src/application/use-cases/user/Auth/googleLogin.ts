@@ -1,7 +1,8 @@
 import CustomError from "../../../../utils/CustomError";
 import { IUserGoogleRepository } from "../../../../domain/entities/repositoryInterface/user/interface.googleRepository";
 import { TokenService } from "../../../services/service.token";
-import logger from "../../../../utils/logger"; // Assuming you have this
+import logger from "../../../../utils/logger";
+import { responseUserDTO , UserDetailsDTO } from "../../../../config/DTO/user/dto.user";
 
 export class GoogleLogin {
   constructor(private userRepository: IUserGoogleRepository) {}
@@ -10,30 +11,16 @@ export class GoogleLogin {
     firstname: string,
     googleId: string,
     email: string
-  ): Promise<{
-    accessToken: string;
-    refreshToken: string;
-    user: {
-      id: string;
-      firstname: string;
-      lastname: string;
-      phone: string;
-      email: string;
-      profilePic: string;
-      role: string;
-      isBlocked: boolean;
-      isActive: boolean;
-      timestamp?: Date;
-    };
-  }> {
+  ): Promise<UserDetailsDTO> {
+    
     logger.info("Executing GoogleLogin for email:", email);
     let user = await this.userRepository.findByEmail(email);
     logger.info("User found by email:", user);
 
     if (user) {
       if (!user.googleId) {
-        logger.info("Updating user with Google ID:", { googleId, userId: user._id });
-        user = await this.userRepository.updateUser(user._id!, {
+        logger.info("Updating user with Google ID:", { googleId, userId: user.id });
+        user = await this.userRepository.updateUser(user.id!, {
           googleId,
           isActive: true,
         });
@@ -46,7 +33,7 @@ export class GoogleLogin {
       }
 
       if (!user.isActive) {
-        logger.warn("User is not active:", user._id);
+        logger.warn("User is not active:", user.id);
         throw new CustomError("User is not active", 403);
       }
     } else {
@@ -66,20 +53,20 @@ export class GoogleLogin {
       logger.info("New user created:", user);
     }
 
-    logger.info("Generating tokens for user:", { id: user._id, role: user.role });
+    logger.info("Generating tokens for user:", { id: user.id, role: user.role });
     const accessToken = TokenService.generateAccessToken({
-      id: user._id!,
+      id: user.id!,
       role: user.role,
     });
 
     const refreshToken = TokenService.generateRefreshToken({
-      id: user._id!,
+      id: user.id!,
       role: user.role,
     });
     logger.info("Tokens generated:", { accessToken, refreshToken });
 
     const userResponse = {
-      id: user._id!,
+      id: user.id!,
       firstname: user.firstname ?? "",
       lastname: user.lastname ?? "",
       phone: user.phone || "",

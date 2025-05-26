@@ -3,10 +3,11 @@ import store from "@/redux/store";
 import { setUserDetails, logoutUser } from "@/redux/Slice/user/userSlice";
 
 const axiosInstance: AxiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL_USER || "http://localhost:4000/api/user", 
-    withCredentials: true,
-    timeout: 10000,
-  });
+  baseURL:
+    import.meta.env.VITE_BASE_URL_USER || "http://localhost:4000/api/user",
+  withCredentials: true,
+  timeout: 10000,
+});
 
 axiosInstance.interceptors.request.use(
   (config) => {
@@ -19,32 +20,33 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-
-axiosInstance.interceptors.response.use(  
+axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+
+      const state = store.getState();
+      const refreshToken = state.user.userInfo?.refreshToken;
+
+      if (!refreshToken) {
+        store.dispatch(logoutUser());
+        return Promise.reject(error);
+      }
+
       try {
-        const state = store.getState();
-        const refreshToken = state.user.userInfo?.refreshToken;
-
-        if (!refreshToken) {
-          store.dispatch(logoutUser());
-          return Promise.reject(error);
-        }
-
-        const response = await axios.post(
-          `${import.meta.env.VITE_BASE_URL_USER}/auth/refresh`,
-          { refreshToken }
-        );
+        const response = await axiosInstance.post("/auth/refresh", {
+          refreshToken,
+        });
 
         const {
           accessToken,
           refreshToken: newRefreshToken,
           user,
         } = response.data;
+
         store.dispatch(
           setUserDetails({
             ...user,
@@ -52,6 +54,7 @@ axiosInstance.interceptors.response.use(
             refreshToken: newRefreshToken,
           })
         );
+
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
@@ -59,6 +62,7 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   }
 );

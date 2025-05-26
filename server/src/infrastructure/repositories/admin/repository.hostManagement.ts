@@ -1,10 +1,11 @@
-import { IHost } from "../../../domain/entities/modelInterface/host.interface";
-import { IHostManagementRepository } from "../../../domain/entities/repositoryInterface/admin/hostManagement.interface";
+import { IHost } from "../../../domain/entities/modelInterface/interface.host";
+import { IHostManagementRepository } from "../../../domain/entities/repositoryInterface/admin/interface.hostManagement";
 import { HostModel } from "../../../domain/models/hostModel";
 import { pickDefinedFields } from "../../../utils/pickDefinedFields";
+import { responseHostDTO } from "../../../config/DTO/host/dto.host";
 
 export class HostManagementRepostory implements IHostManagementRepository {
-  async findAllHosts(): Promise<IHost[]> {
+  async findAllHosts(): Promise<responseHostDTO[]> {
     return HostModel.find().exec();
   }
   async HostblockUnblock(hostId: string, isBlocked: boolean): Promise<boolean> {
@@ -12,7 +13,7 @@ export class HostManagementRepostory implements IHostManagementRepository {
     return response.modifiedCount > 0;
   }
 
-  async editHost(hostId: string, form: Partial<IHost>): Promise<IHost[]> {
+  async editHost(hostId: string, form: Partial<IHost>): Promise<responseHostDTO[]> {
     const allowedFields = [
       "name",
       "phone",
@@ -41,7 +42,7 @@ export class HostManagementRepostory implements IHostManagementRepository {
     return HostModel.find().exec();
   }
 
-  async changeProfile(hostId: string, imageUrl: string): Promise<IHost> {
+  async changeProfile(hostId: string, imageUrl: string): Promise<responseHostDTO> {
     const updateHost = await HostModel.findByIdAndUpdate(
       hostId,
       { profilePic: imageUrl },

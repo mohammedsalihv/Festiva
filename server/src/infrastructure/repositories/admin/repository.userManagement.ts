@@ -1,11 +1,13 @@
-import { IUser } from "../../../domain/entities/modelInterface/user.interface";
-import { IUserManagementRepository } from "../../../domain/entities/repositoryInterface/admin/userManagement.interface";
+import { IUser } from "../../../domain/entities/modelInterface/interface.user";
+import { IUserManagementRepository } from "../../../domain/entities/repositoryInterface/admin/interface.userManagement";
 import { UserModal } from "../../../domain/models/userModel";
 import { pickDefinedFields } from "../../../utils/pickDefinedFields";
-import { EditUserPayload } from "../../../domain/entities/modelInterface/editUser.interface";
+import { EditUserPayload } from "../../../domain/entities/adminInterface/interface.editUser";
+import { responseUserDTO } from "../../../config/DTO/user/dto.user";
+import { toResponseUserDTO } from "../../../config/DTO/user/dto.user";
 
 export class UserManagementRepository implements IUserManagementRepository {
-  async findAll(): Promise<IUser[]> {
+  async findAll(): Promise<responseUserDTO[]> {
     return UserModal.find().exec();
   }
 
@@ -14,8 +16,10 @@ export class UserManagementRepository implements IUserManagementRepository {
     return response.modifiedCount > 0;
   }
 
-  async editUser(userId: string, form: EditUserPayload)
-: Promise<IUser[]> {
+  async editUser(
+    userId: string,
+    form: EditUserPayload
+  ): Promise<responseUserDTO[]> {
     const allowedFields = [
       "firstname",
       "lastname",
@@ -35,10 +39,14 @@ export class UserManagementRepository implements IUserManagementRepository {
       throw new Error("User update failed");
     }
 
-    return UserModal.find().exec();
+    const users = await UserModal.find().exec();
+    return users.map(toResponseUserDTO);
   }
 
-  async changeProfile(userId: string, imageUrl: string): Promise<IUser> {
+  async changeProfile(
+    userId: string,
+    imageUrl: string
+  ): Promise<responseUserDTO> {
     const updatedUser = await UserModal.findByIdAndUpdate(
       userId,
       { profilePic: imageUrl },
@@ -48,7 +56,7 @@ export class UserManagementRepository implements IUserManagementRepository {
     if (!updatedUser) {
       throw new Error("User not found or update failed");
     }
-    return updatedUser;
+    return toResponseUserDTO(updatedUser);
   }
 
   async deleteUser(userId: string): Promise<boolean> {

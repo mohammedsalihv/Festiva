@@ -1,33 +1,22 @@
-import { Request , Response } from "express";
-import { RegisterUserDTO } from "../../../../config/DTO/userDtos";
-import { RegisterUser } from "../../../../application/use-cases/user/Auth/registerUser";
+import { Request, Response } from "express";
+import { resetPasswordDTO } from "../../../../config/DTO/user/dto.user";
+import { ResetPassword } from "../../../../application/use-cases/user/Auth/resetPassowrd";
 
-export class UserController{
-    constructor(private registerUser : RegisterUser){}
+export class UserController {
+  constructor(private userController: ResetPassword) {}
 
-   async register(req:Request , res:Response) : Promise<void>{
-        try {
-            const {firstname , lastname , email , phone , password } = req.body
-            const userData: RegisterUserDTO = {firstname , lastname , email , phone , password}
+  async resetPassword(req: Request, res: Response): Promise<void> {
+    try {
+      const { email, newPassword } = req.body;
+      const userData: resetPasswordDTO = { email, newPassword };
 
-            const {user , accessToken , refreshToken} = 
-            await this.registerUser.execute(userData)
-            res.status(200).json({
-                success:true,
-                message: "User registered successfully", 
-                user: {
-                    id: user.id,
-                    firstname: user.firstname,
-                    lastname: user.lastname,
-                    phone:user.phone,
-                    email: user.email,
-                    role: user.role,
-                  },
-                  accessToken,
-                  refreshToken,
-            })
-        } catch (error:any) {
-            res.status(500).json({ message: error.message });
-        }
+      await this.userController.execute(userData);
+      res.status(200).json({
+        success: true,
+        message: "Password changed!",
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
     }
+  }
 }

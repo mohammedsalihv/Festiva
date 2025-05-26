@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { RegisterHostDTO } from "../../../../config/DTO/hostDto";
+import { registerHostDTO } from "../../../../config/DTO/host/dto.host";
 import { RegsiterHost } from "../../../../application/use-cases/host/Auth/registerHost";
 import logger from "../../../../utils/logger";
 
@@ -14,7 +14,7 @@ export class HostRegisterController {
         res.status(400).json({ message: "All fields are required." });
         return;
       }
-      const hostData: RegisterHostDTO = {
+      const hostData: registerHostDTO = {
         name,
         email,
         phone,

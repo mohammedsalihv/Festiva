@@ -1,5 +1,5 @@
-import { IVenue } from "../../../../domain/entities/modelInterface/venue.interface";
-import { IVenueRepository } from "../../../../domain/entities/repositoryInterface/host/venueRepository";
+import { IVenue } from "../../../../domain/entities/serviceInterface/interface.venue";
+import { IVenueRepository } from "../../../../domain/entities/repositoryInterface/host/interface.venueRepository";
 import { VenueModel } from "../../../../domain/models/venueModel";
 
 export class venueRepository implements IVenueRepository{

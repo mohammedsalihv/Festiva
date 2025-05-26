@@ -7,21 +7,33 @@ import { Images } from "@/assets";
 import { RootState } from "@/redux/store";
 import { setUserDetails, logoutUser } from "@/redux/Slice/user/userSlice";
 import { changeProfile } from "@/services/user/userService";
-import { sendOtp } from "@/services/user/userAuthService";
+import {
+  deleteProfile,
+  passwordModify,
+  sendOtp,
+  validateEmail,
+} from "@/services/user/userAuthService";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { AxiosError } from "axios";
 import { profileEdit } from "@/services/user/userService";
 import Otp from "@/components/Otp";
 import { verifyOtp } from "@/services/user/userAuthService";
+import { BiSolidEditAlt } from "react-icons/bi";
+import Spinner from "@/components/Spinner";
+import { changePasswordErrorState } from "@/utils/Types/user/profileTypes";
+import { changePasswordState } from "@/utils/Types/user/profileTypes";
+import { validateChangePasswordForm } from "@/utils/validations/user/Auth/changePasswordValidation";
 
 const Profile: React.FC = () => {
   const profile = useSelector((state: RootState) => state.user.userInfo);
   const [activeTab, setActiveTab] = useState("Profile Information");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [updating, setUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const [confirmDelete , setConfirmDelete] = useState(false)
   const [isEditing, setIsEditing] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [otpError, setOtpError] = useState("");
@@ -32,9 +44,63 @@ const Profile: React.FC = () => {
     email: profile?.email || "",
     phone: profile?.phone || "",
   });
-
+  const [changePasswordForm, setChangePasswordForm] =
+    useState<changePasswordState>({
+      currentPassword: "",
+      newPassword: "",
+    });
+  const [errors, setErrors] = useState<changePasswordErrorState>({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+
+  const handleProfileDelete = async () =>{
+     await deleteProfile()
+     toast.success('Account deleted')
+     handleLogout()
+  }
+
+const hanldeChangePasswordSubmit = async () => {
+  setUpdating(true);
+
+  const { isValid, errors: validationErrors } = validateChangePasswordForm(changePasswordForm);
+
+  if (!isValid) {
+    setErrors(validationErrors);
+    toast.error("Please correct the errors in the form.");
+    setTimeout(() => setErrors({}), 10000);
+    setUpdating(false);
+    return;
+  }
+
+  try {
+    const response = await passwordModify(changePasswordForm);
+    dispatch(setUserDetails(response.data));
+    toast.success("Password changed!");
+    setChangePasswordForm({ currentPassword: "", newPassword: "" });
+  } catch (error: unknown) {
+    if(error instanceof AxiosError){
+       if (error.response?.status === 401) {
+      toast.error("Incorrect current password.");
+    } else if (error.response?.data?.message) {
+      toast.error(error.response.data.message);
+    } else {
+      toast.error("Something went wrong. Please try again.");
+    }
+    }
+  } finally {
+    setUpdating(false);
+  }
+};
+
+  const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setChangePasswordForm((prev) => ({ ...prev, [name]: value }));
+
+    if (errors[name as keyof typeof errors]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
 
   const handleTriggerEdit = () => {
     setIsEditing(true);
@@ -51,6 +117,11 @@ const Profile: React.FC = () => {
     const emailChanged = profile?.email !== editProfileForm.email;
 
     if (emailChanged) {
+      const exists = await validateEmail(editProfileForm.email);
+      if (exists) {
+        toast.error("Email already registered, please use another email.");
+        return;
+      }
       sendOtpMutation({ email: editProfileForm.email });
     } else {
       try {
@@ -69,7 +140,7 @@ const Profile: React.FC = () => {
     }
   };
 
-  const { mutate: sendOtpMutation } = useMutation({
+  const { mutate: sendOtpMutation, isPending: sendingOtp } = useMutation({
     mutationFn: sendOtp,
     onSuccess: () => {
       toast.success("OTP sent successfully!");
@@ -86,6 +157,7 @@ const Profile: React.FC = () => {
   const { mutate: verifyOtpMutation, isPending: verifyingOtp } = useMutation({
     mutationFn: verifyOtp,
     onSuccess: () => {
+      toast.success("Email verified successfully!");
       handleSaveProfile();
       setShowOtp(false);
       setIsEditing(false);
@@ -116,11 +188,9 @@ const Profile: React.FC = () => {
 
   const { mutate: editProfileMutate, isPending: editing } = useMutation({
     mutationFn: profileEdit,
-    onSuccess: () => {
-      setTimeout(() => {
-        toast.success("profile updated!");
-      }, 500);
-      navigate("/user/profile");
+    onSuccess: (response) => {
+      dispatch(setUserDetails(response.data));
+      toast.success("Profile updated!");
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       toast.error(
@@ -300,7 +370,6 @@ const Profile: React.FC = () => {
                       value={editProfileForm.firstname}
                       className="border-b-2 p-2 rounded w-full text-[18px]"
                       readOnly={!isEditing}
-                      disabled={!isEditing}
                       onChange={handleChangeProfile}
                     />
                     <input
@@ -310,7 +379,6 @@ const Profile: React.FC = () => {
                       value={editProfileForm.lastname}
                       className="border-b-2 p-2 rounded w-full text-[18px]"
                       readOnly={!isEditing}
-                      disabled={!isEditing}
                       onChange={handleChangeProfile}
                     />
                   </div>
@@ -321,7 +389,6 @@ const Profile: React.FC = () => {
                     value={editProfileForm.email}
                     className="border-b-2 p-2 rounded w-full text-[18px]"
                     readOnly={!isEditing}
-                    disabled={!isEditing}
                     onChange={handleChangeProfile}
                   />
                   <input
@@ -331,7 +398,6 @@ const Profile: React.FC = () => {
                     value={editProfileForm?.phone}
                     className="border-b-2 p-2 rounded w-full text-[18px]"
                     readOnly={!isEditing}
-                    disabled={!isEditing}
                     onChange={handleChangeProfile}
                   />
                   <div className="flex justify-end">
@@ -339,45 +405,74 @@ const Profile: React.FC = () => {
                       (isEditing ? (
                         <button
                           onClick={handleTriggerSave}
-                          className="bg-main_color hover:bg-[#564eef] text-white px-4 py-2 rounded text-sm font-semibold"
+                          className="bg-main_color hover:bg-[#564eef] text-white px-4 py-2 rounded text-sm font-semibold flex items-center justify-center gap-2"
+                          disabled={sendingOtp}
                         >
-                          Save changes
+                          {sendingOtp ? (
+                            <Spinner text="Sending OTP..." />
+                          ) : (
+                            "Save changes"
+                          )}
                         </button>
                       ) : (
-                        <button
+                        <div
+                          className="cursor-pointer hover:bg-gray-200 rounded-full p-2 inline-flex items-center justify-center"
                           onClick={handleTriggerEdit}
-                          className="bg-white border border-main_color hover:bg-[#564eef] hover:text-white text-black px-4 py-2 rounded text-sm font-semibold"
                         >
-                          Edit
-                        </button>
+                          <BiSolidEditAlt className="text-black h-6 w-6" />
+                        </div>
                       ))}
                   </div>
                 </div>
-                <div className="w-full lg:w-1/2 space-y-3">
+                <form className="w-full lg:w-1/2 space-y-3">
                   <p className="text-sm md:text-lg font-bold">
                     Change Password
                   </p>
                   <input
                     type="password"
+                    name="currentPassword"
                     placeholder="Current password"
                     className="border-b-2 p-2 rounded w-full text-[16px]"
+                    value={changePasswordForm.currentPassword}
+                    onChange={handleChangePassword}
                   />
+                  {errors.currentPassword && (
+                    <p className="text-red-500 text-sm mt-1 font-bold">
+                      {errors.currentPassword}
+                    </p>
+                  )}
                   <input
                     type="password"
+                    name="newPassword"
                     placeholder="New password"
                     className="border-b-2 p-2 rounded w-full text-[16px]"
+                    value={changePasswordForm.newPassword}
+                    onChange={handleChangePassword}
                   />
-                  <input
-                    type="password"
-                    placeholder="Repeat password"
-                    className="border-b-2 p-2 rounded w-full text-[16px]"
-                  />
+                  {errors.newPassword && (
+                    <p className="text-red-500 text-sm mt-1 font-bold">
+                      {errors.newPassword}
+                    </p>
+                  )}
                   <div className="flex justify-end">
-                    <button className="bg-white border border-main_color hover:bg-[#564eef] hover:text-white text-black px-4 py-2 rounded text-sm font-semibold">
-                      Change
+                    <button
+                      className={`${
+                        updating
+                          ? "bg-main_color text-white px-4"
+                          : "hover:bg-gray-200"
+                      } cursor-pointer rounded-full p-2 inline-flex items-center justify-center`}
+                      onClick={hanldeChangePasswordSubmit}
+                      type="button"
+                      disabled={updating}
+                    >
+                      {updating ? (
+                        <Spinner text="Changing..." />
+                      ) : (
+                        <BiSolidEditAlt className="text-black h-6 w-6" />
+                      )}
                     </button>
                   </div>
-                </div>
+                </form>
               </div>
               <div className="space-y-3">
                 <p className="text-sm md:text-lg font-bold">Delete account</p>
@@ -385,7 +480,7 @@ const Profile: React.FC = () => {
                   Deleting account is a permanent action and cannot be undone.
                   Are you sure you want to proceed?
                 </p>
-                <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-semibold">
+                <button onClick={() => setConfirmDelete(true)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-semibold">
                   Delete
                 </button>
               </div>
@@ -407,7 +502,18 @@ const Profile: React.FC = () => {
           />
         )}
       </div>
-
+      <ConfirmDialog
+        isOpen={confirmDelete}
+        title="Confirm delete"
+        description="Are you sure you want to delete your account?"
+        confirmText="Yes, Delete"
+        cancelText="Cancel"
+        onConfirm={() => {
+          handleProfileDelete();
+          setConfirmDelete(false);
+        }}
+        onCancel={() => setConfirmDelete(false)}
+      />
       <ConfirmDialog
         isOpen={confirmLogout}
         title="Confirm Logout"

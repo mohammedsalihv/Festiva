@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { IOTP } from "../entities/modelInterface/otp.interface";
+import { IOTP } from "../entities/modelInterface/interface.otp";
 import { sendVerificationEmail } from "../../utils/mail.sender";
 
 const OTPSchema: Schema = new Schema({

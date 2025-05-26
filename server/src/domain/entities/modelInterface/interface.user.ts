@@ -2,13 +2,14 @@ export interface IUser {
   _id?: string;
   firstname?: string;
   lastname?: string;
-  email: string; 
+  email: string;
   password?: string;
   phone?: string;
   profilePic?: string;
-  role: "admin" | "user";
+  role: string;
   googleId?: string;
-  isActive: boolean; 
+  isActive: boolean;
+  isBlocked: boolean;
   timestamp?: Date;
-  isBlocked: boolean; 
 }
+

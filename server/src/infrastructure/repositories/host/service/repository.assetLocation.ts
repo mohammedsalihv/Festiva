@@ -1,5 +1,5 @@
-import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/locationRepostory"; // Import the interface
-import { ILocation } from "../../../../domain/entities/modelInterface/location.interface"; // Import the ILocation interface for the data structure
+import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/interface.locationRepostory"; // Import the interface
+import { ILocation } from "../../../../domain/entities/serviceInterface/interface.location"; // Import the ILocation interface for the data structure
 import { LocationModel } from "../../../../domain/models/locationModel";
 
 export class LocationRepository implements ILocationRepository {

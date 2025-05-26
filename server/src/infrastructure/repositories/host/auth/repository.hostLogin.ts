@@ -1,9 +1,9 @@
-import { IHost } from "../../../../domain/entities/modelInterface/host.interface";
 import { HostModel } from "../../../../domain/models/hostModel";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostLoginRepository.interface";
+import { IHostLoginRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostLoginRepository";
+import { responseHostDTO } from "../../../../config/DTO/host/dto.host";
 
-export class HostLoginRepository implements IHostRepository{
-    async findByEmail(email: string): Promise<IHost | null> {
+export class HostLoginRepository implements IHostLoginRepository{
+    async findByEmail(email: string): Promise<responseHostDTO | null> {
         return HostModel.findOne({email})
     }
 }

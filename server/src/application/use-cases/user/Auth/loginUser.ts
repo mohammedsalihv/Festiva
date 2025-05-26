@@ -2,30 +2,17 @@ import { IUserLoginRepository } from "../../../../domain/entities/repositoryInte
 import CustomError from "../../../../utils/CustomError";
 import { TokenService } from "../../../../application/services/service.token";
 import bcrypt from "bcrypt";
+import { UserDetailsDTO } from "../../../../config/DTO/user/dto.user";
+import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userRepository";
 
 export class LoginUser {
-  constructor(private userRepository: IUserLoginRepository) {}
+  constructor(
+    private userLoginRepository: IUserLoginRepository,
+    private userRepository: IUserRepository
+  ) {}
 
-  async execute(
-    email: string,
-    password: string
-  ): Promise<{
-    accessToken: string;
-    refreshToken: string;
-    user: {
-      firstname: string;
-      lastname: string;
-      phone: string;
-      email: string;
-      profilePic: string;
-      id: string;
-      role: string;
-      isBlocked: boolean;
-      isActive: boolean;
-      timestamp?: Date;
-    };
-  }> {
-    const user = await this.userRepository.findByEmail(email);
+  async execute(email: string, password: string): Promise<UserDetailsDTO> {
+    const user = await this.userLoginRepository.findByEmail(email);
     if (!user) {
       throw new CustomError("User not found", 401);
     }
@@ -37,8 +24,13 @@ export class LoginUser {
       );
     }
 
-    const isPasswordValid = user.password
-      ? await bcrypt.compare(password, user.password)
+    const userValidation = await this.userRepository.findByEmail(email);
+    if (!userValidation) {
+      throw new CustomError("User not found", 401);
+    }
+
+    const isPasswordValid = userValidation.password
+      ? await bcrypt.compare(password, userValidation.password)
       : false;
 
     if (!isPasswordValid) {
@@ -46,11 +38,11 @@ export class LoginUser {
     }
 
     const accessToken = TokenService.generateAccessToken({
-      id: user._id!,
+      id: user.id!,
       role: user.role,
     });
     const refreshToken = TokenService.generateRefreshToken({
-      id: user._id!,
+      id: user.id!,
       role: user.role,
     });
 
@@ -58,11 +50,11 @@ export class LoginUser {
       accessToken,
       refreshToken,
       user: {
-        id: user._id!,
+        id: user.id!,
         firstname: user.firstname ?? "",
         lastname: user.lastname ?? "",
         email: user.email ?? "",
-        phone: user.phone || "Please add contact details",
+        phone: user.phone || "",
         profilePic: user.profilePic || "",
         role: user.role || "user",
         isActive: user.isActive || true,

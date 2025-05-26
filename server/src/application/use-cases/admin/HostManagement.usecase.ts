@@ -1,12 +1,12 @@
-import { IHost } from "../../../domain/entities/modelInterface/host.interface";
-import { IHostManagementRepository } from "../../../domain/entities/repositoryInterface/admin/hostManagement.interface";
+import { responseHostDTO } from "../../../config/DTO/host/dto.host";
+import { IHostManagementRepository } from "../../../domain/entities/repositoryInterface/admin/interface.hostManagement";
 import CustomError from "../../../utils/CustomError";
-import { EditHostPayload } from "../../../domain/entities/modelInterface/editHost.interface";
+import { EditHostPayload } from "../../../domain/entities/adminInterface/interface.editHost";
 
 export class HostManagementUseCase {
   constructor(private HostManagementRepository: IHostManagementRepository) {}
 
-  async execute(): Promise<IHost[]> {
+  async execute(): Promise<responseHostDTO[]> {
     const hosts = await this.HostManagementRepository.findAllHosts();
     if (!hosts || hosts.length === 0) {
       throw new CustomError("Users empty", 401);
@@ -26,7 +26,7 @@ export class HostManagementUseCase {
     return response;
   }
 
-  async editHost(hostId: string, form: EditHostPayload): Promise<IHost[]> {
+  async editHost(hostId: string, form: EditHostPayload): Promise<responseHostDTO[]> {
     const response = await this.HostManagementRepository.editHost(hostId, form);
 
     if (!response || response.length === 0) {
@@ -39,7 +39,7 @@ export class HostManagementUseCase {
   async changeProfile(
     hostId: string,
     image: Express.Multer.File
-  ): Promise<IHost> {
+  ): Promise<responseHostDTO> {
     if (!image) {
       throw new CustomError("No image file provided", 400);
     }

@@ -1,5 +1,5 @@
 import { IOTPRepository } from "../../../../domain/entities/repositoryInterface/user/interface.otpRepository";
-import { IOTP } from "../../../../domain/entities/modelInterface/otp.interface";
+import { IOTP } from "../../../../domain/entities/modelInterface/interface.otp";
 import { OTP } from "../../../../domain/models/otpModel";
 
 export class OTPRepository implements IOTPRepository {
