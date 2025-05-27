@@ -1,5 +1,9 @@
 import express from "express";
-import { hostRegisterController , hostLoginController } from "../../../infrastructure/frameworks/DependencyInjection/host/Auth.dependancyContainer";
+import {
+  hostRegisterController,
+  hostLoginController,
+  refreshTokenController,
+} from "../../../infrastructure/frameworks/DependencyInjection/host/Auth.dependancyContainer";
 import logger from "../../../utils/logger";
 
 const hostAuthRoutes = express.Router();
@@ -20,5 +24,9 @@ hostAuthRoutes.post("/login-host", async (req, res) => {
   }
 });
 
+hostAuthRoutes.post(
+  "/refresh",
+  refreshTokenController.refreshAccessToken.bind(refreshTokenController)
+);
 
 export default hostAuthRoutes;

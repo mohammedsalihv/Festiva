@@ -17,6 +17,7 @@ const venueSchema = new Schema<IVenue>(
     terms: { type: String, required: true },
     venueImages: [{ type: String, required: true }],
     location: { type: Schema.Types.ObjectId, ref: "Location", required: true },
+    host:{type: Schema.Types.ObjectId,ref: "Host",required: true }
   },
   {
     timestamps: true,

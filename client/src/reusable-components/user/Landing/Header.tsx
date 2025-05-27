@@ -51,7 +51,7 @@ const Header = () => {
   return (
     <>
       <nav className="fixed top-0 left-0 w-full z-30 bg-black bg-opacity-40 text-white backdrop-blur-md">
-        <div className="container mx-auto flex justify-between items-center px-4 py-6">
+        <div className="container mx-auto flex justify-between items-center px-4 py-4">
           <LogoText />
           <div className="hidden md:block">
             <ul className="flex items-center gap-6">

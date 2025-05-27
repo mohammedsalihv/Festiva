@@ -15,4 +15,5 @@ export interface IVenue {
     terms: string;
     venueImages: string[];
     location: Types.ObjectId;
+    host: Types.ObjectId;
 }

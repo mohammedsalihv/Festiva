@@ -87,7 +87,7 @@ const LocationFeaturesTab: React.FC = () => {
     }
 
     dispatch(setLoading(true));
-    toast.success("Features have been sent");
+    toast.success("Saving...");
 
     dispatch(
       setAllLocationFeatures({
@@ -215,7 +215,7 @@ const LocationFeaturesTab: React.FC = () => {
               />
             </svg>
           )}
-          {loading ? "Submitting..." : "Next"}
+          {loading ? "Saving..." : "Next"}
         </button>
       </div>
       <CustomToastContainer />

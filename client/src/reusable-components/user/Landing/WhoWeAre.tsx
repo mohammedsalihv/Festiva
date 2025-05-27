@@ -70,7 +70,7 @@ const AnimatedCounter = ({ end, duration = 1500 }: AnimatedCounterProps) => {
 
 const WhoWeAre = () => {
   return (
-    <section className="w-full px-8 py-16 max-w-7xl mx-auto">
+    <section className="w-full px-8 py-16 max-w-7xl mx-auto bg-white">
       <div className="flex flex-col md:flex-row gap-8">
         <div className="flex-shrink-0 flex items-start justify-center md:w-1/4">
           <div className="text-xl md:text-2xl font-medium leading-tight">

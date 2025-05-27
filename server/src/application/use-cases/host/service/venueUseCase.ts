@@ -2,7 +2,7 @@ import { IVenueRepository } from "../../../../domain/entities/repositoryInterfac
 import ErrorHandler from "../../../../utils/CustomError";
 import { addVenueDTO } from "../../../../config/DTO/host/dto.venue";
 import { Types } from "mongoose";
-import { IVenue } from "../../../../domain/entities/serviceInterface/interface.venue"; // Fixed typo
+import { IVenue } from "../../../../domain/entities/serviceInterface/interface.venue";
 
 export class addVenueUseCase {
   constructor(private venueRepository: IVenueRepository) {}
@@ -21,38 +21,13 @@ export class addVenueUseCase {
       parkingFeatures: string[];
       venueDescription: string;
       terms: string;
-      venueImages: string[];
+      Images: string[];
       location: Types.ObjectId;
+      host: Types.ObjectId;
     };
   }> {
-    if (!venueDetails.venueName)
-      throw new ErrorHandler("Venue name is required", 400);
-    if (!venueDetails.capacity)
-      throw new ErrorHandler("Capacity is required", 400);
-    if (!venueDetails.shift) throw new ErrorHandler("Shift is required", 400);
-    if (!venueDetails.squareFeet)
-      throw new ErrorHandler("Square feet is required", 400);
-    if (!venueDetails.timeSlots || venueDetails.timeSlots.length === 0)
-      throw new ErrorHandler("At least one time slot is required", 400);
-    if (
-      !venueDetails.availableDates ||
-      venueDetails.availableDates.length === 0
-    )
-      throw new ErrorHandler("At least one available date is required", 400);
-    if (!venueDetails.details)
-      throw new ErrorHandler("Venue details are required", 400);
-    if (!venueDetails.venueDescription)
-      throw new ErrorHandler("Venue description is required", 400);
-    if (!venueDetails.terms)
-      throw new ErrorHandler("Venue terms are required", 400);
-    if (!venueDetails.location)
-      throw new ErrorHandler("Location is required", 400);
-
-    const venueName = venueDetails.venueName.trim();
-    if (!venueName) throw new ErrorHandler("Venue name cannot be empty", 400);
-
     const newVenue: IVenue = {
-      venueName,
+      venueName: venueDetails.venueName,
       rent: venueDetails.rent,
       capacity: venueDetails.capacity,
       shift: venueDetails.shift,
@@ -64,9 +39,11 @@ export class addVenueUseCase {
       parkingFeatures: venueDetails.parkingFeatures || [],
       venueDescription: venueDetails.venueDescription,
       terms: venueDetails.terms,
-      venueImages: venueDetails.venueImages || [],
+      venueImages: venueDetails.Images,
       location: venueDetails.location,
+      host: venueDetails.host,
     };
+
     const addVenue = await this.venueRepository.addVenue(newVenue);
 
     if (!addVenue) {
@@ -87,8 +64,9 @@ export class addVenueUseCase {
         parkingFeatures: addVenue.parkingFeatures,
         venueDescription: addVenue.venueDescription,
         terms: addVenue.terms,
-        venueImages: addVenue.venueImages,
+        Images: addVenue.venueImages,
         location: addVenue.location,
+        host: addVenue.host,
       },
     };
   }

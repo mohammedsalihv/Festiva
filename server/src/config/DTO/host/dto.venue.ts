@@ -13,6 +13,7 @@ export interface addVenueDTO {
     parkingFeatures: string[];
     venueDescription: string;
     terms: string;
-    venueImages: string[];
+    Images: string[];
     location: Types.ObjectId;
+    host: Types.ObjectId;
 }

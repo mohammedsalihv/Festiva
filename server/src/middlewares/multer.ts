@@ -5,6 +5,7 @@ import { createUploadsFolder, uploadDir } from '../utils/createUploadsFolder';
 
 createUploadsFolder();
 
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
@@ -30,3 +31,4 @@ const upload = multer({
 });
 
 export const singleImageUpload = upload.single('file');
+export const multipleImageUpload = upload.array('Images', 5);  

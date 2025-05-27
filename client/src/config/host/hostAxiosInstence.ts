@@ -1,12 +1,13 @@
 import axios, { AxiosInstance } from "axios";
 import store from "@/redux/store";
-import { setHostDetails } from "@/redux/Slice/host/hostSlice";
+import { setHostDetails , logoutHost } from "@/redux/Slice/host/hostSlice";
 
 const axiosInstance: AxiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL_HOST || "http://localhost:4000/api/host", 
-    withCredentials: true,
-    timeout: 10000,
-  });
+  baseURL:
+    import.meta.env.VITE_BASE_URL_USER || "http://localhost:4000/api/host",
+  withCredentials: true,
+  timeout: 10000,
+});
 
 axiosInstance.interceptors.request.use(
   (config) => {
@@ -23,41 +24,45 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+
+      const state = store.getState();
+      const refreshToken = state.host.hostInfo?.refreshToken;
+
+      if (!refreshToken) {
+        store.dispatch(logoutHost());
+        return Promise.reject(error);
+      }
+
       try {
-        const state = store.getState();
-        const refreshToken = state.host.hostInfo?.refreshToken;
-
-        // if (!refreshToken) {
-        //   store.dispatch(logoutUser());
-        //   return Promise.reject(error);
-        // }
-
-        const response = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/auth/refresh`,
-          { refreshToken }
-        );
+        const response = await axiosInstance.post("/auth/refresh", {
+          refreshToken,
+        });
 
         const {
           accessToken,
           refreshToken: newRefreshToken,
           host,
         } = response.data;
+
         store.dispatch(
-            setHostDetails({
+          setHostDetails({
             ...host,
             accessToken,
             refreshToken: newRefreshToken,
           })
         );
+
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-       // store.dispatch(logoutUser());
+        store.dispatch(logoutHost());
         return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   }
 );

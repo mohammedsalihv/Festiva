@@ -1,33 +1,61 @@
-import { AddVenueData, addVenue } from "@/services/host/hostService";
+import { addVenue } from "@/services/host/hostService";
+import {
+  VenueDetails,
+  LocationDetails,
+  LocationFeatures,
+  ImageDetails,
+} from "@/utils/Types/host/services/venueTypes";
 import { toast } from "react-toastify";
 import { NavigateFunction } from "react-router-dom";
 
 export const handleFinalSubmit = async (
-  venueDetails: any,
-  locationDetails: any,
-  images: any,
-  locationFeatures: any,
-  navigate: NavigateFunction // Add navigate as a parameter
+  venueDetails: VenueDetails,
+  locationDetails: LocationDetails,
+  images: ImageDetails,
+  locationFeatures: LocationFeatures,
+  navigate: NavigateFunction
 ) => {
   try {
     const { rent, ...restVenueDetails } = venueDetails;
 
-    const finalData: AddVenueData = {
-      ...restVenueDetails, // From venueDetails, excluding rent
-      rent: rent ?? undefined,
-      features: locationFeatures.features,
-      parkingFeatures: locationFeatures.parkingFeatures,
-      venueDescription: locationFeatures.venueDescription,
-      terms: locationFeatures.terms,
-      venueImages: images.croppedImages,
-      location: locationDetails,
-    };
-    console.log('==',finalData)
-    await addVenue(finalData);
+    const formData = new FormData();
 
-    console.log("Submitted Successfully");
+    Object.entries(restVenueDetails).forEach(([key, value]) => {
+      formData.append(key, String(value));
+    });
+
+    if (rent !== undefined) {
+      formData.append("rent", String(rent));
+    }
+    locationFeatures.features.forEach((feature, index) => {
+      formData.append(`features[${index}]`, feature);
+    });
+
+    locationFeatures.parkingFeatures.forEach((parking, index) => {
+      formData.append(`parkingFeatures[${index}]`, parking);
+    });
+
+    formData.append("venueDescription", locationFeatures.venueDescription);
+    formData.append("terms", locationFeatures.terms);
+
+    venueDetails.timeSlots.forEach((slot, index) => {
+      formData.append(`timeSlots[${index}]`, slot);
+    });
+
+    venueDetails.availableDates.forEach((date, index) => {
+      formData.append(`availableDates[${index}]`, date);
+    });
+
+    Object.entries(locationDetails).forEach(([key, value]) => {
+      formData.append(`location[${key}]`, String(value));
+    });
+
+    images.Images.forEach((imageFile) => {
+      formData.append("Images", imageFile);
+    });
+    await addVenue(formData); 
     toast.success("All data submitted successfully!");
-    navigate("/host/dashboard"); // Use the passed navigate function
+    navigate("/host/dashboard");
   } catch (error) {
     console.error("Submission Failed:", error);
     toast.error("Something went wrong while submitting!");

@@ -12,8 +12,9 @@ import CustomToastContainer from "../../../reusable-components/Messages/ToastCon
 import { useDispatch, useSelector } from "react-redux";
 import { setLocationDetails } from "@/redux/Slice/host/locationSlice";
 import { handleFinalSubmit } from "./FinalSubmit";
-import {LocationDetails, VenueDetails, LocationFeatures } from "@/utils/Types/host/services/venueTypes";
+import { VenueDetails, LocationFeatures , ImageDetails } from "@/utils/Types/host/services/venueTypes";
 import { useNavigate } from "react-router-dom"; 
+import base64ToFile from "@/utils/Base64ToFile";
 
 interface ErrorState {
   houseNo?: string;
@@ -29,7 +30,7 @@ const LocationForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
   const [errors, setErrors] = useState<ErrorState>({});
-  const [form, setForm] = useState<locationFormState>({
+  const [locationForm, setLocationForm] = useState<locationFormState>({
     houseNo: "",
     street: "",
     district: "",
@@ -39,13 +40,20 @@ const LocationForm = () => {
   });
 
   const venueDetails = useSelector<RootState, VenueDetails>((state) => state.venueDetails);
-  const locationDetails = useSelector<RootState, LocationDetails>((state) => state.location);
-  const images = useSelector<RootState, File[]>((state) => state.images.croppedImages);
+  const images = useSelector<RootState, string[]>((state) => state.images.croppedImages);
+
+const fileImages: ImageDetails = {
+  Images: images.map((base64Image, index) =>
+    base64ToFile(base64Image, `image-${index}.jpg`, 'image/jpeg')
+  ),
+};
+
+
   const locationFeatures = useSelector<RootState, LocationFeatures>((state) => state.locationFeatures);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setLocationForm((prev) => ({ ...prev, [name]: value }));
 
     if (errors[name as keyof ErrorState]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -54,7 +62,7 @@ const LocationForm = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const { isValid, errors: validationErrors } = validateLocationForm(form);
+    const { isValid, errors: validationErrors } = validateLocationForm(locationForm);
     if (!isValid) {
       setErrors(validationErrors);
       toast.error("Please correct the errors in the form.");
@@ -66,11 +74,11 @@ const LocationForm = () => {
     }
 
     try {
-      dispatch(setLocationDetails(form));
-      await handleFinalSubmit(venueDetails, locationDetails, images, locationFeatures, navigate);
+      dispatch(setLocationDetails(locationForm));
+      await handleFinalSubmit(venueDetails, locationForm, fileImages, locationFeatures, navigate);
     } catch (error: unknown) {
       setLoading(false);
-      toast.error("Something went wrong while submitting the location.");
+      toast.error("Something went wrong");
       console.error(error);
     }
   };
@@ -93,7 +101,7 @@ const LocationForm = () => {
                 type="text"
                 placeholder="House no"
                 name="houseNo"
-                value={form.houseNo}
+                value={locationForm.houseNo}
                 onChange={handleChange}
               />
               {errors.houseNo && (
@@ -106,7 +114,7 @@ const LocationForm = () => {
                 type="text"
                 placeholder="Street"
                 name="street"
-                value={form.street}
+                value={locationForm.street}
                 onChange={handleChange}
               />
               {errors.street && (
@@ -120,7 +128,7 @@ const LocationForm = () => {
                   type="text"
                   placeholder="District"
                   name="district"
-                  value={form.district}
+                  value={locationForm.district}
                   onChange={handleChange}
                 />
                 {errors.district && (
@@ -133,7 +141,7 @@ const LocationForm = () => {
                   type="text"
                   placeholder="State"
                   name="state"
-                  value={form.state}
+                  value={locationForm.state}
                   onChange={handleChange}
                 />
                 {errors.state && (
@@ -148,7 +156,7 @@ const LocationForm = () => {
                   type="text"
                   placeholder="Country"
                   name="country"
-                  value={form.country}
+                  value={locationForm.country}
                   onChange={handleChange}
                 />
                 {errors.country && (
@@ -161,7 +169,7 @@ const LocationForm = () => {
                   type="text"
                   placeholder="Zip"
                   name="zip"
-                  value={form.zip}
+                  value={locationForm.zip}
                   onChange={handleChange}
                 />
                 {errors.zip && (
@@ -221,7 +229,7 @@ const LocationForm = () => {
               />
             </svg>
           )}
-          {loading ? "Submitting..." : "Next"}
+          {loading ? "Saving..." : "Next"}
         </button>
       </div>
       <CustomToastContainer />

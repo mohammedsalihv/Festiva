@@ -113,7 +113,7 @@ const ResetPassword = ({ email, onSuccess , onClose }: ResetPasswordProps) => {
 
             <Button
               type="submit"
-              className="h-10 md:h-12 w-full bg-main_color text-white py-2 md:py-3 rounded-lg hover:bg-main_color_dark transition duration-200"
+              className="h-10 md:h-12 w-full bg-main_color text-white py-2 md:py-3 rounded-lg hover:bg-main_color_dark transition duration-200 mb-2"
               disabled={loading}
             >
               {loading ? "Resetting..." : "Reset Password"}

@@ -10,9 +10,6 @@ export interface MulterRequest extends Request {
 }
 
 
-
-
-// User Management
 adminRoutes.get(
   "/users",
   authenticateToken,

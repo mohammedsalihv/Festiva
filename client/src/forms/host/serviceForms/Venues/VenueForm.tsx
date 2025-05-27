@@ -166,7 +166,7 @@ const VenueDetailsForm = () => {
     }
 
     dispatch(setVenueDetails(form))
-    toast.success("Venue details submitted!");
+    toast.success("Saving...");
     setTimeout(() => navigate("/host/location-features"), 5000);
   };
 
@@ -487,7 +487,7 @@ const VenueDetailsForm = () => {
               />
             </svg>
           )}
-          {loading ? "Submitting..." : "Next"}
+          {loading ? "Saving..." : "Next"}
         </button>
       </div>
 

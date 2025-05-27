@@ -22,7 +22,10 @@ export const locationDetailsFormState = createSlice({
   name: "locationDetails",
   initialState: initialLocationDetailsState,
   reducers: {
-    setLocationDetails: (state, action: PayloadAction<locationDetailsState>) => {
+    setLocationDetails: (
+      state,
+      action: PayloadAction<Partial<locationDetailsState>>
+    ) => {
       return { ...state, ...action.payload };
     },
   },

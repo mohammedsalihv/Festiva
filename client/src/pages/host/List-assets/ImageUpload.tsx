@@ -25,7 +25,7 @@ const ImageUploader: React.FC = () => {
     if (file) {
       setSelectedFile(file);
       setIsCropping(true);
-      e.target.value = ""; // clear input value
+      e.target.value = "";
     }
   };
 
@@ -33,11 +33,23 @@ const ImageUploader: React.FC = () => {
     dispatch(removeImage(index));
   };
 
-  const handleCloseCropper = (file: File) => {
-    dispatch(addCroppedImage(file)); // Either cropped or original passed from cropper
-    setIsCropping(false);
-    setSelectedFile(null);
-  };
+  const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};
+
+
+ const handleCloseCropper = async (file: File) => {
+  const base64 = await fileToBase64(file);
+  dispatch(addCroppedImage(base64));
+  setIsCropping(false);
+  setSelectedFile(null);
+};
+
 
   const handleSubmit = () => {
     if (croppedImages.length === 0) {
@@ -46,8 +58,8 @@ const ImageUploader: React.FC = () => {
     }
 
     setLoading(true);
-    dispatch(setAllImages(croppedImages)); // Optionally redundant
-    toast.success("Images saved successfully");
+    dispatch(setAllImages(croppedImages));
+    toast.success("Saving...");
     navigate("/host/location-details/");
   };
 
@@ -91,21 +103,22 @@ const ImageUploader: React.FC = () => {
           </div>
 
           <div className="mt-6 grid grid-cols-3 gap-4">
-            {croppedImages.map((img, index) => (
-              <div key={index} className="relative group">
-                <img
-                  src={URL.createObjectURL(img)}
-                  alt={`Preview ${index}`}
-                  className="w-full h-32 object-cover rounded shadow"
-                />
-                <button
-                  onClick={() => handleRemoveImage(index)}
-                  className="absolute top-1 right-1 bg-black text-white rounded-full px-2 py-1 text-xs hidden group-hover:block"
-                >
-                  ✕
-                </button>
-              </div>
-            ))}
+           {croppedImages.map((base64, index) => (
+  <div key={index} className="relative group">
+    <img
+      src={base64}
+      alt={`Preview ${index}`}
+      className="w-full h-32 object-cover rounded shadow"
+    />
+    <button
+      onClick={() => handleRemoveImage(index)}
+      className="absolute top-1 right-1 bg-black text-white rounded-full px-2 py-1 text-xs hidden group-hover:block"
+    >
+      ✕
+    </button>
+  </div>
+))}
+
           </div>
         </div>
 
@@ -157,7 +170,7 @@ const ImageUploader: React.FC = () => {
                   d="M4 12a8 8 0 018-8v8z"
                 />
               </svg>
-              Submitting...
+              Saving...
             </>
           ) : (
             "Next"

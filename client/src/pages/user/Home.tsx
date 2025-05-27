@@ -34,7 +34,7 @@ const Home = () => {
   return (
     <div className="relative">
       <Header />
-      <section className="relative w-full h-screen overflow-hidden">
+      <section className="relative w-full h-screen overflow-hidden ">
         <div ref={sliderRef} className="keen-slider w-full h-full">
           {images.map((img, index) => (
             <div key={index} className="keen-slider__slide">
