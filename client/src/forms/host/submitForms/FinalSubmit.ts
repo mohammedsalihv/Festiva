@@ -22,7 +22,7 @@ export const handleFinalSubmit = async (
       venueImages: images.croppedImages,
       location: locationDetails,
     };
-
+    console.log('==',finalData)
     await addVenue(finalData);
 
     console.log("Submitted Successfully");

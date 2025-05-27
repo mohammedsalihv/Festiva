@@ -69,7 +69,5 @@ export const {
 } = locationFormSlice.actions;
 
 export default locationFormSlice.reducer;
-
-// Export the initial state as initialLocationFeaturesState
 export const initialLocationFeaturesState = initialState;
 

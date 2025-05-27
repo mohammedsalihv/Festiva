@@ -1,8 +1,7 @@
-// imageSlice.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ImageState {
-  croppedImages: string[];
+  croppedImages: File[];
 }
 
 const initialState: ImageState = {
@@ -10,17 +9,17 @@ const initialState: ImageState = {
 };
 
 const imageSlice = createSlice({
-  name: 'images',
+  name: "images",
   initialState,
   reducers: {
-    addCroppedImage: (state, action: PayloadAction<string>) => {
-      state.croppedImages.push(action.payload); // Save one image at a time
+    addCroppedImage: (state, action: PayloadAction<File>) => {
+      state.croppedImages.push(action.payload);
     },
     removeImage: (state, action: PayloadAction<number>) => {
       state.croppedImages.splice(action.payload, 1);
     },
-    setAllImages: (state, action: PayloadAction<string[]>) => {
-      state.croppedImages = action.payload; // Correctly replace all images if needed
+    setAllImages: (state, action: PayloadAction<File[]>) => {
+      state.croppedImages = action.payload;
     },
     clearImages: (state) => {
       state.croppedImages = [];
@@ -28,9 +27,7 @@ const imageSlice = createSlice({
   },
 });
 
-export const { addCroppedImage, removeImage, setAllImages, clearImages } = imageSlice.actions;
-
+export const { addCroppedImage, removeImage, setAllImages, clearImages } =
+  imageSlice.actions;
 export default imageSlice.reducer;
-
-// Export the initial state as initialImageState
 export const initialImageState = initialState;

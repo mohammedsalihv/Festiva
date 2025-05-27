@@ -1,21 +1,20 @@
 import React, { useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { removeImage, addCroppedImage } from "@/redux/Slice/host/imageSlice";
+import { removeImage, addCroppedImage, setAllImages } from "@/redux/Slice/host/imageSlice";
 import ImageCropper from "@/components/ImageCropper";
 import { Images } from "@/assets";
 import { toast } from "react-toastify";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
-import { setAllImages } from "@/redux/Slice/host/imageSlice";
 import { useNavigate } from "react-router-dom";
 
 const ImageUploader: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [isCropping, setIsCropping] = useState(false); // To toggle cropper visibility
+  const [isCropping, setIsCropping] = useState(false);
   const croppedImages = useAppSelector((state) => state.images.croppedImages);
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
@@ -26,7 +25,7 @@ const ImageUploader: React.FC = () => {
     if (file) {
       setSelectedFile(file);
       setIsCropping(true);
-      e.target.value = "";
+      e.target.value = ""; // clear input value
     }
   };
 
@@ -34,25 +33,27 @@ const ImageUploader: React.FC = () => {
     dispatch(removeImage(index));
   };
 
-  const handleCloseCropper = () => {
-    if (selectedFile) {
-      const fullImageUrl = URL.createObjectURL(selectedFile);
-      dispatch(addCroppedImage(fullImageUrl));
-    }
+  const handleCloseCropper = (file: File) => {
+    dispatch(addCroppedImage(file)); // Either cropped or original passed from cropper
     setIsCropping(false);
     setSelectedFile(null);
   };
 
   const handleSubmit = () => {
+    if (croppedImages.length === 0) {
+      toast.error("Please upload at least one image.");
+      return;
+    }
+
     setLoading(true);
-    dispatch(setAllImages(croppedImages));
-    toast.success("images upload successfull");
-    navigate('/host/location-details/')
+    dispatch(setAllImages(croppedImages)); // Optionally redundant
+    toast.success("Images saved successfully");
+    navigate("/host/location-details/");
   };
 
   return (
     <div className="max-w-6xl mx-auto mt-10 p-8 bg-white flex flex-col">
-      <div className="flex flex-col md:flex-row justify-between items-start gap-6 p-8 bg-white max-w-6xl mx-auto mt-10">
+      <div className="flex flex-col md:flex-row justify-between items-start gap-6 p-8 bg-white">
         <div className="w-full md:w-1/2 px-4">
           <h2 className="text-xl font-semibold mb-4 font-prompt">
             Get your listing to stand out
@@ -63,10 +64,10 @@ const ImageUploader: React.FC = () => {
           </p>
           <p className="text-gray-600 mb-4 text-sm font-JosephicSans">
             Add as many images of your location as you'd like. Photographers
-            typically select a location based on the photos. This helps them
-            tremendously. Make sure your images are at least 1020px wide.
-            Horizontal images work best.
+            typically select a location based on the photos. Make sure your
+            images are at least 1020px wide.
           </p>
+
           <div
             onClick={handleUploadClick}
             className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center text-center cursor-pointer hover:border-indigo-500 transition"
@@ -88,11 +89,12 @@ const ImageUploader: React.FC = () => {
               className="hidden"
             />
           </div>
+
           <div className="mt-6 grid grid-cols-3 gap-4">
             {croppedImages.map((img, index) => (
               <div key={index} className="relative group">
                 <img
-                  src={img}
+                  src={URL.createObjectURL(img)}
                   alt={`Preview ${index}`}
                   className="w-full h-32 object-cover rounded shadow"
                 />
@@ -106,26 +108,25 @@ const ImageUploader: React.FC = () => {
             ))}
           </div>
         </div>
+
         <div className="w-full md:w-1/2 bg-gray-50 border border-gray-200 rounded-lg px-8 py-5 mt-6 md:mt-8 hidden md:block">
           <img
             src={Images.image_uplaod}
             alt="Photographer Illustration"
             className="mb-4 mx-auto h-24"
           />
-          <h3 className="text-lg font-semibold mb-2">
-            Showcase your location.
-          </h3>
+          <h3 className="text-lg font-semibold mb-2">Showcase your location.</h3>
           <p className="text-gray-600 text-sm mb-4 font-JosephicSans">
             Include photos of the areas that will be available: interior and
             exterior.
           </p>
-          {isCropping && selectedFile && (
-            <ImageCropper file={selectedFile} onClose={handleCloseCropper} />
-          )}
         </div>
-
-        <CustomToastContainer />
       </div>
+
+      {isCropping && selectedFile && (
+        <ImageCropper file={selectedFile} onClose={handleCloseCropper} />
+      )}
+
       <div className="flex justify-end mt-10">
         <button
           onClick={handleSubmit}
@@ -163,6 +164,8 @@ const ImageUploader: React.FC = () => {
           )}
         </button>
       </div>
+
+      <CustomToastContainer />
     </div>
   );
 };

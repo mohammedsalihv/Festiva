@@ -12,7 +12,7 @@ import CustomToastContainer from "../../../reusable-components/Messages/ToastCon
 import { useDispatch, useSelector } from "react-redux";
 import { setLocationDetails } from "@/redux/Slice/host/locationSlice";
 import { handleFinalSubmit } from "./FinalSubmit";
-import { croppedImages, LocationDetails, VenueDetails, LocationFeatures } from "@/utils/types";
+import {LocationDetails, VenueDetails, LocationFeatures } from "@/utils/Types/host/services/venueTypes";
 import { useNavigate } from "react-router-dom"; 
 
 interface ErrorState {
@@ -40,7 +40,7 @@ const LocationForm = () => {
 
   const venueDetails = useSelector<RootState, VenueDetails>((state) => state.venueDetails);
   const locationDetails = useSelector<RootState, LocationDetails>((state) => state.location);
-  const images = useSelector<RootState, croppedImages>((state) => state.images);
+  const images = useSelector<RootState, File[]>((state) => state.images.croppedImages);
   const locationFeatures = useSelector<RootState, LocationFeatures>((state) => state.locationFeatures);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,12 +67,6 @@ const LocationForm = () => {
 
     try {
       dispatch(setLocationDetails(form));
-
-      setTimeout(() => {
-        setLoading(false);
-        toast.success("Location details submitted. Redirecting to the next step...");
-      }, 5000);
-
       await handleFinalSubmit(venueDetails, locationDetails, images, locationFeatures, navigate);
     } catch (error: unknown) {
       setLoading(false);
