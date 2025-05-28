@@ -1,16 +1,19 @@
+
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { AuthRequest } from "../domain/entities/controlInterface/authType";
-import { JwtPayload } from "../domain/entities/controlInterface/authType";
+import {
+  AuthRequest,
+  JwtPayload,
+} from "../domain/entities/controlInterface/authType";
 import logger from "../utils/logger";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
 
 if (!ACCESS_TOKEN_SECRET) {
   logger.error(
-    "ACCESS_TOKEN_SECRET is undefined! Check your .env file or environment variables."
+    "ACCESS_TOKEN_SECRET is undefined. Please check your environment variables."
   );
-  throw new Error("ACCESS_TOKEN_SECRET environment variable is not set.");
+  throw new Error("ACCESS_TOKEN_SECRET is not set in environment variables.");
 }
 
 export const authenticateToken = (
@@ -21,13 +24,12 @@ export const authenticateToken = (
   const authHeader = req.headers.authorization;
   const token =
     req.cookies?.accesstoken ||
-    (authHeader && authHeader.startsWith("Bearer ")
-      ? authHeader.split(" ")[1]
-      : null);
+    (authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : null);
+
   if (!token) {
     res
       .status(401)
-      .json({ message: "Access Denied: No token provided", status: 401 });
+      .json({ message: "Access denied: No token provided", status: 401 });
     return;
   }
 
@@ -36,20 +38,25 @@ export const authenticateToken = (
     req.auth = decoded;
     next();
   } catch (error) {
-    console.log(" JWT Verification Error:", error);
-    res.status(403).json({ message: "Invalid token", status: 498 });
+    logger.error("JWT verification failed:", error);
+    res.status(403).json({ message: "Invalid or expired token", status: 498 });
   }
 };
 
-export const authrizeRoles = (roles: string[]) => {
+export const authorizeRoles = (roles: string[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
-    const role = req.auth?.role;
-    if (!req.auth || !role || !roles.includes(role)) {
+    const userRole = req.auth?.role;
+
+    if (!req.auth || !userRole || !roles.includes(userRole)) {
       res
         .status(403)
-        .json({ message: "Unauthorized: Insufficient permissions" });
+        .json({
+          message: "Unauthorized: Insufficient permissions",
+          status: 403,
+        });
       return;
     }
+
     next();
   };
 };
@@ -59,15 +66,12 @@ export const isAdmin = (
   res: Response,
   next: NextFunction
 ): void => {
-  try {
-    if (req.auth?.role !== "admin") {
-      res.status(403).json({ message: "Admin access required", status: 403 });
-      return;
-    }
-    next();
-  } catch (error) {
-    logger.error(error);
+  if (req.auth?.role !== "admin") {
+    res.status(403).json({ message: "Admin access required", status: 403 });
+    return;
   }
+
+  next();
 };
 
 export const isHost = (
@@ -75,13 +79,10 @@ export const isHost = (
   res: Response,
   next: NextFunction
 ): void => {
-  try {
-    if (req.auth?.role !== "host") {
-      res.status(403).json({ message: "Host access required", status: 403 });
-      return;
-    }
-    next();
-  } catch (error) {
-    logger.error(error);
+  if (req.auth?.role !== "host") {
+    res.status(403).json({ message: "Host access required", status: 403 });
+    return;
   }
+
+  next();
 };

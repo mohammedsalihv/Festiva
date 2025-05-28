@@ -67,4 +67,11 @@ userAuthRoutes.delete(
   userProfileController.deleteProfile.bind(userProfileController)
 );
 
+userAuthRoutes.post("/logout", async (req, res) => {
+  try {
+    await logoutController.logout(req, res);
+  } catch (err) {
+    console.error("Logout route error:", err);
+  }
+});
 export default userAuthRoutes;

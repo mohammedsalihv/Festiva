@@ -58,3 +58,7 @@ export const deleteProfile = async () => {
   return response.data;
 };
 
+export const userLogout = async () => {
+  const response = await axiosInstance.delete("/auth/logout");
+  return response.data;
+};

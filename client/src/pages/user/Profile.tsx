@@ -11,6 +11,7 @@ import {
   deleteProfile,
   passwordModify,
   sendOtp,
+  userLogout,
   validateEmail,
 } from "@/services/user/userAuthService";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
@@ -33,7 +34,7 @@ const Profile: React.FC = () => {
   const [updating, setUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
-  const [confirmDelete , setConfirmDelete] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [otpError, setOtpError] = useState("");
@@ -53,45 +54,45 @@ const Profile: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const handleProfileDelete = async () => {
+    await deleteProfile();
+    toast.success("Account deleted");
+    handleLogout();
+  };
 
-  const handleProfileDelete = async () =>{
-     await deleteProfile()
-     toast.success('Account deleted')
-     handleLogout()
-  }
+  const hanldeChangePasswordSubmit = async () => {
+    setUpdating(true);
 
-const hanldeChangePasswordSubmit = async () => {
-  setUpdating(true);
+    const { isValid, errors: validationErrors } =
+      validateChangePasswordForm(changePasswordForm);
 
-  const { isValid, errors: validationErrors } = validateChangePasswordForm(changePasswordForm);
-
-  if (!isValid) {
-    setErrors(validationErrors);
-    toast.error("Please correct the errors in the form.");
-    setTimeout(() => setErrors({}), 10000);
-    setUpdating(false);
-    return;
-  }
-
-  try {
-    const response = await passwordModify(changePasswordForm);
-    dispatch(setUserDetails(response.data));
-    toast.success("Password changed!");
-    setChangePasswordForm({ currentPassword: "", newPassword: "" });
-  } catch (error: unknown) {
-    if(error instanceof AxiosError){
-       if (error.response?.status === 401) {
-      toast.error("Incorrect current password.");
-    } else if (error.response?.data?.message) {
-      toast.error(error.response.data.message);
-    } else {
-      toast.error("Something went wrong. Please try again.");
+    if (!isValid) {
+      setErrors(validationErrors);
+      toast.error("Please correct the errors in the form.");
+      setTimeout(() => setErrors({}), 10000);
+      setUpdating(false);
+      return;
     }
+
+    try {
+      const response = await passwordModify(changePasswordForm);
+      dispatch(setUserDetails(response.data));
+      toast.success("Password changed!");
+      setChangePasswordForm({ currentPassword: "", newPassword: "" });
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          toast.error("Incorrect current password.");
+        } else if (error.response?.data?.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("Something went wrong. Please try again.");
+        }
+      }
+    } finally {
+      setUpdating(false);
     }
-  } finally {
-    setUpdating(false);
-  }
-};
+  };
 
   const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -260,9 +261,17 @@ const hanldeChangePasswordSubmit = async () => {
     }
   };
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      dispatch(logoutUser());
+      await userLogout();
+      toast.success("Logout successfull!");
+      navigate("/login");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.message || "Failed to update profile");
+      }
+    }
   };
 
   const tabs = [
@@ -480,7 +489,10 @@ const hanldeChangePasswordSubmit = async () => {
                   Deleting account is a permanent action and cannot be undone.
                   Are you sure you want to proceed?
                 </p>
-                <button onClick={() => setConfirmDelete(true)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-semibold">
+                <button
+                  onClick={() => setConfirmDelete(true)}
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-semibold"
+                >
                   Delete
                 </button>
               </div>
