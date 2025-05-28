@@ -79,4 +79,16 @@ adminRoutes.delete(
   hostAdminController.deleteHost.bind(hostAdminController)
 );
 
+
+
+// service management
+adminRoutes.get(
+  "/services",
+   authenticateToken,
+   isAdmin,
+  hostAdminController.getHosts.bind(hostAdminController)
+);
+
+
+
 export default adminRoutes;

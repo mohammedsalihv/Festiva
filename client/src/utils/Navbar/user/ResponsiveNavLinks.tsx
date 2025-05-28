@@ -46,7 +46,7 @@ const ResponsiveNavLinks = ({
             transition={{ duration: 0.3 }}
             className="fixed top-20 left-0 w-full h-screen z-20"
           >
-            <div className="text-sm font-semibold uppercase text-white py-10 m-1 mt-11 md:hidden shadow-lg">
+            <div className="text-sm font-semibold text-white py-10 m-1 mt-11 md:hidden shadow-lg">
               <ul className="flex flex-col justify-center items-center gap-7 cursor-pointer">
                 {NavbarMenu.map((item) => (
                   <li key={item.id}>

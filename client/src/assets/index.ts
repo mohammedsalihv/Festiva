@@ -56,6 +56,17 @@ import c_8 from '@/assets/images/c_8.png';
 
 
 
+// user services
+
+import main_service from "@/assets/images/services/main-service.jpg"
+import conventionCenter_service from "@/assets/images/services/convention-center.jpg";
+import rentCar_service from "@/assets/images/services/rent-service.jpg";
+import studio_service from"@/assets/images/services/studio-service.jpg";
+import cater_service from "@/assets/images/services/cater-service.jpg";
+import convention_space from "@/assets/images/services/convention_space.jpg";
+import multiPurpose_space from "@/assets/images/services/Multi_space.jpg";
+import event_space from "@/assets/images/services/event_party_space.jpg";
+import business_space from "@/assets/images/services/confrence_space.jpg";
 
 
 
@@ -140,5 +151,14 @@ export const Images = {
   photography_sub,
   carRent_sub,
   catering_manpower_sub,
-  admin_login
+  admin_login,
+  main_service,
+  conventionCenter_service,
+  cater_service,
+  rentCar_service,
+  studio_service,
+  convention_space,
+  multiPurpose_space,
+  event_space,
+  business_space
 };

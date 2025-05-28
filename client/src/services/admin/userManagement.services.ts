@@ -5,7 +5,7 @@ import {
   EditUserResponse,
   BlockUserResponse,
   GetUsersResponse,
-} from "@/utils/types";
+} from "@/utils/Types/admin/userManagementTypes";
 import logger from "@/utils/logger";
 
 export const AllUsers = async () => {

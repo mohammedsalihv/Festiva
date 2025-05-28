@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Host } from "@/utils/types";
+import { Host } from "@/utils/Types/host/authTypes";
 
 interface hostSate {
   hosts: Host[];

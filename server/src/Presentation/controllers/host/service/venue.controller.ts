@@ -33,8 +33,6 @@ export class venueController {
       const imageUrls = files.map(
         (file) => `uploads/assetImages/${file.filename}`
       );
-
-      // Fix: use location from cleanedData
       const newLocation = await this.locationRepository.addLocation(
         cleanedData.location
       );
@@ -43,7 +41,6 @@ export class venueController {
         throw new ErrorHandler("Failed to create location", 400);
       }
 
-      // Fix: use destructured data from cleanedData
       const {
         venueName,
         rent,

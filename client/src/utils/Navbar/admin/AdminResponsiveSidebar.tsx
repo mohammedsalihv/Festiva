@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { IoSettings } from "react-icons/io5";
 import { HiMiniUsers } from "react-icons/hi2";
 import { RiDashboardHorizontalFill } from "react-icons/ri";
 import { SiBookstack } from "react-icons/si";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { FaUsersRectangle } from "react-icons/fa6";
+import { MdOutlineManageAccounts } from "react-icons/md";
+import { FcServices } from "react-icons/fc";
 import { FaBell } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import ConfirmDialog from "../../../reusable-components/user/Landing/ConfirmDialog";
@@ -51,6 +52,12 @@ const AdminResponsiveSidebar: React.FC = () => {
       </div>
       <div
         className="flex items-center gap-2 cursor-pointer text-black"
+        onClick={() => handleNavigation("/admin/services")}
+      >
+        <FcServices className="w-6 h-6" /> Services
+      </div>
+      <div
+        className="flex items-center gap-2 cursor-pointer text-black"
         onClick={() => handleNavigation("/admin/booking")}
       >
         <SiBookstack className="w-6 h-6" /> Bookings
@@ -65,7 +72,7 @@ const AdminResponsiveSidebar: React.FC = () => {
         className="flex items-center gap-2 cursor-pointer text-black"
         onClick={() => handleNavigation("/admin/setting")}
       >
-        <IoSettings className="w-6 h-6" /> Settings
+        <MdOutlineManageAccounts className="w-6 h-6" /> Settings
       </div>
       <div
         className="flex items-center gap-2 cursor-pointer text-black"
