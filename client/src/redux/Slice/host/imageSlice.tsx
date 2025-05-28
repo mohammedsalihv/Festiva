@@ -26,10 +26,11 @@ const imageSlice = createSlice({
     clearImages: (state) => {
       state.croppedImages = [];
     },
+     resetImages: () => initialState,
   },
 });
 
-export const { addCroppedImage, removeImage, setAllImages, clearImages } =
+export const { addCroppedImage, removeImage, setAllImages, clearImages , resetImages } =
   imageSlice.actions;
 
 export default imageSlice.reducer;

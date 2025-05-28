@@ -20,7 +20,7 @@ export interface AddVenueData {
 
 
 export interface VenueDetails {
-  name: string;
+  venueName: string;
   rent: number | null;
   capacity: number | null;
   shift: string;

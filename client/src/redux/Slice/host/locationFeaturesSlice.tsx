@@ -18,7 +18,6 @@ const initialState: LocationFeaturesState = {
   loading: false,
 };
 
-// Create the slice
 export const locationFormSlice = createSlice({
   name: "locationForm",
   initialState,
@@ -48,7 +47,7 @@ export const locationFormSlice = createSlice({
     },
     setAllLocationFeatures: (
       state,
-      action: PayloadAction<Partial<LocationFeaturesState>> // Change to Partial for flexibility
+      action: PayloadAction<Partial<LocationFeaturesState>>
     ) => {
       const { features, parkingFeatures, venueDescription, terms } = action.payload;
       if (features) state.features = features;
@@ -56,6 +55,7 @@ export const locationFormSlice = createSlice({
       if (venueDescription) state.venueDescription = venueDescription;
       if (terms) state.terms = terms;
     },
+    resetLocationFeatures : () => initialState,
   },
 });
 
@@ -66,6 +66,7 @@ export const {
   setTerms, 
   setLoading,
   setAllLocationFeatures, 
+  resetLocationFeatures
 } = locationFormSlice.actions;
 
 export default locationFormSlice.reducer;

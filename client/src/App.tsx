@@ -12,10 +12,13 @@ import UserPrivateRoute from "./routes/Protect/UserPrivateRoute";
 import AdminPrivateRoute from "./routes/admin/AdminPrivateRoutes";
 import AdminLogin from "./pages/admin/auth/AdminLogin";
 import RobotError from "./components/ErrorAlert";
+import CustomToastContainer from "./reusable-components/Messages/ToastContainer";
 
 const App: React.FC = () => {
   return (
     <Router>
+
+      <CustomToastContainer/>
       <Routes>
         <Route path="/*" element={<PublicRoutes />} />
         <Route path="/error" element={<RobotError statusCode={404} />} />

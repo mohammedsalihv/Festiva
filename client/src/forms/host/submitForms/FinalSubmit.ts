@@ -7,13 +7,19 @@ import {
 } from "@/utils/Types/host/services/venueTypes";
 import { toast } from "react-toastify";
 import { NavigateFunction } from "react-router-dom";
+import { AppDispatch } from "@/redux/store";
+import { resetLocationDetails } from "@/redux/Slice/host/locationSlice";
+import { resetImages } from "@/redux/Slice/host/imageSlice";
+import { resetLocationFeatures } from "@/redux/Slice/host/locationFeaturesSlice";
+import { resetVenueDetails } from "@/redux/Slice/host/venueDetailsSlice";
 
 export const handleFinalSubmit = async (
   venueDetails: VenueDetails,
   locationDetails: LocationDetails,
   images: ImageDetails,
   locationFeatures: LocationFeatures,
-  navigate: NavigateFunction
+  navigate: NavigateFunction,
+  dispatch: AppDispatch
 ) => {
   try {
     const { rent, ...restVenueDetails } = venueDetails;
@@ -53,9 +59,15 @@ export const handleFinalSubmit = async (
     images.Images.forEach((imageFile) => {
       formData.append("Images", imageFile);
     });
-    await addVenue(formData); 
+    await addVenue(formData);
     toast.success("All data submitted successfully!");
-    navigate("/host/dashboard");
+    dispatch(resetLocationDetails());
+    dispatch(resetImages());
+    dispatch(resetLocationFeatures());
+    dispatch(resetVenueDetails());
+    setTimeout(() => {
+      navigate("/host/dashboard");
+    }, 2000);
   } catch (error) {
     console.error("Submission Failed:", error);
     toast.error("Something went wrong while submitting!");

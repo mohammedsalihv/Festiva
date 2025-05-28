@@ -14,6 +14,7 @@ export interface addVenueDTO {
     venueDescription: string;
     terms: string;
     Images: string[];
+    status?:string
     location: Types.ObjectId;
     host: Types.ObjectId;
 }

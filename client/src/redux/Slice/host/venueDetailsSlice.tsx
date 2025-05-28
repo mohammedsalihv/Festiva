@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface VenueDetailsState {
-  name: string;
+  venueName: string;
   rent: number | null;
   capacity: number | null;
   shift: string;
@@ -12,7 +12,7 @@ export interface VenueDetailsState {
 }
 
 export const initialVenueDetailsState: VenueDetailsState = {
-  name: "",
+  venueName: "",
   rent: null,
   capacity: null,
   shift: "",
@@ -29,10 +29,10 @@ const venueDetailsSlice = createSlice({
     setVenueDetails: (state, action: PayloadAction<VenueDetailsState>) => {
       return { ...state, ...action.payload };
     },
-    resetForm: () => initialVenueDetailsState,
+    resetVenueDetails: () => initialVenueDetailsState,
   },
 });
 
-export const { setVenueDetails, resetForm } = venueDetailsSlice.actions;
+export const { setVenueDetails, resetVenueDetails } = venueDetailsSlice.actions;
 
 export default venueDetailsSlice.reducer;

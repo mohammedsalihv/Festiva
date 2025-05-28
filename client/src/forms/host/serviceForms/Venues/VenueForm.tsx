@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { setVenueDetails } from "@/redux/Slice/host/venueDetailsSlice";
 
 interface VenueDetailsErrorState {
-  name?: string;
+  venueName?: string;
   rent?: number;
   capacity?: number;
   shift?: string;
@@ -25,7 +25,7 @@ interface VenueDetailsErrorState {
 
 const VenueDetailsForm = () => {
   const [form, setForm] = useState<venueDetailsFormState>({
-    name: "",
+    venueName: "",
     rent: null,
     capacity: null,
     shift: "",
@@ -186,12 +186,12 @@ const VenueDetailsForm = () => {
               <Input
                 type="text"
                 placeholder="Venue name"
-                name="name"
-                value={form.name}
+                name="venueName"
+                value={form.venueName}
                 onChange={handleChange}
               />
-              {errors.name && (
-                <p className="text-red-600 text-xs mt-1">{errors.name}</p>
+              {errors.venueName && (
+                <p className="text-red-600 text-xs mt-1">{errors.venueName}</p>
               )}
             </div>
 

@@ -41,6 +41,8 @@ const LocationForm = () => {
 
   const venueDetails = useSelector<RootState, VenueDetails>((state) => state.venueDetails);
   const images = useSelector<RootState, string[]>((state) => state.images.croppedImages);
+  
+  const locationFeatures = useSelector<RootState, LocationFeatures>((state) => state.locationFeatures);
 
 const fileImages: ImageDetails = {
   Images: images.map((base64Image, index) =>
@@ -49,7 +51,6 @@ const fileImages: ImageDetails = {
 };
 
 
-  const locationFeatures = useSelector<RootState, LocationFeatures>((state) => state.locationFeatures);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -75,7 +76,7 @@ const fileImages: ImageDetails = {
 
     try {
       dispatch(setLocationDetails(locationForm));
-      await handleFinalSubmit(venueDetails, locationForm, fileImages, locationFeatures, navigate);
+      await handleFinalSubmit(venueDetails, locationForm, fileImages, locationFeatures, navigate ,dispatch );
     } catch (error: unknown) {
       setLoading(false);
       toast.error("Something went wrong");

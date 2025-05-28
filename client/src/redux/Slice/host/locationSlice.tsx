@@ -28,9 +28,10 @@ export const locationDetailsFormState = createSlice({
     ) => {
       return { ...state, ...action.payload };
     },
+    resetLocationDetails: () => initialLocationDetailsState,
   },
 });
 
-export const { setLocationDetails } = locationDetailsFormState.actions;
+export const { setLocationDetails , resetLocationDetails} = locationDetailsFormState.actions;
 
 export default locationDetailsFormState.reducer;
