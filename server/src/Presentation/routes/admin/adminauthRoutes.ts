@@ -4,7 +4,7 @@ import logger from "../../../utils/logger";
 
 const adminAuthRoutes = express.Router();
 
-adminAuthRoutes.post("/login-admin", async (req, res) => {
+adminAuthRoutes.post("/admin/login", async (req, res) => {
   try {
     await adminLoginController.adminLogin(req, res);
   } catch (error) {

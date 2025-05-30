@@ -11,6 +11,7 @@ interface EmailVerificationProps {
   onClose?: () => void;
 }
 
+
 const EmailVerification = ({
   loading = false,
   errorMessage = "",

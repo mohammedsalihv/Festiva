@@ -51,7 +51,7 @@ const App: React.FC = () => {
             </AdminPrivateRoute>
           }
         />
-        <Route path="/admin/login-admin" element={<AdminLogin />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
       </Routes>
     </Router>
   );
