@@ -1,17 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface AdminState {
-  adminInfo: {
-    accessToken: string;
-    email:string
-    firstname:string;
-    lastname:string;
-    phone:string;
-    refreshToken: string;
-    role: string;
-    isVerified?: boolean;
-  } | null;
-}
+import { AdminState } from "@/utils/Types/admin/authTypes";
 
 const initialState: AdminState = {
   adminInfo: localStorage.getItem("adminInfo")
@@ -23,9 +11,19 @@ const adminSlice = createSlice({
   name: "admin",
   initialState,
   reducers: {
-    setAdminDetails: (state, action: PayloadAction<AdminState["adminInfo"]>) => {
-      state.adminInfo = action.payload;
-      localStorage.setItem("adminInfo", JSON.stringify(action.payload));
+    setAdminDetails: (
+      state,
+      action: PayloadAction<Partial<AdminState["adminInfo"]>>
+    ) => {
+      if (state.adminInfo) {
+        state.adminInfo = {
+          ...state.adminInfo,
+          ...action.payload,
+        };
+      } else {
+        state.adminInfo = action.payload as AdminState["adminInfo"];
+      }
+      localStorage.setItem("adminInfo", JSON.stringify(state.adminInfo));
     },
     logoutAdmin: (state) => {
       state.adminInfo = null;

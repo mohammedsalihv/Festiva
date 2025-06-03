@@ -66,6 +66,8 @@ const verifyOtpController = new VerifyOtpController(verifyOtp);
 const googleController = new GoogleController(googleLoginUseCase);
 const userController = new UserController(resetPassword)
 const logoutController = new LogoutController(logoutUser)
+
+
 export {
   userController,
   userRegisterController,

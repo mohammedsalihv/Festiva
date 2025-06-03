@@ -1,4 +1,4 @@
-import { addVenue } from "@/services/host/hostService";
+import { addVenue } from "@/api/host/hostService";
 import {
   VenueDetails,
   LocationDetails,

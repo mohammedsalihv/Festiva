@@ -6,25 +6,26 @@ import { useMutation } from "@tanstack/react-query";
 import { Images } from "@/assets";
 import { RootState } from "@/redux/store";
 import { setUserDetails, logoutUser } from "@/redux/Slice/user/userSlice";
-import { changeProfile } from "@/services/user/userService";
+import { changeProfile , profileEdit } from "@/api/user/userService";
 import {
   deleteProfile,
   passwordModify,
   sendOtp,
   userLogout,
   validateEmail,
-} from "@/services/user/userAuthService";
+  verifyOtp
+} from "@/api/user/userAuthService";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { AxiosError } from "axios";
-import { profileEdit } from "@/services/user/userService";
 import Otp from "@/components/Otp";
-import { verifyOtp } from "@/services/user/userAuthService";
 import { BiSolidEditAlt } from "react-icons/bi";
 import Spinner from "@/components/Spinner";
 import { changePasswordErrorState } from "@/utils/Types/user/profileTypes";
 import { changePasswordState } from "@/utils/Types/user/profileTypes";
 import { validateChangePasswordForm } from "@/utils/validations/user/Auth/changePasswordValidation";
+
+
 
 const Profile: React.FC = () => {
   const profile = useSelector((state: RootState) => state.user.userInfo);

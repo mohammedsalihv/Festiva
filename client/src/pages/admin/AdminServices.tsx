@@ -9,7 +9,7 @@ import Drawer from "@/components/Drawer";
 import { IoMdArrowDropright } from "react-icons/io";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { CgCloseR } from "react-icons/cg";
-import { AllServices } from "@/services/admin/serviceManagement.services";
+import { AllServices } from "@/api/admin/serviceManagement.services";
 import { useDispatch, useSelector } from "react-redux";
 import { setAllServices } from "@/redux/Slice/admin/serviceManagementSlice";
 import { AxiosError } from "axios";

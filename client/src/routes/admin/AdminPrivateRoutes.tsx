@@ -10,7 +10,6 @@ interface AdminPrivateRouteProps {
 
 const AdminPrivateRoute: React.FC<AdminPrivateRouteProps> = ({ children }) => {
   const adminInfo = useSelector((state: RootState) => state.admin.adminInfo);
-  
   if (!adminInfo?.accessToken) {
     return <Navigate to="/admin/login" replace />;
   }

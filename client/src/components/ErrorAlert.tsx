@@ -50,8 +50,8 @@ const sparkFlicker = {
 };
 
 type ErrorProps = {
-  statusCode: number;
-  message?: string | Error;
+  statusCode: string | number;
+  message?: string | Error | { [key: string]: any };
 };
 
 
@@ -176,8 +176,6 @@ const ErrorAlert: React.FC<ErrorProps> = ({ statusCode , message }) => {
     : 'Uh oh! Our robot broke something. We’re working on fixing it.'}
         
       </p>
-
-      {/* Button */}
       <a
         href="/"
         className="mt-6 px-5 py-2 border hover:font-bold shadow-md text-black rounded-xl transition"

@@ -1,9 +1,12 @@
 import { Request, Response } from "express";
 import { HostManagementUseCase } from "../../../application/use-cases/admin/HostManagement.usecase";
 import logger from "../../../utils/logger";
+import { AuthRequest } from "../../../domain/entities/controlInterface/authType";
+import { JwtPayload } from "jsonwebtoken";
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
+  auth?: JwtPayload & { id: string; role?: string };
 }
 
 export class HostAdminController {
@@ -27,7 +30,7 @@ export class HostAdminController {
   }
 
   async blockOrUnblockHost(req: Request, res: Response): Promise<void> {
-    const { hostId } = req.params;
+    const hostId = req.params.hostId;
     const { isBlocked } = req.body;
 
     if (!hostId || typeof isBlocked !== "boolean") {
@@ -59,8 +62,8 @@ export class HostAdminController {
     }
   }
 
-  async editHost(req: Request, res: Response): Promise<void> {
-    const { hostId } = req.params;
+  async editHost(req: AuthRequest, res: Response): Promise<void> {
+    const hostId = req.params.hostId;
     const formData = req.body;
 
     if (!hostId || !formData) {
@@ -135,8 +138,8 @@ export class HostAdminController {
     }
   }
 
-  async deleteHost(req: Request, res: Response): Promise<void> {
-    const { hostId } = req.params;
+  async deleteHost(req: AuthRequest, res: Response): Promise<void> {
+    const hostId = req.params.hostId;
 
     if (!hostId) {
       res.status(400).json({

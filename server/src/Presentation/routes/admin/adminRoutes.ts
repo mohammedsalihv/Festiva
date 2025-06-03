@@ -17,13 +17,13 @@ adminRoutes.get(
   userAdminController.Users.bind(userAdminController)
 );
 adminRoutes.patch(
-  "/users/:userId/blockUnblock",
+  "/users/:userId/blockUnblock/:userId",
    authenticateToken,
    isAdmin,
   userAdminController.blockOrUnblockUser.bind(userAdminController)
 );
 adminRoutes.patch(
-  "/users/:userId/edit",
+  "/users/edit/:userId",
    authenticateToken,
    isAdmin,
   userAdminController.editUser.bind(userAdminController)
@@ -54,13 +54,13 @@ adminRoutes.get(
 );
 
 adminRoutes.patch(
-  "/hosts/:hostId/blockUnblock",
+  "/hosts/blockUnblock/:hostId",
    authenticateToken,
    isAdmin,
   hostAdminController.blockOrUnblockHost.bind(hostAdminController)
 );
 adminRoutes.patch(
-  "/hosts/:hostId/edit",
+  "/hosts/edit/:hostId",
    authenticateToken,
    isAdmin,
   hostAdminController.editHost.bind(hostAdminController)

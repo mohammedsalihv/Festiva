@@ -13,7 +13,7 @@ import {
   changeProfile,
   blockUnblockUser,
   deleteUser,
-} from "@/services/admin/userManagement.services";
+} from "@/api/admin/userManagement.services";
 import {
   setAllUsers,
   updateUser,
@@ -43,7 +43,7 @@ const AdminUsers = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [sort, setSort] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<unknown>(null);
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,7 +67,6 @@ const AdminUsers = () => {
   });
 
   useEffect(() => {
-    console.log(selectedUser);
     if (selectedUser) {
       setForm({
         firstname: selectedUser.firstname || "",
@@ -133,7 +132,7 @@ const AdminUsers = () => {
 
   const handleBlockOrUnblock = async (userId: string, isBlocked: boolean) => {
     try {
-      const response = await blockUnblockUser(userId, isBlocked);
+      const response = await blockUnblockUser(isBlocked, userId);
       const updatedUsers = await AllUsers();
       dispatch(setAllUsers(updatedUsers));
       setSelectedUser(updatedUsers.find((u: User) => u._id === userId) || null);
@@ -179,7 +178,7 @@ const AdminUsers = () => {
           isBlocked: form.isBlocked,
         };
 
-        const res = await editUserDetails(selectedUser._id, payload);
+        const res = await editUserDetails(payload, selectedUser?._id);
         toast.success(res.message);
 
         const updatedUsers = await AllUsers().catch((err) => {
@@ -192,8 +191,8 @@ const AdminUsers = () => {
         );
         setEditForm(null);
         navigate("/admin/users");
-      } catch (err: unknown) {
-        toast.error((err as Error).message || "Failed to update user");
+      } catch (error: unknown) {
+        toast.error((error as Error).message || "Failed to update user");
       } finally {
         setSubmitting(false);
       }
@@ -207,7 +206,7 @@ const AdminUsers = () => {
 
       setIsLoading(true);
       try {
-        const response = await changeProfile(selectedUser._id, formData);
+        const response = await changeProfile(formData, selectedUser?._id);
         if (response?.profilePhotoUrl) {
           const updatedUser = {
             ...selectedUser,
@@ -256,9 +255,9 @@ const AdminUsers = () => {
     }
   };
 
-  const handleDelete = async (hostId: string) => {
+  const handleDelete = async (userId: string) => {
     try {
-      await deleteUser(hostId);
+      await deleteUser(userId);
       const updatedUser = await AllUsers();
       dispatch(setAllUsers(updatedUser));
       setSelectedUser(null);
@@ -267,7 +266,7 @@ const AdminUsers = () => {
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         toast.error("User account delete failed");
-        logger.error({ hostId, error: error }, "User account delete failed");
+        logger.error({ userId, error: error }, "User account delete failed");
       }
       console.log(error);
     }
@@ -319,7 +318,25 @@ const AdminUsers = () => {
       </div>
     );
 
-  if (error) return <ErrorAlert statusCode={error} message={error} />;
+  if (error) {
+    let statusCode = "Error";
+    let message = "An unknown error occurred";
+
+    if (error instanceof Error) {
+      message = error.message;
+    } else if (typeof error === "object" && error !== null) {
+      if ("status" in error) {
+        statusCode = String((error as any).status);
+      }
+      if ("message" in error) {
+        message = String((error as any).message);
+      }
+    } else if (typeof error === "string") {
+      message = error;
+    }
+
+    return <ErrorAlert statusCode={statusCode} message={message} />;
+  }
 
   return (
     <AdminLayout>

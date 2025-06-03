@@ -5,7 +5,7 @@ import { Input } from "@/components/Input";
 import { Checkbox } from "@/components/Checkbox";
 import { Button } from "@/components/Button";
 import { useState, ChangeEvent, FormEvent } from "react";
-import { sendOtp, verifyOtp, registerUser } from "@/services/user/userAuthService";
+import { sendOtp, verifyOtp, registerUser } from "@/api/user/userAuthService";
 import { validateSignupForm, FormState } from "@/utils/validations/user/Auth/signupValidation";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";

@@ -15,7 +15,7 @@ import {
   editHostDetails,
   changeProfile,
   deleteHost,
-} from "@/services/admin/hostManagement.services";
+} from "@/api/admin/hostManagement.services";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setAllHosts,
@@ -144,7 +144,7 @@ const AdminHosts = () => {
 
   const handleBlockOrUnblock = async (hostId: string, isBlocked: boolean) => {
     try {
-      const response = await blockUnblockHost(hostId, isBlocked);
+      const response = await blockUnblockHost(isBlocked,hostId);
       const updatedHosts = await getAllHosts();
       dispatch(setAllHosts(updatedHosts));
       setSelectedHost(updatedHosts.find((h: Host) => h._id === hostId) || null);
@@ -190,7 +190,7 @@ const AdminHosts = () => {
           rejectedRequests: form.rejectedRequests,
         };
 
-        const res = await editHostDetails(selectedHost._id, payload);
+        const res = await editHostDetails(payload,selectedHost._id);
         toast.success(res.message);
 
         const updatedHosts = await getAllHosts();
@@ -199,7 +199,6 @@ const AdminHosts = () => {
           updatedHosts.find((h: Host) => h._id === selectedHost._id) || null
         );
         setEditForm(null);
-        navigate("/admin/hosts");
       } catch (err: unknown) {
         toast.error((err as Error).message || "Failed to update host");
       } finally {
@@ -231,7 +230,7 @@ const AdminHosts = () => {
 
       setIsLoading(true);
       try {
-        const response = await changeProfile(selectedHost._id, formData);
+        const response = await changeProfile(formData,selectedHost._id);
         if (response?.profilePhotoUrl) {
           const updatedHost = {
             ...selectedHost,

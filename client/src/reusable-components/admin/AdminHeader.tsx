@@ -61,7 +61,11 @@ const AdminHeader: React.FC<HeaderProps> = ({ role }) => {
             </div>
             <div className="hidden sm:flex items-center gap-2">
               <img
-                src={Images.casual_user}
+                src={
+                  admin?.profilePic
+                    ? `${import.meta.env.VITE_PROFILE_URL}${admin.profilePic}`
+                    : Images.default_profile
+                }
                 alt="avatar"
                 className="w-8 h-8 rounded-full object-cover"
               />

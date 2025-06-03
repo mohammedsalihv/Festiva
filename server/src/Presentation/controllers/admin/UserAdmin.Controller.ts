@@ -29,8 +29,8 @@ export class UserAdminController {
     }
   }
 
-  async blockOrUnblockUser(req: AuthRequest, res: Response): Promise<void> {
-    const userId = req.auth?.id;
+  async blockOrUnblockUser(req: Request, res: Response): Promise<void> {
+    const userId = req.params.userId
     const { isBlocked } = req.body;
 
     if (!userId || typeof isBlocked !== "boolean") {
@@ -62,8 +62,8 @@ export class UserAdminController {
     }
   }
 
-  async editUser(req: AuthRequest, res: Response): Promise<void> {
-    const userId = req.auth?.id;
+  async editUser(req: Request, res: Response): Promise<void> {
+    const userId = req.params.userId
     const formData = req.body;
 
     if (!userId || !formData) {
@@ -92,7 +92,7 @@ export class UserAdminController {
 
   async changeProfile(req: MulterRequest, res: Response) {
     try {
-      const userId = req.auth?.userId;
+      const userId = req.params.userId
       const image = req.file;
 
       if (!image) {
@@ -139,8 +139,8 @@ export class UserAdminController {
     }
   }
 
-  async deleteUser(req: AuthRequest, res: Response): Promise<void> {
-    const userId = req.auth?.id;
+  async deleteUser(req: Request, res: Response): Promise<void> {
+    const userId = req.params.userId;
 
     if (!userId) {
       res.status(400).json({
@@ -152,7 +152,6 @@ export class UserAdminController {
 
     try {
       const isDeleted = await this.userManagementUseCase.deleteUser(userId);
-
       if (!isDeleted) {
         res.status(404).json({
           success: false,

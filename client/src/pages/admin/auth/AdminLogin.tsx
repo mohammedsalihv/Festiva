@@ -4,7 +4,7 @@ import { Images } from "@/assets";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
-import { adminLogin } from "@/services/admin/adminAuthService";
+import { adminLogin } from "@/api/admin/adminAuthService";
 import {
   validateAdminLoginForm,
   AdminFormState,
@@ -44,11 +44,15 @@ const AdminLogin: React.FC = () => {
     onSuccess: (data) => {
       const adminData = {
         id: data.admin.id,
-        email: data.admin.email,
         firstname: data.admin.firstname,
         lastname: data.admin.lastname,
         phone: data.admin.phone,
+        email: data.admin.email,
         role: data.admin.role,
+        profilePic: data.admin.profilePic,
+        isBlocked: data.admin.isBlocked,
+        isActive: data.admin.isActive,
+        timestamp: data.admin.timestamp,
         accessToken: data.admin.accessToken,
         refreshToken: data.admin.refreshToken,
       };

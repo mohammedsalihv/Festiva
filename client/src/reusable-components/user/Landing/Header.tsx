@@ -11,8 +11,10 @@ import { RootState } from "@/redux/store";
 import { logoutUser } from "@/redux/Slice/user/userSlice";
 import { Images } from "@/assets";
 import ConfirmDialog from "./ConfirmDialog";
+import { userLogout } from "@/api/user/userAuthService";
+import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { userLogout } from "@/services/user/userAuthService";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -43,13 +45,20 @@ const Header = () => {
   }, []);
 
   const handleLogout = async () => {
-    dispatch(logoutUser());
-    await userLogout()
-    setTimeout(() => {
+    try {
+      await userLogout();
       toast.success("Logout successful");
-    }, 500);
-    navigate("/");
+      dispatch(logoutUser());
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        toast.error("Logout failed");
+      }
+    }
   };
+
   return (
     <>
       <nav className="fixed top-0 left-0 w-full z-30 bg-black bg-opacity-40 text-white backdrop-blur-md">
@@ -133,6 +142,7 @@ const Header = () => {
             )}
           </div>
         </div>
+        <CustomToastContainer />
       </nav>
       <ResponsiveNavLinks
         open={open}

@@ -16,7 +16,7 @@ export class LogoutController {
       }
 
       await this.logoutUser.execute(token);
-
+      console.log('--------------------------------------------------------L')
       res.status(200).json({
         success: true,
         message: "Logout successful. Token blacklisted.",

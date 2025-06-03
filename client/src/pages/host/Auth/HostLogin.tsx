@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { loginHost } from "@/services/host/hostAuthService";
+import { loginHost } from "@/api/host/hostAuthService";
 import {
   validateHostLoginForm,
   FormState,

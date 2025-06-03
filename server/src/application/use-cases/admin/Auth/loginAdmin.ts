@@ -58,7 +58,11 @@ export class LoginAdmin {
         lastname: admin.lastname ?? "",
         email: admin.email ?? "",
         phone: admin.phone || "",
-        role: admin.role || "",
+        profilePic: admin.profilePic || "",
+        role: admin.role || "admin",
+        isActive: admin.isActive || true,
+        isBlocked: admin.isBlocked || false,
+        timestamp: admin.timestamp,
       },
     };
   }
