@@ -128,7 +128,6 @@ const AdminHosts = () => {
         setLoading(true);
         const data = await getAllHosts();
         dispatch(setAllHosts(data));
-        toast.success("List refreshed");
       } catch (error: unknown) {
         const errorMessage =
           error instanceof AxiosError
@@ -141,7 +140,7 @@ const AdminHosts = () => {
         setLoading(false);
       }
     })();
-  }, [dispatch]);
+  }, []);
 
   const handleBlockOrUnblock = async (hostId: string, isBlocked: boolean) => {
     try {

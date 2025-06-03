@@ -7,6 +7,7 @@ import {
   loginController,
   refreshTokenController,
   googleController,
+  logoutController 
 } from "../../../infrastructure/frameworks/DependencyInjection/user/Auth.dependancyContainer";
 import { userProfileController } from "../../../infrastructure/frameworks/DependencyInjection/user/page.dependancyContainer";
 import logger from "../../../utils/logger";

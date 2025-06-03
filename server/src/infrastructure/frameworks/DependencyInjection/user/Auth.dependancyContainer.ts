@@ -7,6 +7,10 @@ import { VerifyOtpController } from "../../../../Presentation/controllers/user/a
 import { RefreshTokenController } from "../../../../Presentation/controllers/user/auth/refreshToken.controller";
 import { LoginController } from "../../../../Presentation/controllers/user/auth/login.controller";
 import { GoogleController } from "../../../../Presentation/controllers/user/auth/google.controller";
+import { LogoutController } from "../../../../Presentation/controllers/user/auth/logout.controller";
+
+
+
 
 //use-cases
 
@@ -16,7 +20,7 @@ import { SendOTP } from "../../../../application/use-cases/user/Auth/sentOtp";
 import { LoginUser } from "../../../../application/use-cases/user/Auth/loginUser";
 import { GoogleLogin } from "../../../../application/use-cases/user/Auth/googleLogin";
 import { ResetPassword } from "../../../../application/use-cases/user/Auth/resetPassowrd";
-
+import { LogoutUser } from "../../../../application/use-cases/user/Auth/logoutUser";
 
 //repositories
 
@@ -26,6 +30,10 @@ import { OTPrepository } from "../../../repositories/user/auth/repository.verify
 import { LoginRepository } from "../../../repositories/user/auth/repository.userLogin";
 import { GoogleAuthRepository } from "../../../repositories/user/auth/repository.userGoogle";
 import { UserRepository } from "../../../repositories/user/pages/repository.user";
+import { LogoutRepository } from "../../../repositories/user/auth/repository.userLogout";
+
+
+
 
 // Instantiating Repositories
 
@@ -35,6 +43,8 @@ const loginRepository = new LoginRepository();
 const userRepository = new UserRepository();
 const verifyOtpRepository = new OTPrepository();
 const googleAuthRepository = new GoogleAuthRepository();
+const logoutRepository = new LogoutRepository()
+
 
 
 // Instantiate use cases
@@ -44,7 +54,7 @@ const loginUser = new LoginUser(loginRepository, userRepository);
 const verifyOtp = new VerifyOtp(verifyOtpRepository);
 const googleLoginUseCase = new GoogleLogin(googleAuthRepository);
 const resetPassword = new ResetPassword(userRepository)
-
+const logoutUser = new LogoutUser(logoutRepository)
 
 
 // Instantiate controllers
@@ -55,7 +65,7 @@ const refreshTokenController = new RefreshTokenController();
 const verifyOtpController = new VerifyOtpController(verifyOtp);
 const googleController = new GoogleController(googleLoginUseCase);
 const userController = new UserController(resetPassword)
-
+const logoutController = new LogoutController(logoutUser)
 export {
   userController,
   userRegisterController,
@@ -64,4 +74,5 @@ export {
   refreshTokenController,
   loginController,
   googleController,
+  logoutController
 };
