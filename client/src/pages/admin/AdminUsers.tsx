@@ -2,7 +2,6 @@ import { Images } from "@/assets";
 import AdminLayout from "@/reusable-components/admin/AdminLayout";
 import { useState, useEffect, FormEvent } from "react";
 import { RiCloseFill } from "react-icons/ri";
-import { VscListSelection } from "react-icons/vsc";
 import { LuUserSearch } from "react-icons/lu";
 import { AiTwotoneEdit } from "react-icons/ai";
 import Pagination from "@/components/Pagination";
@@ -36,6 +35,12 @@ import { useNavigate } from "react-router-dom";
 import Dropdown from "@/components/Dropdown";
 import { FaTrashRestoreAlt } from "react-icons/fa";
 import ErrorAlert from "@/components/ErrorAlert";
+import Table from "@/components/Table";
+
+type ErrorWithStatus = {
+  status?: number | string;
+  message?: string;
+};
 
 const AdminUsers = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -325,11 +330,13 @@ const AdminUsers = () => {
     if (error instanceof Error) {
       message = error.message;
     } else if (typeof error === "object" && error !== null) {
-      if ("status" in error) {
-        statusCode = String((error as any).status);
+      const err = error as Partial<ErrorWithStatus>;
+
+      if ("status" in err && err.status !== undefined) {
+        statusCode = String(err.status);
       }
-      if ("message" in error) {
-        message = String((error as any).message);
+      if ("message" in err && err.message !== undefined) {
+        message = String(err.message);
       }
     } else if (typeof error === "string") {
       message = error;
@@ -376,72 +383,40 @@ const AdminUsers = () => {
             </div>
           </div>
 
-          <div className="relative w-full overflow-x-auto">
-            <table className="min-w-full table-auto divide-y divide-gray-200">
-              <thead className="bg-gray-50 text-center">
-                <tr>
-                  <th className="px-6 lg:px-3 py-2">
-                    <div className="flex justify-center">
-                      <VscListSelection />
-                    </div>
-                  </th>
-                  <th className="px-4 py-4">
-                    <div className="flex justify-center">Person</div>
-                  </th>
-                  <th className="px-4 py-4">Firstname</th>
-                  <th className="px-4 py-4">Lastname</th>
-                  <th className="px-4 py-4">Email</th>
-                  <th className="px-4 py-4">Role</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200 text-center">
-                {filteredUsers
-                  .filter((user) => user !== null)
-                  .map((user) => (
-                    <tr
-                      key={user._id}
-                      onClick={() => handleSelect(user)}
-                      className="cursor-pointer hover:bg-gray-100 transition-all duration-200"
-                    >
-                      <td className="px-4 py-2">
-                        <input
-                          type="checkbox"
-                          checked={selectedUser?._id === user._id}
-                          readOnly
-                        />
-                      </td>
-                      <td className="px-4 py-4">
-                        <div className="flex justify-center">
-                          <img
-                            src={
-                              user?.profilePic
-                                ? `${import.meta.env.VITE_PROFILE_URL}${
-                                    user.profilePic
-                                  }`
-                                : Images.default_profile
-                            }
-                            alt="Profile"
-                            className="w-8 h-8 rounded-full border"
-                          />
-                        </div>
-                      </td>
-                      <td className="px-4 py-4 text-[10px] lg:text-sm">
-                        {user.firstname || "N/A"}
-                      </td>
-                      <td className="px-4 py-4 text-[10px] lg:text-sm">
-                        {user.lastname || "N/A"}
-                      </td>
-                      <td className="px-4 py-4 text-[10px] lg:text-sm">
-                        {user.email || "N/A"}
-                      </td>
-                      <td className="px-4 py-4 text-[10px] lg:text-sm">
-                        {user.role || "N/A"}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
+          <Table
+            data={filteredUsers}
+            onRowClick={(user) => handleSelect(user)}
+            renderRowStart={(user) => (
+              <input
+                type="checkbox"
+                checked={selectedUser?._id === user._id}
+                readOnly
+              />
+            )}
+            columns={[
+              {
+                header: "Person",
+                accessor: (user) => (
+                  <img
+                    src={
+                      user?.profilePic
+                        ? `${import.meta.env.VITE_PROFILE_URL}${
+                            user.profilePic
+                          }`
+                        : Images.default_profile
+                    }
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full border"
+                  />
+                ),
+                center: true,
+              },
+              { header: "Firstname", accessor: "firstname" },
+              { header: "Lastname", accessor: "lastname" },
+              { header: "Email", accessor: "email" },
+              { header: "Role", accessor: "role" },
+            ]}
+          />
         </div>
         {selectedUser && (
           <div className="w-full md:w-1/3 p-2 bg-gray-50">

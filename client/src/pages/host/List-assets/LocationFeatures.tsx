@@ -42,7 +42,7 @@ const LocationFeaturesTab: React.FC = () => {
   const [errors, setErrors] = useState({
     features: "",
     parking: "",
-    description: "",
+    venueDescription: "",
     terms: "",
   });
   const handleNext = () => {
@@ -51,7 +51,7 @@ const LocationFeaturesTab: React.FC = () => {
     const newErrors = {
       features: "",
       parking: "",
-      description: "",
+      venueDescription: "",
       terms: "",
     };
 
@@ -64,7 +64,7 @@ const LocationFeaturesTab: React.FC = () => {
       hasError = true;
     }
     if (!venueDescription) {
-      newErrors.description = "Please provide a description for your venue.";
+      newErrors.venueDescription = "Please provide a description for your venue.";
       hasError = true;
     }
     if (!terms) {
@@ -79,7 +79,7 @@ const LocationFeaturesTab: React.FC = () => {
         setErrors({
           features: "",
           parking: "",
-          description: "",
+          venueDescription: "",
           terms: "",
         });
       }, 5000);
@@ -105,7 +105,7 @@ const LocationFeaturesTab: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 md:px-2 sm:mt-16 py-10 font-prompt">
+    <div className="max-w-5xl mx-auto px-3 md:px-1 sm:mt-16 py-8 font-prompt">
       <div className="grid lg:grid-cols-[2fr_1fr] gap-8 items-start">
         <div>
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-black mb-1">
@@ -165,8 +165,8 @@ const LocationFeaturesTab: React.FC = () => {
               value={venueDescription}
               onChange={(e) => dispatch(setVenueDescription(e.target.value))}
             />
-            {errors.description && (
-              <p className="text-red-600 text-xs mt-1">{errors.description}</p>
+            {errors.venueDescription && (
+              <p className="text-red-600 text-xs mt-1">{errors.venueDescription}</p>
             )}
           </div>
 

@@ -1,7 +1,7 @@
 import axiosInstance from "@/config/admin/adminAxiosInstence";
 import { GetServicesResponse } from "@/utils/Types/admin/serviceManagementTypes";
 
-export const AllServices = async () => {
-  const response = await axiosInstance.get<GetServicesResponse>("/services");
+export const Assets = async (typeOfAsset:string) => {
+  const response = await axiosInstance.get<GetServicesResponse>(`/asset/${typeOfAsset}`);
   return response.data.data;
 };

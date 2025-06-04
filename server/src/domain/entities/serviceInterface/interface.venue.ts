@@ -15,6 +15,7 @@ export interface IVenue {
     terms: string;
     venueImages: string[];
     status?:string;
+    typeOfAsset?:string;
     location: Types.ObjectId;
     host: Types.ObjectId;
 }

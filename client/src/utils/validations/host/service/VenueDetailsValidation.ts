@@ -5,10 +5,10 @@ export interface ValidationResult {
 
 export interface venueDetailsFormState {
   venueName: string;
-  rent: number | null;
-  capacity: number | null;
+  rent: string;
+  capacity: string;
   shift: string;
-  squareFeet: number | null;
+  squareFeet: string;
   timeSlots: string[];
   availableDates: string[];
   details: string;
@@ -21,13 +21,13 @@ export const validateVenueDetailsForm = (
 
   if (!form.venueName.trim()) errors.name = "Venue name is required";
   
-  if (form.rent === null || form.rent <= 0) errors.rent = "Rent is required and should be a positive number";
+  if (form.rent === null) errors.rent = "Rent is required and should be a positive number";
   
-  if (form.capacity === null || form.capacity <= 0) errors.capacity = "Capacity is required and should be a positive number";
+  if (form.capacity === null) errors.capacity = "Capacity is required and should be a positive number";
   
   if (!form.shift) errors.shift = "Shift is required";
   
-  if (form.squareFeet === null || form.squareFeet <= 0) errors.squareFeet = "Square feet is required and should be a positive number";
+  if (form.squareFeet === null) errors.squareFeet = "Square feet is required and should be a positive number";
   
   if (!form.details.trim()) errors.details = "Please write something about the venue";
 

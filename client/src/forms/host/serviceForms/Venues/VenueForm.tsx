@@ -26,10 +26,10 @@ interface VenueDetailsErrorState {
 const VenueDetailsForm = () => {
   const [form, setForm] = useState<venueDetailsFormState>({
     venueName: "",
-    rent: null,
-    capacity: null,
+    rent: "",
+    capacity: "",
     shift: "",
-    squareFeet: null,
+    squareFeet: "",
     timeSlots: [],
     availableDates: [],
     details: "",
@@ -39,7 +39,7 @@ const VenueDetailsForm = () => {
   const [loading, setLoading] = useState(false);
   const [dateInput, setDateInput] = useState("");
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [startTime, setStartTime] = useState({
     hour: "10",
@@ -100,26 +100,22 @@ const VenueDetailsForm = () => {
     }));
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-  
-    setForm((prev) => ({
-      ...prev,
-      [name]:
-        ["rent", "capacity", "squareFeet"].includes(name)
-          ? Number(value)
-          : value, 
-    }));
-  
-    if (errors[name as keyof typeof errors]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
-  
+ const handleChange = (
+  e: React.ChangeEvent<
+    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  >
+) => {
+  const { name, value } = e.target;
+
+  setForm((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+
+  if (errors[name as keyof typeof errors]) {
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  }
+};
 
   const handleAddDate = () => {
     if (!dateInput) {
@@ -152,23 +148,31 @@ const VenueDetailsForm = () => {
   };
 
   const handleSubmit = () => {
-    setLoading(true);
-    const { isValid, errors: validationErrors } =
-      validateVenueDetailsForm(form);
-    if (!isValid) {
-      setErrors(validationErrors);
-      toast.error("Please correct the errors in the form.");
-      setTimeout(() => {
-        setErrors({});
-      }, 5000);
-      setLoading(false);
-      return;
-    }
+  setLoading(true);
 
-    dispatch(setVenueDetails(form))
-    toast.success("Saving...");
-    setTimeout(() => navigate("/host/location-features"), 5000);
+  const { isValid, errors: validationErrors } =
+    validateVenueDetailsForm(form);
+
+  if (!isValid) {
+    setErrors(validationErrors);
+    toast.error("Please correct the errors in the form.");
+    setTimeout(() => setErrors({}), 5000);
+    setLoading(false);
+    return;
+  }
+
+  const payload = {
+    ...form,
+    rent: form.rent === "" ? null : Number(form.rent),
+    capacity: form.capacity === "" ? null : Number(form.capacity),
+    squareFeet: form.squareFeet === "" ? null : Number(form.squareFeet),
   };
+
+  dispatch(setVenueDetails(payload));
+  toast.success("Saving...");
+  setTimeout(() => navigate("/host/location-features"), 5000);
+};
+
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 font-prompt">
@@ -198,10 +202,10 @@ const VenueDetailsForm = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <Input
-                  type="number"
+                  type="text"
                   placeholder="Rent"
                   name="rent"
-                  value={form.rent as string | number | undefined}
+                  value={form.rent}
                   onChange={handleChange}
                 />
                 {errors.rent && (
@@ -210,10 +214,10 @@ const VenueDetailsForm = () => {
               </div>
               <div>
                 <Input
-                  type="number"
+                  type="text"
                   placeholder="Max capacity"
                   name="capacity"
-                  value={form.capacity as string | number | undefined}
+                  value={form.capacity}
                   onChange={handleChange}
                 />
                 {errors.capacity && (
@@ -241,10 +245,10 @@ const VenueDetailsForm = () => {
               </div>
               <div>
                 <Input
-                  type="number"
+                  type="text"
                   placeholder="Square feet"
                   name="squareFeet"
-                  value={form.squareFeet as string | number | undefined}
+                  value={form.squareFeet}
                   onChange={handleChange}
                 />
                 {errors.squareFeet && (
@@ -347,10 +351,10 @@ const VenueDetailsForm = () => {
                     </select>
                   </div>
                   {errors.timeSlots && (
-                      <p className="text-red-600 text-xs mt-1">
-                        {errors.timeSlots}
-                      </p>
-                    )}
+                    <p className="text-red-600 text-xs mt-1">
+                      {errors.timeSlots}
+                    </p>
+                  )}
                 </div>
                 <button
                   type="button"
@@ -458,7 +462,7 @@ const VenueDetailsForm = () => {
         </div>
       </div>
       <div className="flex justify-end mt-10">
-      <button
+        <button
           onClick={handleSubmit}
           disabled={loading}
           className={`flex items-center justify-center gap-2 bg-main_host text-white px-10 py-3 rounded-lg transition ${

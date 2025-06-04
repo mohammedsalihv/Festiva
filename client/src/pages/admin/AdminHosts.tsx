@@ -1,6 +1,5 @@
 import AdminLayout from "@/reusable-components/admin/AdminLayout";
 import { LuUserSearch } from "react-icons/lu";
-import { VscListSelection } from "react-icons/vsc";
 import { Images } from "@/assets";
 import Pagination from "@/components/Pagination";
 import { useEffect, useState, FormEvent } from "react";
@@ -37,6 +36,7 @@ import { useNavigate } from "react-router-dom";
 import Loader from "@/components/Loader";
 import Dropdown from "@/components/Dropdown";
 import { FaTrashRestoreAlt } from "react-icons/fa";
+import Table from "@/components/Table";
 
 const AdminHosts = () => {
   const [page, setPage] = useState(1);
@@ -144,7 +144,7 @@ const AdminHosts = () => {
 
   const handleBlockOrUnblock = async (hostId: string, isBlocked: boolean) => {
     try {
-      const response = await blockUnblockHost(isBlocked,hostId);
+      const response = await blockUnblockHost(isBlocked, hostId);
       const updatedHosts = await getAllHosts();
       dispatch(setAllHosts(updatedHosts));
       setSelectedHost(updatedHosts.find((h: Host) => h._id === hostId) || null);
@@ -190,7 +190,7 @@ const AdminHosts = () => {
           rejectedRequests: form.rejectedRequests,
         };
 
-        const res = await editHostDetails(payload,selectedHost._id);
+        const res = await editHostDetails(payload, selectedHost._id);
         toast.success(res.message);
 
         const updatedHosts = await getAllHosts();
@@ -230,7 +230,7 @@ const AdminHosts = () => {
 
       setIsLoading(true);
       try {
-        const response = await changeProfile(formData,selectedHost._id);
+        const response = await changeProfile(formData, selectedHost._id);
         if (response?.profilePhotoUrl) {
           const updatedHost = {
             ...selectedHost,
@@ -355,64 +355,39 @@ const AdminHosts = () => {
               </div>
             </div>
           </div>
-          <div className="relative w-full overflow-x-auto">
-            <table className="min-w-full table-auto divide-y divide-gray-200">
-              <thead className="bg-gray-50 text-center">
-                <tr>
-                  <th className="px-6 lg:px-3 py-2">
-                    <div className="flex justify-center">
-                      <VscListSelection />
-                    </div>
-                  </th>
-                  <th className="px-4 py-4">
-                    <div className="flex justify-center">Person</div>
-                  </th>
-                  <th className="px-4 py-4">Name</th>
-                  <th className="px-4 py-4">Email</th>
-                  <th className="px-4 py-4">More</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200 text-center">
-                {filteredHosts.map((host, index) => (
-                  <tr
-                    key={host._id}
-                    className="cursor-pointer hover:bg-gray-100 transition-all duration-200"
-                  >
-                    <td className="px-4 py-4">{index + 1}</td>
-                    <td className="flex justify-center gap-2 py-4">
-                      <img
-                        src={
-                          host.profilePic
-                            ? `${import.meta.env.VITE_PROFILE_URL}${
-                                host.profilePic
-                              }`
-                            : Images.casual_user
-                        }
-                        alt="Profile"
-                        className="w-8 h-8 rounded-full border"
-                      />
-                    </td>
-                    <td className="px-4 py-4 text-[10px] lg:text-sm">
-                      <span className="text-[10px] lg:text-sm">
-                        {host.name}
-                      </span>
-                    </td>
-                    <td className="px-4 py-4 text-[10px] lg:text-sm">
-                      {host.email}
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex justify-center">
-                        <IoMdArrowForward
-                          className="text-black h-5 w-5 lg:h-7 lg:w-7"
-                          onClick={() => setSelectedHost(host)}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Table
+            data={filteredHosts}
+            onRowClick={(host) => setSelectedHost(host)}
+            renderRowStart={(_, index) => index + 1}
+            columns={[
+              {
+                header: "Person",
+                accessor: (host) => (
+                  <img
+                    src={
+                      host.profilePic
+                        ? `${import.meta.env.VITE_PROFILE_URL}${
+                            host.profilePic
+                          }`
+                        : Images.casual_user
+                    }
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full border"
+                  />
+                ),
+                center: true,
+              },
+              { header: "Name", accessor: "name" },
+              { header: "Email", accessor: "email" },
+              {
+                header: "More",
+                accessor: () => (
+                  <IoMdArrowForward className="text-black h-5 w-5 lg:h-7 lg:w-7" />
+                ),
+                center: true,
+              },
+            ]}
+          />
         </div>
       </div>
       <div className="p-1">
