@@ -75,4 +75,6 @@ userAuthRoutes.delete("/logout", async (req, res) => {
     console.error("Logout route error:", err);
   }
 });
+
+
 export default userAuthRoutes;
