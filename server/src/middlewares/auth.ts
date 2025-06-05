@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import {
   AuthRequest,
   JwtPayload,
-} from "../domain/entities/controlInterface/authType";
+} from "../domain/controlInterface/authType";
 import logger from "../utils/logger";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;

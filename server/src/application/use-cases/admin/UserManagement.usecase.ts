@@ -1,7 +1,7 @@
 import { responseUserDTO } from "../../../config/DTO/user/dto.user";
 import { IUserManagementRepository } from "../../../domain/entities/repositoryInterface/admin/interface.userManagement";
 import CustomError from "../../../utils/CustomError";
-import { EditUserPayload } from "../../../domain/entities/adminInterface/interface.editUser";
+import { EditUserPayload } from "../../../domain/adminInterface/interface.editUser";
 
 export class UserManagementUseCase {
   constructor(private userManagementRepository: IUserManagementRepository) {}

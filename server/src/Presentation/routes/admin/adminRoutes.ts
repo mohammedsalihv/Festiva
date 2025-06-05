@@ -1,6 +1,7 @@
 import express, { Request, Response, RequestHandler } from "express";
-import { userAdminController } from "../../../infrastructure/frameworks/DependencyInjection/admin/UserManagement.dependancyContainer";
-import { hostAdminController } from "../../../infrastructure/frameworks/DependencyInjection/admin/HostManagement.dependancyContainer";
+import { userAdminController } from "../../../infrastructure/frameworks/DependencyInjection/admin/userManagement.dependancyContainer";
+import { hostAdminController } from "../../../infrastructure/frameworks/DependencyInjection/admin/hostManagement.dependancyContainer";
+import { assetAdminController } from "../../../infrastructure/frameworks/DependencyInjection/admin/assetManagement.dependancyContainer";
 import { singleImageUpload } from "../../../middlewares/multer";
 import { authenticateToken, isAdmin } from "../../../middlewares/auth";
 
@@ -82,11 +83,12 @@ adminRoutes.delete(
 
 
 // service management
+
 adminRoutes.get(
-  "/services",
+  "/assets/:typeOfAsset",
    authenticateToken,
    isAdmin,
-  hostAdminController.getHosts.bind(hostAdminController)
+  assetAdminController.AllAssets.bind(assetAdminController)
 );
 
 

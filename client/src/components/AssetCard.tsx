@@ -11,7 +11,8 @@ export const AssetsCard: React.FC<AssetsCardProps> = ({
   showPagination = false,
 }) => {
   return (
-    <div className="group relative w-64 aspect-[3/4] rounded-md overflow-hidden shadow bg-white cursor-pointer transition-transform hover:scale-[1.02]">
+   <div className="group relative w-full aspect-[3/3.8] rounded-md overflow-hidden shadow bg-white cursor-pointer transition-transform hover:scale-[1.02]">
+
       <img
         src={imageSrc}
         alt="Card"

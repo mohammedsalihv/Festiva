@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import { UserManagementUseCase } from "../../../application/use-cases/admin/UserManagement.usecase";
+import { UserManagementUseCase } from "../../../application/use-cases/admin/userManagement.usecase";
 import logger from "../../../utils/logger";
 import { JwtPayload } from "jsonwebtoken";
-import { AuthRequest } from "../../../domain/entities/controlInterface/authType";
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;

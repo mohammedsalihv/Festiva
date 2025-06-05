@@ -1,5 +1,5 @@
 import { responseUserDTO } from "../../../../config/DTO/user/dto.user";
-import { EditUserPayload } from "../../adminInterface/interface.editUser";
+import { EditUserPayload } from "../../../adminInterface/interface.editUser";
 export interface IUserManagementRepository {
   findAll(): Promise<responseUserDTO[]>;
   UserBlockUnblock(userId: string, isBlocked: boolean): Promise<boolean>;

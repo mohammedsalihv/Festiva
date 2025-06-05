@@ -1,6 +1,6 @@
-import { HostAdminController } from "../../../../Presentation/controllers/admin/HostAdmin.Controller";
+import { HostAdminController } from "../../../../Presentation/controllers/admin/hostAdmin.Controller";
 
-import { HostManagementUseCase } from "../../../../application/use-cases/admin/HostManagement.usecase";
+import { HostManagementUseCase } from "../../../../application/use-cases/admin/hostManagement.usecase";
 
 import { HostManagementRepostory } from "../../../repositories/admin/repository.hostManagement";
 

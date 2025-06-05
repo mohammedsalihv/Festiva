@@ -1,5 +1,5 @@
-import { UserAdminController } from "../../../../Presentation/controllers/admin/UserAdmin.Controller";
-import { UserManagementUseCase } from "../../../../application/use-cases/admin/UserManagement.usecase";
+import { UserAdminController } from "../../../../Presentation/controllers/admin/userAdmin.Controller";
+import { UserManagementUseCase } from "../../../../application/use-cases/admin/userManagement.usecase";
 import { UserManagementRepository } from "../../../repositories/admin/repository.userManagement";
 
 const userManagementRepository = new UserManagementRepository();

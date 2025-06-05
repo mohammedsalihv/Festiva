@@ -1,5 +1,5 @@
 import { responseHostDTO } from "../../../../config/DTO/host/dto.host";
-import { EditHostPayload } from "../../adminInterface/interface.editHost";
+import { EditHostPayload } from "../../../adminInterface/interface.editHost";
 
 export interface IHostManagementRepository {
   findAllHosts(): Promise<responseHostDTO[]>;

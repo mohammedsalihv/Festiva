@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { UserProfile } from "../../../../application/use-cases/user/Pages/Profile/userProfile-usecase";
 import logger from "../../../../utils/logger";
 import { JwtPayload } from "jsonwebtoken";
-import { AuthRequest } from "../../../../domain/entities/controlInterface/authType";
+import { AuthRequest } from "../../../../domain/controlInterface/authType";
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
