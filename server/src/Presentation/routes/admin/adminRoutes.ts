@@ -10,87 +10,85 @@ export interface MulterRequest extends Request {
   file: Express.Multer.File;
 }
 
-
 adminRoutes.get(
   "/users",
   authenticateToken,
-   isAdmin,
+  isAdmin,
   userAdminController.Users.bind(userAdminController)
 );
 adminRoutes.patch(
   "/users/:userId/blockUnblock/:userId",
-   authenticateToken,
-   isAdmin,
+  authenticateToken,
+  isAdmin,
   userAdminController.blockOrUnblockUser.bind(userAdminController)
 );
 adminRoutes.patch(
   "/users/edit/:userId",
-   authenticateToken,
-   isAdmin,
+  authenticateToken,
+  isAdmin,
   userAdminController.editUser.bind(userAdminController)
 );
 adminRoutes.put(
   "/users/changeprofile/:userId",
-   authenticateToken,
-   isAdmin,
+  authenticateToken,
+  isAdmin,
   singleImageUpload,
   userAdminController.changeProfile.bind(userAdminController) as RequestHandler
 );
 adminRoutes.delete(
   "/users/:userId",
-   authenticateToken,
-   isAdmin,
+  authenticateToken,
+  isAdmin,
   userAdminController.deleteUser.bind(userAdminController)
 );
 
-
-
-
 // host management
+
 adminRoutes.get(
   "/hosts",
-   authenticateToken,
-   isAdmin,
+  authenticateToken,
+  isAdmin,
   hostAdminController.getHosts.bind(hostAdminController)
 );
 
 adminRoutes.patch(
   "/hosts/blockUnblock/:hostId",
-   authenticateToken,
-   isAdmin,
+  authenticateToken,
+  isAdmin,
   hostAdminController.blockOrUnblockHost.bind(hostAdminController)
 );
 adminRoutes.patch(
   "/hosts/edit/:hostId",
-   authenticateToken,
-   isAdmin,
+  authenticateToken,
+  isAdmin,
   hostAdminController.editHost.bind(hostAdminController)
 );
 adminRoutes.put(
   "/hosts/changeprofile/:hostId",
-   authenticateToken,
-   isAdmin,
+  authenticateToken,
+  isAdmin,
   singleImageUpload,
   hostAdminController.changeProfile.bind(hostAdminController) as RequestHandler
 );
 adminRoutes.delete(
   "/hosts/:hostId",
-   authenticateToken,
-   isAdmin,
+  authenticateToken,
+  isAdmin,
   hostAdminController.deleteHost.bind(hostAdminController)
 );
-
-
 
 // service management
 
 adminRoutes.get(
   "/assets/:typeOfAsset",
-   authenticateToken,
-   isAdmin,
-  assetAdminController.AllAssets.bind(assetAdminController)
+  authenticateToken,
+  isAdmin,
+  assetAdminController.Assets.bind(assetAdminController)
 );
 
-
-
+adminRoutes.get("/assets/details/:assetId",
+  authenticateToken,
+  isAdmin,
+  assetAdminController.assetDetails.bind(assetAdminController)
+)
 export default adminRoutes;

@@ -8,7 +8,7 @@ import HostLanding from "@/pages/host/landing/HostLanding";
 import HostLogin from "./pages/host/Auth/HostLogin";
 import HostRegister from "./pages/host/Auth/HostRegister";
 import HostPrivateRoute from "./routes/host/HostPrivateRoute";
-import UserPrivateRoute from "./routes/Protect/UserPrivateRoute";
+import UserPrivateRoute from "./routes/user/Protect/UserPrivateRoute";
 import AdminPrivateRoute from "./routes/admin/AdminPrivateRoutes";
 import AdminLogin from "./pages/admin/auth/AdminLogin";
 import RobotError from "./components/ErrorAlert";

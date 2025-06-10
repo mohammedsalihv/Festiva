@@ -1,8 +1,11 @@
-export type AssetsCardProps = {
+export interface AssetsCardProps {
   title: string;
-  subtitle: string;
+  status: string;
+  host: string;
+  reqDate: string;
   imageSrc: string;
-  logoSrc?: string;
   bookmarked?: boolean;
   showPagination?: boolean;
-};
+  id: string;
+  fulldata?: (id: string) => void;
+}

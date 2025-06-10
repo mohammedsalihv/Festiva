@@ -14,14 +14,14 @@ interface ErrorState {
   businessName: string;
   make?: string;
   model?: string;
-  year?: number;
+  year?: string;
   color?: string;
   plate?: string;
   fuel?: string;
   transmission?: string;
-  seats?: number;
-  rent?: number;
-  deposite?: number;
+  seats?: string;
+  rent?: string;
+  deposite?: string;
   timeSlots?: string[];
   availableDates?: string[];
 }
@@ -31,14 +31,14 @@ const CarForm = () => {
     businessName: "",
     make: "",
     model: "",
-    year: null,
+    year: "",
     color: "",
     plate: "",
     fuel: "",
     transmission: "",
-    seats: null,
-    rent: null,
-    deposite: null,
+    seats: "",
+    rent: "",
+    deposite: "",
     timeSlots: [],
     availableDates: [],
   });

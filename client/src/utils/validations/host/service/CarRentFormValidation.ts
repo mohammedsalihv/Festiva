@@ -5,18 +5,18 @@ export interface ValidationResult {
 
 export interface carRentFormState {
   businessName: string;
-  rent: number | null;
+  rent: string;
   make: string;
   model: string;
   timeSlots: string[];
   availableDates: string[];
-  year: number | null;
+  year: string;
   plate: string;
   color: string;
   fuel: string;
   transmission: string;
-  seats: number | null;
-  deposite: number | null;
+  seats: string;
+  deposite: string;
 }
 
 export const validateCarRentForm = (
@@ -24,18 +24,17 @@ export const validateCarRentForm = (
 ): ValidationResult => {
   const errors: { [key: string]: string } = {};
 
-  if (!form.businessName.trim()) errors.businessName = "Your business name is required";
+  if (!form.businessName.trim())
+    errors.businessName = "Your business name is required";
   if (!form.make.trim()) errors.make = "Make is required";
   if (!form.model.trim()) errors.model = "Model is required";
-  if (form.rent === null || form.rent <= 0)
+  if (!form.rent.trim())
     errors.rent = "Rent is required and should be a positive number";
-  if (form.seats === null || form.seats <= 0)
-    errors.seats = "Please select at least one seat";
+  if (form.seats.trim()) errors.seats = "Please select at least one seat";
   if (!form.transmission) errors.transmission = "Transmission is required";
-  if (form.year === null || form.year <= 0)
+  if (form.year.trim())
     errors.year = "Year is required and should be a positive number";
-  if (form.deposite === null || form.deposite <= 0)
-    errors.deposite = "Deposit amount is required";
+  if (form.deposite.trim()) errors.deposite = "Deposit amount is required";
   if (!form.color.trim()) errors.color = "Please type your car color";
   if (!form.plate.trim())
     errors.plate =

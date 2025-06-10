@@ -31,7 +31,7 @@ export class venueController {
 
       const files = req.files as Express.Multer.File[];
       const imageUrls = files.map(
-        (file) => `uploads/assetImages/${file.filename}`
+        (file) => `uploads/assetImages/venues/${file.filename}`
       );
       const newLocation = await this.locationRepository.addLocation(
         cleanedData.location

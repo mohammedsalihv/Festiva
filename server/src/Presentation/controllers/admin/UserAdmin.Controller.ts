@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserManagementUseCase } from "../../../application/use-cases/admin/userManagement.usecase";
+import { UserManagementUseCase } from "../../../application/use-cases/admin/UserManagement.usecase";
 import logger from "../../../utils/logger";
 import { JwtPayload } from "jsonwebtoken";
 

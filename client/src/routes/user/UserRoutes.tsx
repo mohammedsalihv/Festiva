@@ -6,7 +6,7 @@ import Profile from "@/pages/user/Profile";
 import MainServices from "@/pages/user/MainServices";
 import Venuetypes from "@/pages/user/service/venue/Venuetypes";
 import Venues from "@/pages/user/service/venue/Venues";
-import PrivateRoute from "@/routes/Protect/PrivateRoute";
+import PrivateRoute from "@/routes/user/Protect/PrivateRoute";
 import ErrorAlert from "@/components/ErrorAlert";
 
 const UserRoutes: React.FC = () => {

@@ -1,5 +1,6 @@
-import { IVenue } from "../../serviceInterface/interface.venue";
+import { IAssetBase } from "../../serviceInterface/interface.asset";
 
 export interface IAssetManagementRepository {
-  findAllAssets(): Promise<IVenue[]>;
+  findAssets(typeOfAsset: string): Promise<IAssetBase[]>;
+  findAssetById(id: string, typeOfAsset: string): Promise<IAssetBase | null>;
 }

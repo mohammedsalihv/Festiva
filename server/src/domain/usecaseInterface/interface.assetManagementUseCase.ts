@@ -1,5 +1,7 @@
-import { IVenue } from "../entities/serviceInterface/interface.venue";
+import { IAssetBase } from "../entities/serviceInterface/interface.asset";
 
 export interface IAssetManagementUseCase {
-  execute(): Promise<IVenue[]>;
+  execute(typeOfAsset: string): Promise<IAssetBase[]>;
+  fetchAssetById(id: string, typeOfAsset: string): Promise<IAssetBase | null>;
+
 }

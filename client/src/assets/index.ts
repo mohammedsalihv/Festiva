@@ -7,7 +7,7 @@ import Landing_2 from "../assets/images/Landing_2.jpg";
 import default_profile from '@/assets/images/default_profile.png';
 import landing_lady_sing from '@/assets/images/Landing_lady_sing.jpg';
 import landing_venue from '@/assets/images/landing_venue.jpg';
-
+import imageNA from "@/assets/images/image NA.png"
 
 
 // logo
@@ -110,6 +110,7 @@ export const Images = {
   security,
   lock,
   mail,
+  imageNA,
   Landing_1,
   Landing_2,
   landing_lady_sing,

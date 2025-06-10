@@ -3,7 +3,7 @@ import Signup from "@/pages/user/Auth/Signup";
 import { Routes, Route } from "react-router-dom";
 import Landing from "@/pages/user/Landing";
 import ErrorAlert from "@/components/ErrorAlert";
-import PublicOnlyRoute from "../Protect/PublicOnlyRoute";
+import PublicOnlyRoute from "./Protect/PublicOnlyRoute";
 
 const PublicRoutes = () => (
   <Routes>
