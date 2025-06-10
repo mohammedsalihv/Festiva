@@ -1,8 +1,8 @@
 import { Button } from "@/components/Button";
 import { Card, CardContent } from "@/components/Card";
-import { FaParking, FaTree, FaUserCircle } from "react-icons/fa";
-import { MdLocationOn, MdAttachMoney } from "react-icons/md";
-import { FaPeopleGroup } from "react-icons/fa6";
+import { FaParking, FaTree } from "react-icons/fa";
+import { MdLocationOn} from "react-icons/md";
+import { MdCelebration } from "react-icons/md";
 import { LuShapes } from "react-icons/lu";
 import { venueRequestProps } from "@/utils/Types/admin/assetManagement/venue";
 import { Images } from "@/assets";
@@ -10,9 +10,13 @@ import { useDispatch } from "react-redux";
 import { clearAssetDetails } from "@/redux/Slice/admin/assetManagementSlice";
 import { useNavigate } from "react-router-dom";
 import { MdBedtime } from "react-icons/md";
+import { LuArmchair } from "react-icons/lu";
+import { FaRupeeSign } from "react-icons/fa";
+
 
 const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
   const {
+    venueName,
     venueDescription,
     venueImages,
     rent,
@@ -61,7 +65,7 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
             <MdLocationOn className="text-xl" /> Easy Location
           </div>
           <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3">
-            <FaParking className="text-xl" /> Parking
+            <MdCelebration className="text-xl" /> Celebration
           </div>
           <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3">
             <LuShapes className="text-xl" />
@@ -70,9 +74,55 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
           <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3">
             <FaTree className="text-xl" /> Garden View
           </div>
-          <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3">
-            <MdBedtime className="text-xl" /> {shift}
-          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card>
+            <CardContent className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex items-center gap-2">
+                <div>
+                  <p className="text-sm text-gray-500">Venue Name</p>
+                  <p className="text-base font-medium text-gray-800">
+                    {venueName}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <MdBedtime className="text-xl text-gray-600" />
+                <div>
+                  <p className="text-sm text-gray-500">Shift</p>
+                  <p className="text-base font-medium text-gray-800">{shift}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex items-center gap-2">
+                <LuArmchair className="text-xl text-gray-600" />
+                <div>
+                  <p className="text-sm text-gray-500">Sitting capacity</p>
+                  <p className="text-base font-medium text-gray-800">
+                    {capacity} peoples
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaParking className="text-xl text-gray-600" />
+                <div>
+                  <p className="text-sm text-gray-500">Parking</p>
+                  {parkingFeatures?.length > 0 &&
+                    parkingFeatures.map((feat, i) => (
+                      <p
+                        key={i}
+                        className="text-base font-medium text-gray-800"
+                      >
+                        {feat}
+                      </p>
+                    ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {Array.isArray(availableDates) && availableDates.length > 0 && (
@@ -130,7 +180,10 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
       <div className="space-y-4">
         <Card>
           <CardContent className="p-4 flex items-center gap-4">
-            <FaUserCircle className="text-4xl text-gray-600" />
+            <img
+              src={`${import.meta.env.VITE_PROFILE_URL}${host.profilePic}`}
+              className="w-14 h-14 rounded-full border border-solid text-gray-600"
+            />
             <div>
               <h4 className="font-semibold">{host?.name}</h4>
               <p className="text-sm text-gray-600">{host?.email}</p>
@@ -166,11 +219,10 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
 
         <Card>
           <CardContent className="p-4 flex justify-between items-center">
-            <div className="text-xl font-bold text-gray-800 flex items-center gap-1">
-              <MdAttachMoney className="text-2xl" /> ₹{rent}/Day
-            </div>
-            <div className="text-md font-medium text-gray-600 flex items-center gap-1">
-              <FaPeopleGroup className="text-lg" /> {capacity}
+            <div className="text-xl text-gray-800 flex items-center gap-1">
+              <FaRupeeSign className="text-sm" />
+              <span className="font-bold">{rent}</span>
+              <span className="text-sm text-gray-500 font-normal">/Day</span>
             </div>
           </CardContent>
         </Card>

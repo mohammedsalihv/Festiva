@@ -20,8 +20,8 @@ const AdminServices = () => {
     setLoading(true);
     try {
       const response = await Assets(selectedTab);
+      console.log(response)
       setAssets(response);
-      console.log(response);
     } catch (err) {
       console.error(`Error fetching ${selectedTab}`, err);
       setAssets([]);
