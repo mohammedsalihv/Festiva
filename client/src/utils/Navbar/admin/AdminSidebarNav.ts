@@ -16,7 +16,7 @@ const navItems = [
   { icon: SiBookstack, label: "Bookings", link: "/admin/bookings" },
   { icon: HiMiniUsers, label: "Customers  Management", link: "/admin/users" },
   { icon: FaUsersRectangle, label: "Host Management", link: "/admin/hosts" },
-  { icon: FcServices, label: "Service Management", link: "/admin/services" },
+  { icon: FcServices, label: "Service Management", link: "/admin/assets" },
   { icon: MdOutlineManageAccounts, label: "Settings", link: "/admin/settings" },
   { icon: RiLogoutCircleRLine, label: "Signout" , isLogout: true, },
 ];

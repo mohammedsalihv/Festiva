@@ -14,3 +14,13 @@ export const assetDetails = async (assetId: string, typeOfAsset: string) => {
   );
   return response.data.data;
 };
+
+export const assetRequestApprove = async (
+  assetId: string,
+  assetStatus: string
+) => {
+  const response = await axiosInstance.put<GetServicesResponse>(
+    `/asset/request/approve/${assetId}?assetStatus=${assetStatus}`
+  );
+  return response.data.data;
+};

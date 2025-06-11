@@ -1,6 +1,7 @@
 import { assetHostInfo , assetLocationInfo } from "./commonAssets";
 
 export interface venueResponse {
+  id:string;
   venueName?: string;
   rent?: number;
   capacity?: number;

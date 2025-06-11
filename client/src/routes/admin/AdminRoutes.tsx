@@ -35,7 +35,7 @@ const AdminRoutes: React.FC = () => {
         }
       />
       <Route
-        path="services"
+        path="assets"
         element={
           <LoaderPage>
             <AdminServices />
