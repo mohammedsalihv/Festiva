@@ -4,7 +4,7 @@ import { FaParking, FaTree, FaUserCircle } from "react-icons/fa";
 import { MdLocationOn, MdAttachMoney } from "react-icons/md";
 import { BsClockHistory } from "react-icons/bs";
 import { GiChecklist } from "react-icons/gi";
-import { rentCarRequestProps } from "@/utils/Types/admin/assetManagement/rentCar";
+import { rentCarRequestProps } from "@/utils/Types/admin/assetManagement/IRentCar";
 
 const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
   const {

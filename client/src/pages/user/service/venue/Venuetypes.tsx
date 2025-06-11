@@ -1,13 +1,8 @@
 import { Images } from "@/assets";
 import { useNavigate } from "react-router-dom";
 
-
 const Venuetypes = () => {
-
-  const navigate = useNavigate()
-
-
-
+  const navigate = useNavigate();
 
   return (
     <div className="px-4 py-10 md:px-12 lg:px-24 max-w-screen-xl mx-auto font-JosephicSans">
@@ -46,26 +41,27 @@ const Venuetypes = () => {
           {
             image: Images.convention_space,
             title: "Convention centers",
-            description: "Versatile venues for any event type like wedding , birthday.",
-            link:'/user/venues'
+            description:
+              "Versatile venues for any event type like wedding , birthday.",
+            link: "/user/assets/venues",
           },
           {
             image: Images.multiPurpose_space,
             title: "Multipurpose event space",
             description: "Spacious halls for large-scale gatherings.",
-            link:'/user/venues'
+            link: "/user/assets/venues",
           },
           {
             image: Images.business_space,
             title: "Business Meetings",
             description: "Professional setups for corporate events.",
-            link:'/user/venues'
+            link: "/user/assets/venues",
           },
           {
             image: Images.event_space,
             title: "Event party spaces",
             description: "Elegant venues for unforgettable parties.",
-            link:'/user/venues'
+            link: "/user/assets/venues",
           },
         ].map((item, index) => (
           <div
@@ -80,7 +76,10 @@ const Venuetypes = () => {
             <div className="p-4">
               <h4 className="font-semibold text-base mb-1">{item.title}</h4>
               <p className="text-sm text-gray-600 mb-4">{item.description}</p>
-              <button onClick={() => navigate(item.link)} className="bg-purple-600 text-white px-4 py-2 text-sm rounded hover:bg-purple-700">
+              <button
+                onClick={() => navigate(item.link)}
+                className="bg-purple-600 text-white px-4 py-2 text-sm rounded hover:bg-purple-700"
+              >
                 View more
               </button>
             </div>

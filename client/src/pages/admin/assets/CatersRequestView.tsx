@@ -4,7 +4,7 @@ import { FaParking, FaTree, FaUserCircle } from "react-icons/fa";
 import { MdLocationOn, MdAttachMoney } from "react-icons/md";
 import { BsClockHistory } from "react-icons/bs";
 import { GiChecklist } from "react-icons/gi";
-import { catersRequestProps } from "@/utils/Types/admin/assetManagement/caters";
+import { catersRequestProps } from "@/utils/Types/admin/assetManagement/ICaters";
 
 
 const CatersRequestView:React.FC<catersRequestProps> = ({data}) => {

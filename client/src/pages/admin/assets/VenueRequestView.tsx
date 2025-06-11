@@ -5,7 +5,7 @@ import { FaParking, FaTree } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
 import { MdCelebration } from "react-icons/md";
 import { LuShapes } from "react-icons/lu";
-import { venueRequestProps } from "@/utils/Types/admin/assetManagement/venue";
+import { venueRequestProps } from "@/utils/Types/admin/assetManagement/Ivenue";
 import { Images } from "@/assets";
 import { useDispatch } from "react-redux";
 import { clearAssetDetails } from "@/redux/Slice/admin/assetManagementSlice";
@@ -13,11 +13,16 @@ import { useNavigate } from "react-router-dom";
 import { MdBedtime } from "react-icons/md";
 import { LuArmchair } from "react-icons/lu";
 import { FaRupeeSign } from "react-icons/fa";
-import { assetRequestApprove } from "@/api/admin/assetManagement.services";
+import {
+  assetRequestApprove,
+  assetRequestReject,
+} from "@/api/admin/assetManagement.services";
 import { toast } from "react-toastify";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { CiCircleCheck } from "react-icons/ci";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
+import { useState } from "react";
 
 const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
   const {
@@ -34,16 +39,30 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
     availableDates,
     features = [],
     details,
+    typeOfAsset,
+    status,
     terms,
     host,
   } = data;
 
+  const [confirmAction, setConfirmAction] = useState(false);
+  const [actionType, setActionType] = useState<"approve" | "reject" | null>(
+    null
+  );
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const hanldeAccept = async () => {
-    await assetRequestApprove(id, "approved");
+  const hanldeAccept = async (id: string, assetType: string) => {
+    await assetRequestApprove(id, assetType);
     toast.success("Asset approved successfully");
+    dispatch(clearAssetDetails());
+    navigate("/admin/assets");
+  };
+
+  const hanldeReject = async (id: string, assetType: string) => {
+    await assetRequestReject(id, assetType);
+    toast.success("Asset rejected successfully");
     dispatch(clearAssetDetails());
     navigate("/admin/assets");
   };
@@ -241,21 +260,70 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
               </div>
             </CardContent>
           </Card>
+          {status === "pending" ? (
+            <div className="flex flex-col sm:flex-row gap-2 w-full">
+              <Button
+                className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-prompt px-4 py-2"
+                onClick={() => {
+                  setActionType("approve");
+                  setConfirmAction(true);
+                }}
+              >
+                <CiCircleCheck className="w-10 h-10 text-white" />
+                <span>Approve</span>
+              </Button>
 
-          <div className="flex flex-col sm:flex-row gap-2 w-full">
-            <Button
-              className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-prompt px-4 py-2"
-              onClick={hanldeAccept}
-            >
-              <CiCircleCheck className="w-10 h-10 text-white" />
-              <span>Approve</span>
-            </Button>
+              <Button
+                className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-prompt px-4 py-2"
+                onClick={() => {
+                  setActionType("reject");
+                  setConfirmAction(true);
+                }}
+              >
+                <IoIosCloseCircleOutline className="w-10 h-10 text-white" />
+                <span>Reject</span>
+              </Button>
+            </div>
+          ) : (
+            <h1 className="text-sm text-green-600 font-semibold bg-green-300 px-3 py-1 rounded">
+              {status}
+            </h1>
+          )}
 
-            <Button className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-prompt px-4 py-2">
-              <IoIosCloseCircleOutline className="w-14 h-14 text-white" />
-              <span>Reject</span>
-            </Button>
-          </div>
+          <ConfirmDialog
+            isOpen={confirmAction}
+            title={
+              actionType === "approve"
+                ? "Confirm Approval"
+                : "Confirm Rejection"
+            }
+            description={
+              actionType === "approve"
+                ? "Are you sure you want to approve this asset?"
+                : "Are you sure you want to reject this asset?"
+            }
+            confirmText={
+              actionType === "approve" ? "Yes, Approve" : "Yes, Reject"
+            }
+            cancelText="Cancel"
+            onConfirm={async () => {
+              if (!typeOfAsset) {
+                toast.success("asset type required");
+                return;
+              }
+              if (actionType === "approve") {
+                await hanldeAccept(id, typeOfAsset);
+              } else if (actionType === "reject") {
+                await hanldeReject(id, typeOfAsset);
+              }
+              setConfirmAction(false);
+              setActionType(null);
+            }}
+            onCancel={() => {
+              setConfirmAction(false);
+              setActionType(null);
+            }}
+          />
 
           <CustomToastContainer />
         </div>

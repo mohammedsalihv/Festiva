@@ -15,4 +15,13 @@ export class AssetManagementUseCase implements IAssetManagementUseCase {
   ): Promise<IAssetBase | null> {
     return await this.repository.findAssetById(id, typeOfAsset);
   }
+
+ async assetApprove(id: string, typeOfAsset: string, assetStatus: string): Promise<boolean> {
+  return await this.repository.assetApprove(id, typeOfAsset, assetStatus);
+}
+
+async assetReject(id: string, typeOfAsset: string, assetStatus: string): Promise<boolean> {
+  return await this.repository.assetReject(id, typeOfAsset, assetStatus);
+}
+
 }

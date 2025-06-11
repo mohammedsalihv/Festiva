@@ -28,7 +28,7 @@ export class AssetAdminController {
 
   async assetDetails(req: Request, res: Response): Promise<void> {
     try {
-      const typeOfAsset = req.query.type?.toString().toLowerCase()
+      const typeOfAsset = req.query.type?.toString().toLowerCase();
       if (!typeOfAsset) {
         res.status(400).json({
           success: false,
@@ -57,4 +57,59 @@ export class AssetAdminController {
       });
     }
   }
+
+  async approveAsset(req: Request, res: Response): Promise<void> {
+  try {
+    const { assetStatus, type } = req.query;
+    const { id } = req.params;
+
+    if (!type || !assetStatus) {
+      res.status(400).json({
+        success: false,
+        message: "Asset type and status are required.",
+      });
+      return;
+    }
+
+    const result = await this.useCase.assetApprove(id, String(type), String(assetStatus));
+    if (result) {
+      res.status(200).json({ success: true, message: "Asset approved successfully" });
+    } else {
+      res.status(400).json({ success: false, message: "Asset not found or update failed" });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error instanceof Error ? error.message : "Failed to approve asset",
+    });
+  }
+}
+
+async rejectAsset(req: Request, res: Response): Promise<void> {
+  try {
+    const { assetStatus, type } = req.query;
+    const  id  = req.params.assetId;
+
+    if (!type || !assetStatus) {
+      res.status(400).json({
+        success: false,
+        message: "Asset type and status are required.",
+      });
+      return;
+    }
+
+    const result = await this.useCase.assetReject(id, String(type), String(assetStatus));
+    if (result) {
+      res.status(200).json({ success: true, message: "Asset rejected successfully" });
+    } else {
+      res.status(400).json({ success: false, message: "Asset not found or update failed" });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error instanceof Error ? error.message : "Failed to reject asset",
+    });
+  }
+}
+
 }

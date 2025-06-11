@@ -1,3 +1,7 @@
+import { IVenue } from "./Ivenue";
+import { IStudio } from "./IStudio";
+import { ICaters } from "./ICaters";
+import { IRentCar } from "./IRentCar";
 
 export interface assetHostInfo {
   _id: string;
@@ -26,3 +30,9 @@ export interface GetServicesResponse {
 }
 
 
+export interface assetStatusResponse {
+  message: string;
+  success: boolean;
+}
+
+export type AssetDetail = IVenue | IStudio | IRentCar | ICaters;

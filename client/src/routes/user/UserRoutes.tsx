@@ -5,9 +5,9 @@ import MyBookings from "@/pages/user/MyBookings";
 import Profile from "@/pages/user/Profile";
 import MainServices from "@/pages/user/MainServices";
 import Venuetypes from "@/pages/user/service/venue/Venuetypes";
-import Venues from "@/pages/user/service/venue/Venues";
 import PrivateRoute from "@/routes/user/Protect/PrivateRoute";
 import ErrorAlert from "@/components/ErrorAlert";
+import ServicesPage from "@/pages/user/ServicesPage";
 
 const UserRoutes: React.FC = () => {
   return (
@@ -29,8 +29,8 @@ const UserRoutes: React.FC = () => {
           </PrivateRoute>
         }
       />
-       <Route
-        path="/service"
+      <Route
+        path="/services"
         element={
           <PrivateRoute>
             <MainServices />
@@ -45,11 +45,11 @@ const UserRoutes: React.FC = () => {
           </PrivateRoute>
         }
       />
-       <Route
-        path="/venues"
+      <Route
+        path="/assets/:type"
         element={
           <PrivateRoute>
-            <Venues />
+            <ServicesPage />
           </PrivateRoute>
         }
       />

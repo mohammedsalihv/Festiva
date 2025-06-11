@@ -1,6 +1,6 @@
 import express, { Request, Response, RequestHandler } from "express";
-import { userAdminController } from "../../../infrastructure/frameworks/DependencyInjection/admin/userManagement.dependancyContainer";
-import { hostAdminController } from "../../../infrastructure/frameworks/DependencyInjection/admin/hostManagement.dependancyContainer";
+import { userAdminController } from "../../../infrastructure/frameworks/DependencyInjection/admin/UserManagement.dependancyContainer";
+import { hostAdminController } from "../../../infrastructure/frameworks/DependencyInjection/admin/HostManagement.dependancyContainer";
 import { assetAdminController } from "../../../infrastructure/frameworks/DependencyInjection/admin/assetManagement.dependancyContainer";
 import { singleImageUpload } from "../../../middlewares/multer";
 import { authenticateToken, isAdmin } from "../../../middlewares/auth";
@@ -77,7 +77,9 @@ adminRoutes.delete(
   hostAdminController.deleteHost.bind(hostAdminController)
 );
 
-// service management
+
+
+// asset management
 
 adminRoutes.get(
   "/assets/:typeOfAsset",
@@ -90,5 +92,16 @@ adminRoutes.get("/assets/details/:assetId",
   authenticateToken,
   isAdmin,
   assetAdminController.assetDetails.bind(assetAdminController)
+)
+
+adminRoutes.get("/assets/approve/:assetId",
+  authenticateToken,
+  isAdmin,
+  assetAdminController.approveAsset.bind(assetAdminController)
+)
+adminRoutes.get("/assets/reject/:assetId",
+  authenticateToken,
+  isAdmin,
+  assetAdminController.rejectAsset.bind(assetAdminController)
 )
 export default adminRoutes;

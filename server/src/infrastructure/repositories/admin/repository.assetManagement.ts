@@ -6,18 +6,33 @@ import { StudioModel } from "../../../domain/models/studioModel";
 import { CatersModel } from "../../../domain/models/catersModel";
 
 export class AssetManagementRepository implements IAssetManagementRepository {
-  async findAssets(typeOfAsset: string): Promise<IAssetBase[]> {
-    const populateOptions = [
-      { path: "host", select: "-password" },
-      { path: "location" },
-    ];
+  private populateOptions = [
+    { path: "host", select: "-password" },
+    { path: "location" },
+  ];
 
+  private getModelByType(type: string): any {
+    switch (type) {
+      case "venue":
+        return VenueModel;
+      case "rentcar":
+        return RentCarModel;
+      case "studio":
+        return StudioModel;
+      case "caters":
+        return CatersModel;
+      default:
+        throw new Error("Invalid asset type");
+    }
+  }
+
+  async findAssets(typeOfAsset: string): Promise<IAssetBase[]> {
     const fetchModelData = async (model: any) => {
-      return await model.find().populate(populateOptions).lean();
+      return await model.find().populate(this.populateOptions).lean();
     };
 
     switch (typeOfAsset) {
-      case "venues":
+      case "venue":
         return await fetchModelData(VenueModel);
       case "rentcar":
         return await fetchModelData(RentCarModel);
@@ -38,30 +53,20 @@ export class AssetManagementRepository implements IAssetManagementRepository {
     }
   }
 
-  async findAssetById(
-    id: string,
-    typeOfAsset: string
-  ): Promise<IAssetBase | null> {
-    const populateOptions = [
-      { path: "host", select: "-password" },
-      { path: "location" },
-    ];
+  async findAssetById(id: string, typeOfAsset: string): Promise<IAssetBase | null> {
+    const model = this.getModelByType(typeOfAsset);
+    return await model.findById(id).populate(this.populateOptions).lean();
+  }
 
-    const fetchById = async (model: any) => {
-      return await model.findById(id).populate(populateOptions).lean();
-    };
+  async assetApprove(id: string, typeOfAsset: string, assetStatus: string): Promise<boolean> {
+    const model = this.getModelByType(typeOfAsset);
+    const result = await model.findByIdAndUpdate(id, { status: assetStatus });
+    return !!result;
+  }
 
-    switch (typeOfAsset) {
-      case "venues":
-        return await fetchById(VenueModel);
-      case "rentcar":
-        return await fetchById(RentCarModel);
-      case "studio":
-        return await fetchById(StudioModel);
-      case "caters":
-        return await fetchById(CatersModel);
-      default:
-        throw new Error("Invalid asset type");
-    }
+  async assetReject(id: string, typeOfAsset: string, assetStatus: string): Promise<boolean> {
+    const model = this.getModelByType(typeOfAsset);
+    const result = await model.findByIdAndUpdate(id, { status: assetStatus });
+    return !!result;
   }
 }

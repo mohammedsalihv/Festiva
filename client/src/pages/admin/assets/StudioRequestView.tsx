@@ -4,7 +4,9 @@ import { FaParking, FaTree, FaUserCircle } from "react-icons/fa";
 import { MdLocationOn, MdAttachMoney } from "react-icons/md";
 import { BsClockHistory } from "react-icons/bs";
 import { GiChecklist } from "react-icons/gi";
-import { studioRequestProps } from "@/utils/Types/admin/assetManagement/studio";
+import { studioRequestProps } from "@/utils/Types/admin/assetManagement/IStudio";
+
+
 
 const StudioRequestView: React.FC<studioRequestProps> = ({ data }) => {
   const {

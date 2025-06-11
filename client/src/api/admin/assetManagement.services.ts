@@ -1,5 +1,8 @@
 import axiosInstance from "@/config/admin/adminAxiosInstence";
-import { GetServicesResponse } from "@/utils/Types/admin/assetManagement/commonAssets";
+import {
+  GetServicesResponse,
+  assetStatusResponse,
+} from "@/utils/Types/admin/assetManagement/commonAssets";
 
 export const Assets = async (typeOfAsset: string) => {
   const response = await axiosInstance.get<GetServicesResponse>(
@@ -17,10 +20,20 @@ export const assetDetails = async (assetId: string, typeOfAsset: string) => {
 
 export const assetRequestApprove = async (
   assetId: string,
-  assetStatus: string
+  typeOfAsset: string
 ) => {
-  const response = await axiosInstance.put<GetServicesResponse>(
-    `/asset/request/approve/${assetId}?assetStatus=${assetStatus}`
+  const response = await axiosInstance.put<assetStatusResponse>(
+    `/assets/approve/${assetId}?assetStatus=approved&type=${typeOfAsset}`
   );
-  return response.data.data;
+  return response.data;
+};
+
+export const assetRequestReject = async (
+  assetId: string,
+  typeOfAsset: string
+) => {
+  const response = await axiosInstance.put<assetStatusResponse>(
+    `/assets/reject/${assetId}?assetStatus=rejected&type=${typeOfAsset}`
+  );
+  return response.data;
 };

@@ -26,7 +26,7 @@ const rentCarSchema = new Schema<IRentCar>(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
-    typeOfAsset: { type: String, default: "car" },
+    typeOfAsset: { type: String, default: "rentcar" },
     location: { type: Schema.Types.ObjectId, ref: "Location", required: true },
     host: { type: Schema.Types.ObjectId, ref: "Host", required: true },
   },
