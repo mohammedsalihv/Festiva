@@ -1,5 +1,5 @@
 import { IUserLoginRepository } from "../../../../domain/entities/repositoryInterface/user/interface.loginRepository";
-import CustomError from "../../../../utils/CustomError";
+import CustomError from "../../../../utils/common/errors/CustomError";
 import { TokenService } from "../../../../application/services/service.token";
 import bcrypt from "bcrypt";
 import { UserDetailsDTO } from "../../../../config/DTO/user/dto.user";

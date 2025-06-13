@@ -1,9 +1,12 @@
 import express, { Request, Response, RequestHandler } from "express";
-import { userAdminController } from "../../../infrastructure/frameworks/DependencyInjection/admin/UserManagement.dependancyContainer";
-import { hostAdminController } from "../../../infrastructure/frameworks/DependencyInjection/admin/HostManagement.dependancyContainer";
-import { assetAdminController } from "../../../infrastructure/frameworks/DependencyInjection/admin/assetManagement.dependancyContainer";
-import { singleImageUpload } from "../../../middlewares/multer";
-import { authenticateToken, isAdmin } from "../../../middlewares/auth";
+import { userAdminController } from "../../../infrastructure/DI/admin/UserManagement.dependancyContainer";
+import { hostAdminController } from "../../../infrastructure/DI/admin/HostManagement.dependancyContainer";
+import { assetAdminController } from "../../../infrastructure/DI/admin/assetManagement.dependancyContainer";
+import { singleImageUpload } from "../../../utils/common/middlewares/multer";
+import {
+  authenticateToken,
+  isAdmin,
+} from "../../../utils/common/middlewares/auth";
 
 const adminRoutes = express.Router();
 export interface MulterRequest extends Request {
@@ -77,8 +80,6 @@ adminRoutes.delete(
   hostAdminController.deleteHost.bind(hostAdminController)
 );
 
-
-
 // asset management
 
 adminRoutes.get(
@@ -88,20 +89,23 @@ adminRoutes.get(
   assetAdminController.Assets.bind(assetAdminController)
 );
 
-adminRoutes.get("/assets/details/:assetId",
+adminRoutes.get(
+  "/assets/details/:assetId",
   authenticateToken,
   isAdmin,
   assetAdminController.assetDetails.bind(assetAdminController)
-)
+);
 
-adminRoutes.get("/assets/approve/:assetId",
+adminRoutes.put(
+  "/assets/approve/:assetId",
   authenticateToken,
   isAdmin,
   assetAdminController.approveAsset.bind(assetAdminController)
-)
-adminRoutes.get("/assets/reject/:assetId",
+);
+adminRoutes.put(
+  "/assets/reject/:assetId",
   authenticateToken,
   isAdmin,
   assetAdminController.rejectAsset.bind(assetAdminController)
-)
+);
 export default adminRoutes;

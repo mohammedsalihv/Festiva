@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
-import logger from "../../../utils/logger";
-import { userProfileController } from "../../../infrastructure/frameworks/DependencyInjection/user/page.dependancyContainer";
-import { singleImageUpload } from "../../../middlewares/multer";
-import { authenticateToken } from "../../../middlewares/auth";
+import logger from "../../../utils/common/messages/logger";
+import { userProfileController } from "../../../infrastructure/DI/user/account.dependancyContainer";
+import { singleImageUpload } from "../../../utils/common/middlewares/multer";
+import { authenticateToken } from "../../../utils/common/middlewares/auth";
 
 
 export interface MulterRequest extends Request {

@@ -3,8 +3,8 @@ import {
   hostRegisterController,
   hostLoginController,
   refreshTokenController,
-} from "../../../infrastructure/frameworks/DependencyInjection/host/Auth.dependancyContainer";
-import logger from "../../../utils/logger";
+} from "../../../infrastructure/DI/host/Auth.dependancyContainer";
+import logger from "../../../utils/common/messages/logger";
 
 const hostAuthRoutes = express.Router();
 
@@ -16,7 +16,7 @@ hostAuthRoutes.post("/register", async (req, res) => {
   }
 });
 
-hostAuthRoutes.post("/login-host", async (req, res) => {
+hostAuthRoutes.post("/login", async (req, res) => {
   try {
     await hostLoginController.hostLogin(req, res);
   } catch (error) {

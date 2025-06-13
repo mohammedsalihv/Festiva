@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AdminVenueUseCase } from "../../../application/use-cases/admin/adminVenue.usecase";
-import CustomError from "../../../utils/CustomError";
+import CustomError from "../../../utils/common/errors/CustomError";
 
 export class AdminVenueController {
   constructor(private adminVenueUseCase: AdminVenueUseCase) {}

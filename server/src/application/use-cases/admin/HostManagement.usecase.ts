@@ -1,6 +1,6 @@
 import { responseHostDTO } from "../../../config/DTO/host/dto.host";
 import { IHostManagementRepository } from "../../../domain/entities/repositoryInterface/admin/interface.hostManagement";
-import CustomError from "../../../utils/CustomError";
+import CustomError from "../../../utils/common/errors/CustomError";
 import { EditHostPayload } from "../../../domain/adminInterface/interface.editHost";
 
 export class HostManagementUseCase {

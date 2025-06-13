@@ -1,7 +1,7 @@
-import CustomError from "../../../../utils/CustomError";
+import CustomError from "../../../../utils/common/errors/CustomError";
 import { IUserGoogleRepository } from "../../../../domain/entities/repositoryInterface/user/interface.googleRepository";
 import { TokenService } from "../../../services/service.token";
-import logger from "../../../../utils/logger";
+import logger from "../../../../utils/common/messages/logger";
 import { responseUserDTO , UserDetailsDTO } from "../../../../config/DTO/user/dto.user";
 
 export class GoogleLogin {

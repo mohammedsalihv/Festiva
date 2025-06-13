@@ -4,6 +4,10 @@ import VenueRequestView from "./VenueRequestView";
 import RentCarRequestView from "./RentCarRequestView";
 import StudioRequestView from "./StudioRequestView";
 import CatersRequestView from "./CatersRequestView";
+import { IVenue } from "@/utils/Types/admin/assetManagement/Ivenue";
+import { IRentCar } from "@/utils/Types/admin/assetManagement/IRentCar";
+import { ICaters } from "@/utils/Types/admin/assetManagement/ICaters";
+import { IStudio } from "@/utils/Types/admin/assetManagement/IStudio";
 
 const RequestedAsset = () => {
   const requestedAsset = useSelector(
@@ -12,17 +16,15 @@ const RequestedAsset = () => {
 
   if (!requestedAsset) return <div>Asset details not found</div>;
 
-  const { typeOfAsset } = requestedAsset;
-
-  switch (typeOfAsset) {
+  switch (requestedAsset.typeOfAsset) {
     case "venue":
-      return <VenueRequestView data={requestedAsset} />;
+      return <VenueRequestView data={requestedAsset as IVenue} />;
     case "car":
-      return <RentCarRequestView data={requestedAsset} />;
+      return <RentCarRequestView data={requestedAsset as IRentCar} />;
     case "studio":
-      return <StudioRequestView data={requestedAsset} />;
+      return <StudioRequestView data={requestedAsset as IStudio} />;
     case "caters":
-      return <CatersRequestView data={requestedAsset} />;
+      return <CatersRequestView data={requestedAsset as ICaters} />;
     default:
       return <div>Unsupported asset type</div>;
   }

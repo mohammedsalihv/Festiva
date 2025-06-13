@@ -3,7 +3,7 @@ import {
   registerHostDTO,
   HostDetailsDTO,
 } from "../../../../config/DTO/host/dto.host";
-import ErrorHandler from "../../../../utils/CustomError";
+import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IHost } from "../../../../domain/entities/modelInterface/interface.host";
 import { TokenService } from "../../../services/service.token";
 import { IHostRegisterRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostRegisterRepository";

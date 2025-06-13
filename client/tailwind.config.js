@@ -19,6 +19,7 @@ module.exports = {
         boldonse: ["Boldonse", "sans-serif"],
         lilita: ["Lilita One", "cursive"],
         JosephicSans: ["Josefin Sans"],
+        Exo: ["Exo 2"],
       },
       keyframes: {
         zoomOut: {

@@ -1,5 +1,5 @@
 import { IVenueRepository } from "../../../../domain/entities/repositoryInterface/host/interface.venueRepository";
-import ErrorHandler from "../../../../utils/CustomError";
+import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { addVenueDTO } from "../../../../config/DTO/host/dto.venue";
 import { Types } from "mongoose";
 import { IVenue } from "../../../../domain/entities/serviceInterface/interface.venue";

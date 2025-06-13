@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserProfile } from "../../../../application/use-cases/user/Pages/Profile/userProfile-usecase";
-import logger from "../../../../utils/logger";
+import logger from "../../../../utils/common/messages/logger";
 import { JwtPayload } from "jsonwebtoken";
 import { AuthRequest } from "../../../../domain/controlInterface/authType";
 

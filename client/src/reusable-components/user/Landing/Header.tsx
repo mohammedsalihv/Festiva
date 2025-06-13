@@ -61,7 +61,7 @@ const Header = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full z-30 bg-black bg-opacity-40 text-white backdrop-blur-md">
+      <nav className="fixed top-0  left-0 w-full z-30 bg-black bg-opacity-25 text-white">
         <div className="container mx-auto flex justify-between items-center px-4 py-4">
           <LogoText />
           <div className="hidden md:block">
@@ -69,7 +69,7 @@ const Header = () => {
               {NavbarMenu.map((item) => (
                 <li key={item.id}>
                   <a
-                    className="inline-block py-1 px-3 hover:text-main_color font-semibold text-white font-JosephicSans"
+                    className="inline-block py-1 px-3 hover:text-gray-400 font-semibold text-white font-Exo"
                     href={item.link}
                   >
                     {item.title}
@@ -79,10 +79,10 @@ const Header = () => {
             </ul>
           </div>
           <div className="flex items-center gap-2">
-            <button className="text-white text-xl sm:text-2xl hover:bg-main_color hover:text-white rounded-full p-2 duration-300">
+            <button className="text-white text-xl sm:text-2xl hover:bg-gray-500 hover:text-white rounded-full p-2 duration-300">
               <CiSearch />
             </button>
-            <button className="text-white text-xl sm:text-2xl hover:bg-main_color hover:text-white rounded-full p-2 duration-300">
+            <button className="text-white text-xl sm:text-2xl hover:bg-gray-500 hover:text-white rounded-full p-2 duration-300">
               <CiLocationOn />
             </button>
             {isAuthenticated ? (

@@ -1,6 +1,7 @@
 import { assetHostInfo, assetLocationInfo } from "./commonAssets";
 
 export interface IRentCar {
+  _id:string;
   businessName?: string;
   carName?: string;
   rent?: string;

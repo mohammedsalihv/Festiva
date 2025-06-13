@@ -1,7 +1,7 @@
 import { IAdminVenueUseCase } from "../../../domain/usecaseInterface/interface.venueUseCase";
 import { IVenue } from "../../../domain/entities/serviceInterface/interface.venue";
 import { IAdminVenueRepository } from "../../../domain/entities/repositoryInterface/admin/interface.adminVenueRepository";
-import CustomError from "../../../utils/CustomError";
+import CustomError from "../../../utils/common/errors/CustomError";
 
 export class AdminVenueUseCase implements IAdminVenueUseCase {
   constructor(private adminVenuerepository: IAdminVenueRepository) {}

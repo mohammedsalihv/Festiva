@@ -1,8 +1,8 @@
 import express, { Request } from "express";
-import { VenueController } from "../../../infrastructure/frameworks/DependencyInjection/host/Service.dependancyContainer";
-import logger from "../../../utils/logger";
-import { authenticateToken, isHost } from "../../../middlewares/auth";
-import { multipleImageUpload } from "../../../middlewares/multer";
+import { VenueController } from "../../../infrastructure/DI/host/Service.dependancyContainer";
+import logger from "../../../utils/common/messages/logger";
+import { authenticateToken, isHost } from "../../../utils/common/middlewares/auth";
+import { multipleImageUpload } from "../../../utils/common/middlewares/multer";
 
 interface MulterRequest extends Request {
   files?: Express.Multer.File[];

@@ -1,4 +1,4 @@
-import CustomError from "../../../../utils/CustomError";
+import CustomError from "../../../../utils/common/errors/CustomError";
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userRepository";
 import { hash } from "../../../../utils/passwordHash";
 import { resetPasswordDTO } from "../../../../config/DTO/user/dto.user";

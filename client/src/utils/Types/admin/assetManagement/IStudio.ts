@@ -1,6 +1,7 @@
 import { assetHostInfo, assetLocationInfo } from "./commonAssets";
 
 export interface IStudio {
+  _id:string;
   studioName?: string;
   packages?: {
     packageName?: string;

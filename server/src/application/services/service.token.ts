@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import logger from "../../utils/logger";
+import logger from "../../utils/common/messages/logger";
 
 export class TokenService {
   static generateAccessToken(payload: { id: string; role?: string }): string {

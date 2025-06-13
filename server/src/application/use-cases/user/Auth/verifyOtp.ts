@@ -1,5 +1,5 @@
 import {IOTPVerifyRepository} from '../../../../domain/entities/repositoryInterface/user/interface.verifyOtprepository'
-import CustomError from '../../../../utils/CustomError';
+import CustomError from '../../../../utils/common/errors/CustomError';
 
 export class VerifyOtp {
    constructor(private otpRepository: IOTPVerifyRepository) {}

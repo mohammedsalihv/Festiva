@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-export const uploadDir = path.join(__dirname, '..', 'uploads', 'singleImages');
+export const uploadDir = path.join(__dirname, '..', 'uploads', 'Images');
 export const createUploadsFolder = () => {
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });

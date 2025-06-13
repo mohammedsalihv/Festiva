@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import { addVenueDTO } from "../../../../config/DTO/host/dto.venue";
 import { addVenueUseCase } from "../../../../application/use-cases/host/service/venueUseCase";
 import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/interface.locationRepostory";
-import ErrorHandler from "../../../../utils/CustomError";
+import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";
-import logger from "../../../../utils/logger";
-import { sanitizeVenueInput } from "../../../../utils/sanitizeInput";
+import logger from "../../../../utils/common/messages/logger";
+import { sanitizeVenueInput } from "../../../../utils/common/general/sanitizeInput";
 
 interface MulterRequest extends Request {
   file?: Express.Multer.File;
@@ -31,7 +31,7 @@ export class venueController {
 
       const files = req.files as Express.Multer.File[];
       const imageUrls = files.map(
-        (file) => `uploads/assetImages/venues/${file.filename}`
+        (file) => `uploads/Images/assets/venues/${file.filename}`
       );
       const newLocation = await this.locationRepository.addLocation(
         cleanedData.location

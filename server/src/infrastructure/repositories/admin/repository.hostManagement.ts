@@ -1,7 +1,7 @@
 import { IHost } from "../../../domain/entities/modelInterface/interface.host";
 import { IHostManagementRepository } from "../../../domain/entities/repositoryInterface/admin/interface.hostManagement";
 import { HostModel } from "../../../domain/models/hostModel";
-import { pickDefinedFields } from "../../../utils/pickDefinedFields";
+import { pickDefinedFields } from "../../../utils/common/general/pickDefinedFields";
 import { responseHostDTO } from "../../../config/DTO/host/dto.host";
 
 export class HostManagementRepostory implements IHostManagementRepository {

@@ -1,6 +1,6 @@
 import { responseUserDTO } from "../../../../../config/DTO/user/dto.user";
 import { IUserProfileRepository } from "../../../../../domain/entities/repositoryInterface/user/interface.userProfile";
-import CustomError from "../../../../../utils/CustomError";
+import CustomError from "../../../../../utils/common/errors/CustomError";
 import {
   changePasswordDTO,
   profileEditDTO,

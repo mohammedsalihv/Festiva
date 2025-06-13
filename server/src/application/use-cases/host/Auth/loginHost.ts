@@ -1,6 +1,6 @@
 import { IHostLoginRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostLoginRepository";
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostRepository";
-import CustomError from "../../../../utils/CustomError";
+import CustomError from "../../../../utils/common/errors/CustomError";
 import { TokenService } from "../../../services/service.token";
 import bcrypt from "bcrypt";
 import { HostDetailsDTO } from "../../../../config/DTO/host/dto.host";

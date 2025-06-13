@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { LoginUser } from "../../../../application/use-cases/user/Auth/loginUser";
-import logger from "../../../../utils/logger";
-import CustomError from "../../../../utils/CustomError";
+import logger from "../../../../utils/common/messages/logger";
+import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class LoginController {
   constructor(private loginUser: LoginUser) {}

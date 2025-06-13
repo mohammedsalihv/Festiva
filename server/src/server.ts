@@ -1,7 +1,7 @@
 import app from "./app";
 import connectDB from "./infrastructure/Database/db";
 import dotenv from 'dotenv';
-import logger from "./utils/logger";
+import logger from "./utils/common/messages/logger";
 logger
 dotenv.config()
 

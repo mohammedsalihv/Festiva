@@ -1,5 +1,5 @@
 import { IOTPRepository } from "../../../../domain/entities/repositoryInterface/user/interface.otpRepository";
-import { generateOTP } from "../../../../utils/otpGenerator";
+import { generateOTP } from "../../../../utils/common/communication/otpGenerator";
 
 export class SendOTP {
   private RESEND_WAIT_TIME = 60 * 1000;

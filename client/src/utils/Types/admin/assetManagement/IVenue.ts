@@ -1,7 +1,7 @@
 import { assetHostInfo , assetLocationInfo } from "./commonAssets";
 
 export interface IVenue {
-  id:string;
+  _id:string;
   venueName?: string;
   rent?: number;
   capacity?: number;

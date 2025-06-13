@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { AssetManagementUseCase } from "../../../application/use-cases/admin/AssetManagement.usecase";
 import { AdminVenueController } from "./AdminVenue.controller";
+import logger from "../../../utils/common/messages/logger";
 
 export class AssetAdminController {
   constructor(
@@ -61,7 +62,7 @@ export class AssetAdminController {
   async approveAsset(req: Request, res: Response): Promise<void> {
   try {
     const { assetStatus, type } = req.query;
-    const { id } = req.params;
+    const  id  = req.params.assetId;
 
     if (!type || !assetStatus) {
       res.status(400).json({
@@ -74,13 +75,14 @@ export class AssetAdminController {
     const result = await this.useCase.assetApprove(id, String(type), String(assetStatus));
     if (result) {
       res.status(200).json({ success: true, message: "Asset approved successfully" });
-    } else {
-      res.status(400).json({ success: false, message: "Asset not found or update failed" });
-    }
+    } 
+
   } catch (error) {
+    logger.error(error)
     res.status(500).json({
       success: false,
       message: error instanceof Error ? error.message : "Failed to approve asset",
+
     });
   }
 }

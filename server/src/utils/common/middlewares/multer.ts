@@ -1,7 +1,7 @@
 import multer from 'multer';
 import path from 'path';
-import CustomeError from '../utils/CustomError';
-import { createUploadsFolder, uploadDir } from '../utils/createUploadsFolder';
+import CustomeError from '../errors/CustomError';
+import { createUploadsFolder, uploadDir } from '../general/createUploadsFolder';
 
 createUploadsFolder();
 

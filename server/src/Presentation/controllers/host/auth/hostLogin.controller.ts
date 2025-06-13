@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { LoginHost } from "../../../../application/use-cases/host/Auth/loginHost";
-import logger from "../../../../utils/logger";
+import logger from "../../../../utils/common/messages/logger";
 
 export class HostLoginController {
   constructor(private loginHost: LoginHost) {}

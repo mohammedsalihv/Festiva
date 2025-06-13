@@ -8,10 +8,10 @@ import {
   refreshTokenController,
   googleController,
   logoutController 
-} from "../../../infrastructure/frameworks/DependencyInjection/user/Auth.dependancyContainer";
-import { userProfileController } from "../../../infrastructure/frameworks/DependencyInjection/user/page.dependancyContainer";
-import logger from "../../../utils/logger";
-import { authenticateToken } from "../../../middlewares/auth";
+} from "../../../infrastructure/DI/user/Auth.dependancyContainer";
+import { userProfileController } from "../../../infrastructure/DI/user/account.dependancyContainer";
+import logger from "../../../utils/common/messages/logger";
+import { authenticateToken } from "../../../utils/common/middlewares/auth";
 
 const userAuthRoutes = express.Router();
 

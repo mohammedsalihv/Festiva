@@ -1,6 +1,6 @@
 import { responseUserDTO } from "../../../config/DTO/user/dto.user";
 import { IUserManagementRepository } from "../../../domain/entities/repositoryInterface/admin/interface.userManagement";
-import CustomError from "../../../utils/CustomError";
+import CustomError from "../../../utils/common/errors/CustomError";
 import { EditUserPayload } from "../../../domain/adminInterface/interface.editUser";
 
 export class UserManagementUseCase {

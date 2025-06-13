@@ -26,7 +26,7 @@ import { useState } from "react";
 
 const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
   const {
-    id,
+    _id,
     venueName,
     venueDescription,
     venueImages,
@@ -312,9 +312,9 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
                 return;
               }
               if (actionType === "approve") {
-                await hanldeAccept(id, typeOfAsset);
+                await hanldeAccept(_id, typeOfAsset);
               } else if (actionType === "reject") {
-                await hanldeReject(id, typeOfAsset);
+                await hanldeReject(_id, typeOfAsset);
               }
               setConfirmAction(false);
               setActionType(null);

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { LogoutUser } from "../../../../application/use-cases/user/Auth/logoutUser";
 import { LogoutRepository } from "../../../../infrastructure/repositories/user/auth/repository.userLogout";
-import CustomError from "../../../../utils/CustomError";
-import logger from "../../../../utils/logger";
+import CustomError from "../../../../utils/common/errors/CustomError";
+import logger from "../../../../utils/common/messages/logger";
 
 export class LogoutController {
   constructor(private logoutUser: LogoutUser) {}

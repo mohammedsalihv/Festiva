@@ -1,12 +1,13 @@
 import axios, { AxiosInstance } from "axios";
 import store from "@/redux/store";
-import { setAdminDetails , logoutAdmin } from "@/redux/Slice/admin/adminSlice";
+import { setAdminDetails, logoutAdmin } from "@/redux/Slice/admin/adminSlice";
 
 const axiosInstance: AxiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL_ADMIN || "http://localhost:4000/api/admin", 
-    withCredentials: true,
-    timeout: 10000,
-  });
+  baseURL:
+    import.meta.env.VITE_BASE_URL_ADMIN || "http://localhost:4000/api/admin",
+  withCredentials: true,
+  timeout: 10000,
+});
 
 axiosInstance.interceptors.request.use(
   (config) => {

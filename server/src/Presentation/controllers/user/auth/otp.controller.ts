@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { SendOTP } from "../../../../application/use-cases/user/Auth/sentOtp";
-import logger from "../../../../utils/logger";
+import logger from "../../../../utils/common/messages/logger";
 
 export class OTPController {
   constructor(private sendOTPUseCase: SendOTP) {}

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { LoginAdmin } from "../../../../application/use-cases/admin/Auth/loginAdmin";
-import CustomError from "../../../../utils/CustomError";
-import logger from "../../../../utils/logger";
+import CustomError from "../../../../utils/common/errors/CustomError";
+import logger from "../../../../utils/common/messages/logger";
 export class AdminLoginController {
   constructor(private loginAdmin: LoginAdmin) {}
 

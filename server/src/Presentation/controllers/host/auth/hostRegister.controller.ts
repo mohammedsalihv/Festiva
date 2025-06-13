@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { registerHostDTO } from "../../../../config/DTO/host/dto.host";
 import { RegsiterHost } from "../../../../application/use-cases/host/Auth/registerHost";
-import logger from "../../../../utils/logger";
+import logger from "../../../../utils/common/messages/logger";
 
 export class HostRegisterController {
   constructor(private registerHost: RegsiterHost) {}

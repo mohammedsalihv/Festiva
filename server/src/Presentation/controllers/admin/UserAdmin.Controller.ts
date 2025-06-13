@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { UserManagementUseCase } from "../../../application/use-cases/admin/UserManagement.usecase";
-import logger from "../../../utils/logger";
+import { UserManagementUseCase } from "../../../application/use-cases/admin/userManagement.usecase";
+import logger from "../../../utils/common/messages/logger";
 import { JwtPayload } from "jsonwebtoken";
 
 interface MulterRequest extends Request {

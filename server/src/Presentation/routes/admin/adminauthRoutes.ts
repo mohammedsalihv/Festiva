@@ -1,8 +1,7 @@
 import express from "express";
-import { adminLoginController } from "../../../infrastructure/frameworks/DependencyInjection/admin/adminAuth.dependancyContainer";
-import { refreshTokenController } from "../../../infrastructure/frameworks/DependencyInjection/user/Auth.dependancyContainer";
-import logger from "../../../utils/logger";
-
+import { adminLoginController } from "../../../infrastructure/DI/admin/adminAuth.dependancyContainer";
+import { refreshTokenController } from "../../../infrastructure/DI/admin/adminAuth.dependancyContainer";
+import logger from "../../../utils/common/messages/logger";
 
 const adminAuthRoutes = express.Router();
 

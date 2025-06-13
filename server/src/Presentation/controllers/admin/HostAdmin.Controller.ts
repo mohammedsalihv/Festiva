@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { HostManagementUseCase } from "../../../application/use-cases/admin/HostManagement.usecase";
-import logger from "../../../utils/logger";
+import logger from "../../../utils/common/messages/logger";
 import { AuthRequest } from "../../../domain/controlInterface/authType";
 import { JwtPayload } from "jsonwebtoken";
 

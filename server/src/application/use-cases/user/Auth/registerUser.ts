@@ -3,7 +3,7 @@ import {
   registerUserDTO,
   UserDetailsDTO,
 } from "../../../../config/DTO/user/dto.user";
-import ErrorHandler from "../../../../utils/CustomError";
+import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IUser } from "../../../../domain/entities/modelInterface/interface.user";
 import { TokenService } from "../../../services/service.token";
 import { IUserRegisterRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userRegisterRepository";
