@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { loginHost } from "@/api/host/hostAuthService";
+import { hostLogin } from "@/api/host/hostAuthService";
 import {
   validateHostLoginForm,
   FormState,
@@ -24,7 +24,7 @@ const HostLogin = () => {
   const dispatch = useDispatch();
 
   const mutation = useMutation({
-    mutationFn: loginHost,
+    mutationFn: hostLogin,
     onSuccess: (data) => {
       const hostData = {
         id: data.host.id,

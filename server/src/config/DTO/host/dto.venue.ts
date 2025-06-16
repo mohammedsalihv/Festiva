@@ -9,10 +9,10 @@ export interface addVenueDTO {
     squareFeet?: number;
     timeSlots?: string[];
     availableDates?: string[];
-    details?: string;
+    about?: string;
     features: string[];
     parkingFeatures: string[];
-    venueDescription: string;
+    description: string;
     terms: string;
     Images: string[];
     status?:string
@@ -29,10 +29,10 @@ export interface responseVenueDTO {
     squareFeet?: number;
     timeSlots?: string[];
     availableDates?: string[];
-    details?: string;
+    about?: string;
     features: string[];
     parkingFeatures: string[];
-    venueDescription: string;
+    description: string;
     terms: string;
     Images?: string[];
     status?:string;

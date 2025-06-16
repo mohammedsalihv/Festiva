@@ -13,12 +13,12 @@ export interface HostLoginData {
   password: string;
 }
 
-export const loginHost = async (data: HostLoginData) => {
+export const hostLogin = async (data: HostLoginData) => {
   const response = await axiosInstance.post("/auth/login", data);
   return response.data;
 };
 
-export const registerHost = async (data: HostRegisterData) => {
+export const hostSignup = async (data: HostRegisterData) => {
   const response = await axiosInstance.post("/auth/signup", data);
   console.log(response);
   return response.data;

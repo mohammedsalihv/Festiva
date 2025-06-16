@@ -25,6 +25,7 @@ export class HostVenueController {
   ) {}
 
   async addVenue(req: MulterRequest, res: Response): Promise<void> {
+    console.log('req body', req.body)
     const hostId = req.auth?.id;
     if (!hostId) {
       throw new ErrorHandler(
@@ -59,10 +60,10 @@ export class HostVenueController {
         squareFeet,
         timeSlots,
         availableDates,
-        details,
+        about,
         features,
         parkingFeatures,
-        venueDescription,
+        description,
         terms,
       } = cleanedData;
 
@@ -74,10 +75,10 @@ export class HostVenueController {
         squareFeet,
         timeSlots,
         availableDates,
-        details,
+        about,
         features,
         parkingFeatures,
-        venueDescription,
+        description,
         terms,
         Images: imageUrls,
         location: newLocation._id,
