@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
-import { UserProfile } from "../../../../application/use-cases/user/Pages/Profile/userProfile-usecase";
+import { UserProfileUseCase } from "../../../../application/use-cases/user/profile/usecase.userProfile";
 import logger from "../../../../utils/common/messages/logger";
 import { JwtPayload } from "jsonwebtoken";
 import { AuthRequest } from "../../../../domain/controlInterface/authType";
+import {
+  statusCodes,
+  statusMessages,
+} from "../../../../utils/common/messages/constantResponses";
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -10,7 +14,7 @@ interface MulterRequest extends Request {
 }
 
 export class UserProfileController {
-  constructor(private userProfileUseCase: UserProfile) {}
+  constructor(private userProfileUseCase: UserProfileUseCase) {}
 
   async setProfilePic(req: MulterRequest, res: Response) {
     try {
@@ -18,14 +22,14 @@ export class UserProfileController {
       const image = req.file;
 
       if (!image) {
-        return res.status(400).json({
+        return res.status(statusCodes.forbidden).json({
           success: false,
           message: "No image file uploaded.",
         });
       }
 
       if (!userId) {
-        return res.status(401).json({
+        return res.status(statusCodes.unAuthorized).json({
           success: false,
           message: "Unauthorized. No user ID found in request.",
         });
@@ -33,7 +37,7 @@ export class UserProfileController {
 
       const updatedUser = await this.userProfileUseCase.execute(userId, image);
 
-      res.status(200).json({
+      res.status(statusCodes.Success).json({
         success: true,
         message: "Profile image changed!",
         data: {
@@ -45,14 +49,14 @@ export class UserProfileController {
       logger.error("Profile change Error:", error);
 
       if (error.message === "User not found") {
-        return res.status(404).json({
+        return res.status(statusCodes.notfound).json({
           success: false,
           message: "User not found",
         });
       }
-      res.status(500).json({
+      res.status(statusCodes.serverError).json({
         success: false,
-        message: error.message || "Internal server error",
+        message: error.message,
       });
     }
   }
@@ -61,14 +65,14 @@ export class UserProfileController {
     const userId = req.auth?.id;
     const formData = req.body;
     if (!userId) {
-      res.status(400).json({
+      res.status(statusCodes.unAuthorized).json({
         success: false,
         message: "Missing userId",
       });
       return;
     }
     if (!formData) {
-      res.status(400).json({
+      res.status(statusCodes.forbidden).json({
         success: false,
         message: "Missing form data",
       });
@@ -79,7 +83,7 @@ export class UserProfileController {
         userId,
         formData
       );
-      res.status(200).json({
+      res.status(statusCodes.Success).json({
         message: "Profile updated!",
         success: true,
         data: response,
@@ -87,7 +91,7 @@ export class UserProfileController {
     } catch (error) {
       logger.error(String(error), "Error updating profile");
 
-      const statusCode = (error as any)?.statusCode || 500;
+      const statusCode = (error as any)?.statusCode || statusCodes.serverError;
       const message = (error as any)?.message || "Failed to update profile";
 
       res.status(statusCode).json({
@@ -100,7 +104,7 @@ export class UserProfileController {
   async validateMail(req: AuthRequest, res: Response): Promise<void> {
     const { email } = req.params;
     if (!email) {
-      res.status(400).json({
+      res.status(statusCodes.unAuthorized).json({
         success: false,
         message: "Email is required",
       });
@@ -109,7 +113,7 @@ export class UserProfileController {
 
     try {
       await this.userProfileUseCase.validateEmail(email);
-      res.status(200).json({
+      res.status(statusCodes.Success).json({
         success: true,
         message: "Email is available",
       });
@@ -119,7 +123,7 @@ export class UserProfileController {
 
       res.status(statusCode).json({
         success: false,
-        message: message || "Email already registered",
+        message: message || statusMessages.accountExisted,
       });
     }
   }
@@ -129,12 +133,16 @@ export class UserProfileController {
     const formData = req.body;
 
     if (!userId) {
-      res.status(400).json({ success: false, message: "Missing userId" });
+      res
+        .status(statusCodes.unAuthorized)
+        .json({ success: false, message: "Missing userId" });
       return;
     }
 
     if (!formData) {
-      res.status(400).json({ success: false, message: "Missing form data" });
+      res
+        .status(statusCodes.forbidden)
+        .json({ success: false, message: "Missing form data" });
       return;
     }
 
@@ -144,12 +152,12 @@ export class UserProfileController {
         formData
       );
       res
-        .status(200)
+        .status(statusCodes.Success)
         .json({ message: "Password changed!", success: true, data: response });
     } catch (error) {
       logger.error(String(error), "Error while changing password");
-      const statusCode = (error as any)?.statusCode || 500;
-      const message = (error as any)?.message || "Internal server error";
+      const statusCode = (error as any)?.statusCode || statusCodes.serverError;
+      const message = (error as any)?.message || statusMessages.serverError;
       res.status(statusCode).json({ success: false, message });
     }
   }
@@ -158,7 +166,7 @@ export class UserProfileController {
     const userId = req.auth?.id;
 
     if (!userId) {
-      res.status(400).json({
+      res.status(statusCodes.unAuthorized).json({
         success: false,
         message: "Missing or invalid userId",
       });
@@ -169,20 +177,20 @@ export class UserProfileController {
       const isDeleted = await this.userProfileUseCase.deleteProfile(userId);
 
       if (!isDeleted) {
-        res.status(404).json({
+        res.status(statusCodes.notfound).json({
           success: false,
           message: "User not found or already deleted",
         });
         return;
       }
 
-      res.status(200).json({
+      res.status(statusCodes.Success).json({
         success: true,
         message: "User account deleted successfully",
       });
     } catch (error) {
       logger.error(String(error), "Error deleting user");
-      res.status(500).json({
+      res.status(statusCodes.serverError).json({
         success: false,
         message: "Error while deleting the account",
       });

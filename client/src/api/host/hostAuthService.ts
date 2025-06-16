@@ -19,7 +19,7 @@ export const loginHost = async (data: HostLoginData) => {
 };
 
 export const registerHost = async (data: HostRegisterData) => {
-  const response = await axiosInstance.post("/auth/register", data);
+  const response = await axiosInstance.post("/auth/signup", data);
   console.log(response);
   return response.data;
 };

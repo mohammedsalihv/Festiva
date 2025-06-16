@@ -1,7 +1,7 @@
-import { ILogoutRepository } from "../../../../domain/entities/repositoryInterface/host/interface.logoutRepository";
+import { IUserLogoutRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userLogoutRepository";
 import { TokenBlacklistModel } from "../../../../domain/models/tokenBlacklistModel";
 
-export class LogoutRepository implements ILogoutRepository {
+export class UserLogoutRepository implements IUserLogoutRepository {
   async blacklistToken(token: string): Promise<void> {
     await TokenBlacklistModel.create({ token });
   }

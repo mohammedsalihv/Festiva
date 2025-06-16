@@ -1,4 +1,4 @@
-import AdminLayout from "@/reusable-components/admin/AdminLayout";
+
 import { LuUserSearch } from "react-icons/lu";
 import { Images } from "@/assets";
 import Pagination from "@/components/Pagination";
@@ -323,7 +323,7 @@ const AdminHosts = () => {
   if (error)
     return <div className="text-center font-bold px-4 py-4">{error}</div>;
   return (
-    <AdminLayout>
+    <div>
       <div className="flex flex-col md:flex-row h-screen bg-main_white rounded-md font-prompt">
         <div className="transition-all duration-300 overflow-hidden p-4 w-full">
           <div className="flex justify-between items-center mb-10 mt-5 px-2">
@@ -938,7 +938,7 @@ const AdminHosts = () => {
           </>
         )}
       </Drawer>
-    </AdminLayout>
+    </div>
   );
 };
 

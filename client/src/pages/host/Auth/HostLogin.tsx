@@ -105,9 +105,9 @@ const HostLogin = () => {
         </div>
       </div>
 
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6">
-        <div className="w-full max-w-md bg-zinc-900 rounded-2xl shadow-xl p-6 sm:p-8">
-          <h1 className="p-3 font-bold text-xl">Login to Your Account</h1>
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:py-5">
+        <div className="w-full max-w-md bg-zinc-900 rounded-md shadow-xl p-6 sm:p-12">
+          <h1 className="p-3 sm:p-5 font-bold text-xl">Login to Your Account</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <input
@@ -116,7 +116,7 @@ const HostLogin = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Email"
-                className={`w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none ${
+                className={`w-full bg-zinc-800 text-white px-4 py-3 rounded-md focus:outline-none ${
                   errors.email ? "border border-red-500" : ""
                 }`}
                 autoComplete="username"
@@ -133,14 +133,14 @@ const HostLogin = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Password"
-                className={`w-full bg-zinc-800 text-white px-4 py-2 rounded-md focus:outline-none ${
+                className={`w-full bg-zinc-800 text-white px-4 py-3 rounded-md focus:outline-none ${
                   errors.password ? "border border-red-500" : ""
                 }`}
                 autoComplete="current-password"
               />
               <button
                 type="button"
-                className="absolute right-3 top-2.5 text-gray-400 hover:text-white text-sm"
+                className="absolute right-3 top-3 text-gray-400 hover:text-white text-sm"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? "Hide" : "Show"}
@@ -153,14 +153,14 @@ const HostLogin = () => {
             <button
               type="submit"
               disabled={mutation.isPending}
-              className={`w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-md transition-all ${
+              className={`w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-md transition-all ${
                 mutation.isPending ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
               {mutation.isPending ? "Logging in..." : "Login"}
             </button>
 
-            <div className="text-center text-sm mt-4">
+            <div className="text-center text-sm mt-6">
               <p className="text-gray-400">
                 By logging in, you agree to our{" "}
                 <Link to="/terms" className="underline hover:text-white">
@@ -168,7 +168,7 @@ const HostLogin = () => {
                 </Link>
                 .
               </p>
-              <p className="mt-2">
+              <p className="mt-3">
                 Don't have an account?{" "}
                 <Link
                   to="/host/register"
@@ -177,7 +177,7 @@ const HostLogin = () => {
                   Register
                 </Link>
               </p>
-              <p className="mt-2">
+              <p className="mt-3">
                 Switch to user?{" "}
                 <Link
                   to="/user/home"

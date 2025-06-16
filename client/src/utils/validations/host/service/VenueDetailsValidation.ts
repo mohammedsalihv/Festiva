@@ -3,6 +3,18 @@ export interface ValidationResult {
   errors: { [key: string]: string };
 }
 
+
+export interface VenueDetailsErrorState {
+  venueName?: string;
+  rent?: string;
+  capacity?: string;
+  shift?: string;
+  squareFeet?: string;
+  timeSlots?: string[];
+  availableDates?: string[];
+  description?: string;
+}
+
 export interface venueDetailsFormState {
   venueName: string;
   rent: string;
@@ -11,7 +23,7 @@ export interface venueDetailsFormState {
   squareFeet: string;
   timeSlots: string[];
   availableDates: string[];
-  details: string;
+  description: string;
 }
 
 export const validateVenueDetailsForm = (
@@ -19,17 +31,17 @@ export const validateVenueDetailsForm = (
 ): ValidationResult => {
   const errors: { [key: string]: string } = {};
 
-  if (!form.venueName.trim()) errors.name = "Venue name is required";
+  if (!form.venueName.trim()) errors.venueName = "Venue name is required";
   
-  if (form.rent === null) errors.rent = "Rent is required and should be a positive number";
+  if (!form.rent.trim()) errors.rent = "Rent is required";
   
-  if (form.capacity === null) errors.capacity = "Capacity is required and should be a positive number";
+  if (!form.capacity.trim()) errors.capacity = "Capacity is required";
   
   if (!form.shift) errors.shift = "Shift is required";
   
-  if (form.squareFeet === null) errors.squareFeet = "Square feet is required and should be a positive number";
+  if (!form.squareFeet.trim()) errors.squareFeet = "Square feet is required";
   
-  if (!form.details.trim()) errors.details = "Please write something about the venue";
+  if (!form.description.trim()) errors.description = "Please write something about the venue";
 
   if (form.availableDates.length === 0) {
     errors.availableDates = "Please select at least one available date";

@@ -1,5 +1,4 @@
 import { Images } from "@/assets";
-import AdminLayout from "@/reusable-components/admin/AdminLayout";
 import { useState, useEffect, FormEvent } from "react";
 import { RiCloseFill } from "react-icons/ri";
 import { LuUserSearch } from "react-icons/lu";
@@ -346,7 +345,7 @@ const AdminUsers = () => {
   }
 
   return (
-    <AdminLayout>
+    <div>
       <div className="flex flex-col md:flex-row h-screen bg-main_white rounded-md font-prompt">
         <div
           className={`transition-all duration-300 ${
@@ -769,7 +768,7 @@ const AdminUsers = () => {
           onPageChange={(p) => setPage(p)}
         />
       </div>
-    </AdminLayout>
+    </div>
   );
 };
 

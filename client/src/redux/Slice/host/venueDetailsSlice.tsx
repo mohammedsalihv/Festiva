@@ -8,7 +8,7 @@ export interface VenueDetailsState {
   squareFeet: number | null;
   timeSlots: string[];
   availableDates: string[];
-  details: string;
+  description: string;
 }
 
 export const initialVenueDetailsState: VenueDetailsState = {
@@ -19,7 +19,7 @@ export const initialVenueDetailsState: VenueDetailsState = {
   squareFeet: null,
   timeSlots: [],
   availableDates: [],
-  details: "",
+  description: "",
 };
 
 const venueDetailsSlice = createSlice({

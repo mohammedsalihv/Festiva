@@ -13,7 +13,7 @@ export interface IVenue {
     parkingFeatures: string[];
     venueDescription: string;
     terms: string;
-    venueImages: string[];
+    Images?: string[];
     status?:string;
     typeOfAsset?:string;
     location: Types.ObjectId;

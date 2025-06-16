@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import logger from "../../../utils/common/messages/logger";
-import { userProfileController } from "../../../infrastructure/DI/user/account.dependancyContainer";
+import { userProfileController } from "../../../infrastructure/DI/user/userAccount.DI";
 import { singleImageUpload } from "../../../utils/common/middlewares/multer";
 import { authenticateToken } from "../../../utils/common/middlewares/auth";
 

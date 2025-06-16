@@ -8,20 +8,11 @@ import CustomToastContainer from "@/reusable-components/Messages/ToastContainer"
 import {
   validateVenueDetailsForm,
   venueDetailsFormState,
+  VenueDetailsErrorState,
 } from "@/utils/validations/host/service/VenueDetailsValidation";
 import { useDispatch } from "react-redux";
 import { setVenueDetails } from "@/redux/Slice/host/venueDetailsSlice";
-
-interface VenueDetailsErrorState {
-  venueName?: string;
-  rent?: number;
-  capacity?: number;
-  shift?: string;
-  squareFeet?: number;
-  timeSlots?: string[];
-  availableDates?: string[];
-  details?: string;
-}
+import { Textarea } from "@/components/Textarea";
 
 const VenueDetailsForm = () => {
   const [form, setForm] = useState<venueDetailsFormState>({
@@ -32,7 +23,7 @@ const VenueDetailsForm = () => {
     squareFeet: "",
     timeSlots: [],
     availableDates: [],
-    details: "",
+    description: "",
   });
 
   const [errors, setErrors] = useState<VenueDetailsErrorState>({});
@@ -100,22 +91,22 @@ const VenueDetailsForm = () => {
     }));
   };
 
- const handleChange = (
-  e: React.ChangeEvent<
-    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-  >
-) => {
-  const { name, value } = e.target;
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
 
-  setForm((prev) => ({
-    ...prev,
-    [name]: value,
-  }));
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
 
-  if (errors[name as keyof typeof errors]) {
-    setErrors((prev) => ({ ...prev, [name]: "" }));
-  }
-};
+    if (errors[name as keyof typeof errors]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
 
   const handleAddDate = () => {
     if (!dateInput) {
@@ -148,31 +139,30 @@ const VenueDetailsForm = () => {
   };
 
   const handleSubmit = () => {
-  setLoading(true);
+    setLoading(true);
 
-  const { isValid, errors: validationErrors } =
-    validateVenueDetailsForm(form);
+    const { isValid, errors: validationErrors } =
+      validateVenueDetailsForm(form);
 
-  if (!isValid) {
-    setErrors(validationErrors);
-    toast.error("Please correct the errors in the form.");
-    setTimeout(() => setErrors({}), 5000);
-    setLoading(false);
-    return;
-  }
+    if (!isValid) {
+      setErrors(validationErrors);
+      toast.error("Please correct the errors in the form.");
+      setTimeout(() => setErrors({}), 5000);
+      setLoading(false);
+      return;
+    }
 
-  const payload = {
-    ...form,
-    rent: form.rent === "" ? null : Number(form.rent),
-    capacity: form.capacity === "" ? null : Number(form.capacity),
-    squareFeet: form.squareFeet === "" ? null : Number(form.squareFeet),
+    const payload = {
+      ...form,
+      rent: form.rent === "" ? null : Number(form.rent),
+      capacity: form.capacity === "" ? null : Number(form.capacity),
+      squareFeet: form.squareFeet === "" ? null : Number(form.squareFeet),
+    };
+
+    dispatch(setVenueDetails(payload));
+    toast.success("Saving...");
+    setTimeout(() => navigate("/host/location-features"), 5000);
   };
-
-  dispatch(setVenueDetails(payload));
-  toast.success("Saving...");
-  setTimeout(() => navigate("/host/location-features"), 5000);
-};
-
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 font-prompt">
@@ -185,14 +175,17 @@ const VenueDetailsForm = () => {
             This helps us better match guests to your space.
           </p>
 
-          <form className="space-y-5">
-            <div>
+          <form className="space-y-5 py-3">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">Venue name</label>
               <Input
                 type="text"
-                placeholder="Venue name"
                 name="venueName"
                 value={form.venueName}
                 onChange={handleChange}
+                className={`${
+                  errors.venueName ? "border-red-600" : "border-black"
+                }`}
               />
               {errors.venueName && (
                 <p className="text-red-600 text-xs mt-1">{errors.venueName}</p>
@@ -200,25 +193,31 @@ const VenueDetailsForm = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
+              <div className="space-y-2">
+                 <label className="block text-sm font-medium">Rent</label>
                 <Input
                   type="text"
-                  placeholder="Rent"
                   name="rent"
                   value={form.rent}
                   onChange={handleChange}
+                  className={`${
+                    errors.rent ? "border-red-600" : "border-black"
+                  }`}
                 />
                 {errors.rent && (
                   <p className="text-red-600 text-xs mt-1">{errors.rent}</p>
                 )}
               </div>
-              <div>
+              <div className="space-y-2">
+                 <label className="block text-sm font-medium">Max capacity</label>
                 <Input
                   type="text"
-                  placeholder="Max capacity"
                   name="capacity"
                   value={form.capacity}
                   onChange={handleChange}
+                  className={`${
+                    errors.rent ? "border-red-600" : "border-black"
+                  }`}
                 />
                 {errors.capacity && (
                   <p className="text-red-600 text-xs mt-1">{errors.capacity}</p>
@@ -226,14 +225,14 @@ const VenueDetailsForm = () => {
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
+               <div className="space-y-2">
+                 <label className="block text-sm font-medium">Select available shift</label>
                 <select
                   name="shift"
                   value={form.shift}
                   onChange={handleChange}
-                  className="w-full border rounded px-3 py-2"
+                  className={`w-full border-b rounded px-3 py-2 ${errors.shift ? 'border-red-600':'border-black'}`}
                 >
-                  <option value="">Select available shift</option>
                   <option value="All">All</option>
                   <option value="Day">Day</option>
                   <option value="Evening">Evening</option>
@@ -243,13 +242,16 @@ const VenueDetailsForm = () => {
                   <p className="text-red-600 text-xs mt-1">{errors.shift}</p>
                 )}
               </div>
-              <div>
+            <div className="space-y-2">
+                 <label className="block text-sm font-medium">Square feet</label>
                 <Input
                   type="text"
-                  placeholder="Square feet"
                   name="squareFeet"
                   value={form.squareFeet}
                   onChange={handleChange}
+                  className={`${
+                    errors.rent ? "border-red-600" : "border-black"
+                  }`}
                 />
                 {errors.squareFeet && (
                   <p className="text-red-600 text-xs mt-1">
@@ -374,7 +376,7 @@ const VenueDetailsForm = () => {
                         <button
                           type="button"
                           onClick={() => handleRemoveSlot(slot)}
-                          className="text-red-500 hover:text-red-700 text-sm"
+                          className="text-red-500 hover:text-red-700 text-3xl"
                           aria-label={`Remove ${slot}`}
                         >
                           ×
@@ -392,12 +394,12 @@ const VenueDetailsForm = () => {
               </label>
 
               <div className="flex flex-col sm:flex-row gap-2 w-full">
-                <input
+                <Input
                   type="date"
                   value={dateInput}
                   min={new Date().toISOString().split("T")[0]}
                   onChange={(e) => setDateInput(e.target.value)}
-                  className="border rounded px-3 py-2 flex-grow w-full sm:w-auto"
+                  className={`${errors.availableDates ? "border-red-600":"border-black"}`}
                 />
 
                 <button
@@ -410,7 +412,7 @@ const VenueDetailsForm = () => {
                 </button>
               </div>
               {form.availableDates.length > 0 && (
-                <div className="mt-2 flex flex-wrap gap-2">
+                <div className="mt-2 flex flex-wrap gap-2 ">
                   {form.availableDates.map((date) => (
                     <div
                       key={date}
@@ -420,7 +422,7 @@ const VenueDetailsForm = () => {
                       <button
                         type="button"
                         onClick={() => handleRemoveDate(date)}
-                        className="text-red-500 hover:text-red-700 text-sm"
+                        className="text-red-500 hover:text-red-700 text-3xl"
                         aria-label={`Remove ${date}`}
                       >
                         ×
@@ -435,16 +437,18 @@ const VenueDetailsForm = () => {
                 {errors.availableDates}
               </p>
             )}
-            <div>
-              <textarea
-                placeholder="Venue details and description"
-                name="details"
-                value={form.details}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium">Description</label>
+              <Textarea
+                name="description"
+                value={form.description}
                 onChange={handleChange}
-                className="w-full border rounded p-3 min-h-[120px] text-sm"
+                className={`${errors.description ? "border-red-600":"border-black"}`}
               />
-              {errors.details && (
-                <p className="text-red-600 text-xs mt-1">{errors.details}</p>
+              {errors.description && (
+                <p className="text-red-600 text-xs mt-1">
+                  {errors.description}
+                </p>
               )}
             </div>
           </form>

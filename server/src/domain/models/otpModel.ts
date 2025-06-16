@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import { IOTP } from "../entities/modelInterface/interface.otp";
-import { sendVerificationEmail } from "../../utils/mail.sender";
+import { sendVerificationEmail } from "../../utils/common/communication/otpMailSender";
 
 const OTPSchema: Schema = new Schema({
   email: { type: String, required: true, unique: true },

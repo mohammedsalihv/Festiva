@@ -27,7 +27,7 @@ export interface VenueDetails {
   squareFeet: number | null;
   timeSlots: string[];
   availableDates: string[];
-  details: string;
+  description: string;
 }
 
 export interface LocationDetails {

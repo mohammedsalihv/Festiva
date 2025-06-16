@@ -1,15 +1,15 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import HostDashboard from "@/pages/host/landing/HostDashboard";
-import KindOfService from "@/pages/host/List-assets/KindOfService";
-import LocationForm from "@/forms/host/submitForms/LocationForm";
+import KindOfService from "@/forms/host/serviceForms/Common/KindOfService";
+import LocationForm from "@/forms/host/serviceForms/Common/LocationForm";
 import VenueForm from "@/forms/host/serviceForms/Venues/VenueForm";
-import LocationFeaturesTab from "@/pages/host/List-assets/LocationFeatures";
-import ImageUpload from "@/pages/host/List-assets/ImageUpload";
+import LocationFeaturesTab from "@/forms/host/serviceForms/Common/LocationFeatures";
+import ImageUpload from "@/forms/host/serviceForms/Common/ImageUpload";
 import CarForm from "@/forms/host/serviceForms/CarRents/CarForm";
 import CarFeatures from "@/forms/host/serviceForms/CarRents/CarFeatures";
 import CateringForm from "@/forms/host/serviceForms/Caters/CateringForm";
-import PhotoVideoForm from "@/forms/host/serviceForms/Studio/PhotoVideoForm";
+import PhotoVideoForm from "@/forms/host/serviceForms/Studio/StudioForm";
 import ErrorAlert from "@/components/ErrorAlert";
 
 const HostRoutes: React.FC = () => {

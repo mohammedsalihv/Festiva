@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import logger from "./logger";
+import logger from "../messages/logger";
 
 export const hash = async (password: string): Promise<string> => {
   try {

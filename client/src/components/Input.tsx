@@ -6,9 +6,9 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
     return (
       <input
         type={type}
-        value={value ?? ""}  // Ensure value is never null
+        value={value ?? ""}
         className={cn(
-          "flex h-12 w-full bg-transparent px-3 py-1 text-black transition-all duration-300 border-b-2 border-black/40 hover:border-black/80 focus:border-black focus:border-2",
+          "flex h-12 w-full bg-transparent px-3 py-1 text-black transition-all duration-300 border-0 border-b border-gray-300 focus:border-b-2 focus:border-black focus:outline-none focus:ring-0",
           className
         )}
         ref={ref}

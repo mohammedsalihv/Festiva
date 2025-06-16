@@ -6,7 +6,7 @@ import {
   JwtPayload,
 } from "../../../domain/controlInterface/authType";
 import logger from "../messages/logger";
-import { statusCodes , statusMessages } from "../messages/responses";
+import { statusCodes , statusMessages } from "../messages/constantResponses";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
 

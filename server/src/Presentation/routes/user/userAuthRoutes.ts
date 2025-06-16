@@ -1,15 +1,15 @@
 import express from "express";
 import {
   userController,
-  userRegisterController,
+  userSignupController,
   otpController,
   verifyOtpController,
-  loginController,
+  userLoginController,
   refreshTokenController,
-  googleController,
-  logoutController 
-} from "../../../infrastructure/DI/user/Auth.dependancyContainer";
-import { userProfileController } from "../../../infrastructure/DI/user/account.dependancyContainer";
+  userGoogleLoginController,
+  userLogoutController,
+} from "../../../infrastructure/DI/user/userAuth.DI";
+import { userProfileController } from "../../../infrastructure/DI/user/userAccount.DI";
 import logger from "../../../utils/common/messages/logger";
 import { authenticateToken } from "../../../utils/common/middlewares/auth";
 
@@ -17,7 +17,7 @@ const userAuthRoutes = express.Router();
 
 userAuthRoutes.post(
   "/signup",
-  userRegisterController.register.bind(userRegisterController)
+  userSignupController.signup.bind(userSignupController)
 );
 userAuthRoutes.post("/send-otp", async (req, res) => {
   try {
@@ -32,7 +32,7 @@ userAuthRoutes.post(
 );
 userAuthRoutes.post("/login", async (req, res) => {
   try {
-    await loginController.login(req, res);
+    await userLoginController.login(req, res);
   } catch (error) {
     logger.info(error);
   }
@@ -43,7 +43,7 @@ userAuthRoutes.post(
 );
 userAuthRoutes.post(
   "/google-login",
-  googleController.login.bind(googleController)
+  userGoogleLoginController.login.bind(userGoogleLoginController)
 );
 
 userAuthRoutes.get(
@@ -70,11 +70,10 @@ userAuthRoutes.delete(
 
 userAuthRoutes.delete("/logout", async (req, res) => {
   try {
-    await logoutController.logout(req, res);
+    await userLogoutController.logout(req, res);
   } catch (err) {
     console.error("Logout route error:", err);
   }
 });
-
 
 export default userAuthRoutes;

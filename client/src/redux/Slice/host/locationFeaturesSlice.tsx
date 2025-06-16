@@ -1,74 +1,29 @@
-// locationFeaturesSlice.ts
-
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface LocationFeaturesState {
-  features: string[];
-  parkingFeatures: string[];
-  venueDescription: string;
-  terms: string;
-  loading: boolean;
-}
+import { LocationFeaturesState } from "@/utils/validations/host/service/locationFeatures";
 
 const initialState: LocationFeaturesState = {
   features: [],
   parkingFeatures: [],
-  venueDescription: "",
+  about: "",
   terms: "",
-  loading: false,
 };
 
 export const locationFormSlice = createSlice({
   name: "locationForm",
   initialState,
   reducers: {
-    toggleFeature: (state, action: PayloadAction<string>) => {
-      if (state.features.includes(action.payload)) {
-        state.features = state.features.filter(f => f !== action.payload);
-      } else if (state.features.length < 5) {
-        state.features.push(action.payload);
-      }
-    },
-    toggleParkingFeature: (state, action: PayloadAction<string>) => {
-      if (state.parkingFeatures.includes(action.payload)) {
-        state.parkingFeatures = state.parkingFeatures.filter(f => f !== action.payload);
-      } else {
-        state.parkingFeatures.push(action.payload);
-      }
-    },
-    setVenueDescription: (state, action: PayloadAction<string>) => {
-      state.venueDescription = action.payload;
-    },
-    setTerms: (state, action: PayloadAction<string>) => {
-      state.terms = action.payload;
-    },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
-    },
-    setAllLocationFeatures: (
+    setLocationFeatures: (
       state,
-      action: PayloadAction<Partial<LocationFeaturesState>>
+      action: PayloadAction<LocationFeaturesState>
     ) => {
-      const { features, parkingFeatures, venueDescription, terms } = action.payload;
-      if (features) state.features = features;
-      if (parkingFeatures) state.parkingFeatures = parkingFeatures;
-      if (venueDescription) state.venueDescription = venueDescription;
-      if (terms) state.terms = terms;
+      return { ...state, ...action.payload };
     },
-    resetLocationFeatures : () => initialState,
+    resetLocationFeatures: () => initialState,
   },
 });
 
-export const { 
-  toggleFeature, 
-  toggleParkingFeature, 
-  setVenueDescription, 
-  setTerms, 
-  setLoading,
-  setAllLocationFeatures, 
-  resetLocationFeatures
-} = locationFormSlice.actions;
+export const { setLocationFeatures, resetLocationFeatures } =
+  locationFormSlice.actions;
 
 export default locationFormSlice.reducer;
 export const initialLocationFeaturesState = initialState;
-

@@ -1,4 +1,4 @@
-import AdminLayout from "@/reusable-components/admin/AdminLayout";
+import AdminLayout from "@/routes/admin/AdminLayout";
 import { Button } from "@/components/Button";
 import { Card, CardContent } from "@/components/Card";
 import { FaParking, FaTree } from "react-icons/fa";

@@ -2,6 +2,7 @@ import React, { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import AdminLayout from "./AdminLayout";
 
 
 interface AdminPrivateRouteProps {
@@ -18,7 +19,7 @@ const AdminPrivateRoute: React.FC<AdminPrivateRouteProps> = ({ children }) => {
     return <Navigate to="/error" replace />;
   }
 
-  return children
+  return <AdminLayout>{children}</AdminLayout>
 };
 
 export default AdminPrivateRoute;

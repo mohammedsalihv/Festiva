@@ -1,7 +1,7 @@
 import express, { Request, Response, RequestHandler } from "express";
-import { userAdminController } from "../../../infrastructure/DI/admin/UserManagement.dependancyContainer";
-import { hostAdminController } from "../../../infrastructure/DI/admin/HostManagement.dependancyContainer";
-import { assetAdminController } from "../../../infrastructure/DI/admin/assetManagement.dependancyContainer";
+import { adminUserController } from "../../../infrastructure/DI/admin/adminUserManagement.DI";
+import { adminHostController } from "../../../infrastructure/DI/admin/adminHostManagement.DI";
+import { adminAssetController } from "../../../infrastructure/DI/admin/adminAssetManagement.DI";
 import { singleImageUpload } from "../../../utils/common/middlewares/multer";
 import {
   authenticateToken,
@@ -17,32 +17,32 @@ adminRoutes.get(
   "/users",
   authenticateToken,
   isAdmin,
-  userAdminController.Users.bind(userAdminController)
+  adminUserController.Users.bind(adminUserController)
 );
 adminRoutes.patch(
   "/users/:userId/blockUnblock/:userId",
   authenticateToken,
   isAdmin,
-  userAdminController.blockOrUnblockUser.bind(userAdminController)
+  adminUserController.blockOrUnblockUser.bind(adminUserController)
 );
 adminRoutes.patch(
   "/users/edit/:userId",
   authenticateToken,
   isAdmin,
-  userAdminController.editUser.bind(userAdminController)
+  adminUserController.editUser.bind(adminUserController)
 );
 adminRoutes.put(
   "/users/changeprofile/:userId",
   authenticateToken,
   isAdmin,
   singleImageUpload,
-  userAdminController.changeProfile.bind(userAdminController) as RequestHandler
+  adminUserController.changeProfile.bind(adminUserController) as RequestHandler
 );
 adminRoutes.delete(
   "/users/:userId",
   authenticateToken,
   isAdmin,
-  userAdminController.deleteUser.bind(userAdminController)
+  adminUserController.deleteUser.bind(adminUserController)
 );
 
 // host management
@@ -51,33 +51,33 @@ adminRoutes.get(
   "/hosts",
   authenticateToken,
   isAdmin,
-  hostAdminController.getHosts.bind(hostAdminController)
+  adminHostController.Hosts.bind(adminHostController)
 );
 
 adminRoutes.patch(
   "/hosts/blockUnblock/:hostId",
   authenticateToken,
   isAdmin,
-  hostAdminController.blockOrUnblockHost.bind(hostAdminController)
+  adminHostController.blockOrUnblockHost.bind(adminHostController)
 );
 adminRoutes.patch(
   "/hosts/edit/:hostId",
   authenticateToken,
   isAdmin,
-  hostAdminController.editHost.bind(hostAdminController)
+  adminHostController.editHost.bind(adminHostController)
 );
 adminRoutes.put(
   "/hosts/changeprofile/:hostId",
   authenticateToken,
   isAdmin,
   singleImageUpload,
-  hostAdminController.changeProfile.bind(hostAdminController) as RequestHandler
+  adminHostController.changeProfile.bind(adminHostController) as RequestHandler
 );
 adminRoutes.delete(
   "/hosts/:hostId",
   authenticateToken,
   isAdmin,
-  hostAdminController.deleteHost.bind(hostAdminController)
+  adminHostController.deleteHost.bind(adminHostController)
 );
 
 // asset management
@@ -86,26 +86,26 @@ adminRoutes.get(
   "/assets/:typeOfAsset",
   authenticateToken,
   isAdmin,
-  assetAdminController.Assets.bind(assetAdminController)
+  adminAssetController.Assets.bind(adminAssetController)
 );
 
 adminRoutes.get(
   "/assets/details/:assetId",
   authenticateToken,
   isAdmin,
-  assetAdminController.assetDetails.bind(assetAdminController)
+  adminAssetController.assetDetails.bind(adminAssetController)
 );
 
 adminRoutes.put(
   "/assets/approve/:assetId",
   authenticateToken,
   isAdmin,
-  assetAdminController.approveAsset.bind(assetAdminController)
+  adminAssetController.approveAsset.bind(adminAssetController)
 );
 adminRoutes.put(
   "/assets/reject/:assetId",
   authenticateToken,
   isAdmin,
-  assetAdminController.rejectAsset.bind(assetAdminController)
+  adminAssetController.rejectAsset.bind(adminAssetController)
 );
 export default adminRoutes;
