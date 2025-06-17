@@ -35,8 +35,7 @@ export class HostVenueController {
     }
 
     try {
-      const cleanedData = sanitizeVenueInput(req.body);
-
+      const cleanedData = req.body
       const files = req.files as Express.Multer.File[];
       const imageUrls = files.map(
         (file) => `uploads/Images/assets/venues/${file.filename}`

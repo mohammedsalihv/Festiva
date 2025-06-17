@@ -1,6 +1,6 @@
 export interface AssetsCardProps {
-  title: string;
-  status: string;
+  name: string;
+  status?: string;
   host: string;
   reqDate: string;
   imageSrc: string;

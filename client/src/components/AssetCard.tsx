@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 export const AssetsCard: React.FC<AssetsCardProps> = ({
   status,
-  title,
+  name,
   host,
   reqDate,
   imageSrc,
@@ -43,7 +43,7 @@ export const AssetsCard: React.FC<AssetsCardProps> = ({
           </span>
         </div>
         <div className="text-xs mt-auto">
-          <p className="font-bold sm:text-2xl text-xl leading-snug">{title}</p>
+          <p className="font-bold sm:text-2xl text-xl leading-snug">{name}</p>
           <p className="opacity-90">{host}</p>
           <p className="opacity-90">Requested on: {formattedDate}</p>
         </div>

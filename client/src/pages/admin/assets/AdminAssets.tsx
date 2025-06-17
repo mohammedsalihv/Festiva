@@ -1,12 +1,16 @@
 import SwitchTabs from "@/components/SwitchTabs";
 import { useEffect, useState } from "react";
 import { tabOptions } from "@/utils/Options/admin/adminService";
-import { Assets, assetDetails } from "@/api/admin/assetManagement.services";
+import {
+  allAssets,
+  singleAssetDetails,
+} from "@/api/admin/assetManagement.services";
 import { AssetsCard } from "@/components/AssetCard";
-import { Images } from "@/assets";
 import { useDispatch } from "react-redux";
-import { setAssetDetails } from "@/redux/Slice/admin/assetManagementSlice";
+import { setSingleAssetDetails } from "@/redux/Slice/admin/assetManagementSlice";
 import { useNavigate } from "react-router-dom";
+import { normalizeAssetData } from "@/utils/Types/admin/assetManagement/commonAssets";
+import { Images } from "@/assets";
 
 const AdminServices = () => {
   const [selectedTab, setSelectedTab] = useState("all");
@@ -18,7 +22,7 @@ const AdminServices = () => {
   const listAssets = async (selectedTab: string) => {
     setLoading(true);
     try {
-      const response = await Assets(selectedTab);
+      const response = await allAssets(selectedTab);
       console.log(response);
       setAssets(response);
     } catch (err) {
@@ -31,8 +35,8 @@ const AdminServices = () => {
 
   const fetchFullAssetDetails = async (id: string, typeOfAsset: string) => {
     try {
-      const assetFullDetails = await assetDetails(id, typeOfAsset);
-      dispatch(setAssetDetails(assetFullDetails));
+      const assetFullDetails = await singleAssetDetails(id, typeOfAsset);
+      dispatch(setSingleAssetDetails(assetFullDetails));
       navigate("/admin/asset/request");
     } catch (err) {
       console.error("Failed to fetch full asset details:", err);
@@ -64,26 +68,29 @@ const AdminServices = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 px-4">
-            {assets.map((asset: any) => (
-              <AssetsCard
-                key={asset._id}
-                title={asset.venueName}
-                status={asset.status}
-                host={asset.host.name}
-                reqDate={asset.createdAt}
-                imageSrc={
-                  asset.venueImages?.[0]
-                    ? `${import.meta.env.VITE_PROFILE_URL}${
-                        asset.venueImages?.[0]
-                      }`
-                    : Images.imageNA
-                }
-                bookmarked={true}
-                showPagination={true}
-                id={asset._id}
-                fulldata={(id) => fetchFullAssetDetails(id, asset.typeOfAsset)}
-              />
-            ))}
+            {assets.map((asset: any) => {
+              const { name, image, hostName } = normalizeAssetData(asset);
+              return (
+                <AssetsCard
+                  id={asset._id}
+                  key={asset._id}
+                  name={name}
+                  status={asset.status}
+                  host={hostName}
+                  reqDate={asset.createdAt}
+                  imageSrc={
+                    image
+                      ? `${import.meta.env.VITE_PROFILE_URL}${image}`
+                      : Images.imageNA
+                  }
+                  bookmarked={true}
+                  showPagination={true}
+                  fulldata={(id) =>
+                    fetchFullAssetDetails(id, asset.typeOfAsset)
+                  }
+                />
+              );
+            })}
           </div>
         )}
       </div>

@@ -27,10 +27,10 @@ export const validateLocationFeaturesForm = (
   if (!form.terms.trim()) errors.terms = "Your terms and conditions required";
 
   if (form.features.length === 0) {
-    errors.availableDates = "Please include at least one feature";
+    errors.features = "Please include at least one feature";
   }
   if (form.parkingFeatures.length === 0) {
-    errors.timeSlots = "Please add at least one parking feature";
+    errors.parkingFeatures = "Please add at least one parking feature";
   }
   const isValid = Object.keys(errors).length === 0;
 

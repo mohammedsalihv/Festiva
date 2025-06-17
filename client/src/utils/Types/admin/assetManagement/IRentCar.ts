@@ -19,7 +19,7 @@ export interface IRentCar {
   features?: string[];
   inclusion?: string;
   terms?: string;
-  carImages?: string[];
+  Images?: string[];
   status?: string;
   typeOfAsset?: string;
   location: assetLocationInfo;

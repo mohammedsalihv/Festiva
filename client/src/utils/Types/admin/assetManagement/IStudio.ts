@@ -18,11 +18,12 @@ export interface IStudio {
   terms?: string;
   conditions?: string;
   about: string;
-  workImages: string[];
+  Images: string[];
   status?: string;
   typeOfAsset?: string;
   location: assetLocationInfo;
   host: assetHostInfo;
+   timstamp?:string;
 }
 
 export interface studioRequestProps {

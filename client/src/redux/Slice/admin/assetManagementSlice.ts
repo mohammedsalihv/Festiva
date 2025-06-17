@@ -1,32 +1,37 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AssetDetail } from "@/utils/Types/admin/assetManagement/commonAssets";
+import { assetDetailTypes } from "@/utils/Types/admin/assetManagement/commonAssets";
 
 interface AssetState {
-  assets: AssetDetail[];
-  assetDetails: AssetDetail | null;
+  allAssets: assetDetailTypes[];
+  singleAsset: assetDetailTypes | null;
 }
 
 const initialState: AssetState = {
-  assets: [],
-  assetDetails: null,
+  allAssets: [],
+  singleAsset: null,
 };
 
 const assetManagement = createSlice({
   name: "assetManagement",
   initialState,
   reducers: {
-    setAllAssets: (state, action: PayloadAction<AssetDetail[]>) => {
-      state.assets = action.payload;
+    setAllAssets: (state, action: PayloadAction<assetDetailTypes[]>) => {
+      state.allAssets = action.payload;
     },
-    setAssetDetails: (state, action: PayloadAction<AssetDetail>) => {
-      state.assetDetails = action.payload;
+    setSingleAssetDetails: (state, action: PayloadAction<assetDetailTypes>) => {
+      state.singleAsset = action.payload;
     },
-    clearAssetDetails: (state) => {
-      state.assetDetails = null;
+    clearSingleAssetDetails: (state) => {
+      state.singleAsset = null;
     },
+    clearAllAssets: () => initialState,
   },
 });
 
-export const { setAllAssets, setAssetDetails, clearAssetDetails } =
-  assetManagement.actions;
+export const {
+  setAllAssets,
+  setSingleAssetDetails,
+  clearSingleAssetDetails,
+  clearAllAssets,
+} = assetManagement.actions;
 export default assetManagement.reducer;

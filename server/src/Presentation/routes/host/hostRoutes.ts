@@ -1,4 +1,5 @@
-import express, { Request } from "express";
+import express, { Request, Response, NextFunction  } from "express";
+import multer from "multer";
 import { hostVenueController } from "../../../infrastructure/DI/host/hostVenue.DI";
 import {
   authenticateToken,
@@ -12,13 +13,24 @@ interface MulterRequest extends Request {
 
 const hostRoutes = express.Router();
 
+
 hostRoutes.post(
   "/addVenue",
   authenticateToken,
   isHost,
-  multipleImageUpload,
-  async (req, res) =>
-    await hostVenueController.addVenue(req as MulterRequest, res)
-);
+  (req: Request, res: Response, next: NextFunction) => {
+    multipleImageUpload(req, res, function (err) {
+      if (err instanceof multer.MulterError) {
+        if (err.code === "LIMIT_FILE_SIZE") {
+          return res.status(413).json({ error: "One or more files are too large" });
+        }
+        return res.status(400).json({ error: err.message });
+      } else if (err) {
+        return res.status(400).json({ error: err.message });
+      }
 
+      hostVenueController.addVenue(req as MulterRequest, res);
+    });
+  }
+);
 export default hostRoutes;

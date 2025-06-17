@@ -5,9 +5,9 @@ import { FaParking, FaTree } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
 import { MdCelebration } from "react-icons/md";
 import { LuShapes } from "react-icons/lu";
-import { venueRequestProps } from "@/utils/Types/admin/assetManagement/Ivenue";
+import { venueRequestProps } from "@/utils/Types/admin/assetManagement/IVenue";
 import { useDispatch } from "react-redux";
-import { clearAssetDetails } from "@/redux/Slice/admin/assetManagementSlice";
+import { clearSingleAssetDetails } from "@/redux/Slice/admin/assetManagementSlice";
 import { useNavigate } from "react-router-dom";
 import { MdBedtime } from "react-icons/md";
 import { LuArmchair } from "react-icons/lu";
@@ -55,14 +55,14 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
   const hanldeAccept = async (id: string, assetType: string) => {
     await assetRequestApprove(id, assetType);
     toast.success("Asset approved successfully");
-    dispatch(clearAssetDetails());
+    dispatch(clearSingleAssetDetails());
     navigate("/admin/assets");
   };
 
   const hanldeReject = async (id: string, assetType: string) => {
     await assetRequestReject(id, assetType);
     toast.success("Asset rejected successfully");
-    dispatch(clearAssetDetails());
+    dispatch(clearSingleAssetDetails());
     navigate("/admin/assets");
   };
 
@@ -80,7 +80,7 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
             ))
           ) : (
             <img
-              src='/client/src/assets/images/default_profile.png'
+              src="/client/src/assets/images/default_profile.png"
               alt="Image not available"
               className="rounded-xl object-cover w-full h-40"
             />

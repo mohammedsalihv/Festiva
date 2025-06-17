@@ -1,6 +1,6 @@
 import { assetHostInfo, assetLocationInfo } from "./commonAssets";
 export interface ICaters {
-  _id:string;
+  _id: string;
   catersName?: string;
   manpower: string;
   rent: string;
@@ -10,10 +10,11 @@ export interface ICaters {
   terms?: string;
   conditions?: string;
   about: string;
-  workImages: string[];
+  Images: string[];
   status?: string;
   typeOfAsset?: string;
   location: assetLocationInfo;
+  timstamp?:string;
   host: assetHostInfo;
 }
 

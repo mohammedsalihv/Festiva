@@ -40,7 +40,7 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ file, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center font-JosephicSans">
       <div className="bg-white rounded-lg shadow-lg w-[90vw] max-w-3xl h-[80vh] flex flex-col">
         <div className="flex-grow overflow-hidden rounded-t-lg">
           {imageUrl && (
@@ -64,15 +64,15 @@ const ImageCropper: React.FC<ImageCropperProps> = ({ file, onClose }) => {
         <div className="p-4 flex justify-center gap-4 border-t">
           <button
             onClick={handleCropSave}
-            className="border-2 border-green-700 px-4 py-2 text-black rounded hover:bg-green-700 hover:text-white"
+            className="border-2  px-3 py-1 rounded border-main_host text-main_host hover:bg-main_host hover:text-main_white"
           >
-            Crop & Save
+            crop & save
           </button>
           <button
             onClick={handleCancel}
-            className="bg-gray-500 px-4 py-2 text-white rounded hover:bg-gray-600"
+            className="bg-black px-3 py-1 text-sm text-white rounded hover:bg-gray-900"
           >
-            Skip Crop
+            skip
           </button>
         </div>
       </div>

@@ -106,7 +106,7 @@ const LocationFeatures: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-3 md:px-1 sm:mt-16 py-8 font-prompt">
+    <div className="max-w-7xl mx-auto px-3 sm:mt-16 py-8 font-prompt">
       <div className="grid lg:grid-cols-[2fr_1fr] gap-8 items-start">
         <div>
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-black mb-1">
@@ -125,6 +125,11 @@ const LocationFeatures: React.FC = () => {
                   onCheckedChange={(checked) =>
                     handleCheckboxChange(checked, feature, "features")
                   }
+                  className={
+                    errors.features?.length > 0
+                      ? "border-red-600"
+                      : "border-black"
+                  }
                 />
 
                 <label htmlFor={feature} className="text-sm">
@@ -133,7 +138,7 @@ const LocationFeatures: React.FC = () => {
               </div>
             ))}
           </div>
-          {errors.features && (
+          {errors.features?.length > 0 && (
             <p className="text-red-600 text-xs mt-3">{errors.features}</p>
           )}
         </div>
@@ -153,12 +158,17 @@ const LocationFeatures: React.FC = () => {
                   onCheckedChange={(checked) =>
                     handleCheckboxChange(checked, option, "parkingFeatures")
                   }
+                  className={`${
+                    errors.parkingFeatures?.length > 0
+                      ? "border-red-600"
+                      : "border-black"
+                  }`}
                 />
 
                 <span className="text-sm">{option}</span>
               </label>
             ))}
-            {errors.parkingFeatures && (
+            {errors.parkingFeatures?.length > 0 && (
               <p className="text-red-600 text-xs mt-1">
                 {errors.parkingFeatures}
               </p>
@@ -170,9 +180,9 @@ const LocationFeatures: React.FC = () => {
             </label>
             <Textarea
               name="about"
-              placeholder="Write something about your venue..."
               value={form.about}
               onChange={handleChange}
+              className={`${errors.about ? "border-red-600" : "border-black"}`}
             />
             {errors.about && (
               <p className="text-red-600 text-xs mt-1">{errors.about}</p>
@@ -185,9 +195,9 @@ const LocationFeatures: React.FC = () => {
             </label>
             <Textarea
               name="terms"
-              placeholder="Mention terms and conditions for your venue..."
               value={form.terms}
               onChange={handleChange}
+              className={`${errors.terms ? "border-red-600" : "border-black"}`}
             />
             {errors.terms && (
               <p className="text-red-600 text-xs mt-1">{errors.terms}</p>

@@ -19,6 +19,7 @@ export interface IVenue {
   typeOfAsset?: string;
   location: assetLocationInfo;
   host: assetHostInfo;
+   timstamp?:string;
 }
 
 export interface venueRequestProps {

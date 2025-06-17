@@ -1,11 +1,16 @@
 import React, { useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { removeImage, addCroppedImage, setAllImages } from "@/redux/Slice/host/imageSlice";
+import {
+  removeImage,
+  addCroppedImage,
+  setAllImages,
+} from "@/redux/Slice/host/imageSlice";
 import ImageCropper from "@/components/ImageCropper";
 import { Images } from "@/assets";
 import { toast } from "react-toastify";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { useNavigate } from "react-router-dom";
+import Spinner from "@/components/Spinner";
 
 const ImageUploader: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -34,22 +39,20 @@ const ImageUploader: React.FC = () => {
   };
 
   const fileToBase64 = (file: File): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-};
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
 
-
- const handleCloseCropper = async (file: File) => {
-  const base64 = await fileToBase64(file);
-  dispatch(addCroppedImage(base64));
-  setIsCropping(false);
-  setSelectedFile(null);
-};
-
+  const handleCloseCropper = async (file: File) => {
+    const base64 = await fileToBase64(file);
+    dispatch(addCroppedImage(base64));
+    setIsCropping(false);
+    setSelectedFile(null);
+  };
 
   const handleSubmit = () => {
     if (croppedImages.length === 0) {
@@ -60,7 +63,9 @@ const ImageUploader: React.FC = () => {
     setLoading(true);
     dispatch(setAllImages(croppedImages));
     toast.success("Saving...");
-    navigate("/host/location-details/");
+    setTimeout(() => {
+      navigate("/host/location-details/");
+    }, 2000);
   };
 
   return (
@@ -82,11 +87,11 @@ const ImageUploader: React.FC = () => {
 
           <div
             onClick={handleUploadClick}
-            className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center text-center cursor-pointer hover:border-indigo-500 transition"
+            className="border-2 border-dashed border-black rounded-lg p-6 flex flex-col items-center text-center cursor-pointer hover:border-main_host transition"
           >
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-black font-JosephicSans font-bold">
               Drag and drop or{" "}
-              <span className="text-indigo-600 font-medium">
+              <span className="text-black font-bold">
                 click to upload your photos
               </span>
             </p>
@@ -103,22 +108,21 @@ const ImageUploader: React.FC = () => {
           </div>
 
           <div className="mt-6 grid grid-cols-3 gap-4">
-           {croppedImages.map((base64, index) => (
-  <div key={index} className="relative group">
-    <img
-      src={base64}
-      alt={`Preview ${index}`}
-      className="w-full h-32 object-cover rounded shadow"
-    />
-    <button
-      onClick={() => handleRemoveImage(index)}
-      className="absolute top-1 right-1 bg-black text-white rounded-full px-2 py-1 text-xs hidden group-hover:block"
-    >
-      ✕
-    </button>
-  </div>
-))}
-
+            {croppedImages.map((base64, index) => (
+              <div key={index} className="relative group">
+                <img
+                  src={base64}
+                  alt={`Preview ${index}`}
+                  className="w-full h-32 object-cover rounded shadow"
+                />
+                <button
+                  onClick={() => handleRemoveImage(index)}
+                  className="absolute top-1 right-1 bg-black text-white rounded-full px-2 py-1 text-xs hidden group-hover:block"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -128,7 +132,9 @@ const ImageUploader: React.FC = () => {
             alt="Photographer Illustration"
             className="mb-4 mx-auto h-24"
           />
-          <h3 className="text-lg font-semibold mb-2">Showcase your location.</h3>
+          <h3 className="text-lg font-semibold mb-2">
+            Showcase your location.
+          </h3>
           <p className="text-gray-600 text-sm mb-4 font-JosephicSans">
             Include photos of the areas that will be available: interior and
             exterior.
@@ -150,27 +156,7 @@ const ImageUploader: React.FC = () => {
         >
           {loading ? (
             <>
-              <svg
-                className="animate-spin h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v8z"
-                />
-              </svg>
-              Saving...
+              <Spinner text="Saving..." />
             </>
           ) : (
             "Next"

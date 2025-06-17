@@ -119,7 +119,7 @@ const VenueDetailsForm = () => {
       toast.error("Cannot select past dates");
       return;
     }
-
+     
     if (!form.availableDates.includes(dateInput)) {
       setForm((prev) => ({
         ...prev,
@@ -233,6 +233,7 @@ const VenueDetailsForm = () => {
                   onChange={handleChange}
                   className={`w-full border-b rounded px-3 py-2 ${errors.shift ? 'border-red-600':'border-black'}`}
                 >
+                  <option value="">Select one</option>
                   <option value="All">All</option>
                   <option value="Day">Day</option>
                   <option value="Evening">Evening</option>

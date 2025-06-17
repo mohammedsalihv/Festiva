@@ -1,7 +1,7 @@
 import { Input } from "@/components/Input";
 import { Images } from "@/assets";
 import { RootState } from "@/redux/store";
-import { useState } from "react";
+import {useState } from "react";
 import {
   locationFormState,
   validateLocationForm,
@@ -49,7 +49,6 @@ const fileImages: ImageDetails = {
     base64ToFile(base64Image, `image-${index}.jpg`, 'image/jpeg')
   ),
 };
-
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -27,7 +27,9 @@ export const handleFinalSubmit = async (
     const formData = new FormData();
 
     Object.entries(restVenueDetails).forEach(([key, value]) => {
-      formData.append(key, String(value));
+      if (!Array.isArray(value)) {
+        formData.append(key, String(value));
+      }
     });
 
     if (rent !== undefined) {
@@ -44,12 +46,12 @@ export const handleFinalSubmit = async (
     formData.append("about", locationFeatures.about);
     formData.append("terms", locationFeatures.terms);
 
-    venueDetails.timeSlots.forEach((slot, index) => {
-      formData.append(`timeSlots[${index}]`, slot);
+    venueDetails.timeSlots.forEach((slot) => {
+      formData.append("timeSlots[]", slot);
     });
 
-    venueDetails.availableDates.forEach((date, index) => {
-      formData.append(`availableDates[${index}]`, date);
+    venueDetails.availableDates.forEach((date) => {
+      formData.append("availableDates[]", date);
     });
 
     Object.entries(locationDetails).forEach(([key, value]) => {
@@ -59,6 +61,11 @@ export const handleFinalSubmit = async (
     images.Images.forEach((imageFile) => {
       formData.append("Images", imageFile);
     });
+
+    // for (const pair of formData.entries()) {
+    //   console.log(`${pair[0]}: ${pair[1]}`);
+    // }
+
     await addVenue(formData);
     toast.success("All data submitted successfully!");
     dispatch(resetLocationDetails());
@@ -66,7 +73,7 @@ export const handleFinalSubmit = async (
     dispatch(resetLocationFeatures());
     dispatch(resetVenueDetails());
     setTimeout(() => {
-      navigate("/host/dashboard");
+      navigate("/host/kind-of-service");
     }, 2000);
   } catch (error) {
     console.error("Submission Failed:", error);
