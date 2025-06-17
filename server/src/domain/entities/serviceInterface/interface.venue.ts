@@ -11,7 +11,7 @@ export interface IVenue {
     about?: string;
     features: string[];
     parkingFeatures: string[];
-    description: string;
+    description?: string;
     terms: string;
     Images?: string[];
     status?:string;

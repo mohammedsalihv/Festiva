@@ -13,7 +13,7 @@ const venueSchema = new Schema<IVenue>(
     about: { type: String },
     features: [{ type: String, required: true }],
     parkingFeatures: [{ type: String, required: true }],
-    description: { type: String, required: true },
+    description: { type: String},
     terms: { type: String, required: true },
     Images: [{ type: String, required: true }],
     status:{ type:String , enum :[ "pending" , "approved" , "rejected"] ,  default: "pending"},

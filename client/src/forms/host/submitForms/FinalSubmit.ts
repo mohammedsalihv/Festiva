@@ -41,7 +41,7 @@ export const handleFinalSubmit = async (
       formData.append(`parkingFeatures[${index}]`, parking);
     });
 
-    formData.append("venueDescription", locationFeatures.venueDescription);
+    formData.append("about", locationFeatures.about);
     formData.append("terms", locationFeatures.terms);
 
     venueDetails.timeSlots.forEach((slot, index) => {

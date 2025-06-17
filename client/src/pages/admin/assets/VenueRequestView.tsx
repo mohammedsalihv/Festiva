@@ -6,7 +6,6 @@ import { MdLocationOn } from "react-icons/md";
 import { MdCelebration } from "react-icons/md";
 import { LuShapes } from "react-icons/lu";
 import { venueRequestProps } from "@/utils/Types/admin/assetManagement/Ivenue";
-import { Images } from "@/assets";
 import { useDispatch } from "react-redux";
 import { clearAssetDetails } from "@/redux/Slice/admin/assetManagementSlice";
 import { useNavigate } from "react-router-dom";
@@ -28,8 +27,8 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
   const {
     _id,
     venueName,
-    venueDescription,
-    venueImages,
+    about,
+    Images,
     rent,
     shift,
     capacity,
@@ -38,7 +37,7 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
     timeSlots,
     availableDates,
     features = [],
-    details,
+    description,
     typeOfAsset,
     status,
     terms,
@@ -71,8 +70,8 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
     <AdminLayout>
       <div className="p-4 md:p-8 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 font-prompt bg-main_white rounded-md w-full h-full">
         <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-          {venueImages?.length ? (
-            venueImages?.map((img, i) => (
+          {Images?.length ? (
+            Images?.map((img, i) => (
               <img
                 key={i}
                 src={`${import.meta.env.VITE_PROFILE_URL}${img}`}
@@ -81,7 +80,7 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
             ))
           ) : (
             <img
-              src={Images.imageNA}
+              src='/client/src/assets/images/default_profile.png'
               alt="Image not available"
               className="rounded-xl object-cover w-full h-40"
             />
@@ -191,13 +190,13 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
           <Card>
             <CardContent className="p-4">
               <h3 className="text-lg font-semibold mb-2">About</h3>
-              <p className="text-sm text-gray-700">{venueDescription}</p>
+              <p className="text-sm text-gray-700">{about}</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4">
               <h3 className="text-lg font-semibold mb-2">Venue Details</h3>
-              <p className="text-sm text-gray-700">{details}</p>
+              <p className="text-sm text-gray-700">{description}</p>
             </CardContent>
           </Card>
           {terms && (

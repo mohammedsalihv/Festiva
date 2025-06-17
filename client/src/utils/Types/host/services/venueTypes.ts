@@ -9,9 +9,9 @@ export interface AddVenueData {
   details?: string;
   features: string[];
   parkingFeatures: string[];
-  venueDescription: string;
+  description: string;
   terms: string;
-  venueImages: File[];
+  Images: File[];
   location: object;
 }
 
@@ -49,6 +49,6 @@ export interface ImageDetails {
 export interface LocationFeatures {
   features: string[];
   parkingFeatures: string[];
-  venueDescription: string;
+  about: string;
   terms: string;
 }

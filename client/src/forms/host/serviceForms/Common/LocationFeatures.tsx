@@ -81,7 +81,15 @@ const LocationFeatures: React.FC = () => {
       validateLocationFeaturesForm(form);
 
     if (!isValid) {
-      setErrors(validationErrors);
+      setErrors({
+        features: validationErrors.features ? [validationErrors.features] : [],
+        parkingFeatures: validationErrors.parkingFeatures
+          ? [validationErrors.parkingFeatures]
+          : [],
+        about: validationErrors.about ?? "",
+        terms: validationErrors.terms ?? "",
+      });
+
       toast.error("Please correct the errors in the form.");
       setTimeout(() => setErrors({} as LocationFeaturesErrorState), 5000);
       setLoading(false);

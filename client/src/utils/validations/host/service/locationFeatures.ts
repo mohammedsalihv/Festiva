@@ -22,9 +22,9 @@ export const validateLocationFeaturesForm = (
 ): ValidationResult => {
   const errors: { [key: string]: string } = {};
 
-  if (!form.about.trim()) errors.venueName = "About is required";
+  if (!form.about.trim()) errors.about = "About is required";
 
-  if (!form.terms.trim()) errors.rent = "Your terms and conditions required";
+  if (!form.terms.trim()) errors.terms = "Your terms and conditions required";
 
   if (form.features.length === 0) {
     errors.availableDates = "Please include at least one feature";

@@ -9,12 +9,12 @@ export interface IVenue {
   squareFeet?: number;
   timeSlots?: string[];
   availableDates?: string[];
-  details?: string;
+  description?: string;
   features: string[];
   parkingFeatures: string[];
-  venueDescription: string;
+  about: string;
   terms: string;
-  venueImages: string[];
+  Images: string[];
   status?: string;
   typeOfAsset?: string;
   location: assetLocationInfo;
