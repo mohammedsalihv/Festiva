@@ -2,7 +2,7 @@ import { IUserLoginRepository } from "../../../../domain/entities/repositoryInte
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { TokenService } from "../../../tokenService/service.token";
 import bcrypt from "bcrypt";
-import { UserDetailsDTO } from "../../../../config/DTO/user/dto.user";
+import { UserDetailsDTO } from "../../../../types/DTO/user/dto.user";
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userRepository";
 import {
   statusCodes,

@@ -1,5 +1,5 @@
 import { IUser } from "../../modelInterface/interface.user";
-import { responseUserDTO } from "../../../../config/DTO/user/dto.user";
+import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
 export interface IUserGoogleRepository {
   findByEmail(email: string): Promise<responseUserDTO | null>;
   updateUser(

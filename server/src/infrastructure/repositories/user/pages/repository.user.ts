@@ -1,5 +1,5 @@
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userRepository";
-import { resetPasswordDTO } from "../../../../config/DTO/user/dto.user";
+import { resetPasswordDTO } from "../../../../types/DTO/user/dto.user";
 import { UserModal } from "../../../../domain/models/userModel";
 
 export class UserRepository implements IUserRepository {

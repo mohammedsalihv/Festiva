@@ -1,5 +1,5 @@
 import { IUser } from "../../modelInterface/interface.user";
-import { resetPasswordDTO } from "../../../../config/DTO/user/dto.user";
+import { resetPasswordDTO } from "../../../../types/DTO/user/dto.user";
 
 export interface IUserRepository {
   findByEmail(email: string): Promise<IUser | null>;

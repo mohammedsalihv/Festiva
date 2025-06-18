@@ -3,7 +3,7 @@ import { AdminHostManagementUseCase } from "../../../../application/use-cases/ad
 import logger from "../../../../utils/common/messages/logger";
 import { AuthRequest } from "../../../../domain/controlInterface/authType";
 import { JwtPayload } from "jsonwebtoken";
-import { validateAndGetImageUrl } from "../../../../utils/common/general/imageUtils";
+import { validateAndGetImageUrl } from "../../../../utils/common/cloudinary/imageUtils";
 import {
   statusCodes,
   statusMessages,

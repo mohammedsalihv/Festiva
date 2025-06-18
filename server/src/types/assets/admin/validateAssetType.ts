@@ -7,7 +7,6 @@ export const validateAssetType: RequestHandler = (
 ): void => {
   const allowedTypes = ["all", "venues", "rentcar", "studio", "caters"];
   const type = req.params.typeOfAsset?.toLowerCase();
-  console.log('====',type)
   if (!allowedTypes.includes(type)) {
     res.status(400).json({
       success: false,

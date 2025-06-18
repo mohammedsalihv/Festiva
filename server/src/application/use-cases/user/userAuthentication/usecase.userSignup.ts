@@ -2,7 +2,7 @@ import { hash } from "../../../../utils/common/auth/passwordHash";
 import {
   registerUserDTO,
   UserDetailsDTO,
-} from "../../../../config/DTO/user/dto.user";
+} from "../../../../types/DTO/user/dto.user";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IUser } from "../../../../domain/entities/modelInterface/interface.user";
 import { TokenService } from "../../../tokenService/service.token";

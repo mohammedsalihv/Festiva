@@ -1,4 +1,4 @@
-import { responseHostDTO } from "../../../../config/DTO/host/dto.host";
+import { responseHostDTO } from "../../../../types/DTO/host/dto.host";
 import { IHost } from "../../modelInterface/interface.host";
 
 export interface IHostSignupRepository {

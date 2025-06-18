@@ -3,7 +3,7 @@ import { IHostRepository } from "../../../../domain/entities/repositoryInterface
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { TokenService } from "../../../tokenService/service.token";
 import bcrypt from "bcrypt";
-import { HostDetailsDTO } from "../../../../config/DTO/host/dto.host";
+import { HostDetailsDTO } from "../../../../types/DTO/host/dto.host";
 import {
   statusCodes,
   statusMessages,

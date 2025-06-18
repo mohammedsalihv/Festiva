@@ -1,8 +1,8 @@
 import { UserModal } from "../../../../domain/models/userModel";
 import { IUserProfileRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userProfileRepository";
-import { profileEditDTO } from "../../../../config/DTO/user/dto.user";
-import { responseUserDTO } from "../../../../config/DTO/user/dto.user";
-import { toResponseUserDTO } from "../../../../config/DTO/user/dto.user";
+import { profileEditDTO } from "../../../../types/DTO/user/dto.user";
+import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
+import { toResponseUserDTO } from "../../../../types/DTO/user/dto.user";
 
 
 export class UserProfileRepository implements IUserProfileRepository {

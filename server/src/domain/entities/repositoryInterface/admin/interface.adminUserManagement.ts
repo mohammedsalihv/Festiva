@@ -1,4 +1,4 @@
-import { responseUserDTO } from "../../../../config/DTO/user/dto.user";
+import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
 import { EditUserPayload } from "../../../adminInterface/interface.editUser";
 export interface IAdminUserManagementRepository {
   findAll(): Promise<responseUserDTO[]>;

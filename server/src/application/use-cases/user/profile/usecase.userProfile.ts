@@ -1,13 +1,13 @@
-import { responseUserDTO } from "../../../../config/DTO/user/dto.user";
+import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
 import { IUserProfileRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userProfileRepository";
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userRepository";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import {
   changePasswordDTO,
   profileEditDTO,
-} from "../../../../config/DTO/user/dto.user";
+} from "../../../../types/DTO/user/dto.user";
 import { hash } from "../../../../utils/common/auth/passwordHash";
-import { validateAndGetImageUrl } from "../../../../utils/common/general/imageUtils";
+import { validateAndGetImageUrl } from "../../../../utils/common/cloudinary/imageUtils";
 import {
   statusCodes,
   statusMessages,

@@ -2,7 +2,7 @@ import { hash } from "../../../../utils/common/auth/passwordHash";
 import {
   registerHostDTO,
   HostDetailsDTO,
-} from "../../../../config/DTO/host/dto.host";
+} from "../../../../types/DTO/host/dto.host";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IHost } from "../../../../domain/entities/modelInterface/interface.host";
 import { TokenService } from "../../../tokenService/service.token";

@@ -1,4 +1,4 @@
-import { responseUserDTO } from "../../../../config/DTO/user/dto.user";
+import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
 import { IUser } from "../../modelInterface/interface.user";
 
 export interface IUserSignupRepository {

@@ -1,4 +1,4 @@
-import { responseHostDTO } from "../../../../config/DTO/host/dto.host";
+import { responseHostDTO } from "../../../../types/DTO/host/dto.host";
 import { EditHostPayload } from "../../../adminInterface/interface.editHost";
 
 export interface IAdminHostManagementRepository {

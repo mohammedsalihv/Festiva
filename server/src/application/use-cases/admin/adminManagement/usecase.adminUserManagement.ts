@@ -1,4 +1,4 @@
-import { responseUserDTO } from "../../../../config/DTO/user/dto.user";
+import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
 import { IAdminUserManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/interface.adminUserManagement";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { EditUserPayload } from "../../../../domain/adminInterface/interface.editUser";

@@ -1,7 +1,7 @@
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userRepository";
 import { hash } from "../../../../utils/common/auth/passwordHash";
-import { resetPasswordDTO } from "../../../../config/DTO/user/dto.user";
+import { resetPasswordDTO } from "../../../../types/DTO/user/dto.user";
 import {
   statusCodes,
   statusMessages,

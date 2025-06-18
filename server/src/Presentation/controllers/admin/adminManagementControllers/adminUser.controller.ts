@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { AdminUserManagementUseCase } from "../../../../application/use-cases/admin/adminManagement/usecase.adminUserManagement";
 import logger from "../../../../utils/common/messages/logger";
 import { JwtPayload } from "jsonwebtoken";
-import { validateAndGetImageUrl } from "../../../../utils/common/general/imageUtils";
+import { validateAndGetImageUrl } from "../../../../utils/common/cloudinary/imageUtils";
 import {
   statusCodes,
   statusMessages,

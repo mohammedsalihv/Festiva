@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { registerHostDTO } from "../../../../config/DTO/host/dto.host";
+import { registerHostDTO } from "../../../../types/DTO/host/dto.host";
 import { HostSignupUseCase } from "../../../../application/use-cases/host/hostAuthentication/usecase.hostSignup";
 import logger from "../../../../utils/common/messages/logger";
 import {

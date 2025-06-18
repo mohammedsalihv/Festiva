@@ -5,7 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import logger from "./utils/common/messages/logger";
-import { createUploadsFolder } from "./utils/common/general/createUploadsFolder";
+import { createUploadsFolder } from "./utils/common/cloudinary/createUploadsFolder";
 
 import userAuthRoutes from "./Presentation/routes/user/userAuthRoutes";
 import userRoutes from "./Presentation/routes/user/userRoutes";
