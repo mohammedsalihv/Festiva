@@ -173,9 +173,6 @@ const AdminUsers = () => {
     setTimeout(async () => {
       try {
         const payload: EditUserPayload = {
-          firstname: form.firstname,
-          lastname: form.lastname,
-          phone: form.phone,
           role: form.role,
           profilePic: form.profilePic,
           isActive: form.isActive,
@@ -399,9 +396,7 @@ const AdminUsers = () => {
                   <img
                     src={
                       user?.profilePic
-                        ? `${import.meta.env.VITE_PROFILE_URL}${
-                            user.profilePic
-                          }`
+                        ? user.profilePic
                         : Images.default_profile
                     }
                     alt="Profile"
@@ -432,9 +427,7 @@ const AdminUsers = () => {
               <img
                 src={
                   selectedUser?.profilePic
-                    ? `${import.meta.env.VITE_PROFILE_URL}${
-                        selectedUser.profilePic
-                      }`
+                    ? selectedUser.profilePic
                     : Images.default_profile
                 }
                 alt="Profile"
@@ -549,9 +542,7 @@ const AdminUsers = () => {
                     src={
                       previewImage ||
                       (selectedUser?.profilePic
-                        ? `${import.meta.env.VITE_PROFILE_URL}${
-                            selectedUser.profilePic
-                          }`
+                        ? selectedUser.profilePic
                         : Images.default_profile)
                     }
                     alt="Profile picture"
@@ -600,7 +591,7 @@ const AdminUsers = () => {
                       type="text"
                       className="border p-2 md:p-3 rounded-md"
                       value={form.firstname}
-                      onChange={handleInputChange}
+                      disabled
                     />
                   </div>
 
@@ -617,7 +608,7 @@ const AdminUsers = () => {
                       type="text"
                       className="border p-2 md:p-3 rounded-md"
                       value={form.lastname}
-                      onChange={handleInputChange}
+                      disabled
                     />
                   </div>
 
@@ -646,7 +637,7 @@ const AdminUsers = () => {
                       type="text"
                       className="border p-2 md:p-3 rounded-md"
                       value={form.phone}
-                      onChange={handleInputChange}
+                      disabled
                     />
                   </div>
 

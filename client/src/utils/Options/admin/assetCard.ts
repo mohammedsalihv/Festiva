@@ -1,7 +1,7 @@
 export interface AssetsCardProps {
   name: string;
   status?: string;
-  host: string;
+  assetType?: string;
   reqDate: string;
   imageSrc: string;
   bookmarked?: boolean;

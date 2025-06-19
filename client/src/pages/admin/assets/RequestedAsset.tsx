@@ -4,14 +4,14 @@ import VenueRequestView from "./VenueRequestView";
 import RentCarRequestView from "./RentCarRequestView";
 import StudioRequestView from "./StudioRequestView";
 import CatersRequestView from "./CatersRequestView";
-import { IVenue } from "@/utils/Types/admin/assetManagement/Ivenue";
+import { IVenue } from "@/utils/Types/admin/assetManagement/IVenue";
 import { IRentCar } from "@/utils/Types/admin/assetManagement/IRentCar";
 import { ICaters } from "@/utils/Types/admin/assetManagement/ICaters";
 import { IStudio } from "@/utils/Types/admin/assetManagement/IStudio";
 
 const RequestedAsset = () => {
   const requestedAsset = useSelector(
-    (state: RootState) => state.asset.assetDetails
+    (state: RootState) => state.asset.singleAsset
   );
 
   if (!requestedAsset) return <div>Asset details not found</div>;

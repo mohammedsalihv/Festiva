@@ -10,6 +10,9 @@ import FAQ from "@/reusable-components/user/Landing/FAQ";
 import Footer from "@/reusable-components/user/Landing/Footer";
 import Supporters from "@/reusable-components/user/Landing/Supporters";
 
+
+
+
 const images = [Images.Landing_1, Images.Landing_2];
 const featureCards = [
   { img: Images.service_247, label: "24/7 Availability" },

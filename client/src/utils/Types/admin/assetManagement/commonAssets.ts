@@ -44,17 +44,17 @@ export type assetDetailTypes = IVenue | IStudio | IRentCar | ICaters;
 
 interface normalizeAsset {
   name: string;
-  hostName: string;
+  assetType: string;
   image: string;
 }
 
 export const normalizeAssetData = (
-  asset: assetDetailTypes & { host?: assetHostInfo }
+  asset: assetDetailTypes & { host?: assetHostInfo; typeOfAsset?: string }
 ): normalizeAsset => {
-  const type = asset.typeOfAsset;
+  const type = asset.typeOfAsset ?? "unknown";
   let name = "Unknown";
   let image = "";
-  const hostName = asset.host?.name;
+  const assetType = type;
 
   const getFirstImage = (imgs: any) =>
     Array.isArray(imgs) && imgs.length > 0 ? imgs[0] : "";
@@ -84,6 +84,6 @@ export const normalizeAssetData = (
   return {
     name,
     image,
-    hostName,
+    assetType,
   };
 };

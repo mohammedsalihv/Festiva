@@ -12,9 +12,6 @@ export interface BlockUserResponse {
 }
 
 export interface EditUserPayload {
-  firstname: string;
-  lastname: string;
-  phone: string;
   role: string;
   profilePic: string;
   isActive: boolean;

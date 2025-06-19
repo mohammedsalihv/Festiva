@@ -6,5 +6,4 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-console.log("name", process.env.CLOUDINARY_NAME);
 export default cloudinary;

@@ -4,13 +4,15 @@ import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import Header from "@/reusable-components/user/Landing/Header";
 
-
 interface UserPrivateRouteProps {
   children: ReactNode;
   allowedRoles?: string[];
 }
 
-const UserPrivateRoute: React.FC<UserPrivateRouteProps> = ({ children, allowedRoles }) => {
+const UserPrivateRoute: React.FC<UserPrivateRouteProps> = ({
+  children,
+  allowedRoles,
+}) => {
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const location = useLocation();
 
@@ -19,7 +21,7 @@ const UserPrivateRoute: React.FC<UserPrivateRouteProps> = ({ children, allowedRo
   const isAuthenticated = !!accessToken;
 
   if (!isAuthenticated) {
-    console.log('User not authenticated', accessToken,userInfo)
+    console.log("User not authenticated", accessToken, userInfo);
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
@@ -27,13 +29,12 @@ const UserPrivateRoute: React.FC<UserPrivateRouteProps> = ({ children, allowedRo
     return <Navigate to="/" replace />;
   }
 
-  return <>
-  <Header/>
-  <div className="pt-16">
-  {children}
-  </div>
-
-  </>;
+  return (
+    <>
+      <Header />
+      {children}
+    </>
+  );
 };
 
 export default UserPrivateRoute;

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Search,
   Calendar,
   Users,
   MessageCircle,
@@ -26,68 +25,40 @@ const HostHeader: React.FC = () => {
 
   const handleLogout = () => {
     dispatch(logoutHost());
-    setTimeout(() => {
-      toast.success("Logout successful");
-    }, 500);
+    toast.success("Logout successful");
     navigate("/host/login");
   };
 
   return (
     <header className="border-b border-gray-200 bg-white px-4 py-2 md:px-6 sticky top-0 z-50">
-      <div className="flex items-center justify-between flex-wrap">
-        <div className="flex items-center gap-4 w-full md:w-auto justify-between">
-          <h1 className="text-lg font-semibold text-gray-800">
+      <div className="flex items-center justify-between">
+        {/* Left: Logo */}
+        <div className="flex items-center gap-2">
+          <img
+            src={Images.default_profile}
+            alt="logo"
+            className="h-8 w-8 rounded-full object-cover"
+          />
+          <h1 className="text-lg font-semibold text-gray-800 hidden md:block">
             Host Dashboard
           </h1>
-          <button
-            className="md:hidden text-gray-600"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
 
-        <nav
-          className={`${
-            menuOpen ? "flex" : "hidden"
-          } flex-col md:flex md:flex-row gap-4 mt-4 md:mt-0 text-sm text-gray-600 w-full md:w-auto`}
-        >
-          <a href="/host/dashboard" className="hover:text-black transition">
-            Dashboard
-          </a>
-          <a href="#" className="hover:text-black transition">
-            About
-          </a>
-          <a href="#" className="hover:text-black transition">
-            Landing
-          </a>
-        </nav>
-
-        {/* Desktop Icons */}
-        <div className="hidden md:flex flex-wrap items-center gap-4 md:w-auto justify-end">
-          <div className="relative w-64 flex-shrink-0">
-            <input
-              type="text"
-              placeholder="Search"
-              className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-            />
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
-          </div>
-
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-4">
           <TooltipIcon
             icon={
               <MessageSquareDiff
-                className="h-9 w-9 text-black hover:text-white cursor-pointer"
+                className="h-6 w-6 text-black cursor-pointer"
                 onClick={() => navigate("/host/kind-of-service")}
               />
             }
-            label="Upload new business"
+            label="Upload"
           />
           <TooltipIcon
             icon={
               <Calendar
-                className="h-9 w-9 text-black hover:text-white cursor-pointer"
+                className="h-6 w-6 text-black cursor-pointer"
                 onClick={() => navigate("/host/calendar")}
               />
             }
@@ -96,7 +67,7 @@ const HostHeader: React.FC = () => {
           <TooltipIcon
             icon={
               <Users
-                className="h-9 w-9 text-black hover:text-white cursor-pointer"
+                className="h-6 w-6 text-black cursor-pointer"
                 onClick={() => navigate("/host/team")}
               />
             }
@@ -105,7 +76,7 @@ const HostHeader: React.FC = () => {
           <TooltipIcon
             icon={
               <MessageCircle
-                className="h-9 w-9 text-black hover:text-white cursor-pointer"
+                className="h-6 w-6 text-black cursor-pointer"
                 onClick={() => navigate("/host/chat")}
               />
             }
@@ -114,48 +85,85 @@ const HostHeader: React.FC = () => {
           <TooltipIcon
             icon={
               <LogOut
-                className="h-9 w-9 text-red-600 hover:text-white cursor-pointer"
+                className="h-6 w-6 text-red-600 cursor-pointer"
                 onClick={() => setConfirmLogout(true)}
               />
             }
             label="Logout"
           />
-
           <img
             src={Images.default_profile}
             alt="avatar"
-            className="h-8 w-8 rounded-full object-cover cursor-pointer"
+            className="h-8 w-8 rounded-full object-cover"
           />
         </div>
-        <div className="flex md:hidden flex-wrap items-center gap-4 text-gray-600 justify-end text-sm">
-          <a
-            href="/host/kind-of-service"
-            className="hover:text-black transition cursor-pointer"
-          >
-            Upload new business
-          </a>
-          <a href="/host/calendar" className="hover:text-black transition">
-            Calendar
-          </a>
-          <a href="/host/team" className="hover:text-black transition">
-            Team
-          </a>
-          <a href="/host/chat" className="hover:text-black transition">
-            Chat
-          </a>
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden">
           <button
-            onClick={() => setConfirmLogout(true)}
-            className="hover:text-red-600 transition cursor-pointer"
+            onClick={() => setMenuOpen(true)}
+            className="text-gray-600"
+            aria-label="Open menu"
           >
-            Logout
+            <Menu size={24} />
           </button>
-          <img
-            src={Images.default_profile}
-            alt="avatar"
-            className="h-8 w-8 rounded-full object-cover cursor-pointer"
-          />
         </div>
       </div>
+
+      {/* Mobile Drawer from RIGHT */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-50 bg-black/50">
+          <div className="fixed top-0 right-0 w-4/5 max-w-xs h-full bg-white shadow-md p-5 flex flex-col gap-6 text-gray-800">
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="text-base font-semibold">Menu</h2>
+              <X className="cursor-pointer" onClick={() => setMenuOpen(false)} />
+            </div>
+
+            <div className="flex flex-col items-center gap-6 mt-4">
+              <MessageSquareDiff
+                className="h-6 w-6 text-black cursor-pointer"
+                onClick={() => {
+                  navigate("/host/kind-of-service");
+                  setMenuOpen(false);
+                }}
+              />
+              <Calendar
+                className="h-6 w-6 text-black cursor-pointer"
+                onClick={() => {
+                  navigate("/host/calendar");
+                  setMenuOpen(false);
+                }}
+              />
+              <Users
+                className="h-6 w-6 text-black cursor-pointer"
+                onClick={() => {
+                  navigate("/host/team");
+                  setMenuOpen(false);
+                }}
+              />
+              <MessageCircle
+                className="h-6 w-6 text-black cursor-pointer"
+                onClick={() => {
+                  navigate("/host/chat");
+                  setMenuOpen(false);
+                }}
+              />
+              <LogOut
+                className="h-6 w-6 text-red-600 cursor-pointer"
+                onClick={() => {
+                  setConfirmLogout(true);
+                  setMenuOpen(false);
+                }}
+              />
+              <img
+                src={Images.default_profile}
+                alt="avatar"
+                className="h-10 w-10 rounded-full mt-4"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       <ConfirmDialog
         isOpen={confirmLogout}
@@ -169,9 +177,11 @@ const HostHeader: React.FC = () => {
         }}
         onCancel={() => setConfirmLogout(false)}
       />
+
       <CustomToastContainer />
     </header>
   );
 };
 
 export default HostHeader;
+

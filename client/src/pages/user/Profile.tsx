@@ -6,14 +6,14 @@ import { useMutation } from "@tanstack/react-query";
 import { Images } from "@/assets";
 import { RootState } from "@/redux/store";
 import { setUserDetails, logoutUser } from "@/redux/Slice/user/userSlice";
-import { changeProfile , profileEdit } from "@/api/user/userService";
+import { changeProfile, profileEdit } from "@/api/user/userService";
 import {
   deleteProfile,
   passwordModify,
   sendOtp,
   userLogout,
   validateEmail,
-  verifyOtp
+  verifyOtp,
 } from "@/api/user/userAuthService";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
@@ -24,8 +24,6 @@ import Spinner from "@/components/Spinner";
 import { changePasswordErrorState } from "@/utils/Types/user/profileTypes";
 import { changePasswordState } from "@/utils/Types/user/profileTypes";
 import { validateChangePasswordForm } from "@/utils/validations/user/Auth/changePasswordValidation";
-
-
 
 const Profile: React.FC = () => {
   const profile = useSelector((state: RootState) => state.user.userInfo);
@@ -286,7 +284,7 @@ const Profile: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white p-4 md:p-10 text-black font-JosephicSans">
+    <div className="min-h-screen bg-white p-4 md:p-10 text-black font-JosephicSans mt-9">
       <div className="flex flex-col md:flex-row gap-10">
         <div className="bg-white p-6 rounded-xl w-full md:w-60 space-y-4 border border-gray-400">
           <div className="flex flex-col space-y-2 text-sm">
@@ -327,9 +325,7 @@ const Profile: React.FC = () => {
                         src={
                           previewImage ||
                           (profile?.profilePic
-                            ? `${import.meta.env.VITE_PROFILE_URL}${
-                                profile.profilePic
-                              }`
+                            ? profile.profilePic
                             : Images.default_profile)
                         }
                         alt="Profile"

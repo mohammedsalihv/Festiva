@@ -1,7 +1,6 @@
 import { NavbarMenu } from "@/utils/Navbar/user/navLinks";
-import { CiSearch } from "react-icons/ci";
-import { MdMenu, MdClose } from "react-icons/md";
-import { CiLocationOn } from "react-icons/ci";
+import { CiSearch, CiLocationOn } from "react-icons/ci";
+import { MdMenu } from "react-icons/md";
 import React, { useState, useRef, useEffect } from "react";
 import ResponsiveNavLinks from "../../../utils/Navbar/user/ResponsiveNavLinks";
 import { useNavigate } from "react-router-dom";
@@ -15,12 +14,17 @@ import { userLogout } from "@/api/user/userAuthService";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const dropDownRef = useRef<HTMLDivElement>(null);
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const location = useLocation();
+  const isHomePage = location.pathname === "/user/home";
+  const showTransparent = isHomePage && !isScrolled;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -44,6 +48,15 @@ const Header = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleLogout = async () => {
     try {
       await userLogout();
@@ -61,32 +74,50 @@ const Header = () => {
 
   return (
     <>
-      <nav className="fixed top-0  left-0 w-full z-30 bg-black bg-opacity-25 text-white">
-        <div className="container mx-auto flex justify-between items-center px-4 py-4">
-          <LogoText />
-          <div className="hidden md:block">
-            <ul className="flex items-center gap-6">
-              {NavbarMenu.map((item) => (
-                <li key={item.id}>
-                  <a
-                    className="inline-block py-1 px-3 hover:text-gray-400 font-semibold text-white font-Exo"
-                    href={item.link}
-                  >
-                    {item.title}
-                  </a>
-                </li>
-              ))}
-            </ul>
+      <nav
+        className={`fixed top-0 left-0 w-full z-30 transition-all duration-300 ${
+          showTransparent
+            ? "bg-transparent"
+            : "bg-white shadow-md border-b border-gray-200"
+        } font-JosephicSans`}
+      >
+        <div className="container mx-auto flex justify-between items-center px-4 py-3 lg:px-10">
+          <div className="flex-shrink-0">
+            <LogoText />
           </div>
-          <div className="flex items-center gap-2">
-            <button className="text-white text-xl sm:text-2xl hover:bg-gray-500 hover:text-white rounded-full p-2 duration-300">
+          <div
+            className={`${
+              showTransparent ? "text-white" : "text-black"
+            }  hidden lg:flex items-center justify-center gap-4 text-sm font-semibold`}
+          >
+            {NavbarMenu.map((item) => (
+              <a
+                key={item.id}
+                href={item.link}
+                className="hover:text-main_color"
+              >
+                {item.title}
+              </a>
+            ))}
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              className={`${
+                showTransparent ? "text-white border-gray-600" : "text-black"
+              } hover:text-main_color text-xl hover:border-main_color border rounded-full px-1 py-1`}
+            >
               <CiSearch />
             </button>
-            <button className="text-white text-xl sm:text-2xl hover:bg-gray-500 hover:text-white rounded-full p-2 duration-300">
+            <button
+              className={`${
+                showTransparent ? "text-white border-gray-600" : "text-black"
+              } hover:text-main_color text-xl hover:border-main_color border rounded-full px-1 py-1`}
+            >
               <CiLocationOn />
             </button>
+
             {isAuthenticated ? (
-              <div className="relative hidden md:block" ref={dropDownRef}>
+              <div className="relative hidden lg:block" ref={dropDownRef}>
                 <img
                   onClick={(e: React.MouseEvent<HTMLImageElement>) => {
                     e.preventDefault();
@@ -94,31 +125,29 @@ const Header = () => {
                   }}
                   src={
                     profile?.profilePic
-                      ? `${import.meta.env.VITE_PROFILE_URL}${
-                          profile.profilePic
-                        }`
+                      ? profile.profilePic
                       : Images.default_profile
                   }
                   alt=""
-                  className="w-10 h-10 rounded-full cursor-pointer border border-white bg-white"
+                  className="w-9 h-9 rounded-full cursor-pointer border border-gray-300"
                 />
                 {dropDown && (
                   <div className="absolute right-0 mt-2 w-36 bg-white border z-50 shadow-lg rounded-md font-JosephicSans py-2">
                     <button
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-md text-black"
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-gray-800"
                       onClick={() => navigate("/user/profile")}
                     >
                       Profile
                     </button>
                     <button
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-md text-black"
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-gray-800"
                       onClick={() => navigate("/user/bookings")}
                     >
                       My bookings
                     </button>
                     <button
                       onClick={() => setConfirmLogout(true)}
-                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-md text-black"
+                      className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-gray-800"
                     >
                       Logout
                     </button>
@@ -128,22 +157,25 @@ const Header = () => {
             ) : (
               <button
                 onClick={() => navigate("/login")}
-                className="hidden md:block hover:bg-main_color hover:border-main_color text-white border border-neutral-300 rounded-md px-6 py-1.5 duration-300 font-JosephicSans"
+                className="hidden lg:block text-sm text-gray-700 border border-gray-300 rounded px-5 py-1.5 hover:bg-gray-100"
               >
                 Login
               </button>
             )}
-          </div>
-          <div className="md:hidden text-white" onClick={() => setOpen(!open)}>
-            {open ? (
-              <MdClose className="text-4xl cursor-pointer " />
-            ) : (
-              <MdMenu className="text-4xl cursor-pointer" />
+            {!open && (
+              <div className="lg:hidden" onClick={() => setOpen(true)}>
+                <MdMenu
+                  className={`${
+                    showTransparent ? "text-white" : "text-black"
+                  } text-3xl cursor-pointer`}
+                />
+              </div>
             )}
           </div>
         </div>
         <CustomToastContainer />
       </nav>
+
       <ResponsiveNavLinks
         open={open}
         setOpen={setOpen}
@@ -151,6 +183,7 @@ const Header = () => {
         onLogout={() => setConfirmLogout(true)}
         navigate={navigate}
       />
+
       <ConfirmDialog
         isOpen={confirmLogout}
         title="Confirm Logout"

@@ -63,7 +63,7 @@ const AdminHeader: React.FC<HeaderProps> = ({ role }) => {
               <img
                 src={
                   admin?.profilePic
-                    ? `${import.meta.env.VITE_PROFILE_URL}${admin.profilePic}`
+                    ? admin.profilePic
                     : Images.default_profile
                 }
                 alt="avatar"

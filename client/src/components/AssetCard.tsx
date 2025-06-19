@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 export const AssetsCard: React.FC<AssetsCardProps> = ({
   status,
   name,
-  host,
+  assetType,
   reqDate,
   imageSrc,
   id,
@@ -24,7 +24,7 @@ export const AssetsCard: React.FC<AssetsCardProps> = ({
 
   return (
     <div
-      className="group relative w-full aspect-[3/3.8] rounded-md overflow-hidden shadow bg-white cursor-pointer transition-transform hover:scale-[1.02]"
+      className="group relative w-52 h-56 sm:h-60 rounded-md overflow-hidden shadow bg-white cursor-pointer transition-transform hover:scale-[1.02]"
       onClick={() => fulldata?.(id)}
     >
       <img
@@ -32,20 +32,22 @@ export const AssetsCard: React.FC<AssetsCardProps> = ({
         alt="Card"
         className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-300 group-hover:opacity-30"
       />
-      <div className="relative z-10 flex flex-col justify-between h-full p-3 text-white">
+      <div className="relative z-10 flex flex-col justify-between h-full p-2 sm:p-3 text-white text-xs">
         <div className="flex items-center gap-1">
           <span
             className={`${
               status === "pending" ? "text-yellow-600 " : "text-white"
-            } border bg-yellow-200 p-1 rounded-md text-xs font-bold`}
+            }  bg-yellow-200 p-1 rounded-md text-[12px] font-sans`}
           >
             {status}
           </span>
         </div>
         <div className="text-xs mt-auto">
-          <p className="font-bold sm:text-2xl text-xl leading-snug">{name}</p>
-          <p className="opacity-90">{host}</p>
-          <p className="opacity-90">Requested on: {formattedDate}</p>
+          <p className="font-bold text-sm sm:text-sm">{name}</p>
+          <p className="opacity-90 text-[10px]">{assetType}</p>
+          <p className="opacity-90 text-[10px]">
+            Requested on: {formattedDate}
+          </p>
         </div>
         <div className="flex justify-between items-center pt-2">
           {showPagination && (

@@ -175,9 +175,6 @@ const AdminHosts = () => {
     setTimeout(async () => {
       try {
         const payload: EditHostPayload = {
-          name: form.name,
-          phone: form.phone,
-          location: form.location,
           role: form.role,
           isActive: form.isActive,
           isBlocked: form.isBlocked,
@@ -321,7 +318,7 @@ const AdminHosts = () => {
       </div>
     );
   if (error)
-    return <div className="text-center font-bold px-4 py-4">{error}</div>;
+    return <div className="text-center font-bold px-4 py-4 mt-10">{error}</div>;
   return (
     <div>
       <div className="flex flex-col md:flex-row h-screen bg-main_white rounded-md font-prompt">
@@ -366,9 +363,7 @@ const AdminHosts = () => {
                   <img
                     src={
                       host.profilePic
-                        ? `${import.meta.env.VITE_PROFILE_URL}${
-                            host.profilePic
-                          }`
+                        ? host.profilePic
                         : Images.casual_user
                     }
                     alt="Profile"
@@ -409,9 +404,7 @@ const AdminHosts = () => {
                 <img
                   src={
                     selectedHost.profilePic
-                      ? `${import.meta.env.VITE_PROFILE_URL}${
-                          selectedHost.profilePic
-                        }`
+                      ? selectedHost.profilePic
                       : Images.casual_user
                   }
                   alt=""
@@ -617,9 +610,7 @@ const AdminHosts = () => {
                     src={
                       previewImage ||
                       (selectedHost?.profilePic
-                        ? `${import.meta.env.VITE_PROFILE_URL}${
-                            selectedHost.profilePic
-                          }`
+                        ? selectedHost.profilePic
                         : Images.default_profile)
                     }
                     alt="Profile picture"
@@ -665,7 +656,7 @@ const AdminHosts = () => {
                       type="text"
                       className="border p-2 md:p-3 rounded-md"
                       value={form.name}
-                      onChange={handleInputChange}
+                      disabled
                     />
                   </div>
                   <div className="flex flex-col gap-1">
@@ -690,7 +681,7 @@ const AdminHosts = () => {
                       name="phone"
                       className="border p-2 md:p-3 rounded-md"
                       value={form.phone}
-                      onChange={handleInputChange}
+                      disabled
                     />
                   </div>
 
@@ -796,7 +787,7 @@ const AdminHosts = () => {
                       type="text"
                       className="border p-2 md:p-3 rounded-md"
                       value={form.location}
-                      onChange={handleInputChange}
+                      disabled
                     />
                   </div>
 

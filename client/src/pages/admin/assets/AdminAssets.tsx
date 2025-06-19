@@ -69,14 +69,14 @@ const AdminServices = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 px-4">
             {assets.map((asset: any) => {
-              const { name, image, hostName } = normalizeAssetData(asset);
+              const { name, image, assetType } = normalizeAssetData(asset);
               return (
                 <AssetsCard
                   id={asset._id}
                   key={asset._id}
                   name={name}
                   status={asset.status}
-                  host={hostName}
+                  assetType={assetType}
                   reqDate={asset.createdAt}
                   imageSrc={image ? image : Images.imageNA}
                   bookmarked={true}

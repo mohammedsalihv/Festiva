@@ -1,12 +1,9 @@
 import { Host } from "../host/authTypes";
 
 export interface EditHostPayload {
-  name: string;
-  phone: string;
   role: string;
   isActive: boolean;
   isBlocked: boolean;
-  location: string;
   isVerified: boolean;
   profilePic: string;
   isSubscriber: boolean;

@@ -26,22 +26,27 @@ const ResponsiveNavLinks = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed top-0 left-0 w-full h-full backdrop-blur-full bg-black/30 z-10"
+            className="fixed top-0 left-0 w-full h-full bg-black/60 z-40"
+            onClick={() => setOpen(false)}
           />
-          <div className="fixed top-[17px] right-4 z-50 md:hidden">
-            <MdClose
-              onClick={() => setOpen(false)}
-              className="text-white text-4xl cursor-pointer"
-            />
-          </div>
+
+          {/* Menu Content */}
           <motion.div
             initial={{ opacity: 0, y: -100 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -100 }}
             transition={{ duration: 0.3 }}
-            className="fixed top-18 left-0 w-full h-screen z-50 bg-black"
+            className="fixed top-0 left-0 w-full h-full bg-transparent backdrop-blur-sm z-50 overflow-y-auto"
           >
-            <div className="text-sm font-semibold text-white py-10 m-1 mt-11 md:hidden shadow-lg">
+            {/* Close button inside menu */}
+            <div className="absolute top-5 right-4">
+              <MdClose
+                onClick={() => setOpen(false)}
+                className="text-white text-4xl cursor-pointer"
+              />
+            </div>
+
+            <div className="text-sm font-semibold text-white py-10 mt-16 px-6">
               <ul className="flex flex-col justify-center items-center gap-7 cursor-pointer">
                 {NavbarMenu.map((item) => (
                   <li key={item.id}>
