@@ -1,7 +1,7 @@
 import { IHost } from "../../../../domain/entities/modelInterface/interface.host";
 import { IAdminHostManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/interface.adminHostManagement";
 import { HostModel } from "../../../../domain/models/hostModel";
-import { pickDefinedFields } from "../../../../utils/common/cloudinary/pickDefinedFields";
+import { pickDefinedFields } from "../../../../utils/user/pickDefinedFields";
 import { responseHostDTO } from "../../../../types/DTO/host/dto.host";
 
 export class AdminHostManagementRepostory implements IAdminHostManagementRepository {

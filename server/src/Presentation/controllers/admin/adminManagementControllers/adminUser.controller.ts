@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import { AdminUserManagementUseCase } from "../../../../application/use-cases/admin/adminManagement/usecase.adminUserManagement";
 import logger from "../../../../utils/common/messages/logger";
 import { JwtPayload } from "jsonwebtoken";
-import { validateAndGetImageUrl } from "../../../../utils/common/cloudinary/imageUtils";
 import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
+import { uploadProfileImage } from "../../../../utils/common/cloudinary/uploadProfileImage";
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -100,9 +100,9 @@ export class AdminUsersController {
   async changeProfile(req: MulterRequest, res: Response) {
     try {
       const userId = req.params.userId;
-      const image = validateAndGetImageUrl(req.file);
+      const file = req.file;
 
-      if (!image) {
+      if (!file) {
         return res.status(statusCodes.forbidden).json({
           success: false,
           message: "No image file uploaded.",
@@ -116,9 +116,14 @@ export class AdminUsersController {
         });
       }
 
+      const image = await uploadProfileImage({
+        id: userId,
+        buffer: file.buffer,
+      });
+
       const updatedUser = await this.AdminUserManagementUseCase.changeProfile(
         userId,
-        image
+        image.url
       );
 
       res.status(statusCodes.Success).json({

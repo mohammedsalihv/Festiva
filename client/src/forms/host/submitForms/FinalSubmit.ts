@@ -62,10 +62,6 @@ export const handleFinalSubmit = async (
       formData.append("Images", imageFile);
     });
 
-    // for (const pair of formData.entries()) {
-    //   console.log(`${pair[0]}: ${pair[1]}`);
-    // }
-
     await addVenue(formData);
     toast.success("All data submitted successfully!");
     dispatch(resetLocationDetails());

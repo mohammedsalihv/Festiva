@@ -56,27 +56,31 @@ export const normalizeAssetData = (
   let image = "";
   const hostName = asset.host?.name;
 
+  const getFirstImage = (imgs: any) =>
+    Array.isArray(imgs) && imgs.length > 0 ? imgs[0] : "";
+
   switch (type) {
     case "venue":
       name = (asset as IVenue).venueName ?? "Unnamed Venue";
-      image = (asset as IVenue).Images?.[0] ?? "";
+      image = getFirstImage((asset as IVenue).Images);
       break;
     case "studio":
       name = (asset as IStudio).studioName ?? "Unnamed Studio";
-      image = (asset as IStudio).Images?.[0] ?? "";
+      image = getFirstImage((asset as IStudio).Images);
       break;
     case "car":
       name = (asset as IRentCar).businessName ?? "Unnamed Car";
-      image = (asset as IRentCar).Images?.[0] ?? "";
+      image = getFirstImage((asset as IRentCar).Images);
       break;
     case "cater":
       name = (asset as ICaters).catersName ?? "Unnamed Caterer";
-      image = (asset as ICaters).Images?.[0] ?? "";
+      image = getFirstImage((asset as ICaters).Images);
       break;
     default:
       name = "Unknown Asset";
       image = "";
   }
+
   return {
     name,
     image,

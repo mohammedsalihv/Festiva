@@ -13,9 +13,9 @@ import {
 import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
 import { assetFilesValidate } from "../../../../utils/host/assetFilesValidate";
 
-interface MulterRequest extends Request {
+export interface MulterRequest extends Request {
+  files?: { [fieldname: string]: Express.Multer.File[] };
   file?: Express.Multer.File;
-  files?: Express.Multer.File[];
   auth?: JwtPayload & { id: string; role?: string };
 }
 
@@ -36,11 +36,11 @@ export class HostVenueController {
 
     try {
       const newVenu = req.body;
-      const files = req.files as Express.Multer.File[];
+      const files = req.files?.["Images"] || [];
+      const typeOfAsset = "venue";
 
       try {
-        await assetFilesValidate({ files, typeOfAsset: newVenu.typeOfAsset });
-
+        await assetFilesValidate({ files, typeOfAsset: typeOfAsset });
         const newLocation = await this.hostAssetlocationRepository.addLocation(
           newVenu.location
         );
@@ -57,9 +57,9 @@ export class HostVenueController {
           await Promise.all(
             files.map((file, i) =>
               uploadAssetImages({
-                assetType: newVenu.typeOfAsset,
+                assetType: typeOfAsset,
                 buffer: file.buffer,
-                filename: `${newVenu.typeOfAsset}_${timestamp}_${i}`,
+                filename: `${typeOfAsset}_${timestamp}_${i}`,
               })
             )
           )

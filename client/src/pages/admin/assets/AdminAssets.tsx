@@ -78,11 +78,7 @@ const AdminServices = () => {
                   status={asset.status}
                   host={hostName}
                   reqDate={asset.createdAt}
-                  imageSrc={
-                    image
-                      ? `${import.meta.env.VITE_PROFILE_URL}${image}`
-                      : Images.imageNA
-                  }
+                  imageSrc={image ? image : Images.imageNA}
                   bookmarked={true}
                   showPagination={true}
                   fulldata={(id) =>

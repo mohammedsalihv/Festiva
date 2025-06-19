@@ -7,7 +7,6 @@ import {
   profileEditDTO,
 } from "../../../../types/DTO/user/dto.user";
 import { hash } from "../../../../utils/common/auth/passwordHash";
-import { validateAndGetImageUrl } from "../../../../utils/common/cloudinary/imageUtils";
 import {
   statusCodes,
   statusMessages,
@@ -20,15 +19,10 @@ export class UserProfileUseCase {
     private userRepository: IUserRepository
   ) {}
 
-  async execute(
-    userId: string,
-    image: Express.Multer.File
-  ): Promise<responseUserDTO> {
-    const imageUrl = validateAndGetImageUrl(image);
-
+  async execute(userId: string, image: string): Promise<responseUserDTO> {
     const response = await this.userProfileRepository.setProfilePic(
       userId,
-      imageUrl
+      image
     );
 
     if (!response) {
@@ -37,10 +31,10 @@ export class UserProfileUseCase {
         statusCodes.serverError
       );
     }
-
     return response;
   }
 
+  
   async profileEdit(
     userId: string,
     form: profileEditDTO

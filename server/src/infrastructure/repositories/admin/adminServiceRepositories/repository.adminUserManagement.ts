@@ -1,7 +1,7 @@
 import { IUser } from "../../../../domain/entities/modelInterface/interface.user";
 import { IAdminUserManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/interface.adminUserManagement";
 import { UserModal } from "../../../../domain/models/userModel";
-import { pickDefinedFields } from "../../../../utils/common/cloudinary/pickDefinedFields";
+import { pickDefinedFields } from "../../../../utils/user/pickDefinedFields";
 import { EditUserPayload } from "../../../../domain/adminInterface/interface.editUser";
 import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
 import { toResponseUserDTO } from "../../../../types/DTO/user/dto.user";

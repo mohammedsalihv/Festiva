@@ -5,17 +5,13 @@ import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import logger from "./utils/common/messages/logger";
-import { createUploadsFolder } from "./utils/common/cloudinary/createUploadsFolder";
-
 import userAuthRoutes from "./Presentation/routes/user/userAuthRoutes";
 import userRoutes from "./Presentation/routes/user/userRoutes";
 import hostAuthRoutes from "./Presentation/routes/host/hostAuthRoutes";
 import hostRoutes from "./Presentation/routes/host/hostRoutes";
 import adminAuthRoutes from "./Presentation/routes/admin/adminauthRoutes";
 import adminRoutes from "./Presentation/routes/admin/adminRoutes";
-
 dotenv.config();
-createUploadsFolder();
 
 const app: Application = express();
 

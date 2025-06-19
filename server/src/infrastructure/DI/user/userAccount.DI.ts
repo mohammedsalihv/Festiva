@@ -1,4 +1,4 @@
-import { UserProfileController } from "../../../Presentation/controllers/user/pages/UserProfile.controller";
+import { UserProfileController } from "../../../Presentation/controllers/user/page controllers/userProfile.controller";
 import { UserProfileUseCase } from "../../../application/use-cases/user/profile/usecase.userProfile";
 import { UserProfileRepository } from "../../repositories/user/pages/repository.userProfile";
 import { UserRepository } from "../../repositories/user/pages/repository.user";

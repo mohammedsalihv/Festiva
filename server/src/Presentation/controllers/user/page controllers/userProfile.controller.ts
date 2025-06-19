@@ -7,6 +7,7 @@ import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
+import { uploadProfileImage } from "../../../../utils/common/cloudinary/uploadProfileImage";
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -19,9 +20,9 @@ export class UserProfileController {
   async setProfilePic(req: MulterRequest, res: Response) {
     try {
       const userId = req.auth?.id;
-      const image = req.file;
+      const file = req.file;
 
-      if (!image) {
+      if (!file) {
         return res.status(statusCodes.forbidden).json({
           success: false,
           message: "No image file uploaded.",
@@ -35,7 +36,12 @@ export class UserProfileController {
         });
       }
 
-      const updatedUser = await this.userProfileUseCase.execute(userId, image);
+      const image = await uploadProfileImage({
+        id: userId,
+        buffer: file.buffer,
+      });
+
+      const updatedUser = await this.userProfileUseCase.execute(userId, image.url);
 
       res.status(statusCodes.Success).json({
         success: true,

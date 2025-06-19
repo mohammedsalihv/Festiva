@@ -3,11 +3,11 @@ import { AdminHostManagementUseCase } from "../../../../application/use-cases/ad
 import logger from "../../../../utils/common/messages/logger";
 import { AuthRequest } from "../../../../domain/controlInterface/authType";
 import { JwtPayload } from "jsonwebtoken";
-import { validateAndGetImageUrl } from "../../../../utils/common/cloudinary/imageUtils";
 import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
+import { uploadProfileImage } from "../../../../utils/common/cloudinary/uploadProfileImage";
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -101,9 +101,9 @@ export class AdminHostsController {
   async changeProfile(req: MulterRequest, res: Response) {
     try {
       const hostId = req.params.hostId;
-      const imageUrl = validateAndGetImageUrl(req.file);
+      const file = req.file;
 
-      if (!imageUrl) {
+      if (!file) {
         res.status(statusCodes.forbidden).json({
           success: false,
           message: "No image file uploaded.",
@@ -116,9 +116,14 @@ export class AdminHostsController {
         });
       }
 
+      const image = await uploadProfileImage({
+        id: hostId,
+        buffer: file.buffer,
+      });
+
       const updatedHost = await this.AdminHostManagementUseCase.changeProfile(
         hostId,
-        imageUrl
+        image.url
       );
 
       res.status(statusCodes.Success).json({

@@ -1,6 +1,6 @@
 import { IAdminLoginRepository } from "../../../../domain/entities/repositoryInterface/admin/interface.adminLogin";
 import { IAdminRepository } from "../../../../domain/entities/repositoryInterface/admin/interface.admin";
-import { AdminDetailsDTO } from "../../../../types/DTO/admin/dto.admin";
+import { AdminDetailsDTO } from "../../../../types/DTO/admin/admin.dto";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { TokenService } from "../../../tokenService/service.token";
 import bcrypt from "bcrypt";

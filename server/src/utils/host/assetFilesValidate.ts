@@ -8,8 +8,10 @@ export const assetFilesValidate = async ({
   files: Express.Multer.File[];
   typeOfAsset: string;
 }): Promise<boolean> => {
-  if (!files?.length || !['venue', 'studio', 'rentcar', 'caters'].includes(typeOfAsset)) {
-    throw new CustomError('Invalid asset type or no files uploaded', statusCodes.forbidden);
+  if (!files?.length) {
+    throw new CustomError("No files uploaded", statusCodes.forbidden);
+  } else if (!["venue", "studio", "rentcar", "caters"].includes(typeOfAsset)) {
+    throw new CustomError("Invalid asset type", statusCodes.forbidden);
   }
 
   return true;
