@@ -9,6 +9,7 @@ import {
   validateCarRentForm,
 } from "@/utils/validations/host/service/CarRentFormValidation";
 import { Clock } from "lucide-react";
+import Spinner from "@/components/Spinner";
 
 interface ErrorState {
   businessName: string;
@@ -565,40 +566,21 @@ const CarForm = () => {
 
         <CustomToastContainer />
       </div>
-      <div className="mt-60 p-4 sm:mt-52 justify-end sm:ml-[1200px] sm:mr-14">
+      <div className="mt-10 justify-end flex">
         <button
          onClick={handleSubmit}
          disabled={loading}
-          className={`w-full md:w-28 flex items-center justify-center gap-2 bg-main_host text-white px-25 py-3 rounded-lg transition ${
+          className={`flex items-center justify-center gap-2 bg-main_host text-white px-10 py-3 rounded-lg transition ${
             loading ? "opacity-70 cursor-not-allowed" : "hover:brightness-110"
           }`}
-          type="button"
         >
            {loading && (
-            <svg
-              className="animate-spin h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v8z"
-              />
-            </svg>
+            <Spinner text="Saving..."/>
           )}
-          {loading ? "Submitting..." : "Next"}
+           Next
         </button>
       </div>
+      <CustomToastContainer/>
     </div>
   );
 };
