@@ -4,7 +4,7 @@ import {
   removeImage,
   addCroppedImage,
   setAllImages,
-} from "@/redux/Slice/host/imageSlice";
+} from "@/redux/Slice/host/common/imageSlice";
 import ImageCropper from "@/components/ImageCropper";
 import { Images } from "@/assets";
 import { toast } from "react-toastify";

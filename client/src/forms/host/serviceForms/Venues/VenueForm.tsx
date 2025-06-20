@@ -11,7 +11,7 @@ import {
   VenueDetailsErrorState,
 } from "@/utils/validations/host/service/VenueDetailsValidation";
 import { useDispatch } from "react-redux";
-import { setVenueDetails } from "@/redux/Slice/host/venueDetailsSlice";
+import { setVenueDetails } from "@/redux/Slice/host/venue/venueDetailsSlice";
 import { Textarea } from "@/components/Textarea";
 
 const VenueDetailsForm = () => {

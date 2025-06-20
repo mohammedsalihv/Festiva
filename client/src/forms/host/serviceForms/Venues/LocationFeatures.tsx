@@ -15,7 +15,7 @@ import {
   LocationFeaturesErrorState,
   validateLocationFeaturesForm,
 } from "@/utils/validations/host/service/locationFeatures";
-import { setLocationFeatures } from "@/redux/Slice/host/locationFeaturesSlice";
+import { setLocationFeatures } from "@/redux/Slice/host/venue/locationFeaturesSlice";
 import Spinner from "@/components/Spinner";
 
 const LocationFeatures: React.FC = () => {

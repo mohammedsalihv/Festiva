@@ -3,12 +3,12 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 import userReducer from "./Slice/user/userSlice";
-import hostReducer from "@/redux/Slice/host/hostSlice";
-import selectServiceReducer from "./Slice/host/selectServiceSlice";
-import locationFeaturesReducer from "./Slice/host/locationFeaturesSlice";
-import imageReducer from "./Slice/host/imageSlice";
-import venueDetailsReducer from "@/redux/Slice/host/venueDetailsSlice";
-import locationReducer from "@/redux/Slice/host/locationSlice";
+import hostReducer from "@/redux/Slice/host/common/hostSlice";
+import selectServiceReducer from "./Slice/host/common/selectServiceSlice";
+import locationFeaturesReducer from "./Slice/host/venue/locationFeaturesSlice";
+import imageReducer from "./Slice/host/common/imageSlice";
+import venueDetailsReducer from "@/redux/Slice/host/venue/venueDetailsSlice";
+import locationReducer from "@/redux/Slice/host/common/locationSlice";
 import adminReduer from "@/redux/Slice/admin/adminSlice";
 import userManagementReducer from "@/redux/Slice/admin/userManagementSlice";
 import hostManagementReducer from "@/redux/Slice/admin/hostManagementSlice";

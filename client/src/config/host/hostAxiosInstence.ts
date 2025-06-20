@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import store from "@/redux/store";
-import { setHostDetails , logoutHost } from "@/redux/Slice/host/hostSlice";
+import { setHostDetails , logoutHost } from "@/redux/Slice/host/common/hostSlice";
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL:

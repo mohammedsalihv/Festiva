@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setHostDetails } from "@/redux/Slice/host/hostSlice";
+import { setHostDetails } from "@/redux/Slice/host/common/hostSlice";
 import { useMutation } from "@tanstack/react-query";
 
 const HostLogin = () => {

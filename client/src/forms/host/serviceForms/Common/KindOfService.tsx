@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setSelectedOption,
   setSelectedTab,
-} from "@/redux/Slice/host/selectServiceSlice";
+} from "@/redux/Slice/host/common/selectServiceSlice";
 import { RootState } from "@/redux/store";
 import { BsFillBuildingsFill } from "react-icons/bs";
 import { FaCar } from "react-icons/fa";

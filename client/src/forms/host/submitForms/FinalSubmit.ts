@@ -8,10 +8,10 @@ import {
 import { toast } from "react-toastify";
 import { NavigateFunction } from "react-router-dom";
 import { AppDispatch } from "@/redux/store";
-import { resetLocationDetails } from "@/redux/Slice/host/locationSlice";
-import { resetImages } from "@/redux/Slice/host/imageSlice";
-import { resetLocationFeatures } from "@/redux/Slice/host/locationFeaturesSlice";
-import { resetVenueDetails } from "@/redux/Slice/host/venueDetailsSlice";
+import { resetLocationDetails } from "@/redux/Slice/host/common/locationSlice";
+import { resetImages } from "@/redux/Slice/host/common/imageSlice";
+import { resetLocationFeatures } from "@/redux/Slice/host/venue/locationFeaturesSlice";
+import { resetVenueDetails } from "@/redux/Slice/host/venue/venueDetailsSlice";
 
 export const handleFinalSubmit = async (
   venueDetails: VenueDetails,
