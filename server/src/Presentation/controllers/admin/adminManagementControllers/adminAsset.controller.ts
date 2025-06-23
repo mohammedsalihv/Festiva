@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { AdminAssetManagementUseCase } from "../../../../application/use-cases/admin/adminManagement/usecase.adminAssetManagement";
 import { AdminVenueController } from "../adminServiceControllers/AdminVenue.controller";
+import { AdminRentCarController } from "../adminServiceControllers/AdminRentCar.controller";
 import logger from "../../../../utils/common/messages/logger";
 import {
   statusCodes,
@@ -10,7 +11,8 @@ import {
 export class AdminAssetsController {
   constructor(
     private adminAssetManagementUseCase: AdminAssetManagementUseCase,
-    private AdminVenueController: AdminVenueController
+    private adminVenueController: AdminVenueController,
+    private adminRentCarController: AdminRentCarController
   ) {}
 
   async Assets(req: Request, res: Response): Promise<void> {
@@ -46,8 +48,10 @@ export class AdminAssetsController {
 
       switch (typeOfAsset) {
         case "venue":
-          await this.AdminVenueController.venueDetails(req, res);
+          await this.adminVenueController.venueDetails(req, res);
           break;
+        case "rentcar":
+          await this.adminRentCarController.carFullDetails(req, res);
         default:
           res.status(statusCodes.forbidden).json({
             success: false,

@@ -2,6 +2,7 @@ import { AdminAssetManagementUseCase } from "../../../application/use-cases/admi
 import { AdminAssetManagementRepository } from "../../repositories/admin/adminServiceRepositories/repository.adminAssetManagement";
 import { AdminAssetsController } from "../../../Presentation/controllers/admin/adminManagementControllers/adminAsset.controller";
 import { adminVenueController } from "./adminVenue.DI";
+import { adminRentCarController } from "./adminRentCar.DI";
 
 const adminAssetManagementRepository = new AdminAssetManagementRepository();
 const adminAssetManagementUseCase = new AdminAssetManagementUseCase(
@@ -9,7 +10,8 @@ const adminAssetManagementUseCase = new AdminAssetManagementUseCase(
 );
 const adminAssetController = new AdminAssetsController(
   adminAssetManagementUseCase,
-  adminVenueController
+  adminVenueController,
+  adminRentCarController
 );
 
 export { adminAssetController };

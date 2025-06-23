@@ -127,7 +127,10 @@ export const handleFinalSubmit = async ({
           formData.append(`additionalFeatures[${i}]`, f)
         );
 
-        formData.append("termsOfUse", details.termsOfUse.join(","));
+        details.termsOfUse?.forEach((f,i)=>
+          formData.append(`termsOfUse[${i}]`,f)
+        )
+        
         formData.append("about", details.about ?? "");
         formData.append("guidelines", details.guidelines ?? "");
         formData.append("description", details.description ?? "");
