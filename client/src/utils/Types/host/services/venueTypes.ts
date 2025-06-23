@@ -15,10 +15,6 @@ export interface AddVenueData {
   location: object;
 }
 
-
-
-
-
 export interface VenueDetails {
   venueName: string;
   rent: number | null;
@@ -30,6 +26,31 @@ export interface VenueDetails {
   description: string;
 }
 
+export const venueDetailsInitialState: VenueDetails = {
+  venueName: "",
+  rent: null,
+  capacity: null,
+  shift: "",
+  squareFeet: null,
+  timeSlots: [],
+  availableDates: [],
+  description: "",
+};
+
+export interface venueFeatures {
+  features: string[];
+  parkingFeatures: string[];
+  about: string;
+  terms: string;
+}
+
+export const venueFeaturesInitialState: venueFeatures = {
+  features: [],
+  parkingFeatures: [],
+  about: "",
+  terms: "",
+};
+
 export interface LocationDetails {
   houseNo: string;
   street: string;
@@ -39,16 +60,6 @@ export interface LocationDetails {
   zip: string;
 }
 
-
-
-
 export interface ImageDetails {
-   Images: File[];
-}
-
-export interface LocationFeatures {
-  features: string[];
-  parkingFeatures: string[];
-  about: string;
-  terms: string;
+  Images: File[];
 }

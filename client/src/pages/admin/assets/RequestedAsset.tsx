@@ -19,7 +19,7 @@ const RequestedAsset = () => {
   switch (requestedAsset.typeOfAsset) {
     case "venue":
       return <VenueRequestView data={requestedAsset as IVenue} />;
-    case "car":
+    case "rentcar":
       return <RentCarRequestView data={requestedAsset as IRentCar} />;
     case "studio":
       return <StudioRequestView data={requestedAsset as IStudio} />;

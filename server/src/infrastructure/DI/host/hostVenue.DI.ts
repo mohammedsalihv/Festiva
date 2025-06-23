@@ -1,14 +1,14 @@
 import { HostVenueController } from "../../../Presentation/controllers/host/hostServiceControllers/hostVenue.controller";
-import { HostaddVenueUseCase } from "../../../application/use-cases/host/hostServices/usecase.venue";
-import { HostVenueRepository } from "../../repositories/host/service/repository.hostVenueService";
+import { HostVenueUseCase } from "../../../application/use-cases/host/hostServices/usecase.hostVenue";
+import { HostVenueRepository } from "../../repositories/host/service/repository.hostVenue";
 import { HostAssetLocationRepository } from "../../repositories/host/service/repository.hostAssetLocation";
 
 const hostVenueRepository = new HostVenueRepository();
 const hostAssetLocationRepository = new HostAssetLocationRepository();
-const addVenue = new HostaddVenueUseCase(hostVenueRepository);
+const hostVenueUseCase = new HostVenueUseCase(hostVenueRepository);
 
 const hostVenueController = new HostVenueController(
-  addVenue,
+  hostVenueUseCase,
   hostAssetLocationRepository
 );
 

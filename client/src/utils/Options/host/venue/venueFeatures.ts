@@ -1,4 +1,4 @@
-export const venueFeatures = [
+export const venueFeaturesOptions = [
   "A/c",
   "Internet and wifi",
   "Dressing room",

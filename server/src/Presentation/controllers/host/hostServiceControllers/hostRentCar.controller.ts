@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { IVenue } from "../../../../domain/entities/serviceInterface/interface.venue";
-import { HostVenueUseCase } from "../../../../application/use-cases/host/hostServices/usecase.hostVenue";
+import { IRentCar } from "../../../../domain/entities/serviceInterface/interface.rentCar";
+import { HostRentCarUseCase } from "../../../../application/use-cases/host/hostServices/usecase.hostRentcar";
+import { IHostRentCarController } from "../../../../domain/controlInterface/host/interface.hostRentCarController";
 import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostAssetLocationRepostory";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
@@ -19,13 +20,13 @@ export interface MulterRequest extends Request {
   auth?: JwtPayload & { id: string; role?: string };
 }
 
-export class HostVenueController {
+export class HostRentCarController implements IHostRentCarController {
   constructor(
-    private hostVenueUseCase: HostVenueUseCase,
+    private hostRentCarUseCase: HostRentCarUseCase,
     private hostAssetlocationRepository: IHostAssetLocationRepository
   ) {}
 
-  async addVenue(req: MulterRequest, res: Response): Promise<void> {
+  async addRentCar(req: MulterRequest, res: Response): Promise<void> {
     const hostId = req.auth?.id;
     if (!hostId) {
       throw new ErrorHandler(
@@ -35,14 +36,14 @@ export class HostVenueController {
     }
 
     try {
-      const newVenu = req.body;
+      const newRentCar = req.body;
       const files = req.files?.["Images"] || [];
-      const typeOfAsset = "venue";
+      const typeOfAsset = "rentcar";
 
       try {
         await assetFilesValidate({ files, typeOfAsset: typeOfAsset });
         const newLocation = await this.hostAssetlocationRepository.addLocation(
-          newVenu.location
+          newRentCar.location
         );
 
         if (!newLocation || !newLocation._id) {
@@ -66,44 +67,60 @@ export class HostVenueController {
         ).map((img) => img.url);
 
         const {
-          venueName,
+          businessName,
+          carName,
           rent,
-          capacity,
-          shift,
-          squareFeet,
+          make,
+          model,
           timeSlots,
           availableDates,
+          color,
+          fuel,
+          transmission,
+          seats,
+          deposite,
+          carFeatures,
+          additionalFeatures,
+          termsOfUse,
           about,
-          features,
-          parkingFeatures,
           description,
-          terms,
-        } = newVenu;
+          guidelines,
+          userDocument,
+        } = newRentCar;
 
-        const venue: IVenue = {
-          venueName,
+        const rentCar: IRentCar = {
+          businessName,
+          carName,
           rent,
-          capacity,
-          shift,
-          squareFeet,
+          make,
+          model,
           timeSlots,
           availableDates,
+          color,
+          fuel,
+          transmission,
+          seats,
+          deposite,
+          carFeatures,
+          additionalFeatures,
+          termsOfUse,
           about,
-          features,
-          parkingFeatures,
           description,
-          terms,
+          guidelines,
+          userDocument,
           Images: imageUrls,
           location: newLocation._id,
           host: new Types.ObjectId(hostId),
         };
 
-        const createdVenue = await this.hostVenueUseCase.addVenue(venue);
-        res.status(statusCodes.Success).json(createdVenue);
+        const createdRentCar = await this.hostRentCarUseCase.addRentCar(
+          rentCar
+        );
+        res.status(statusCodes.Success).json(createdRentCar);
         return;
       } catch (error: any) {
         res
-          .status(error.statusCode || 500)
+          .status(error.statusCode || statusCodes.serverError)
           .json({ message: error.message || "Something went wrong" });
       }
     } catch (error) {
@@ -114,7 +131,7 @@ export class HostVenueController {
         logger.error(error);
         res
           .status(statusCodes.serverError)
-          .json({ message: "Failed to add new venue", error });
+          .json({ message: "Failed to add new rent car", error });
       }
     }
   }

@@ -5,10 +5,11 @@ import storage from "redux-persist/lib/storage";
 import userReducer from "./Slice/user/userSlice";
 import hostReducer from "@/redux/Slice/host/common/hostSlice";
 import selectServiceReducer from "./Slice/host/common/selectServiceSlice";
-import locationFeaturesReducer from "./Slice/host/venue/locationFeaturesSlice";
 import imageReducer from "./Slice/host/common/imageSlice";
-import venueDetailsReducer from "@/redux/Slice/host/venue/venueDetailsSlice";
+import venueReducer from "@/redux/Slice/host/venue/venueSlice";
+import rentcarReducer from "@/redux/Slice/host/rentcar/rentCarSlice"
 import locationReducer from "@/redux/Slice/host/common/locationSlice";
+import serviceTypeReducer from "@/redux/Slice/host/common/serviceTypeSlice"
 import adminReduer from "@/redux/Slice/admin/adminSlice";
 import userManagementReducer from "@/redux/Slice/admin/userManagementSlice";
 import hostManagementReducer from "@/redux/Slice/admin/hostManagementSlice";
@@ -18,10 +19,11 @@ const rootReducer = combineReducers({
   user: userReducer,
   host: hostReducer,
   selectService: selectServiceReducer,
-  locationFeatures: locationFeaturesReducer,
   images: imageReducer,
-  venueDetails: venueDetailsReducer,
+  venue: venueReducer,
+  rentcar:rentcarReducer,
   location: locationReducer,
+  serviceType:serviceTypeReducer,
   admin: adminReduer,
   userManagement: userManagementReducer,
   hostManagement: hostManagementReducer,

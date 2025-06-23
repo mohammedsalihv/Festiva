@@ -4,7 +4,7 @@ import HostDashboard from "@/pages/host/landing/HostDashboard";
 import KindOfService from "@/forms/host/serviceForms/Common/KindOfService";
 import LocationForm from "@/forms/host/serviceForms/Common/LocationForm";
 import VenueForm from "@/forms/host/serviceForms/Venues/VenueForm";
-import LocationFeaturesTab from "@/forms/host/serviceForms/Venues/LocationFeatures";
+import LocationFeaturesTab from "@/forms/host/serviceForms/Venues/VenueFeatures";
 import ImageUpload from "@/forms/host/serviceForms/Common/ImageUpload";
 import RentCarForm from "@/forms/host/serviceForms/CarRents/RentCarForm";
 import CarFeatures from "@/forms/host/serviceForms/CarRents/CarFeatures";

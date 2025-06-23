@@ -12,7 +12,27 @@ export interface locationFormState {
   zip: string;
 }
 
-export const validateLocationForm = (form: locationFormState): ValidationResult => {
+export interface locationFormErrorState {
+  houseNo?: string;
+  street?: string;
+  district?: string;
+  state?: string;
+  country?: string;
+  zip?: string;
+}
+
+export const locationFormInitialState: locationFormState = {
+  houseNo: "",
+  street: "",
+  district: "",
+  state: "",
+  country: "",
+  zip: "",
+};
+
+export const validateLocationForm = (
+  form: locationFormState
+): ValidationResult => {
   const errors: { [key: string]: string } = {};
 
   if (!form.houseNo.trim()) errors.houseNo = "house no is required";

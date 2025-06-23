@@ -35,9 +35,9 @@ export interface rentCarFormState {
 
 export const initialRentCarStates: rentCarFormState = {
   businessName: "",
+  carName: "",
   make: "",
   model: "",
-  carName: "",
   color: "",
   fuel: "",
   transmission: "",
@@ -83,7 +83,7 @@ export const validateRentCarForm = (
 
 export interface rentCarDetailsFormErrorState {
   carFeatures: string[];
-  additionalFeatures?: string[];
+  additionalFeatures: string[];
   termsOfUse: string[];
   about?: string;
   description?: string;
@@ -93,7 +93,7 @@ export interface rentCarDetailsFormErrorState {
 
 export interface rentCarDetailsFormState {
   carFeatures: string[];
-  additionalFeatures?: string[];
+  additionalFeatures: string[];
   termsOfUse: string[];
   about?: string;
   description?: string;
@@ -111,7 +111,17 @@ export const initialRentCarDetailsStates: rentCarDetailsFormState = {
   userDocument: "",
 };
 
-export const validateRentCarDeatilsForm = (
+export const initialRentCarDetailsErrorState: rentCarDetailsFormErrorState = {
+  carFeatures: [],
+  additionalFeatures: [],
+  termsOfUse: [],
+  about: "",
+  description: "",
+  guidelines: "",
+  userDocument: "",
+};
+
+export const validateRentCarFeaturesForm = (
   form: rentCarDetailsFormState
 ): ValidationResult => {
   const errors: { [key: string]: string } = {};

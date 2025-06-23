@@ -1,68 +1,86 @@
 import { Input } from "@/components/Input";
 import { Images } from "@/assets";
 import { RootState } from "@/redux/store";
-import {useState } from "react";
+import { useState } from "react";
 import {
   locationFormState,
   validateLocationForm,
+  locationFormInitialState,
+  locationFormErrorState,
 } from "@/utils/validations/host/service/LocationFormValidation";
+import {
+  VenueDetails,
+  venueFeatures,
+} from "@/utils/Types/host/services/venueTypes";
+import {
+  rentCarFormState,
+  rentCarDetailsFormState,
+} from "@/utils/validations/host/service/CarRentFormValidation";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import CustomToastContainer from "../../../../reusable-components/Messages/ToastContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocationDetails } from "@/redux/Slice/host/common/locationSlice";
 import { handleFinalSubmit } from "../../submitForms/FinalSubmit";
-import { VenueDetails, LocationFeatures , ImageDetails } from "@/utils/Types/host/services/venueTypes";
-import { useNavigate } from "react-router-dom"; 
+import { ImageDetails } from "@/utils/Types/host/services/venueTypes";
+import { useNavigate } from "react-router-dom";
 import base64ToFile from "@/utils/Base64ToFile";
-
-interface ErrorState {
-  houseNo?: string;
-  street?: string;
-  district?: string;
-  state?: string;
-  country?: string;
-  zip?: string;
-}
+import Spinner from "@/components/Spinner";
+import { serviceTypes } from "@/redux/Slice/host/common/serviceTypeSlice";
 
 const LocationForm = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate(); 
-  const [errors, setErrors] = useState<ErrorState>({});
-  const [locationForm, setLocationForm] = useState<locationFormState>({
-    houseNo: "",
-    street: "",
-    district: "",
-    state: "",
-    country: "",
-    zip: "",
-  });
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState<locationFormErrorState>({});
+  const [locationForm, setLocationForm] = useState<locationFormState>(
+    locationFormInitialState
+  );
+  const serviceType = useSelector(
+    (state: RootState) => state.serviceType
+  ) as serviceTypes;
+  const venue = useSelector((state: RootState) => state.venue);
+  const rentcar = useSelector((state: RootState) => state.rentcar);
+  const images = useSelector<RootState, string[]>(
+    (state) => state.images.croppedImages
+  );
 
-  const venueDetails = useSelector<RootState, VenueDetails>((state) => state.venueDetails);
-  const images = useSelector<RootState, string[]>((state) => state.images.croppedImages);
-  
-  const locationFeatures = useSelector<RootState, LocationFeatures>((state) => state.locationFeatures);
+  type ServiceFormUnion =
+    | { form: VenueDetails; features: venueFeatures }
+    | { form: rentCarFormState; details: rentCarDetailsFormState };
 
-const fileImages: ImageDetails = {
-  Images: images.map((base64Image, index) =>
-    base64ToFile(base64Image, `image-${index}.jpg`, 'image/jpeg')
-  ),
-};
+  let serviceForm: ServiceFormUnion;
 
+  switch (serviceType) {
+    case "venue":
+      serviceForm = venue;
+      break;
+    case "rentcar":
+      serviceForm = rentcar;
+      break;
+    default:
+      throw new Error("Invalid service type");
+  }
+
+  const fileImages: ImageDetails = {
+    Images: images.map((base64Image, index) =>
+      base64ToFile(base64Image, `image-${index}.jpg`, "image/jpeg")
+    ),
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLocationForm((prev) => ({ ...prev, [name]: value }));
 
-    if (errors[name as keyof ErrorState]) {
+    if (errors[name as keyof locationFormErrorState]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
   const handleSubmit = async () => {
     setLoading(true);
-    const { isValid, errors: validationErrors } = validateLocationForm(locationForm);
+    const { isValid, errors: validationErrors } =
+      validateLocationForm(locationForm);
     if (!isValid) {
       setErrors(validationErrors);
       toast.error("Please correct the errors in the form.");
@@ -75,7 +93,14 @@ const fileImages: ImageDetails = {
 
     try {
       dispatch(setLocationDetails(locationForm));
-      await handleFinalSubmit(venueDetails, locationForm, fileImages, locationFeatures, navigate ,dispatch );
+      await handleFinalSubmit({
+        serviceType,
+        serviceForm,
+        locationForm,
+        fileImages,
+        navigate,
+        dispatch,
+      });
     } catch (error: unknown) {
       setLoading(false);
       toast.error("Something went wrong");
@@ -207,29 +232,7 @@ const fileImages: ImageDetails = {
             loading ? "opacity-70 cursor-not-allowed" : "hover:brightness-110"
           }`}
         >
-          {loading && (
-            <svg
-              className="animate-spin h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v8z"
-              />
-            </svg>
-          )}
-          {loading ? "Saving..." : "Next"}
+          {loading ? <Spinner text={"Submitting..."} /> : "Submit"}
         </button>
       </div>
       <CustomToastContainer />

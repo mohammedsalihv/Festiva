@@ -1,6 +1,6 @@
 import { IAssetBase } from "../../../../domain/entities/serviceInterface/interface.asset";
 import { IAdminAssetManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/interface.adminAssetManagement";
-import { IAdminAssetManagementUseCase } from "../../../../domain/usecaseInterface/interface.adminAssetManagementUseCase";
+import { IAdminAssetManagementUseCase } from "../../../../domain/usecaseInterface/admin/interface.adminAssetManagementUseCase";
 
 export class AdminAssetManagementUseCase implements IAdminAssetManagementUseCase {
   constructor(private repository: IAdminAssetManagementRepository) {}

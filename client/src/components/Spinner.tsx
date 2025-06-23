@@ -1,10 +1,10 @@
 interface SpinnerProps {
-  text: string;
+  text?: string;
 }
 
 const Spinner = ({ text }: SpinnerProps) => {
   return (
-    <>
+    <div className="flex items-center gap-2">
       <svg
         className="animate-spin h-5 w-5 text-white"
         xmlns="http://www.w3.org/2000/svg"
@@ -25,8 +25,8 @@ const Spinner = ({ text }: SpinnerProps) => {
           d="M4 12a8 8 0 018-8v8z"
         />
       </svg>
-      {text}
-    </>
+      {text && <span>{text}</span>}
+    </div>
   );
 };
 

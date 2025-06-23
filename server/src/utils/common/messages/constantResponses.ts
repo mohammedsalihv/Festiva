@@ -49,6 +49,7 @@ export enum statusCodes {
   notAcceptable = 406,
   reqTimeout = 408,
   conflict = 409,
+  entityTooLarge = 413,
   toManyRequests = 429,
   invalidToken = 498,
   serverError = 500,

@@ -56,3 +56,42 @@ export const validateVenueDetailsForm = (
     errors,
   };
 };
+
+
+
+export interface VenueFeaturesErrorState {
+  features: string[];
+  parkingFeatures: string[];
+  about: string;
+  terms: string;
+}
+
+export interface VenueFeaturesState {
+  features: string[];
+  parkingFeatures: string[];
+  about: string;
+  terms: string;
+}
+
+export const validateVenueFeaturesForm = (
+  form: VenueFeaturesErrorState
+): ValidationResult => {
+  const errors: { [key: string]: string } = {};
+
+  if (!form.about.trim()) errors.about = "About is required";
+
+  if (!form.terms.trim()) errors.terms = "Your terms and conditions required";
+
+  if (form.features.length === 0) {
+    errors.features = "Please include at least one feature";
+  }
+  if (form.parkingFeatures.length === 0) {
+    errors.parkingFeatures = "Please add at least one parking feature";
+  }
+  const isValid = Object.keys(errors).length === 0;
+
+  return {
+    isValid,
+    errors,
+  };
+};

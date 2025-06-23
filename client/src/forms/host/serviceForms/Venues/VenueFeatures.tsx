@@ -6,27 +6,27 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import {
-  venueFeatures,
+  venueFeaturesOptions,
   venueParkingOptions,
 } from "@/utils/Options/host/venue/venueFeatures";
 import { useState } from "react";
 import {
-  LocationFeaturesState,
-  LocationFeaturesErrorState,
-  validateLocationFeaturesForm,
-} from "@/utils/validations/host/service/locationFeatures";
-import { setLocationFeatures } from "@/redux/Slice/host/venue/locationFeaturesSlice";
+  VenueFeaturesErrorState,
+  VenueFeaturesState,
+  validateVenueFeaturesForm,
+} from "@/utils/validations/host/service/VenueDetailsValidation";
+import { setVenueFeatures } from "@/redux/Slice/host/venue/venueSlice";
 import Spinner from "@/components/Spinner";
 
-const LocationFeatures: React.FC = () => {
-  const [errors, setErrors] = useState<LocationFeaturesErrorState>({
+const VenueFeatures: React.FC = () => {
+  const [errors, setErrors] = useState<VenueFeaturesErrorState>({
     about: "",
     terms: "",
     parkingFeatures: [],
     features: [],
   });
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState<LocationFeaturesState>({
+  const [form, setForm] = useState<VenueFeaturesState>({
     about: "",
     terms: "",
     parkingFeatures: [],
@@ -78,7 +78,7 @@ const LocationFeatures: React.FC = () => {
     setLoading(true);
 
     const { isValid, errors: validationErrors } =
-      validateLocationFeaturesForm(form);
+      validateVenueFeaturesForm(form);
 
     if (!isValid) {
       setErrors({
@@ -91,12 +91,12 @@ const LocationFeatures: React.FC = () => {
       });
 
       toast.error("Please correct the errors in the form.");
-      setTimeout(() => setErrors({} as LocationFeaturesErrorState), 5000);
+      setTimeout(() => setErrors({} as VenueFeaturesErrorState), 5000);
       setLoading(false);
       return;
     }
 
-    dispatch(setLocationFeatures(form));
+    dispatch(setVenueFeatures(form));
     toast.success("Saving...");
 
     setTimeout(() => {
@@ -117,7 +117,7 @@ const LocationFeatures: React.FC = () => {
           </p>
 
           <div className="space-y-4">
-            {venueFeatures.map((feature) => (
+            {venueFeaturesOptions.map((feature) => (
               <div key={feature} className="flex items-center gap-3">
                 <Checkbox
                   id={feature}
@@ -221,4 +221,4 @@ const LocationFeatures: React.FC = () => {
   );
 };
 
-export default LocationFeatures;
+export default VenueFeatures;

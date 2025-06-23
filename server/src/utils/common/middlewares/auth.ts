@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import {
   AuthRequest,
   JwtPayload,
-} from "../../../domain/controlInterface/authType";
+} from "../../../domain/controlInterface/authentication/authType";
 import logger from "../messages/logger";
 import { statusCodes , statusMessages } from "../messages/constantResponses";
 

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { UserProfileUseCase } from "../../../../application/use-cases/user/profile/usecase.userProfile";
 import logger from "../../../../utils/common/messages/logger";
 import { JwtPayload } from "jsonwebtoken";
-import { AuthRequest } from "../../../../domain/controlInterface/authType";
+import { AuthRequest } from "../../../../domain/controlInterface/authentication/authType";
 import {
   statusCodes,
   statusMessages,

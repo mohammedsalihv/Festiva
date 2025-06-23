@@ -12,8 +12,9 @@ import {
   initialRentCarStates,
 } from "@/utils/validations/host/service/CarRentFormValidation";
 import Spinner from "@/components/Spinner";
-import { setRentCarDetails } from "@/redux/Slice/host/rentcar/rentCarSlice";
+import {setRentCarForm} from "@/redux/Slice/host/rentcar/rentCarSlice";
 import { useDispatch } from "react-redux";
+import { setServiceType } from "@/redux/Slice/host/common/serviceTypeSlice";
 
 const RentCarForm = () => {
   const [form, setForm] = useState<rentCarFormState>(initialRentCarStates);
@@ -142,7 +143,8 @@ const RentCarForm = () => {
       setLoading(false);
       return;
     }
-    dispatch(setRentCarDetails(form));
+    dispatch(setServiceType("rentcar"))
+    dispatch(setRentCarForm(form));
     toast.success("Saving...");
     setTimeout(() => navigate("/host/rentcar-features"), 5000);
   };

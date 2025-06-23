@@ -1,4 +1,4 @@
-import { IAssetBase } from "../entities/serviceInterface/interface.asset";
+import { IAssetBase } from "../../entities/serviceInterface/interface.asset";
 
 export interface IAdminAssetManagementUseCase {
   execute(typeOfAsset: string): Promise<IAssetBase[]>;

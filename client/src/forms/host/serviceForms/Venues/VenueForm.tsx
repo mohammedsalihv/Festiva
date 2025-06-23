@@ -11,8 +11,10 @@ import {
   VenueDetailsErrorState,
 } from "@/utils/validations/host/service/VenueDetailsValidation";
 import { useDispatch } from "react-redux";
-import { setVenueDetails } from "@/redux/Slice/host/venue/venueDetailsSlice";
+import { setVenueDetails } from "@/redux/Slice/host/venue/venueSlice";
 import { Textarea } from "@/components/Textarea";
+import Spinner from "@/components/Spinner";
+import { setServiceType } from "@/redux/Slice/host/common/serviceTypeSlice";
 
 const VenueDetailsForm = () => {
   const [form, setForm] = useState<venueDetailsFormState>({
@@ -119,7 +121,7 @@ const VenueDetailsForm = () => {
       toast.error("Cannot select past dates");
       return;
     }
-     
+
     if (!form.availableDates.includes(dateInput)) {
       setForm((prev) => ({
         ...prev,
@@ -158,7 +160,7 @@ const VenueDetailsForm = () => {
       capacity: form.capacity === "" ? null : Number(form.capacity),
       squareFeet: form.squareFeet === "" ? null : Number(form.squareFeet),
     };
-
+    dispatch(setServiceType("venue"))
     dispatch(setVenueDetails(payload));
     toast.success("Saving...");
     setTimeout(() => navigate("/host/location-features"), 5000);
@@ -194,7 +196,7 @@ const VenueDetailsForm = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                 <label className="block text-sm font-medium">Rent</label>
+                <label className="block text-sm font-medium">Rent</label>
                 <Input
                   type="text"
                   name="rent"
@@ -209,7 +211,9 @@ const VenueDetailsForm = () => {
                 )}
               </div>
               <div className="space-y-2">
-                 <label className="block text-sm font-medium">Max capacity</label>
+                <label className="block text-sm font-medium">
+                  Max capacity
+                </label>
                 <Input
                   type="text"
                   name="capacity"
@@ -225,13 +229,17 @@ const VenueDetailsForm = () => {
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-               <div className="space-y-2">
-                 <label className="block text-sm font-medium">Select available shift</label>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">
+                  Select available shift
+                </label>
                 <select
                   name="shift"
                   value={form.shift}
                   onChange={handleChange}
-                  className={`w-full border-b rounded px-3 py-2 ${errors.shift ? 'border-red-600':'border-black'}`}
+                  className={`w-full border-b rounded px-3 py-2 ${
+                    errors.shift ? "border-red-600" : "border-black"
+                  }`}
                 >
                   <option value="">Select one</option>
                   <option value="All">All</option>
@@ -243,8 +251,8 @@ const VenueDetailsForm = () => {
                   <p className="text-red-600 text-xs mt-1">{errors.shift}</p>
                 )}
               </div>
-            <div className="space-y-2">
-                 <label className="block text-sm font-medium">Square feet</label>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">Square feet</label>
                 <Input
                   type="text"
                   name="squareFeet"
@@ -400,7 +408,9 @@ const VenueDetailsForm = () => {
                   value={dateInput}
                   min={new Date().toISOString().split("T")[0]}
                   onChange={(e) => setDateInput(e.target.value)}
-                  className={`${errors.availableDates ? "border-red-600":"border-black"}`}
+                  className={`${
+                    errors.availableDates ? "border-red-600" : "border-black"
+                  }`}
                 />
 
                 <button
@@ -444,7 +454,9 @@ const VenueDetailsForm = () => {
                 name="description"
                 value={form.description}
                 onChange={handleChange}
-                className={`${errors.description ? "border-red-600":"border-black"}`}
+                className={`${
+                  errors.description ? "border-red-600" : "border-black"
+                }`}
               />
               {errors.description && (
                 <p className="text-red-600 text-xs mt-1">
@@ -474,32 +486,9 @@ const VenueDetailsForm = () => {
             loading ? "opacity-70 cursor-not-allowed" : "hover:brightness-110"
           }`}
         >
-          {loading && (
-            <svg
-              className="animate-spin h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v8z"
-              />
-            </svg>
-          )}
-          {loading ? "Saving..." : "Next"}
+          {loading ? <Spinner text={"Saving..."} /> : "Next"}
         </button>
       </div>
-
       <CustomToastContainer />
     </div>
   );
