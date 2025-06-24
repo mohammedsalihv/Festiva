@@ -106,7 +106,7 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
               <GiGearStickPattern className="text-lg" /> {transmission}
             </div>
             <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
-              <BsFillFuelPumpDieselFill className="text-lg" /> {fuel} sq.ft
+              <BsFillFuelPumpDieselFill className="text-lg" /> {fuel}
             </div>
             <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
               <FaTree className="text-lg" /> Garden View

@@ -52,6 +52,7 @@ export class AdminAssetsController {
           break;
         case "rentcar":
           await this.adminRentCarController.carFullDetails(req, res);
+          break;
         default:
           res.status(statusCodes.forbidden).json({
             success: false,
