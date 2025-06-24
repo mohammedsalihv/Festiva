@@ -67,10 +67,6 @@ const CarFeatures: React.FC = () => {
 
   const handleAddTerm = () => {
     const trimmed = termInput.trim();
-    if (trimmed.includes(",")) {
-      toast.error("Please add one term at a time. Don't use commas.");
-      return;
-    }
 
     if (trimmed) {
       setCarFeatureForm((prev) => ({
@@ -200,10 +196,10 @@ const CarFeatures: React.FC = () => {
               }`}
             >
               <option value="">Select one</option>
-              <option value="identitycard">Identity card</option>
-              <option value="licence">Driving Licence</option>
-              <option value="adhar">Adhar Card</option>
-              <option value="passport">Passport</option>
+              <option value="Identity card">Identity card</option>
+              <option value="Licence">Driving Licence</option>
+              <option value="Adhar card">Adhar Card</option>
+              <option value="Passport">Passport</option>
             </select>
             {errors.userDocument && (
               <p className="text-red-600 text-xs mt-1">{errors.userDocument}</p>

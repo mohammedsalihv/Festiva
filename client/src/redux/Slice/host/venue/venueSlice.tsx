@@ -21,10 +21,10 @@ const venueSlice = createSlice({
   initialState: initialVenueState,
   reducers: {
     setVenueDetails: (state, action: PayloadAction<VenueDetails>) => {
-      state.form = { ...state, ...action.payload };
+      state.form = {  ...action.payload };
     },
     setVenueFeatures: (state, action: PayloadAction<venueFeatures>) => {
-      state.features = { ...state, ...action.payload };
+      state.features = {  ...action.payload };
     },
     resetVenueDetails: (state) => {
       state.form = venueDetailsInitialState;

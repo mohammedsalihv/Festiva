@@ -24,7 +24,7 @@ export const AssetsCard: React.FC<AssetsCardProps> = ({
 
   return (
     <div
-      className="group relative w-52 h-56 sm:h-60 rounded-md overflow-hidden shadow bg-white cursor-pointer transition-transform hover:scale-[1.02]"
+      className="group relative w-full h-56 sm:h-60 rounded-md overflow-hidden shadow bg-white cursor-pointer transition-transform hover:scale-[1.02]"
       onClick={() => fulldata?.(id)}
     >
       <img

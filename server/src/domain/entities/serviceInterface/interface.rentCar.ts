@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 export interface IRentCar {
   businessName?: string;
-  carName?:string;
+  carName?: string;
   rent?: string;
   make?: string;
   model?: string;
@@ -25,4 +25,20 @@ export interface IRentCar {
   typeOfAsset?: string;
   location: Types.ObjectId;
   host: Types.ObjectId;
+}
+
+export interface IRentCarBase {
+  _id: string;
+  name: string;
+  assetType: "rentcar";
+  rent?: number;
+  status?: "pending" | "approved" | "rejected";
+  location: {
+    _id: string;
+    city?: string;
+    state?: string;
+    country?: string;
+  };
+  thumbnail?: string;
+  [key: string]: any;
 }

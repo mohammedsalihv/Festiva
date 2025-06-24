@@ -1,4 +1,4 @@
-import { IUserLogoutRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userLogoutRepository";
+import { IUserLogoutRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userLogoutRepository";
 import { TokenBlacklistModel } from "../../../../domain/models/tokenBlacklistModel";
 
 export class UserLogoutRepository implements IUserLogoutRepository {

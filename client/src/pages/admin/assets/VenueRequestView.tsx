@@ -71,7 +71,7 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
               <img
                 key={i}
                 src={img}
-                className="rounded-md object-cover w-full h-44 sm:h-52 md:h-64"
+                className="rounded-md object-cover w-full h-32 sm:h-40 md:h-44"
               />
             ))
           ) : (
@@ -82,8 +82,8 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
             />
           )}
         </div>
-        <div className="lg:col-span-2 space-y-4">
 
+        <div className="lg:col-span-2 space-y-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-xs md:text-sm">
             <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
               <MdLocationOn className="text-lg" /> Easy Location
@@ -114,8 +114,6 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
               </div>
             </CardContent>
           </Card>
-
-          {/* Capacity + Parking */}
           <Card>
             <CardContent className="p-4 grid grid-cols-2 gap-4">
               <div>
@@ -182,8 +180,6 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
               </Card>
             )}
           </div>
-
-          {/* About + Description + Terms */}
           <Card>
             <CardContent className="p-4">
               <h3 className="text-sm font-semibold text-gray-500 mb-2">
@@ -214,21 +210,6 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
           )}
         </div>
         <div className="space-y-4">
-          <Card>
-            <CardContent className="p-4 flex flex-col sm:flex-row items-center sm:items-start gap-4">
-              <img
-                src={host.profilePic}
-                className="w-14 h-14 rounded-full border border-solid"
-              />
-              <div>
-                <h4 className="text-base font-semibold">{host?.name}</h4>
-                <p className="text-sm text-gray-600">{host?.email}</p>
-                <p className="text-sm text-gray-600">{host?.phone}</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Features */}
           {features?.length > 0 && (
             <Card>
               <CardContent className="p-4">
@@ -244,7 +225,23 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
             </Card>
           )}
 
-          {/* Rent */}
+          <Card>
+            <h3 className="text-sm font-semibold text-gray-500 mb-2 px-3 py-2">
+              Host
+            </h3>
+            <CardContent className="p-4 flex flex-col sm:flex-row items-center sm:items-start gap-4">
+              <img
+                src={host.profilePic}
+                className="w-14 h-14 rounded-full border border-solid"
+              />
+              <div>
+                <h4 className="text-base font-semibold">{host?.name}</h4>
+                <p className="text-sm text-gray-600">{host?.email}</p>
+                <p className="text-sm text-gray-600">{host?.phone}</p>
+              </div>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardContent className="p-4 flex justify-between items-center">
               <div className="text-xl text-gray-800 flex items-center gap-1">

@@ -1,5 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { FaHeart, FaShareAlt, FaLocationArrow, FaRupeeSign, FaSlidersH, FaMapMarkerAlt, FaSearch } from "react-icons/fa";
+import ServiceCardFilter from "@/components/ServiceCardFilter";
+import {
+  FaHeart,
+  FaShareAlt,
+  FaLocationArrow,
+  FaRupeeSign,
+  FaSlidersH,
+  FaMapMarkerAlt,
+  FaSearch,
+} from "react-icons/fa";
 import { Images } from "@/assets";
 type Asset = {
   id: number;
@@ -18,10 +27,13 @@ type ServicesCardProps = {
 export default function ServicesCard({ assets }: ServicesCardProps) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(event.target as Node)
+      ) {
         setIsFilterOpen(false);
       }
     };
@@ -36,7 +48,7 @@ export default function ServicesCard({ assets }: ServicesCardProps) {
   }, [isFilterOpen]);
 
   return (
-    <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6 font-JosephicSans">
+    <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6 font-JosephicSans mt-12">
       <div className="flex flex-col sm:flex-row items-center justify-between mb-2 sm:mb-4 gap-2 sm:gap-3 border-b">
         <div className="w-full relative">
           <FaSearch className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs sm:text-sm" />
@@ -47,7 +59,7 @@ export default function ServicesCard({ assets }: ServicesCardProps) {
             aria-label="Search for venues"
           />
         </div>
-       <div className="flex items-center gap-1 sm:gap-2 w-full sm:w-auto relative my-2 sm:my-0 pb-2">
+        <div className="flex items-center gap-1 sm:gap-2 w-full sm:w-auto relative my-2 sm:my-0 pb-2">
           <div className="flex gap-1 sm:gap-2 overflow-x-auto lg:overflow-x-visible lg:flex-nowrap py-1 sm:py-0">
             <button
               className="px-3 sm:px-5 py-1 rounded-2xl border text-gray-700 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap"
@@ -84,99 +96,10 @@ export default function ServicesCard({ assets }: ServicesCardProps) {
               Filters
             </button>
             {isFilterOpen && (
-              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
-                <div
-                  ref={filterRef}
-                  className="w-11/12 sm:w-3/4 md:w-1/2 lg:w-1/3 max-w-md bg-white rounded-lg shadow-lg p-3 sm:p-4 max-h-[80vh] overflow-y-auto relative"
-                >
-                  <h1 className="text-center text-base sm:text-lg border-b pb-1 sm:pb-2 mb-2 sm:mb-4">
-                    Filters
-                  </h1>
-                  <button
-                    onClick={() => setIsFilterOpen(false)}
-                    className="absolute top-1 sm:top-2 right-1 sm:right-2 text-gray-500 hover:text-gray-700"
-                    aria-label="Close filters"
-                  >
-                    <svg
-                      className="w-4 sm:w-5 h-4 sm:h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                  <div className="mb-2 sm:mb-4 border-b p-2 sm:p-4">
-                    <h4 className="text-sm sm:text-base font-bold text-gray-800 mb-1 sm:mb-2">
-                      Venue Features
-                    </h4>
-                    <label className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-700">
-                      <input type="checkbox" className="accent-blue-500" />
-                      Garden/Yard
-                    </label>
-                    <label className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-700">
-                      <input type="checkbox" className="accent-blue-500" />
-                      High Ceiling
-                    </label>
-                    <label className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-700">
-                      <input type="checkbox" className="accent-blue-500" />
-                      Light Wood/Whitewash Floor
-                    </label>
-                    <label className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-700">
-                      <input type="checkbox" className="accent-blue-500" />
-                      Open Kitchen
-                    </label>
-                    <label className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-700">
-                      <input type="checkbox" className="accent-blue-500" />
-                      White Walls
-                    </label>
-                    <button className="text-main_color text-xs sm:text-sm mt-1 sm:mt-2 text-left">
-                      Show all (349)
-                    </button>
-                  </div>
-
-                  {/* Location Allows Section */}
-                  <div className="mb-2 sm:mb-4 p-2 sm:p-4">
-                    <h4 className="text-sm sm:text-base font-bold text-gray-800 mb-1 sm:mb-2">
-                      Location Allows
-                    </h4>
-                    <label className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-700">
-                      <input type="checkbox" className="accent-blue-500" />
-                      Adult Filming
-                    </label>
-                    <label className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-700">
-                      <input type="checkbox" className="accent-blue-500" />
-                      Pets
-                    </label>
-                    <label className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-700">
-                      <input type="checkbox" className="accent-blue-500" />
-                      Alcohol
-                    </label>
-                    <label className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-700">
-                      <input type="checkbox" className="accent-blue-500" />
-                      Smoking
-                    </label>
-                    <label className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-700">
-                      <input type="checkbox" className="accent-blue-500" />
-                      Loud Noises
-                    </label>
-                  </div>
-                  <div className="flex justify-between items-center border-t pt-2 sm:pt-3">
-                    <button className="text-gray-600 text-xs sm:text-sm hover:text-gray-800">
-                      Clear all
-                    </button>
-                    <button className="bg-main_color text-white text-xs sm:text-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg hover:bg-indigo-500">
-                      Show 132 listings
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <ServiceCardFilter
+                filterOpen={setIsFilterOpen}
+                filterRef={filterRef}
+              />
             )}
           </div>
         </div>
@@ -240,7 +163,8 @@ export default function ServicesCard({ assets }: ServicesCardProps) {
                 <div className="text-xs sm:text-xs text-gray-600 font-medium flex items-center gap-1">
                   <span className="text-green-600">★</span>
                   <span>
-                    {asset.rating.toFixed(1)} ({Math.floor(Math.random() * 1000) + 1})
+                    {asset.rating.toFixed(1)} (
+                    {Math.floor(Math.random() * 1000) + 1})
                   </span>
                 </div>
               )}

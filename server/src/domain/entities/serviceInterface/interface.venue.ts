@@ -19,3 +19,20 @@ export interface IVenue {
     location: Types.ObjectId;
     host: Types.ObjectId;
 }
+
+
+export interface IVenueBase {
+  _id: string;
+  venueName: string;
+  typeOfAsset: "venue";
+  rent?: number;
+  status?: "pending" | "approved" | "rejected";
+  location: {
+    _id: string;
+    city?: string;
+    state?: string;
+    country?: string;
+  };
+  thumbnail?: string;
+  [key: string]: any;
+}

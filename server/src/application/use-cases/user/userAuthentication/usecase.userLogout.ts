@@ -1,4 +1,4 @@
-import { IUserLogoutRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userLogoutRepository";
+import { IUserLogoutRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userLogoutRepository";
 
 export class UserLogoutUseCase {
   constructor(private UserLogoutRepository: IUserLogoutRepository) {}

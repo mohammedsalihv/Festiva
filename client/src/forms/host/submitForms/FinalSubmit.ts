@@ -32,8 +32,6 @@ import { resetLocationDetails } from "@/redux/Slice/host/common/locationSlice";
 import { resetImages } from "@/redux/Slice/host/common/imageSlice";
 import { serviceTypes } from "@/redux/Slice/host/common/serviceTypeSlice";
 
-
-
 type ServiceFormUnion =
   | { form: VenueDetails; features: venueFeatures }
   | { form: rentCarFormState; details: rentCarDetailsFormState };
@@ -90,9 +88,9 @@ export const handleFinalSubmit = async ({
           formData.append("availableDates[]", String(date))
         );
 
-        features.features.forEach((f, i) =>
-          formData.append(`features[${i}]`, f)
-        );
+        features.features.forEach((f, i) => {
+          formData.append(`features[${i}]`, f);
+        });
 
         features.parkingFeatures.forEach((p, i) =>
           formData.append(`parkingFeatures[${i}]`, p)
@@ -115,9 +113,19 @@ export const handleFinalSubmit = async ({
           details: rentCarDetailsFormState;
         };
 
-        Object.entries(form).forEach(([key, value]) => {
+        const { timeSlots, availableDates , ...rest } = form;
+
+        Object.entries(rest).forEach(([key, value]) => {
           formData.append(key, String(value));
         });
+
+        timeSlots?.forEach((slot) =>
+          formData.append("timeSlots[]", String(slot))
+        );
+
+        availableDates?.forEach((date) =>
+          formData.append("availableDates[]", String(date))
+        );
 
         details.carFeatures?.forEach((f, i) =>
           formData.append(`carFeatures[${i}]`, f)
@@ -127,10 +135,10 @@ export const handleFinalSubmit = async ({
           formData.append(`additionalFeatures[${i}]`, f)
         );
 
-        details.termsOfUse?.forEach((f,i)=>
-          formData.append(`termsOfUse[${i}]`,f)
-        )
-        
+        details.termsOfUse?.forEach((f, i) =>
+          formData.append(`termsOfUse[${i}]`, f)
+        );
+
         formData.append("about", details.about ?? "");
         formData.append("guidelines", details.guidelines ?? "");
         formData.append("description", details.description ?? "");
@@ -151,7 +159,6 @@ export const handleFinalSubmit = async ({
 
     dispatch(resetLocationDetails());
     dispatch(resetImages());
-  
 
     setTimeout(() => {
       navigate("/host/kind-of-service");

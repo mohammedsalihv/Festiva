@@ -68,11 +68,11 @@ export const normalizeAssetData = (
       name = (asset as IStudio).studioName ?? "Unnamed Studio";
       image = getFirstImage((asset as IStudio).Images);
       break;
-    case "car":
+    case "rentcar":
       name = (asset as IRentCar).businessName ?? "Unnamed Car";
       image = getFirstImage((asset as IRentCar).Images);
       break;
-    case "cater":
+    case "caters":
       name = (asset as ICaters).catersName ?? "Unnamed Caterer";
       image = getFirstImage((asset as ICaters).Images);
       break;

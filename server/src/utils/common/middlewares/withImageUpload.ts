@@ -18,7 +18,6 @@ export const withImageUpload = (
       } else if (err) {
         return res.status(statusCodes.badRequest).json({ error: err.message });
       }
-
       controller(req, res);
     });
   };

@@ -1,24 +1,27 @@
 import { Button } from "@/components/Button";
 import { Card, CardContent } from "@/components/Card";
-import { FaParking, FaTree} from "react-icons/fa";
-import { MdLocationOn} from "react-icons/md";
+import { GiMoneyStack } from "react-icons/gi";
 import { GiGearStickPattern } from "react-icons/gi";
 import { BsFillFuelPumpDieselFill } from "react-icons/bs";
 import { PiSeatLight } from "react-icons/pi";
-import { CiCalendarDate ,  CiCircleCheck } from "react-icons/ci";
+import { CiCalendarDate, CiCircleCheck } from "react-icons/ci";
 import { FaCar } from "react-icons/fa";
 import { LuDot } from "react-icons/lu";
 import { IoMdTime } from "react-icons/io";
 import { CiWarning } from "react-icons/ci";
 import { FaRupeeSign } from "react-icons/fa";
+import { IoIosColorFill } from "react-icons/io";
+import { RiMapPinTimeLine } from "react-icons/ri";
+import { LuCar } from "react-icons/lu";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { rentCarRequestProps } from "@/utils/Types/admin/assetManagement/IRentCar";
-import { assetRequestApprove , assetRequestReject } from "@/api/admin/assetManagement.services";
-import { useDispatch } from "react-redux";
+import {
+  assetRequestApprove,
+  assetRequestReject,
+} from "@/api/admin/assetManagement.services";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { clearSingleAssetDetails } from "@/redux/Slice/admin/assetManagementSlice";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 
@@ -50,34 +53,27 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
     host,
   } = data;
 
-
-
-
   const [confirmAction, setConfirmAction] = useState(false);
   const [actionType, setActionType] = useState<"approve" | "reject" | null>(
     null
   );
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const hanldeAccept = async (id: string, assetType: string) => {
     await assetRequestApprove(id, assetType);
     toast.success("Asset approved successfully");
-    dispatch(clearSingleAssetDetails());
     navigate("/admin/assets");
   };
 
   const hanldeReject = async (id: string, assetType: string) => {
     await assetRequestReject(id, assetType);
     toast.success("Asset rejected successfully");
-    dispatch(clearSingleAssetDetails());
     navigate("/admin/assets");
   };
 
-
   return (
-  <div className="text-xs md:text-sm">
+    <div className="text-xs md:text-sm">
       <div className="p-4 md:p-8 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 font-prompt bg-main_white rounded-md w-full h-full">
         <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
           {Images?.length ? (
@@ -85,7 +81,7 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
               <img
                 key={i}
                 src={img}
-                className="rounded-md object-cover w-full h-44 sm:h-52 md:h-64"
+                className="rounded-md object-cover w-full h-32 sm:h-40 md:h-44"
               />
             ))
           ) : (
@@ -97,10 +93,12 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
           )}
         </div>
         <div className="lg:col-span-2 space-y-4">
-
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-xs md:text-sm">
             <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
-              <MdLocationOn className="text-lg" /> Easy Location
+              <LuCar className="text-lg" /> {make}
+            </div>
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+              <RiMapPinTimeLine className="text-lg" /> {model}
             </div>
             <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
               <GiGearStickPattern className="text-lg" /> {transmission}
@@ -109,14 +107,17 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
               <BsFillFuelPumpDieselFill className="text-lg" /> {fuel}
             </div>
             <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
-              <FaTree className="text-lg" /> Garden View
+              <IoIosColorFill className="text-lg" /> {color}
+            </div>
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+              <GiMoneyStack className="text-lg" /> Deposite: {deposite}
             </div>
           </div>
           <Card>
             <CardContent className="p-4 grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm font-semibold text-gray-500 mb-1">
-                  Venue Name
+                  Business Name
                 </p>
                 <p className="text-xs text-black">{businessName}</p>
               </div>
@@ -131,23 +132,55 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
           <Card>
             <CardContent className="p-4 grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm font-semibold text-gray-500 mb-1 flex items-center gap-1">
-                  Seats <PiSeatLight />
+                <p className="text-sm font-semibold text-gray-500 mb-1">
+                  Document required
                 </p>
-                <p className="text-xs text-black">{seats} people</p>
+                <p className="text-xs text-black">{userDocument}</p>
               </div>
               <div>
                 <p className="text-sm font-semibold text-gray-500 mb-1 flex items-center gap-1">
-                  Parking <FaParking />
+                  Seats <PiSeatLight />
                 </p>
-                {carFeatures?.length > 0 ? (
-                  carFeatures.map((feat, i) => (
-                    <p key={i} className="text-xs text-black">
-                      {feat}
-                    </p>
-                  ))
+                <p className="text-xs text-black">{seats}</p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4 grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm font-semibold text-gray-500 mb-1 flex items-center gap-1">
+                  Features
+                </p>
+                {carFeatures ? (
+                  carFeatures.length > 0 ? (
+                    carFeatures.map((feat, i) => (
+                      <p key={i} className="text-xs text-black">
+                        {feat}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="text-xs text-black">None</p>
+                  )
                 ) : (
-                  <p className="text-xs text-black">None</p>
+                  <p className="text-xs text-black">No features available</p>
+                )}
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-500 mb-1 flex items-center gap-1">
+                  Additional features
+                </p>
+                {additionalFeatures ? (
+                  additionalFeatures.length > 0 ? (
+                    additionalFeatures.map((feature, i) => (
+                      <p key={i} className="text-xs text-black">
+                        {feature}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="text-xs text-black">None</p>
+                  )
+                ) : (
+                  <p className="text-xs text-black">No features available</p>
                 )}
               </div>
             </CardContent>
@@ -237,22 +270,31 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
               </div>
             </CardContent>
           </Card>
-
-          
-          {termsOfUse?.length > 0 && (
-            <Card>
-              <CardContent className="p-4">
-                <h3 className="text-sm font-semibold text-gray-500 mb-2">
-                  Features
-                </h3>
-                <ul className="text-xs text-black space-y-1">
-                  {termsOfUse.map((feat, i) => (
-                    <li key={i}><CiWarning/> {feat}</li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          )}
+          <Card>
+            <CardContent className="p-4">
+              {termsOfUse ? (
+                <>
+                  <h3 className="text-sm font-semibold text-gray-500 mb-2">
+                    Features
+                  </h3>
+                  {termsOfUse.length > 0 ? (
+                    <ul className="text-xs text-black space-y-1">
+                      {termsOfUse.map((feat, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CiWarning className="w-4 h-4 mt-1 flex-shrink-0 text-yellow-600" />
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-xs text-black">None</p>
+                  )}
+                </>
+              ) : (
+                <p className="text-xs text-black">No features available</p>
+              )}
+            </CardContent>
+          </Card>
 
           <Card>
             <CardContent className="p-4 flex justify-between items-center">
@@ -265,10 +307,8 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
               </div>
             </CardContent>
           </Card>
-
-          {/* Approve/Reject */}
           {status === "pending" ? (
-            <div className="flex flex-col sm:flex-row gap-2 w-full">
+            <div className="flex flex-col sm:flex-row gap-2 w-full ">
               <Button
                 className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white"
                 onClick={() => {
@@ -292,7 +332,7 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
               </Button>
             </div>
           ) : (
-            <h1 className="text-sm text-green-600 font-semibold bg-green-300 px-3 py-1 rounded">
+            <h1 className="text-sm text-red-600 font-medium bg-red-300 px-3 py-1 rounded">
               {status}
             </h1>
           )}

@@ -5,7 +5,7 @@ const Venuetypes = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="px-4 py-10 md:px-12 lg:px-24 max-w-screen-xl mx-auto font-JosephicSans">
+    <div className="px-4 py-10 md:px-12 lg:px-24 max-w-screen-xl mx-auto font-JosephicSans mt-10">
       <h2 className="text-3xl md:text-4xl font-serif font-semibold text-center mb-12">
         LAST-MINUTE DEALS
       </h2>
@@ -43,25 +43,25 @@ const Venuetypes = () => {
             title: "Convention centers",
             description:
               "Versatile venues for any event type like wedding , birthday.",
-            link: "/user/assets/venues",
+            link: "/user/assets/venue",
           },
           {
             image: Images.multiPurpose_space,
             title: "Multipurpose event space",
             description: "Spacious halls for large-scale gatherings.",
-            link: "/user/assets/venues",
+            link: "/user/assets/venue",
           },
           {
             image: Images.business_space,
             title: "Business Meetings",
             description: "Professional setups for corporate events.",
-            link: "/user/assets/venues",
+            link: "/user/assets/venue",
           },
           {
             image: Images.event_space,
             title: "Event party spaces",
             description: "Elegant venues for unforgettable parties.",
-            link: "/user/assets/venues",
+            link: "/user/assets/venue",
           },
         ].map((item, index) => (
           <div
