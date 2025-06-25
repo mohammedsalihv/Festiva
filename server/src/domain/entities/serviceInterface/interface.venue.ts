@@ -33,6 +33,22 @@ export interface IVenueBase {
     state?: string;
     country?: string;
   };
-  thumbnail?: string;
+  Images?: string[];
   [key: string]: any;
 }
+
+
+export const mapVenueToBase = (venue: any): IVenueBase => ({
+  _id: venue._id.toString(),
+  venueName: venue.venueName || "",
+  typeOfAsset: "venue",
+  rent: venue.rent,
+  status: venue.status,
+  Images: venue.Images,
+  location: {
+    _id: venue.location?._id?.toString(),
+    city: venue.location?.city,
+    state: venue.location?.state,
+    country: venue.location?.country,
+  },
+});

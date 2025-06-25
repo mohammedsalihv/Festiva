@@ -1,4 +1,4 @@
-import { IOTPVerifyRepository } from "../../../../domain/entities/repositoryInterface/user/interface.verifyOtpRepository";
+import { IOTPVerifyRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.verifyOtprepository";
 import { IOTP } from "../../../../domain/entities/modelInterface/interface.otp";
 import { OTP } from "../../../../domain/models/otpModel";
 

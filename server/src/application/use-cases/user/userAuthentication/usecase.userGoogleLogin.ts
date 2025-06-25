@@ -1,5 +1,5 @@
 import CustomError from "../../../../utils/common/errors/CustomError";
-import { IUserGoogleRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userGoogleRepository";
+import { IUserGoogleRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userGoogleRepository";
 import { TokenService } from "../../../tokenService/service.token";
 import { UserDetailsDTO } from "../../../../types/DTO/user/dto.user";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";

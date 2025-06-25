@@ -1,80 +1,50 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ServicesCard from "@/reusable-components/user/Landing/ServiceCard";
+import { getRentcars, getVenues } from "@/api/user/userService";
+import { useDispatch } from "react-redux";
+import { setVenues } from "@/redux/Slice/user/userVenueSlice";
+import { setRentCars } from "@/redux/Slice/user/userRentCarSlice";
+import { toast } from "react-toastify";
+import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 
-const assets = [
-  {
-    id: 1,
-    title: "Modern Farmhouse on 20 acres",
-    costPerDay: 200,
-    place: "Lompoc, CA",
-    images: ["/example1.jpg"],
-    rating: 4.8,
-    category:'venue'
-  },
-  {
-    id: 2,
-    title: "Historic Building with Outdoor Space",
-    costPerDay: 100,
-    place: "Guadalupe, CA",
-    images: ["/example2.jpg"],
-    rating: 5.0,
-    category:'venue'
-  },
-  {
-    id: 2,
-    title: "Historic Building with Outdoor Space",
-    costPerDay: 100,
-    place: "Guadalupe, CA",
-    images: ["/example2.jpg"],
-    rating: 5.0,
-    category:'venue'
-  },
-  {
-    id: 2,
-    title: "Historic Building with Outdoor Space",
-    costPerDay: 100,
-    place: "Guadalupe, CA",
-    images: ["/example2.jpg"],
-    rating: 5.0,
-    category:'venue'
-  },
-  {
-    id: 2,
-    title: "Historic Building with Outdoor Space",
-    costPerDay: 100,
-    place: "Guadalupe, CA",
-    images: ["/example2.jpg"],
-    rating: 5.0,
-    category:'venue'
-  },
-  {
-    id: 2,
-    title: "Historic Building with Outdoor Space",
-    costPerDay: 100,
-    place: "Guadalupe, CA",
-    images: ["/example2.jpg"],
-    rating: 5.0,
-    category:'venue'
-  },
-  {
-    id: 2,
-    title: "Historic Building with Outdoor Space",
-    costPerDay: 100,
-    place: "Guadalupe, CA",
-    images: ["/example2.jpg"],
-    rating: 5.0,
-    category:'venue'
-  },
-];
-
-
-export default function ServicesPage() {
+const ServicesPage = () => {
   const { type } = useParams();
+  const [assets, setAssets] = useState([]);
+  const dispatch = useDispatch();
   const normalizedType = type?.toLowerCase();
 
-  const filteredAssets = assets.filter((asset) =>
-    asset.category.toLowerCase() === normalizedType
-  );
+  useEffect(() => {
+    const fetchAssets = async () => {
+      try {
+        switch (normalizedType) {
+          case "venue": {
+            const venues = await getVenues();
+            setAssets(venues);
+            dispatch(setVenues(venues));
+            console.log(venues);
+            break;
+          }
+          case "rentcar": {
+            const rentcars = await getRentcars();
+            setAssets(rentcars);
+            dispatch(setRentCars(rentcars));
+            console.log(rentcars);
+            break;
+          }
+          default:
+            toast.error("Please check the asset type");
+        }
+      } catch (error) {
+        console.error("Error loading assets:", error);
+        setAssets([]);
+      }
+    };
 
-  return <ServicesCard assets={filteredAssets} />;
-}
+    fetchAssets();
+  }, [normalizedType, dispatch]);
+  <CustomToastContainer />;
+  return <ServicesCard assets={assets} />;
+};
+
+export default ServicesPage;

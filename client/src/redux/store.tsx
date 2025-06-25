@@ -7,13 +7,16 @@ import hostReducer from "@/redux/Slice/host/common/hostSlice";
 import selectServiceReducer from "./Slice/host/common/selectServiceSlice";
 import imageReducer from "./Slice/host/common/imageSlice";
 import venueReducer from "@/redux/Slice/host/venue/venueSlice";
-import rentcarReducer from "@/redux/Slice/host/rentcar/rentCarSlice"
+import rentcarReducer from "@/redux/Slice/host/rentcar/rentCarSlice";
 import locationReducer from "@/redux/Slice/host/common/locationSlice";
-import serviceTypeReducer from "@/redux/Slice/host/common/serviceTypeSlice"
+import serviceTypeReducer from "@/redux/Slice/host/common/serviceTypeSlice";
 import adminReduer from "@/redux/Slice/admin/adminSlice";
 import userManagementReducer from "@/redux/Slice/admin/userManagementSlice";
 import hostManagementReducer from "@/redux/Slice/admin/hostManagementSlice";
 import assetManagementReducer from "@/redux/Slice/admin/assetManagementSlice";
+
+import userVenueReducer from "@/redux/Slice/user/userVenueSlice";
+import userRentcarReducer from "@/redux/Slice/user/userRentCarSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -21,13 +24,15 @@ const rootReducer = combineReducers({
   selectService: selectServiceReducer,
   images: imageReducer,
   venue: venueReducer,
-  rentcar:rentcarReducer,
+  rentcar: rentcarReducer,
   location: locationReducer,
-  serviceType:serviceTypeReducer,
+  serviceType: serviceTypeReducer,
   admin: adminReduer,
   userManagement: userManagementReducer,
   hostManagement: hostManagementReducer,
   asset: assetManagementReducer,
+  userVenue: userVenueReducer,
+  userRentcar: userRentcarReducer,
 });
 
 const persistConfig = {

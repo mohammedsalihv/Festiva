@@ -1,5 +1,5 @@
 import CustomError from "../../../../utils/common/errors/CustomError";
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userRepository";
+import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
 import { hash } from "../../../../utils/common/auth/passwordHash";
 import { resetPasswordDTO } from "../../../../types/DTO/user/dto.user";
 import {

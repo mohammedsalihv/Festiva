@@ -1,4 +1,4 @@
-import { IOTPRepository } from "../../../../domain/entities/repositoryInterface/user/interface.otpRepository";
+import { IOTPRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.otpRepository";
 import { generateOTP } from "../../../../utils/common/communication/otpGenerator";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";

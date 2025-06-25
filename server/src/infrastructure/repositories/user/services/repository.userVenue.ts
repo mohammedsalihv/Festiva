@@ -1,6 +1,7 @@
 import { IUserVenueRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userVenueRepository";
 import { IVenueBase } from "../../../../domain/entities/serviceInterface/interface.venue";
 import { VenueModel } from "../../../../domain/models/venueModel";
+import { mapVenueToBase } from "../../../../domain/entities/serviceInterface/interface.venue";
 
 export class UserVenueRepository implements IUserVenueRepository {
   async findAllVenues(): Promise<IVenueBase[]> {
@@ -8,6 +9,6 @@ export class UserVenueRepository implements IUserVenueRepository {
       .populate("location", "city state country")
       .lean();
 
-    return venues;
+    return venues.map(mapVenueToBase);
   }
 }

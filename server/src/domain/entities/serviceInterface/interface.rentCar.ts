@@ -39,6 +39,21 @@ export interface IRentCarBase {
     state?: string;
     country?: string;
   };
-  thumbnail?: string;
+  Images?: string[];
   [key: string]: any;
 }
+
+export const mapRentCarToBase = (car: any): IRentCarBase => ({
+  _id: car._id.toString(),
+  name: car.carName || "Unnamed Car",
+  assetType: "rentcar",
+  rent: Number(car.rent),
+  status: car.status,
+  Images: car.Images,
+  location: {
+    _id: car.location?._id?.toString(),
+    city: car.location?.city,
+    state: car.location?.state,
+    country: car.location?.country,
+  },
+});

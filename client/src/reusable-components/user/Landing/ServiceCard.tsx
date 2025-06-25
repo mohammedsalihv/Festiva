@@ -9,16 +9,11 @@ import {
   FaMapMarkerAlt,
   FaSearch,
 } from "react-icons/fa";
+import { IRentCarBase } from "@/utils/Types/user/rentCarTypes";
+import { IVenueBase } from "@/utils/Types/user/venueTypes";
 import { Images } from "@/assets";
-type Asset = {
-  id: number;
-  title: string;
-  costPerDay: number;
-  place: string;
-  images: string[];
-  rating?: number;
-  responseTime?: string;
-};
+
+type Asset = IRentCarBase | IVenueBase;
 
 type ServicesCardProps = {
   assets: Asset[];
@@ -122,13 +117,24 @@ export default function ServicesCard({ assets }: ServicesCardProps) {
             key={asset.id}
             className="bg-white rounded-md overflow-hidden shadow-sm hover:shadow-lg transition-shadow"
           >
-            <div className="relative h-36 sm:h-48 w-full">
+            <div className="relative h-36 sm:h-48 w-full group">
               <img
-                src={Images.business_space}
-                alt={asset.title}
-                className="w-full h-full object-cover rounded-t-lg"
+                src={
+                  Array.isArray(asset.Images) ? asset.Images[0] : Images.imageNA
+                }
+                alt={asset.name || "Asset"}
+                className="w-full h-full object-cover rounded-t-lg transition-opacity duration-300 group-hover:opacity-0"
               />
-              <div className="absolute top-2 sm:top-3 right-2 sm:right-3 flex gap-1 sm:gap-2">
+
+              {Array.isArray(asset.Images) && asset.Images[1] && (
+                <img
+                  src={asset.Images[1]}
+                  alt={asset.name || "Asset preview"}
+                  className="absolute top-0 left-0 w-full h-full object-cover rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                />
+              )}
+
+              <div className="absolute top-2 sm:top-3 right-2 sm:right-3 flex gap-1 sm:gap-2 z-10">
                 <button
                   className="bg-white/80 rounded-full p-1 sm:p-1.5 hover:bg-white"
                   aria-label="Add to favorites"
@@ -145,19 +151,21 @@ export default function ServicesCard({ assets }: ServicesCardProps) {
             </div>
 
             <div className="p-2 sm:p-3 space-y-1">
-              <h3 className="text-xs sm:text-sm font-medium text-gray-800 line-clamp-2">
-                {asset.title}
+              <h3 className="text-2xl sm:text-sm font-poppins text-gray-800 line-clamp-2">
+                {asset.name}
               </h3>
               <div className="flex items-center gap-1 text-xs sm:text-sm font-semibold text-gray-900">
                 <FaRupeeSign className="text-xs" />
-                <span>{asset.costPerDay} / hr</span>
+                <span>{asset.rent} / hr</span>
                 <span className="text-gray-500 font-normal">
                   • {asset.responseTime || "Responds within 1 hr"}
                 </span>
               </div>
               <div className="text-xs sm:text-xs text-gray-500 flex items-center gap-1">
                 <FaLocationArrow className="text-xs" />
-                <span>{asset.place}</span>
+                <span>
+                  {asset.location.state}, {asset.location.country}
+                </span>
               </div>
               {asset.rating && (
                 <div className="text-xs sm:text-xs text-gray-600 font-medium flex items-center gap-1">

@@ -18,7 +18,7 @@ const services = [
       "Drive in luxury with our curated selection of rental cars suited for every kind of event — whether for style or logistics.",
     image: Images.rentCar_service,
     reverse: true,
-    link:"/user/venues/types"
+    link:"/user/assets/rentcar"
   },
   {
     id: 3,
@@ -27,7 +27,7 @@ const services = [
       "Experienced chefs and staff ready to serve mouthwatering dishes that suit all tastes and dietary requirements.",
     image: Images.cater_service,
     reverse: false,
-    link:"/user/venues/types"
+    link:"/user/assets/caters"
   },
   {
     id: 4,
@@ -36,14 +36,13 @@ const services = [
       "Capture every unforgettable moment with our top-rated photographers and videographers for weddings and parties alike.",
     image: Images.studio_service,
     reverse: true,
-    link:"/user/venues/types"
+    link:"/user/assets/studio"
   }
 ];
 
 const MainServices: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 font-JosephicSans">
-      {/* Banner */}
       <div className="mb-10">
         <img
           src={Images.main_service}
@@ -51,8 +50,6 @@ const MainServices: React.FC = () => {
           className="w-full h-96 object-cover rounded-md"
         />
       </div>
-
-      {/* Service Cards */}
       <div className="space-y-10">
         {services.map((service) => (
           <div

@@ -1,5 +1,5 @@
 import { IUser } from "../../../../domain/entities/modelInterface/interface.user";
-import { IUserGoogleRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userGoogleRepository";
+import { IUserGoogleRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userGoogleRepository";
 import { UserModal } from "../../../../domain/models/userModel";
 import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
 

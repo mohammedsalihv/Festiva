@@ -1,6 +1,6 @@
 import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
-import { IUserProfileRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userProfileRepository";
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userRepository";
+import { IUserProfileRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userProfileRepository";
+import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import {
   changePasswordDTO,

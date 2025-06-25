@@ -1,5 +1,5 @@
 import { UserModal } from "../../../../domain/models/userModel";
-import { IUserProfileRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userProfileRepository";
+import { IUserProfileRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userProfileRepository";
 import { profileEditDTO } from "../../../../types/DTO/user/dto.user";
 import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
 import { toResponseUserDTO } from "../../../../types/DTO/user/dto.user";

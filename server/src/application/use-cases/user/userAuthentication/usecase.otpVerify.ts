@@ -1,4 +1,4 @@
-import { IOTPVerifyRepository } from "../../../../domain/entities/repositoryInterface/user/interface.verifyOtpRepository";
+import { IOTPVerifyRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.verifyOtprepository";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 

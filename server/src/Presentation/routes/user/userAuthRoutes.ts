@@ -8,8 +8,8 @@ import {
   refreshTokenController,
   userGoogleLoginController,
   userLogoutController,
-} from "../../../infrastructure/DI/user/userAuth.DI";
-import { userProfileController } from "../../../infrastructure/DI/user/userAccount.DI";
+} from "../../../infrastructure/DI/user/authentication/userAuth.DI";
+import { userProfileController } from "../../../infrastructure/DI/user/account/userAccount.DI";
 import logger from "../../../utils/common/messages/logger";
 import { authenticateToken } from "../../../utils/common/middlewares/auth";
 

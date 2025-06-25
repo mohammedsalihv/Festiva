@@ -1,9 +1,9 @@
-import { IUserLoginRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userLoginRepository";
+import { IUserLoginRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userLoginRepository";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { TokenService } from "../../../tokenService/service.token";
 import bcrypt from "bcrypt";
 import { UserDetailsDTO } from "../../../../types/DTO/user/dto.user";
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userRepository";
+import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
 import {
   statusCodes,
   statusMessages,

@@ -6,7 +6,7 @@ import {
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IUser } from "../../../../domain/entities/modelInterface/interface.user";
 import { TokenService } from "../../../tokenService/service.token";
-import { IUserSignupRepository } from "../../../../domain/entities/repositoryInterface/user/interface.userSignupRepository";
+import { IUserSignupRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userSignupRepository";
 import {
   statusCodes,
   statusMessages,
