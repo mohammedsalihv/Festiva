@@ -2,6 +2,12 @@ import { AssetsCardProps } from "@/utils/Options/admin/assetCard";
 import { Bookmark, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const statusColors: Record<string, string> = {
+  pending: "bg-yellow-200 text-yellow-700",
+  approved: "bg-green-200 text-green-700",
+  rejected: "bg-red-200 text-red-700",
+};
+
 export const AssetsCard: React.FC<AssetsCardProps> = ({
   status,
   name,
@@ -34,13 +40,15 @@ export const AssetsCard: React.FC<AssetsCardProps> = ({
       />
       <div className="relative z-10 flex flex-col justify-between h-full p-2 sm:p-3 text-white text-xs">
         <div className="flex items-center gap-1">
-          <span
-            className={`${
-              status === "pending" ? "text-yellow-600 " : "text-white"
-            }  bg-yellow-200 p-1 rounded-md text-[12px] font-sans`}
-          >
-            {status}
-          </span>
+          {status && (
+            <span
+              className={`px-2 py-1 rounded-md text-xs font-semibold ${
+                statusColors[status] || "bg-gray-200 text-gray-700"
+              }`}
+            >
+              {status}
+            </span>
+          )}
         </div>
         <div className="text-xs mt-auto">
           <p className="font-bold text-sm sm:text-sm">{name}</p>

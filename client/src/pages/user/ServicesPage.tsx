@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import axios from "axios";
 import { useParams } from "react-router-dom";
 import ServicesCard from "@/reusable-components/user/Landing/ServiceCard";
 import { getRentcars, getVenues } from "@/api/user/userService";
@@ -6,45 +7,73 @@ import { useDispatch } from "react-redux";
 import { setVenues } from "@/redux/Slice/user/userVenueSlice";
 import { setRentCars } from "@/redux/Slice/user/userRentCarSlice";
 import { toast } from "react-toastify";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import Loader from "@/components/Loader";
 
 const ServicesPage = () => {
   const { type } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [assets, setAssets] = useState([]);
   const dispatch = useDispatch();
   const normalizedType = type?.toLowerCase();
 
-  useEffect(() => {
-    const fetchAssets = async () => {
-      try {
-        switch (normalizedType) {
-          case "venue": {
-            const venues = await getVenues();
-            setAssets(venues);
-            dispatch(setVenues(venues));
-            console.log(venues);
-            break;
-          }
-          case "rentcar": {
-            const rentcars = await getRentcars();
-            setAssets(rentcars);
-            dispatch(setRentCars(rentcars));
-            console.log(rentcars);
-            break;
-          }
-          default:
-            toast.error("Please check the asset type");
-        }
-      } catch (error) {
-        console.error("Error loading assets:", error);
-        setAssets([]);
-      }
-    };
+  const fetchAssets = useCallback(async () => {
+    setLoading(true);
+    setError(null);
 
-    fetchAssets();
+    try {
+      switch (normalizedType) {
+        case "venue": {
+          const venues = await getVenues();
+          setAssets(venues);
+          dispatch(setVenues(venues));
+          break;
+        }
+        case "rentcar": {
+          const rentcars = await getRentcars();
+          setAssets(rentcars);
+          dispatch(setRentCars(rentcars));
+          break;
+        }
+        default:
+          setAssets([]);
+          setError("Invalid asset type.");
+          toast.error("Invalid asset type.");
+      }
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || "Failed to fetch assets.");
+        toast.error(err.response?.data?.message || "Request failed.");
+      } else {
+        setError("Unexpected error occurred.");
+        toast.error("Unexpected error occurred.");
+      }
+      setAssets([]);
+    } finally {
+      setLoading(false);
+    }
   }, [normalizedType, dispatch]);
-  <CustomToastContainer />;
-  return <ServicesCard assets={assets} />;
+
+  useEffect(() => {
+    fetchAssets();
+  }, [fetchAssets]);
+
+  if (loading) {
+    return (
+      <p className="text-center py-8 text-gray-500">
+        <Loader />
+      </p>
+    );
+  }
+
+  return (
+    <ServicesCard
+      assets={assets}
+      loading={loading}
+      error={error}
+      onRetry={fetchAssets}
+    />
+  );
 };
 
 export default ServicesPage;

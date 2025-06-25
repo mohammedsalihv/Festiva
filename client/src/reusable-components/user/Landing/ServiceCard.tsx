@@ -5,23 +5,45 @@ import {
   FaShareAlt,
   FaLocationArrow,
   FaRupeeSign,
-  FaSlidersH,
   FaMapMarkerAlt,
   FaSearch,
 } from "react-icons/fa";
+import { FaSortAmountDownAlt } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import { FaFilter } from "react-icons/fa";
 import { IRentCarBase } from "@/utils/Types/user/rentCarTypes";
 import { IVenueBase } from "@/utils/Types/user/venueTypes";
 import { Images } from "@/assets";
+import Loader from "@/components/Loader";
+import Retry from "@/components/Retry";
+import { serviceOptions } from "@/utils/Options/user/serviceOptions";
 
 type Asset = IRentCarBase | IVenueBase;
 
 type ServicesCardProps = {
   assets: Asset[];
+  loading: boolean;
+  error: string | null;
+  onRetry: () => void;
 };
 
-export default function ServicesCard({ assets }: ServicesCardProps) {
+export default function ServicesCard({
+  assets,
+  loading,
+  error,
+  onRetry,
+}: ServicesCardProps) {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { type } = useParams();
+  const normalizedType = type?.toLowerCase();
+  const [selectedTab, setSelectedTab] = useState<string>("");
   const filterRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (normalizedType) {
+      setSelectedTab(normalizedType);
+    }
+  }, [normalizedType]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -42,6 +64,23 @@ export default function ServicesCard({ assets }: ServicesCardProps) {
     };
   }, [isFilterOpen]);
 
+  if (loading) {
+    return (
+      <div className="text-center py-12">
+        <Loader />
+        <p className="mt-2 text-sm text-gray-500">Loading assets...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <Retry message={error} onRetry={onRetry} />;
+  }
+
+  if (assets.length === 0) {
+    return <Retry message="No assets found" onRetry={onRetry} />;
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6 font-JosephicSans mt-12">
       <div className="flex flex-col sm:flex-row items-center justify-between mb-2 sm:mb-4 gap-2 sm:gap-3 border-b">
@@ -54,42 +93,41 @@ export default function ServicesCard({ assets }: ServicesCardProps) {
             aria-label="Search for venues"
           />
         </div>
-        <div className="flex items-center gap-1 sm:gap-2 w-full sm:w-auto relative my-2 sm:my-0 pb-2">
-          <div className="flex gap-1 sm:gap-2 overflow-x-auto lg:overflow-x-visible lg:flex-nowrap py-1 sm:py-0">
-            <button
-              className="px-3 sm:px-5 py-1 rounded-2xl border text-gray-700 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap"
-              aria-label="Filter by All Spaces"
-            >
-              All Spaces
-            </button>
-            <button
-              className="px-3 sm:px-5 py-1 rounded-2xl border text-gray-700 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap"
-              aria-label="Filter by Photo Studio"
-            >
-              Photo Studio
-            </button>
-            <button
-              className="px-3 sm:px-5 py-1 rounded-2xl border text-gray-700 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap"
-              aria-label="Filter by Film Studio"
-            >
-              Film Studio
-            </button>
-            <button
-              className="px-3 sm:px-5 py-1 rounded-2xl border text-gray-700 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap"
-              aria-label="Filter by Warehouse"
-            >
-              Warehouse
-            </button>
+        <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 border-b pb-2">
+          <div className="w-full overflow-x-auto whitespace-nowrap scrollbar-hide sm:overflow-visible sm:whitespace-nowrap">
+            <div className="inline-flex gap-2 px-1">
+              {serviceOptions.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => setSelectedTab(option.value)}
+                  className={`px-4 py-1.5 rounded-full text-xs sm:text-sm transition whitespace-nowrap ${
+                    selectedTab === option.value
+                      ? "bg-main_color text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="relative lg:ml-2 lg:static lg:flex-shrink-0">
+
+          <div className="flex justify-end gap-2 w-full sm:w-auto">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="flex items-center gap-1 px-3 sm:px-5 py-2 sm:py-2 bg-main_color rounded-2xl border text-white text-xs sm:text-sm hover:bg-indigo-500 sticky right-0 lg:static"
-              aria-label="Open filters"
+              className="flex items-center gap-2 px-3 py-2 bg-main_color text-white text-xs sm:text-sm rounded-2xl hover:bg-indigo-500"
+              aria-label="Filter"
             >
-              <FaSlidersH className="text-xs" />
-              Filters
+              <FaFilter className="text-xs" />
             </button>
+            <button
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className="flex items-center gap-2 px-3 py-2 bg-main_color text-white text-xs sm:text-sm rounded-2xl hover:bg-indigo-500"
+              aria-label="Sort"
+            >
+              <FaSortAmountDownAlt className="text-xs" />
+            </button>
+
             {isFilterOpen && (
               <ServiceCardFilter
                 filterOpen={setIsFilterOpen}
@@ -100,22 +138,35 @@ export default function ServicesCard({ assets }: ServicesCardProps) {
         </div>
       </div>
       <div className="flex flex-col sm:flex-row justify-between items-center mb-2 sm:mb-4 text-xs sm:text-sm text-gray-600 gap-1 sm:gap-2">
-        <p className="text-center sm:text-left">
-          Showing 1-24 of 132 wedding locations near Los Angeles, CA, USA
-        </p>
+        {normalizedType === "venue" && (
+            <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+              <button className="px-3 py-1 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap">
+                All Spaces
+              </button>
+              <button className="px-3 py-1 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap">
+                Business spaces
+              </button>
+              <button className="px-3 py-1 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap">
+                Multi purpose
+              </button>
+              <button className="px-3 py-1 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap">
+                Warehouse
+              </button>
+            </div>
+          )}
+        <p className="text-center sm:text-left"></p>
         <button
           className="flex items-center gap-1 text-xs sm:text-sm text-gray-600 hover:text-blue-500"
           aria-label="Show map"
         >
           <FaMapMarkerAlt className="text-xs" />
-          Show map
         </button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
         {assets.map((asset) => (
           <div
-            key={asset.id}
-            className="bg-white rounded-md overflow-hidden shadow-sm hover:shadow-lg transition-shadow"
+            key={asset._id}
+            className="bg-white rounded-md overflow-hidden shadow-2xl hover:shadow-lg transition-shadow"
           >
             <div className="relative h-36 sm:h-48 w-full group">
               <img
@@ -156,12 +207,15 @@ export default function ServicesCard({ assets }: ServicesCardProps) {
               </h3>
               <div className="flex items-center gap-1 text-xs sm:text-sm font-semibold text-gray-900">
                 <FaRupeeSign className="text-xs" />
-                <span>{asset.rent} / hr</span>
+                <span className="text-lg">
+                  {asset.rent}
+                  <span className="text-gray-500 text-xs">/Day</span>
+                </span>
                 <span className="text-gray-500 font-normal">
                   • {asset.responseTime || "Responds within 1 hr"}
                 </span>
               </div>
-              <div className="text-xs sm:text-xs text-gray-500 flex items-center gap-1">
+              <div className="text-xs sm:text-xs text-main_color flex items-center gap-1">
                 <FaLocationArrow className="text-xs" />
                 <span>
                   {asset.location.state}, {asset.location.country}

@@ -15,9 +15,10 @@ export class UserRentCarController implements IUserRentCarController {
       const cars = await this.userRentCarUseCase.allRentCars();
 
       if (cars.length === 0) {
-        res.status(statusCodes.notfound).json({
-          success: false,
+        res.status(statusCodes.Success).json({
+          success: true,
           message: "cars list empty",
+          data : cars
         });
         return;
       }

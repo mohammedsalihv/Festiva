@@ -1,4 +1,4 @@
-export const tabOptions = [
+export const serviceOptions = [
   { label: "All", value: "all" },
   { label: "venues", value: "venue" },
   { label: "rent cars", value: "rentcar" },
