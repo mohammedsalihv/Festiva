@@ -3,14 +3,16 @@ import { Types } from "mongoose";
 export interface ICaters {
   catersName?: string;
   manpower:string;
-  rent:string
+  charge:string
+  totalAmount:string
   timeSlots?: string[];
   availableDates?: string[];
+  description?:string;
   features?: string[];
   terms?: string;
   conditions?: string;
   about: string;
-  workImages: string[];
+  Images: string[];
   status?: string;
   typeOfAsset?: string;
   location: Types.ObjectId;

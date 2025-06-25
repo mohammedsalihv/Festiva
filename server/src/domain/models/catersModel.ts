@@ -5,14 +5,16 @@ const catersSchema = new Schema<ICaters>(
   {
     catersName: { type: String },
     manpower: { type: String, required: true },
-    rent: { type: String, required: true },
+    charge: { type: String, required: true },
+    totalAmount: { type: String, required: true },
     timeSlots: [{ type: String }],
     availableDates: [{ type: String }],
+    description: [{ type: String }],
     features: [{ type: String }],
     terms: { type: String },
     conditions: { type: String },
     about: { type: String, required: true },
-    workImages: [{ type: String, required: true }],
+    Images: [{ type: String, required: true }],
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],

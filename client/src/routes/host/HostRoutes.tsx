@@ -8,7 +8,7 @@ import LocationFeaturesTab from "@/forms/host/serviceForms/Venues/VenueFeatures"
 import ImageUpload from "@/forms/host/serviceForms/Common/ImageUpload";
 import RentCarForm from "@/forms/host/serviceForms/CarRents/RentCarForm";
 import CarFeatures from "@/forms/host/serviceForms/CarRents/CarFeatures";
-import CateringForm from "@/forms/host/serviceForms/Caters/CateringForm";
+import CateringForm from "@/forms/host/serviceForms/Caters/CatersForm";
 import PhotoVideoForm from "@/forms/host/serviceForms/Studio/StudioForm";
 import ErrorAlert from "@/components/ErrorAlert";
 
