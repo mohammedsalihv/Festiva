@@ -11,27 +11,22 @@ import {
 } from "@/utils/Options/host/venue/venueFeatures";
 import { useState } from "react";
 import {
-  VenueFeaturesErrorState,
-  VenueFeaturesState,
-  validateVenueFeaturesForm,
-} from "@/utils/validations/host/service/VenueDetailsValidation";
-import { setVenueFeatures } from "@/redux/Slice/host/venue/venueSlice";
+  venueDetailsFormState,
+  venueDetailsFormInitialState,
+} from "@/utils/Types/host/services/venueTypes";
+import { validateVenueDetailsForm } from "@/utils/validations/host/service/venueFormValidation";
+import { setVenueDetailsForm } from "@/redux/Slice/host/venue/venueSlice";
 import Spinner from "@/components/Spinner";
+import { venueDetailsFormErrorState } from "@/utils/Types/host/services/venueTypes";
 
-const VenueFeatures: React.FC = () => {
-  const [errors, setErrors] = useState<VenueFeaturesErrorState>({
-    about: "",
-    terms: "",
-    parkingFeatures: [],
-    features: [],
-  });
+const VenueDetailsForm: React.FC = () => {
+  const [errors, setErrors] = useState<venueDetailsFormErrorState>(
+    venueDetailsFormInitialState
+  );
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState<VenueFeaturesState>({
-    about: "",
-    terms: "",
-    parkingFeatures: [],
-    features: [],
-  });
+  const [form, setForm] = useState<venueDetailsFormState>(
+    venueDetailsFormInitialState
+  );
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -78,7 +73,7 @@ const VenueFeatures: React.FC = () => {
     setLoading(true);
 
     const { isValid, errors: validationErrors } =
-      validateVenueFeaturesForm(form);
+      validateVenueDetailsForm(form);
 
     if (!isValid) {
       setErrors({
@@ -91,12 +86,12 @@ const VenueFeatures: React.FC = () => {
       });
 
       toast.error("Please correct the errors in the form.");
-      setTimeout(() => setErrors({} as VenueFeaturesErrorState), 5000);
+      setTimeout(() => setErrors({} as venueDetailsFormErrorState), 5000);
       setLoading(false);
       return;
     }
 
-    dispatch(setVenueFeatures(form));
+    dispatch(setVenueDetailsForm(form));
     toast.success("Saving...");
 
     setTimeout(() => {
@@ -221,4 +216,4 @@ const VenueFeatures: React.FC = () => {
   );
 };
 
-export default VenueFeatures;
+export default VenueDetailsForm;

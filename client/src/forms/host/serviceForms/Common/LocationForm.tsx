@@ -7,30 +7,19 @@ import {
   validateLocationForm,
   locationFormInitialState,
   locationFormErrorState,
-} from "@/utils/validations/host/service/LocationFormValidation";
-import {
-  VenueDetails,
-  venueFeatures,
-} from "@/utils/Types/host/services/venueTypes";
-import {
-  rentCarFormState,
-  rentCarDetailsFormState,
-} from "@/utils/validations/host/service/CarRentFormValidation";
-import {
-  CatersDetailsFormState,
-  CatersFormState,
-} from "@/utils/Types/host/services/catersTypes";
+} from "@/utils/validations/host/service/locationFormValidation";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import CustomToastContainer from "../../../../reusable-components/Messages/ToastContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocationDetails } from "@/redux/Slice/host/common/locationSlice";
 import { handleFinalSubmit } from "../../submitForms/FinalSubmit";
-import { ImageDetails } from "@/utils/Types/host/services/venueTypes";
+import { ImageDetails } from "@/utils/Types/host/services/commonTypes";
 import { useNavigate } from "react-router-dom";
 import base64ToFile from "@/utils/Base64ToFile";
 import Spinner from "@/components/Spinner";
 import { serviceTypes } from "@/redux/Slice/host/common/serviceTypeSlice";
+import { ServiceFormUnion } from "@/utils/Types/host/services/commonTypes";
 
 const LocationForm = () => {
   const [loading, setLoading] = useState(false);
@@ -49,11 +38,6 @@ const LocationForm = () => {
   const images = useSelector<RootState, string[]>(
     (state) => state.images.croppedImages
   );
-
-  type ServiceFormUnion =
-    | { form: VenueDetails; features: venueFeatures }
-    | { form: rentCarFormState; details: rentCarDetailsFormState }
-    | { form: CatersFormState; details: CatersDetailsFormState };
 
   let serviceForm: ServiceFormUnion;
 

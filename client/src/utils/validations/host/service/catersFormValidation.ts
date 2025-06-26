@@ -1,6 +1,6 @@
 import {
-  CatersFormState,
-  CatersDetailsFormState,
+  catersFormState,
+  catersDetailsFormState,
 } from "@/utils/Types/host/services/catersTypes";
 
 export interface ValidationResult {
@@ -8,16 +8,16 @@ export interface ValidationResult {
   errors: { [key: string]: string };
 }
 
-export const validateCatersForm = (form: CatersFormState): ValidationResult => {
+export const validateCatersForm = (form: catersFormState): ValidationResult => {
   const errors: { [key: string]: string } = {};
 
   if (!form.catersName?.trim())
     errors.catersName = "Organization name is required";
 
   if (!form.charge.trim()) {
-    errors.amount = "Charge for per person required";
+    errors.charge = "Charge for per person required";
   } else if (!/^\d+$/.test(form.charge.trim())) {
-    errors.amount = "Only digits are allowed";
+    errors.charge = "Only digits are allowed";
   }
 
   if (!form.manpower.trim()) {
@@ -47,11 +47,11 @@ export const validateCatersForm = (form: CatersFormState): ValidationResult => {
 };
 
 export const validateCatersDetailsForm = (
-  form: CatersDetailsFormState
+  form: catersDetailsFormState
 ): ValidationResult => {
   const errors: { [key: string]: string } = {};
 
-  if (!form.conditions?.trim())
+  if (!form.conditions.trim())
     errors.conditions = "Terms and conditions required";
 
   if (!form.about.trim()) errors.about = "About your organization";
@@ -59,7 +59,7 @@ export const validateCatersDetailsForm = (
   if (!form.description?.trim())
     errors.description = "Please write something about your service";
 
-  if (form.features?.length === 0) {
+  if (form.features.length === 0) {
     errors.features = "Please select at least one available date";
   }
 

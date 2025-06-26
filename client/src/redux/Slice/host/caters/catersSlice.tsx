@@ -8,32 +8,32 @@ import {
 
 interface catersState {
   form: CatersFormState;
-  features: CatersDetailsFormState;
+  details: CatersDetailsFormState;
 }
 
 const initialCatersState: catersState = {
   form: initialCatersFormState,
-  features: initialCatersDetailsFormState,
+  details: initialCatersDetailsFormState,
 };
 
-const catersSlice = createSlice({
+const catersFormSlice = createSlice({
   name: "caters",
   initialState: initialCatersState,
   reducers: {
     setCatersForm: (state, action: PayloadAction<CatersFormState>) => {
       state.form = { ...action.payload };
     },
-    setCatersDetails: (
+    setCatersDetailsForm: (
       state,
       action: PayloadAction<CatersDetailsFormState>
     ) => {
-      state.features = { ...action.payload };
+      state.details = { ...action.payload };
     },
     resetCatersForm: (state) => {
       state.form = initialCatersFormState;
     },
-    resetCatersDetails: (state) => {
-      state.features = initialCatersDetailsFormState;
+    resetCatersDetailsForm: (state) => {
+      state.details = initialCatersDetailsFormState;
     },
     resetAllCatersStates: () => initialCatersState,
   },
@@ -41,10 +41,10 @@ const catersSlice = createSlice({
 
 export const {
   setCatersForm,
-  setCatersDetails,
+  setCatersDetailsForm,
   resetCatersForm,
-  resetCatersDetails,
+  resetCatersDetailsForm,
   resetAllCatersStates,
-} = catersSlice.actions;
+} = catersFormSlice.actions;
 
-export default catersSlice.reducer;
+export default catersFormSlice.reducer;

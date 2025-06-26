@@ -1,41 +1,50 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  venueFeatures,
-  venueFeaturesInitialState,
-  VenueDetails,
-  venueDetailsInitialState,
+  venueFormState,
+  venueDetailsFormState,
+  venueFormInitialState,
+  venueDetailsFormInitialState,
 } from "@/utils/Types/host/services/venueTypes";
 
 interface venuState {
-  form: VenueDetails;
-  features: venueFeatures;
+  form: venueFormState;
+  details: venueDetailsFormState;
 }
 
 const initialVenueState: venuState = {
-  form: venueDetailsInitialState,
-  features: venueFeaturesInitialState,
+  form: venueFormInitialState,
+  details: venueDetailsFormInitialState,
 };
 
 const venueSlice = createSlice({
   name: "venue",
   initialState: initialVenueState,
   reducers: {
-    setVenueDetails: (state, action: PayloadAction<VenueDetails>) => {
-      state.form = {  ...action.payload };
+    setVenueForm: (state, action: PayloadAction<venueFormState>) => {
+      state.form = { ...action.payload };
     },
-    setVenueFeatures: (state, action: PayloadAction<venueFeatures>) => {
-      state.features = {  ...action.payload };
+    setVenueDetailsForm: (
+      state,
+      action: PayloadAction<venueDetailsFormState>
+    ) => {
+      state.details = { ...action.payload };
     },
-    resetVenueDetails: (state) => {
-      state.form = venueDetailsInitialState;
+    resetVenueForm: (state) => {
+      state.form = venueFormInitialState;
     },
-    resetVenueFeatures: (state) => {
-      state.features = venueFeaturesInitialState;
+    resetVenueDetailsForm: (state) => {
+      state.details = venueDetailsFormInitialState;
     },
     resetAllVenueStates: () => initialVenueState,
   },
 });
 
-export const { setVenueDetails , setVenueFeatures, resetVenueDetails , resetVenueFeatures , resetAllVenueStates } = venueSlice.actions;
+export const {
+  setVenueForm,
+  setVenueDetailsForm,
+  resetVenueForm,
+  resetVenueDetailsForm,
+  resetAllVenueStates,
+} = venueSlice.actions;
 
 export default venueSlice.reducer;

@@ -6,7 +6,7 @@ import {
   rentCarDetailsFormState,
   initialRentCarStates,
   initialRentCarDetailsStates,
-} from "@/utils/validations/host/service/CarRentFormValidation";
+} from "@/utils/validations/host/service/rentCarFormValidation";
 
 interface RentCarState {
   form: rentCarFormState;

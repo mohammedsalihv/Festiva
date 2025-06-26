@@ -1,4 +1,4 @@
-export interface CatersFormErrorState {
+export interface catersFormErrorState {
   catersName?: string;
   manpower?: string;
   charge?: string;
@@ -8,7 +8,7 @@ export interface CatersFormErrorState {
 }
 
 
-export interface CatersFormState {
+export interface catersFormState {
   catersName: string;
   manpower: string;
   charge: string;
@@ -17,7 +17,7 @@ export interface CatersFormState {
   availableDates: string[];
 }
 
-export const initialCatersFormState: CatersFormState = {
+export const initialCatersFormState: catersFormState = {
   catersName: "",
   manpower: "",
   charge: "",
@@ -26,21 +26,21 @@ export const initialCatersFormState: CatersFormState = {
   availableDates: [],
 };
 
-export interface CatersDetailsFormErrorState {
+export interface catersDetailsFormErrorState {
   features: string[];
-  conditions?: string;
+  conditions: string;
   about: string;
-  description?: string;
+  description: string;
 }
 
-export interface CatersDetailsFormState {
-  features?: string[];
-  conditions?: string;
+export interface catersDetailsFormState {
+  features: string[];
+  conditions: string;
   about: string;
-  description?: string;
+  description: string;
 }
 
-export const initialCatersDetailsFormState: CatersDetailsFormState = {
+export const initialCatersDetailsFormState: catersDetailsFormState = {
   conditions: "",
   about: "",
   description: "",

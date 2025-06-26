@@ -8,8 +8,8 @@ import CustomToastContainer from "@/reusable-components/Messages/ToastContainer"
 import { validateCatersForm } from "@/utils/validations/host/service/catersFormValidation";
 import {
   initialCatersFormState,
-  CatersFormState,
-  CatersFormErrorState,
+  catersFormState,
+  catersFormErrorState,
 } from "@/utils/Types/host/services/catersTypes";
 import { useDispatch } from "react-redux";
 import Spinner from "@/components/Spinner";
@@ -17,11 +17,11 @@ import { setServiceType } from "@/redux/Slice/host/common/serviceTypeSlice";
 import { setCatersForm } from "@/redux/Slice/host/caters/catersSlice";
 
 const CatersForm = () => {
-  const [caterForm, setCaterForm] = useState<CatersFormState>(
+  const [caterForm, setCaterForm] = useState<catersFormState>(
     initialCatersFormState
   );
 
-  const [errors, setErrors] = useState<CatersFormErrorState>({});
+  const [errors, setErrors] = useState<catersFormErrorState>({});
   const [loading, setLoading] = useState(false);
   const [dateInput, setDateInput] = useState("");
   const navigate = useNavigate();
@@ -149,7 +149,7 @@ const CatersForm = () => {
     dispatch(setServiceType("caters"));
     dispatch(setCatersForm(caterForm));
     toast.success("Saving...");
-    setTimeout(() => navigate("/host/location-features"), 5000);
+    setTimeout(() => navigate("/host/caters-details"), 5000);
   };
 
   return (

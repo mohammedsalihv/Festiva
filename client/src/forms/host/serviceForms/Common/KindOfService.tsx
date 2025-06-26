@@ -123,7 +123,7 @@ const KindOfService = () => {
 
     switch (selectedTab) {
       case "Car rentals":
-        navigate("/host/car-rent-service");
+        navigate("/host/rentcar-service");
         break;
       case "Photo & Video services":
         navigate("/host/photo-video-service");

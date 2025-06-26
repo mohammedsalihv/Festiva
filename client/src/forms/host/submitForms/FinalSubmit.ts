@@ -1,27 +1,29 @@
-import { addVenue, addRentCar } from "@/api/host/hostService";
+import { addVenue, addRentCar, addCaters } from "@/api/host/hostService";
 import { toast } from "react-toastify";
 import { NavigateFunction } from "react-router-dom";
 import { AppDispatch } from "@/redux/store";
+import { ServiceFormUnion } from "@/utils/Types/host/services/commonTypes";
 
 // Location
-import { locationFormState } from "@/utils/validations/host/service/LocationFormValidation";
+import { locationFormState } from "@/utils/validations/host/service/locationFormValidation";
+
+import { ImageDetails } from "@/utils/Types/host/services/commonTypes";
 
 // Venue
 import {
-  VenueDetails,
-  venueFeatures,
-  ImageDetails,
+  venueFormState,
+  venueDetailsFormState,
 } from "@/utils/Types/host/services/venueTypes";
 import {
-  resetVenueDetails,
-  resetVenueFeatures,
+  resetVenueDetailsForm,
+  resetVenueForm,
 } from "@/redux/Slice/host/venue/venueSlice";
 
 // RentCar
 import {
   rentCarFormState,
   rentCarDetailsFormState,
-} from "@/utils/validations/host/service/CarRentFormValidation";
+} from "@/utils/validations/host/service/rentCarFormValidation";
 import {
   resetRentCarForm,
   resetRentCarDetails,
@@ -31,10 +33,14 @@ import {
 import { resetLocationDetails } from "@/redux/Slice/host/common/locationSlice";
 import { resetImages } from "@/redux/Slice/host/common/imageSlice";
 import { serviceTypes } from "@/redux/Slice/host/common/serviceTypeSlice";
-
-type ServiceFormUnion =
-  | { form: VenueDetails; features: venueFeatures }
-  | { form: rentCarFormState; details: rentCarDetailsFormState };
+import {
+  catersDetailsFormState,
+  catersFormState,
+} from "@/utils/Types/host/services/catersTypes";
+import {
+  resetCatersDetailsForm,
+  resetCatersForm,
+} from "@/redux/Slice/host/caters/catersSlice";
 
 interface FinalSubmitParams {
   serviceType: serviceTypes;
@@ -65,9 +71,9 @@ export const handleFinalSubmit = async ({
     });
     switch (serviceType) {
       case "venue": {
-        const { form, features } = serviceForm as {
-          form: VenueDetails;
-          features: venueFeatures;
+        const { form, details } = serviceForm as {
+          form: venueFormState;
+          details: venueDetailsFormState;
         };
 
         const { rent, timeSlots, availableDates, ...rest } = form;
@@ -88,22 +94,22 @@ export const handleFinalSubmit = async ({
           formData.append("availableDates[]", String(date))
         );
 
-        features.features.forEach((f, i) => {
+        details.features.forEach((f, i) => {
           formData.append(`features[${i}]`, f);
         });
 
-        features.parkingFeatures.forEach((p, i) =>
+        details.parkingFeatures.forEach((p, i) =>
           formData.append(`parkingFeatures[${i}]`, p)
         );
 
-        formData.append("about", features.about);
-        formData.append("terms", features.terms);
+        formData.append("about", details.about);
+        formData.append("terms", details.terms);
 
         await addVenue(formData);
         toast.success("Venue submitted successfully!");
 
-        dispatch(resetVenueDetails());
-        dispatch(resetVenueFeatures());
+        dispatch(resetVenueDetailsForm());
+        dispatch(resetVenueForm());
         break;
       }
 
@@ -113,7 +119,7 @@ export const handleFinalSubmit = async ({
           details: rentCarDetailsFormState;
         };
 
-        const { timeSlots, availableDates , ...rest } = form;
+        const { timeSlots, availableDates, ...rest } = form;
 
         Object.entries(rest).forEach(([key, value]) => {
           formData.append(key, String(value));
@@ -149,6 +155,42 @@ export const handleFinalSubmit = async ({
 
         dispatch(resetRentCarForm());
         dispatch(resetRentCarDetails());
+        break;
+      }
+
+      case "caters": {
+        const { form, details } = serviceForm as {
+          form: catersFormState;
+          details: catersDetailsFormState;
+        };
+
+        const { timeSlots, availableDates, ...restOfCaterForm } = form;
+        const { features, ...restOfCatersDetailsForm } = details;
+
+        Object.entries(restOfCaterForm).forEach(([key, value]) => {
+          formData.append(key, String(value));
+        });
+        Object.entries(restOfCatersDetailsForm).forEach(([key, value]) => {
+          formData.append(key, String(value));
+        });
+
+        timeSlots.forEach((slot) => {
+          formData.append("`timeSlots[]", String(slot));
+        });
+
+        availableDates.forEach((date) => {
+          formData.append("availableDates[]", String(date));
+        });
+
+        features?.forEach((feature) => {
+          formData.append("features[]", String(feature));
+        });
+
+        await addCaters(formData);
+        toast.success("Caters submitted successfully!");
+
+        dispatch(resetCatersForm());
+        dispatch(resetCatersDetailsForm());
         break;
       }
 

@@ -10,7 +10,7 @@ import {
   rentCarFormState,
   rentCarFormErrorState,
   initialRentCarStates,
-} from "@/utils/validations/host/service/CarRentFormValidation";
+} from "@/utils/validations/host/service/rentCarFormValidation";
 import Spinner from "@/components/Spinner";
 import {setRentCarForm} from "@/redux/Slice/host/rentcar/rentCarSlice";
 import { useDispatch } from "react-redux";

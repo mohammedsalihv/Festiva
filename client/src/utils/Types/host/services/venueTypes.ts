@@ -1,9 +1,9 @@
-export interface AddVenueData {
+export interface addVenueData {
   venueName?: string;
-  rent?: number | null;
-  capacity?: number | null;
+  rent?: string;
+  capacity?: string;
   shift?: string;
-  squareFeet?: number | null;
+  squareFeet?: string;
   timeSlots?: string[];
   availableDates?: string[];
   details?: string;
@@ -15,51 +15,56 @@ export interface AddVenueData {
   location: object;
 }
 
-export interface VenueDetails {
+export interface venueFormState {
   venueName: string;
-  rent: number | null;
-  capacity: number | null;
+  rent: string;
+  capacity: string;
   shift: string;
-  squareFeet: number | null;
+  squareFeet: string;
   timeSlots: string[];
   availableDates: string[];
   description: string;
 }
 
-export const venueDetailsInitialState: VenueDetails = {
+export interface VenueFormErrorState {
+  venueName?: string;
+  rent?: string;
+  capacity?: string;
+  shift?: string;
+  squareFeet?: string;
+  timeSlots?: string[];
+  availableDates?: string[];
+  description?: string;
+}
+
+export const venueFormInitialState: venueFormState = {
   venueName: "",
-  rent: null,
-  capacity: null,
+  rent: "",
+  capacity: "",
   shift: "",
-  squareFeet: null,
+  squareFeet: "",
   timeSlots: [],
   availableDates: [],
   description: "",
 };
 
-export interface venueFeatures {
+export interface venueDetailsFormState {
   features: string[];
   parkingFeatures: string[];
   about: string;
   terms: string;
 }
 
-export const venueFeaturesInitialState: venueFeatures = {
+export const venueDetailsFormInitialState: venueDetailsFormState = {
   features: [],
   parkingFeatures: [],
   about: "",
   terms: "",
 };
 
-export interface LocationDetails {
-  houseNo: string;
-  street: string;
-  district: string;
-  state: string;
-  country: string;
-  zip: string;
-}
-
-export interface ImageDetails {
-  Images: File[];
+export interface venueDetailsFormErrorState {
+  features: string[];
+  parkingFeatures: string[];
+  about: string;
+  terms: string;
 }

@@ -5,30 +5,22 @@ import { Clock } from "lucide-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import { validateVenueForm } from "@/utils/validations/host/service/venueFormValidation";
 import {
-  validateVenueDetailsForm,
-  venueDetailsFormState,
-  VenueDetailsErrorState,
-} from "@/utils/validations/host/service/VenueDetailsValidation";
+  VenueFormErrorState,
+  venueFormInitialState,
+  venueFormState,
+} from "@/utils/Types/host/services/venueTypes";
 import { useDispatch } from "react-redux";
-import { setVenueDetails } from "@/redux/Slice/host/venue/venueSlice";
+import { setVenueForm } from "@/redux/Slice/host/venue/venueSlice";
 import { Textarea } from "@/components/Textarea";
 import Spinner from "@/components/Spinner";
 import { setServiceType } from "@/redux/Slice/host/common/serviceTypeSlice";
 
-const VenueDetailsForm = () => {
-  const [form, setForm] = useState<venueDetailsFormState>({
-    venueName: "",
-    rent: "",
-    capacity: "",
-    shift: "",
-    squareFeet: "",
-    timeSlots: [],
-    availableDates: [],
-    description: "",
-  });
+const VenueForm = () => {
+  const [form, setForm] = useState<venueFormState>(venueFormInitialState);
 
-  const [errors, setErrors] = useState<VenueDetailsErrorState>({});
+  const [errors, setErrors] = useState<VenueFormErrorState>({});
   const [loading, setLoading] = useState(false);
   const [dateInput, setDateInput] = useState("");
   const navigate = useNavigate();
@@ -143,8 +135,7 @@ const VenueDetailsForm = () => {
   const handleSubmit = () => {
     setLoading(true);
 
-    const { isValid, errors: validationErrors } =
-      validateVenueDetailsForm(form);
+    const { isValid, errors: validationErrors } = validateVenueForm(form);
 
     if (!isValid) {
       setErrors(validationErrors);
@@ -154,14 +145,8 @@ const VenueDetailsForm = () => {
       return;
     }
 
-    const payload = {
-      ...form,
-      rent: form.rent === "" ? null : Number(form.rent),
-      capacity: form.capacity === "" ? null : Number(form.capacity),
-      squareFeet: form.squareFeet === "" ? null : Number(form.squareFeet),
-    };
-    dispatch(setServiceType("venue"))
-    dispatch(setVenueDetails(payload));
+    dispatch(setServiceType("venue"));
+    dispatch(setVenueForm(form));
     toast.success("Saving...");
     setTimeout(() => navigate("/host/location-features"), 5000);
   };
@@ -494,4 +479,4 @@ const VenueDetailsForm = () => {
   );
 };
 
-export default VenueDetailsForm;
+export default VenueForm;
