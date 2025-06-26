@@ -13,6 +13,7 @@ export interface MulterRequest extends Request {
   file: Express.Multer.File;
 }
 
+
 adminRoutes.get(
   "/users",
   authenticateToken,
@@ -25,6 +26,7 @@ adminRoutes.patch(
   isAdmin,
   adminUserController.blockOrUnblockUser.bind(adminUserController)
 );
+
 adminRoutes.patch(
   "/users/edit/:userId",
   authenticateToken,

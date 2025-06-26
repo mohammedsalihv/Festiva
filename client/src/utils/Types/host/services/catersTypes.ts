@@ -1,11 +1,12 @@
 export interface CatersFormErrorState {
-  catersName: string;
-  manpower: string;
-  charge: string;
-  totalAmount: string;
-  timeSlots: string[];
-  availableDates: string[];
+  catersName?: string;
+  manpower?: string;
+  charge?: string;
+  totalAmount?: string;
+  timeSlots?: string;
+  availableDates?: string;
 }
+
 
 export interface CatersFormState {
   catersName: string;

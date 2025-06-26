@@ -180,7 +180,7 @@ const CatersForm = () => {
               )}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="block text-sm font-medium">
                   Amount per person
@@ -205,13 +205,16 @@ const CatersForm = () => {
                   name="manpower"
                   value={caterForm.manpower}
                   onChange={handleChange}
+                  className={`${
+                    errors.manpower ? "border-red-600" : "border-black"
+                  }`}
                 />
                 {errors.manpower && (
                   <p className="text-red-600 text-xs mt-1">{errors.manpower}</p>
                 )}
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
               <div className="space-y-2">
                 <label className="block text-sm font-medium">
                   Total amount
@@ -221,7 +224,13 @@ const CatersForm = () => {
                   name="totalAmount"
                   value={caterForm.totalAmount}
                   onChange={handleChange}
+                   className={`${
+                    errors.totalAmount ? "border-red-600" : "border-black"
+                  }`}
                 />
+                {errors.totalAmount && (
+                  <p className="text-red-600 text-xs mt-1">{errors.totalAmount}</p>
+                )}
               </div>
             </div>
             <div className="space-y-3">
@@ -407,7 +416,7 @@ const CatersForm = () => {
         </div>
         <div className="border rounded-lg p-6 hidden lg:block">
           <img
-            src={Images.cater_service}
+            src={Images.catering}
             alt="Venue illustration"
             className="w-20 h-20 mx-auto mb-4"
           />

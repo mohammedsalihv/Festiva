@@ -15,7 +15,7 @@ export const validateCatersForm = (form: CatersFormState): ValidationResult => {
     errors.catersName = "Organization name is required";
 
   if (!form.charge.trim()) {
-    errors.amount = "Total amount required";
+    errors.amount = "Charge for per person required";
   } else if (!/^\d+$/.test(form.charge.trim())) {
     errors.amount = "Only digits are allowed";
   }
@@ -24,6 +24,12 @@ export const validateCatersForm = (form: CatersFormState): ValidationResult => {
     errors.manpower = "Manpower count required";
   } else if (!/^\d+$/.test(form.manpower.trim())) {
     errors.manpower = "Only digits are allowed";
+  }
+
+  if (!form.totalAmount.trim()) {
+    errors.totalAmount = "Total amount required";
+  } else if (!/^\d+$/.test(form.charge.trim())) {
+    errors.totalAmount = "Only digits are allowed";
   }
 
   if (form.availableDates?.length === 0) {
@@ -49,7 +55,7 @@ export const validateCatersDetailsForm = (
     errors.conditions = "Terms and conditions required";
 
   if (!form.about.trim()) errors.about = "About your organization";
-  
+
   if (!form.description?.trim())
     errors.description = "Please write something about your service";
 

@@ -16,6 +16,10 @@ import {
   rentCarFormState,
   rentCarDetailsFormState,
 } from "@/utils/validations/host/service/CarRentFormValidation";
+import {
+  CatersDetailsFormState,
+  CatersFormState,
+} from "@/utils/Types/host/services/catersTypes";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import CustomToastContainer from "../../../../reusable-components/Messages/ToastContainer";
@@ -41,13 +45,15 @@ const LocationForm = () => {
   ) as serviceTypes;
   const venue = useSelector((state: RootState) => state.venue);
   const rentcar = useSelector((state: RootState) => state.rentcar);
+  const caters = useSelector((state: RootState) => state.caters);
   const images = useSelector<RootState, string[]>(
     (state) => state.images.croppedImages
   );
 
   type ServiceFormUnion =
     | { form: VenueDetails; features: venueFeatures }
-    | { form: rentCarFormState; details: rentCarDetailsFormState };
+    | { form: rentCarFormState; details: rentCarDetailsFormState }
+    | { form: CatersFormState; details: CatersDetailsFormState };
 
   let serviceForm: ServiceFormUnion;
 
@@ -57,6 +63,9 @@ const LocationForm = () => {
       break;
     case "rentcar":
       serviceForm = rentcar;
+      break;
+    case "caters":
+      serviceForm = caters;
       break;
     default:
       throw new Error("Invalid service type");

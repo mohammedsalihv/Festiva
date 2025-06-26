@@ -8,7 +8,7 @@ import LocationFeaturesTab from "@/forms/host/serviceForms/Venues/VenueFeatures"
 import ImageUpload from "@/forms/host/serviceForms/Common/ImageUpload";
 import RentCarForm from "@/forms/host/serviceForms/CarRents/RentCarForm";
 import CarFeatures from "@/forms/host/serviceForms/CarRents/CarFeatures";
-import CateringForm from "@/forms/host/serviceForms/Caters/CatersForm";
+import CatersForm from "@/forms/host/serviceForms/Caters/CatersForm";
 import PhotoVideoForm from "@/forms/host/serviceForms/Studio/StudioForm";
 import ErrorAlert from "@/components/ErrorAlert";
 
@@ -21,9 +21,9 @@ const HostRoutes: React.FC = () => {
       <Route path="venue-service" element={<VenueForm />} />
       <Route path="location-features" element={<LocationFeaturesTab />} />
       <Route path="image-upload" element={<ImageUpload />} />
-      <Route path="car-rent-service" element={<RentCarForm />} />
+      <Route path="rentcar-service" element={<RentCarForm />} />
       <Route path="rentcar-features" element={<CarFeatures />} />
-      <Route path="catering-service" element={<CateringForm />} />
+      <Route path="catering-service" element={<CatersForm />} />
       <Route path="photo-video-service" element={<PhotoVideoForm />} />
 
       <Route path="*" element={<ErrorAlert statusCode={404} />} />

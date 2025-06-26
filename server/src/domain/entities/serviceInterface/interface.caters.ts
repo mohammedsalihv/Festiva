@@ -3,8 +3,8 @@ import { Types } from "mongoose";
 export interface ICaters {
   catersName?: string;
   manpower:string;
-  charge:string
-  totalAmount:string
+  charge:string;
+  totalAmount:string;
   timeSlots?: string[];
   availableDates?: string[];
   description?:string;
