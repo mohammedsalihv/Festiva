@@ -9,6 +9,7 @@ export interface ICaters {
   availableDates?: string[];
   description?:string;
   features?: string[];
+  serviceTypes?: string[];
   terms?: string;
   conditions?: string;
   about: string;

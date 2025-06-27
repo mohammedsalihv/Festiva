@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { validateCatersDetailsForm } from "@/utils/validations/host/service/catersFormValidation";
+
 import {
   catersDetailsFormState,
   initialCatersDetailsFormState,
@@ -16,12 +17,18 @@ import { setCatersDetailsForm } from "@/redux/Slice/host/caters/catersSlice";
 import { Textarea } from "@/components/Textarea";
 import { Checkbox } from "@/components/Checkbox";
 import { catersFeatures } from "@/utils/Options/host/caters/catersDetails";
+import { Button } from "@/components/Button";
+import { Input } from "@/components/Input";
+import { IoMdArrowDropright } from "react-icons/io";
 
 const CatersDetailsForm = () => {
+  const [termInput, setTermInput] = useState("");
   const [caterDetailsForm, setCaterDetailsForm] =
     useState<catersDetailsFormState>(initialCatersDetailsFormState);
 
-  const [errors, setErrors] = useState<catersDetailsFormErrorState>(initialCatersDetailsFormState);
+  const [errors, setErrors] = useState<catersDetailsFormErrorState>(
+    initialCatersDetailsFormState
+  );
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -62,6 +69,23 @@ const CatersDetailsForm = () => {
     }
   };
 
+  const handleAddTerm = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const trimmed = termInput.trim();
+
+    if (trimmed) {
+      setCaterDetailsForm((prev) => ({
+        ...prev,
+        serviceTypes: [...prev.serviceTypes, trimmed],
+      }));
+      setTermInput("");
+    }
+
+    if (errors.serviceTypes?.length) {
+      setErrors((prev) => ({ ...prev, serviceTypes: [] }));
+    }
+  };
+
   const handleSubmit = () => {
     setLoading(true);
 
@@ -69,7 +93,15 @@ const CatersDetailsForm = () => {
       validateCatersDetailsForm(caterDetailsForm);
 
     if (!isValid) {
-      setErrors(validationErrors);
+      setErrors({
+        description: validationErrors.description ?? "",
+        about: validationErrors.about ?? "",
+        conditions: validationErrors.conditions ?? "",
+        features: validationErrors.features ? [validationErrors.features] : [],
+        serviceTypes: validationErrors.serviceTypes
+          ? [validationErrors.serviceTypes]
+          : [],
+      });
       toast.error("Please correct the errors in the form.");
       setTimeout(() => setErrors(initialCatersDetailsFormState), 5000);
       setLoading(false);
@@ -83,7 +115,7 @@ const CatersDetailsForm = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10 font-prompt">
+    <div className="sm:max-w-6xl max-w-5xl px-3 mx-auto  py-7 font-prompt">
       <div className="grid lg:grid-cols-[2fr_1fr] gap-8 items-start">
         <div>
           <h2 className="text-2xl md:text-2xl font-bold text-black mb-1">
@@ -94,36 +126,94 @@ const CatersDetailsForm = () => {
           </p>
 
           <form className="space-y-5 py-3">
-            <div className="grid grid-cols-1 sm:grid-cols-1 gap-4">
-              <div className="space-y-9">
-                <h2 className="text-base sm:text-base font-semibold text-black">
-                  Parking and Accessibility.
-                </h2>
-                <div className="space-y-3">
-                  {catersFeatures.map((option) => (
-                    <label
-                      key={option}
-                      className="flex items-center space-x-3 cursor-pointer"
-                    >
-                      <Checkbox
-                        id={option}
-                        checked={caterDetailsForm.features?.includes(option)}
-                        onCheckedChange={(checked) =>
-                          handleCheckBox(checked, option, "features")
-                        }
-                        className={`${
-                          errors.features?.length > 0
-                            ? "border-red-600"
-                            : "border-black"
-                        }`}
-                      />
-                      <span className="text-sm">{option}</span>
-                    </label>
-                  ))}
-                  {errors.features?.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-1 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                <label className="block text-sm font-medium mt-3">
+                  Features
+                </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {catersFeatures.map((option) => (
+                      <label
+                        key={option}
+                        className="flex items-center space-x-3 cursor-pointer"
+                      >
+                        <Checkbox
+                          id={option}
+                          checked={caterDetailsForm.features?.includes(option)}
+                          onCheckedChange={(checked) =>
+                            handleCheckBox(checked, option, "features")
+                          }
+                          className={`${
+                            errors.features.length > 0
+                              ? "border-red-600"
+                              : "border-black"
+                          }`}
+                        />
+                        <span className="text-sm">{option}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {errors.features.length > 0 && (
                     <p className="text-red-600 text-xs mt-1">
                       {errors.features}
                     </p>
+                  )}
+                </div>
+                <div className="flex flex-col gap-4 w-full">
+                  <label className="block text-sm font-medium mt-3">
+                    Add what types of services you offer
+                  </label>
+                  <div className="flex sm:flex-row items-center gap-2">
+                    <Input
+                      type="text"
+                      value={termInput}
+                      onChange={(e) => setTermInput(e.target.value)}
+                      className={`flex-1 p-2 ${
+                        errors.serviceTypes?.length
+                          ? "border-red-600"
+                          : "border-black"
+                      }`}
+                    />
+                    <Button
+                      className="bg-black text-white hover:bg-gray-800 hover:text-white"
+                      onClick={handleAddTerm}
+                    >
+                      Add
+                    </Button>
+                  </div>
+                  {errors.serviceTypes && (
+                    <p className="text-red-600 text-xs">
+                      {errors.serviceTypes}
+                    </p>
+                  )}
+                  {caterDetailsForm.serviceTypes.length > 0 && (
+                    <ul className="list-disc mt-2 ml-5 text-sm text-black max-h-40 overflow-y-auto pr-2 border p-2 rounded-lg">
+                      {caterDetailsForm.serviceTypes.map((term, idx) => (
+                        <li
+                          key={idx}
+                          className="flex items-center justify-between gap-2 p-1"
+                        >
+                          <span className="flex items-center gap-1">
+                            <IoMdArrowDropright />
+                            {term}
+                          </span>
+                          <Button
+                            onClick={() =>
+                              setCaterDetailsForm((prev) => ({
+                                ...prev,
+                                serviceTypes: prev.serviceTypes.filter(
+                                  (_, i) => i !== idx
+                                ),
+                              }))
+                            }
+                            className="text-red-600 text-xs"
+                          >
+                            Delete
+                          </Button>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </div>
               </div>

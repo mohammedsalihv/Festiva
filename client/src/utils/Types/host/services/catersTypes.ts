@@ -7,7 +7,6 @@ export interface catersFormErrorState {
   availableDates?: string;
 }
 
-
 export interface catersFormState {
   catersName: string;
   manpower: string;
@@ -28,13 +27,15 @@ export const initialCatersFormState: catersFormState = {
 
 export interface catersDetailsFormErrorState {
   features: string[];
-  conditions: string;
-  about: string;
-  description: string;
+  serviceTypes: string[];
+  conditions?: string;
+  about?: string;
+  description?: string;
 }
 
 export interface catersDetailsFormState {
   features: string[];
+  serviceTypes: string[];
   conditions: string;
   about: string;
   description: string;
@@ -44,5 +45,6 @@ export const initialCatersDetailsFormState: catersDetailsFormState = {
   conditions: "",
   about: "",
   description: "",
+  serviceTypes: [],
   features: [],
 };

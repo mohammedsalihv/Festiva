@@ -1,6 +1,6 @@
 import {
   catersFormState,
-  catersDetailsFormState,
+  catersDetailsFormErrorState,
 } from "@/utils/Types/host/services/catersTypes";
 
 export interface ValidationResult {
@@ -47,20 +47,23 @@ export const validateCatersForm = (form: catersFormState): ValidationResult => {
 };
 
 export const validateCatersDetailsForm = (
-  form: catersDetailsFormState
+  form: catersDetailsFormErrorState
 ): ValidationResult => {
   const errors: { [key: string]: string } = {};
 
-  if (!form.conditions.trim())
+  if (!form.conditions?.trim())
     errors.conditions = "Terms and conditions required";
 
-  if (!form.about.trim()) errors.about = "About your organization";
+  if (!form.about?.trim()) errors.about = "About your organization";
 
   if (!form.description?.trim())
     errors.description = "Please write something about your service";
 
-  if (form.features.length === 0) {
+  if (form.features?.length === 0) {
     errors.features = "Please select at least one available date";
+  }
+  if (form.serviceTypes?.length === 0) {
+    errors.serviceTypes = "Please add what types of services you offer";
   }
 
   const isValid = Object.keys(errors).length === 0;

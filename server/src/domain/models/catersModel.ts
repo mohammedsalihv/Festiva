@@ -11,6 +11,7 @@ const catersSchema = new Schema<ICaters>(
     availableDates: [{ type: String }],
     description: [{ type: String }],
     features: [{ type: String }],
+    serviceTypes: [{ type: String }],
     terms: { type: String },
     conditions: { type: String },
     about: { type: String, required: true },

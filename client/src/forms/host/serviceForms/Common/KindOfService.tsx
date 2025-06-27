@@ -106,7 +106,7 @@ const KindOfService = () => {
       default:
         return {
           image: Images.kind_detail_venues,
-          text: "If your location is associated with more than one category, select the one that fits best. You can select up to five types.",
+          text: "If your location is associated with more than one category, select the one that fits best. You can select up to four types.",
         };
     }
   };
@@ -126,7 +126,7 @@ const KindOfService = () => {
         navigate("/host/rentcar-service");
         break;
       case "Photo & Video services":
-        navigate("/host/photo-video-service");
+        navigate("/host/studio-service");
         break;
       case "Catering management":
         navigate("/host/catering-service");
