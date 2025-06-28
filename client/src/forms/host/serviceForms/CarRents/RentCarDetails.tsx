@@ -111,7 +111,7 @@ const RentCarDetailsForm: React.FC = () => {
 
     dispatch(setRentCarDetails(carFeatureForm));
     toast.success("Saving...");
-    setTimeout(() => navigate("/host/image-upload"), 5000);
+    setTimeout(() => navigate("/host/list/image-upload"), 5000);
   };
 
   return (

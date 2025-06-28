@@ -34,7 +34,7 @@ const venueOptions = [
   },
 ];
 
-const photoAndVideoOptions = [
+const studioOptions = [
   {
     label: "Photo and videography",
     image: Images.photography_sub,
@@ -50,7 +50,7 @@ const carRentalOptions = [
 
 const cateringOptions = [
   {
-    label: "Man power",
+    label: "Catering services",
     image: Images.catering_manpower_sub,
   },
 ];
@@ -78,7 +78,7 @@ const KindOfService = () => {
       case "Car rentals":
         return carRentalOptions;
       case "Photo & Video services":
-        return photoAndVideoOptions;
+        return studioOptions;
       case "Catering management":
         return cateringOptions;
       default:
@@ -123,16 +123,16 @@ const KindOfService = () => {
 
     switch (selectedTab) {
       case "Car rentals":
-        navigate("/host/rentcar-service");
+        navigate("/host/list/rentcar-service");
         break;
       case "Photo & Video services":
-        navigate("/host/studio-service");
+        navigate("/host/list/studio-service");
         break;
       case "Catering management":
-        navigate("/host/catering-service");
+        navigate("/host/list/caters-service");
         break;
       default:
-        navigate("/host/venue-service");
+        navigate("/host/list/venue-service");
         break;
     }
   };

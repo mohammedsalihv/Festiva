@@ -111,7 +111,7 @@ const CatersDetailsForm = () => {
     dispatch(setServiceType("caters"));
     dispatch(setCatersDetailsForm(caterDetailsForm));
     toast.success("Saving...");
-    setTimeout(() => navigate("/host/location-features"), 2000);
+    setTimeout(() => navigate("/host/list/image-upload"), 2000);
   };
 
   return (

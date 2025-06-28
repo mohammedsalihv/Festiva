@@ -64,7 +64,7 @@ const ImageUploader: React.FC = () => {
     dispatch(setAllImages(croppedImages));
     toast.success("Saving...");
     setTimeout(() => {
-      navigate("/host/location-details/");
+      navigate("/host/list/location-details/");
     }, 2000);
   };
 

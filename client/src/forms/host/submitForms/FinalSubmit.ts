@@ -2,12 +2,12 @@ import { addVenue, addRentCar, addCaters } from "@/api/host/hostService";
 import { toast } from "react-toastify";
 import { NavigateFunction } from "react-router-dom";
 import { AppDispatch } from "@/redux/store";
-import { ServiceFormUnion } from "@/utils/Types/host/services/commonTypes";
+import { ServiceFormUnion } from "@/utils/Types/host/services/common/commonTypes";
 
 // Location
-import { locationFormState } from "@/utils/validations/host/service/locationFormValidation";
+import { locationFormState } from "@/utils/Types/host/services/common/locationFormTypes";
 
-import { ImageDetails } from "@/utils/Types/host/services/commonTypes";
+import { ImageDetails } from "@/utils/Types/host/services/common/commonTypes";
 
 // Venue
 import {
@@ -42,7 +42,14 @@ import {
   resetCatersForm,
 } from "@/redux/Slice/host/caters/catersSlice";
 
-interface FinalSubmitParams {
+import { studioFormState } from "@/utils/Types/host/services/studio/studioForm.types";
+import { studioDetailsFormState } from "@/utils/Types/host/services/studio/studioDetailsForm.types";
+import {
+  resetStudioFormStates,
+  resetStudioDetailsFormStates,
+} from "@/redux/Slice/host/studio/studioSlice";
+
+interface finalSubmitParams {
   serviceType: serviceTypes;
   serviceForm: ServiceFormUnion;
   locationForm: locationFormState;
@@ -58,7 +65,7 @@ export const handleFinalSubmit = async ({
   fileImages,
   navigate,
   dispatch,
-}: FinalSubmitParams) => {
+}: finalSubmitParams) => {
   try {
     const formData = new FormData();
 
@@ -69,6 +76,7 @@ export const handleFinalSubmit = async ({
     fileImages.Images.forEach((file) => {
       formData.append("Images", file);
     });
+
     switch (serviceType) {
       case "venue": {
         const { form, details } = serviceForm as {
@@ -191,6 +199,42 @@ export const handleFinalSubmit = async ({
 
         dispatch(resetCatersForm());
         dispatch(resetCatersDetailsForm());
+        break;
+      }
+
+      case "studio": {
+        const { form, details } = serviceForm as {
+          form: studioFormState;
+          details: studioDetailsFormState;
+        };
+
+        const { timeSlots, availableDates, ...restOfStudioForm } = form;
+        const { packages, serviceFeatures } = details;
+
+        Object.entries(restOfStudioForm).forEach(([key, value]) => {
+          formData.append(key, String(value));
+        });
+
+        timeSlots.forEach((slot) => {
+          formData.append("`timeSlots[]", String(slot));
+        });
+
+        availableDates.forEach((date) => {
+          formData.append("availableDates[]", String(date));
+        });
+
+        packages.forEach((pkg) => {
+          formData.append("packages[]", JSON.stringify(pkg));
+        });
+        serviceFeatures.forEach((feature) => {
+          formData.append("serviceFeatures[]", String(feature));
+        });
+
+        await addCaters(formData);
+        toast.success("Studio submitted successfully!");
+
+        dispatch(resetStudioFormStates());
+        dispatch(resetStudioDetailsFormStates());
         break;
       }
 

@@ -148,7 +148,7 @@ const VenueForm = () => {
     dispatch(setServiceType("venue"));
     dispatch(setVenueForm(form));
     toast.success("Saving...");
-    setTimeout(() => navigate("/host/location-features"), 5000);
+    setTimeout(() => navigate("/host/list/venue-details"), 5000);
   };
 
   return (

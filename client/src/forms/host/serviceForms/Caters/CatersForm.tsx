@@ -149,7 +149,7 @@ const CatersForm = () => {
     dispatch(setServiceType("caters"));
     dispatch(setCatersForm(caterForm));
     toast.success("Saving...");
-    setTimeout(() => navigate("/host/caters-details"), 5000);
+    setTimeout(() => navigate("/host/list/caters-details"), 5000);
   };
 
   return (

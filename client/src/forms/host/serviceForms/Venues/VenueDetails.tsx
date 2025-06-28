@@ -95,7 +95,7 @@ const VenueDetailsForm: React.FC = () => {
     toast.success("Saving...");
 
     setTimeout(() => {
-      navigate("/host/image-upload");
+      navigate("/host/list/image-upload");
       setLoading(true);
     }, 2000);
   };

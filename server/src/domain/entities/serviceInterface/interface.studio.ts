@@ -7,7 +7,7 @@ export interface IStudio {
     payment: string;
     packageIncludes?: string[];
     manPower: string;
-    equipments: string;
+    equipments: string[];
     deliveryTime: string;
     validity: string;
   }[];

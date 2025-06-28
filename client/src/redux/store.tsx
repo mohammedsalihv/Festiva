@@ -9,6 +9,7 @@ import imageReducer from "./Slice/host/common/imageSlice";
 import venueReducer from "@/redux/Slice/host/venue/venueSlice";
 import rentcarReducer from "@/redux/Slice/host/rentcar/rentCarSlice";
 import catersReducer from "@/redux/Slice/host/caters/catersSlice";
+import studioReducer from "@/redux/Slice/host/studio/studioSlice";
 import locationReducer from "@/redux/Slice/host/common/locationSlice";
 import serviceTypeReducer from "@/redux/Slice/host/common/serviceTypeSlice";
 import adminReduer from "@/redux/Slice/admin/adminSlice";
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   venue: venueReducer,
   rentcar: rentcarReducer,
   caters:catersReducer,
+  studio:studioReducer,
   location: locationReducer,
   serviceType: serviceTypeReducer,
   admin: adminReduer,

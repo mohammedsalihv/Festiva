@@ -146,7 +146,7 @@ const RentCarForm = () => {
     dispatch(setServiceType("rentcar"))
     dispatch(setRentCarForm(form));
     toast.success("Saving...");
-    setTimeout(() => navigate("/host/rentcar-features"), 5000);
+    setTimeout(() => navigate("/host/list/rentcar-details"), 5000);
   };
 
   return (

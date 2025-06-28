@@ -1,20 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   studioFormState,
-  studioPackageState,
   initialStudioFormState,
-  initialStudioPackageState,
-  studioPackage,
-} from "@/utils/Types/host/services/studioTypess";
+} from "@/utils/Types/host/services/studio/studioForm.types";
+import {
+  studioDetailsFormState,
+  initialStudioDetailsFormState,
+} from "@/utils/Types/host/services/studio/studioDetailsForm.types";
 
 interface StudioState {
   form: studioFormState;
-  packages: studioPackageState;
+  details: studioDetailsFormState;
 }
 
 const initialState: StudioState = {
   form: initialStudioFormState,
-  packages: initialStudioPackageState,
+  details: initialStudioDetailsFormState,
 };
 
 const studioSlice = createSlice({
@@ -24,26 +25,17 @@ const studioSlice = createSlice({
     setStudioFormStates: (state, action: PayloadAction<studioFormState>) => {
       state.form = { ...state.form, ...action.payload };
     },
-    setStudioPackagesStates: (
+    setStudioDetailsFormStates: (
       state,
-      action: PayloadAction<studioPackageState>
+      action: PayloadAction<studioDetailsFormState>
     ) => {
-      state.packages = { ...state.packages, ...action.payload };
-    },
-    updateStudioPackagesList: (
-      state,
-      action: PayloadAction<studioPackage[]>
-    ) => {
-      state.packages.packages = action.payload;
-    },
-    updateStudioServiceFeatures: (state, action: PayloadAction<string[]>) => {
-      state.packages.serviceFeatures = action.payload;
+      state.details = { ...state.details, ...action.payload };
     },
     resetStudioFormStates: (state) => {
       state.form = initialStudioFormState;
     },
-    resetStudioPackagesStates: (state) => {
-      state.packages = initialStudioPackageState;
+    resetStudioDetailsFormStates: (state) => {
+      state.details = initialStudioDetailsFormState;
     },
     resetAllStudioStates: () => initialState,
   },
@@ -51,11 +43,9 @@ const studioSlice = createSlice({
 
 export const {
   setStudioFormStates,
-  setStudioPackagesStates,
-  updateStudioPackagesList,
-  updateStudioServiceFeatures,
+  setStudioDetailsFormStates,
   resetStudioFormStates,
-  resetStudioPackagesStates,
+  resetStudioDetailsFormStates,
   resetAllStudioStates,
 } = studioSlice.actions;
 

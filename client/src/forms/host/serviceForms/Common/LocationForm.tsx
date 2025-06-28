@@ -2,24 +2,24 @@ import { Input } from "@/components/Input";
 import { Images } from "@/assets";
 import { RootState } from "@/redux/store";
 import { useState } from "react";
+import { validateLocationForm } from "@/utils/validations/host/service/common/locationFormValidation";
 import {
   locationFormState,
-  validateLocationForm,
-  locationFormInitialState,
   locationFormErrorState,
-} from "@/utils/validations/host/service/locationFormValidation";
+  locationFormInitialState,
+} from "@/utils/Types/host/services/common/locationFormTypes";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import CustomToastContainer from "../../../../reusable-components/Messages/ToastContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocationDetails } from "@/redux/Slice/host/common/locationSlice";
 import { handleFinalSubmit } from "../../submitForms/FinalSubmit";
-import { ImageDetails } from "@/utils/Types/host/services/commonTypes";
+import { ImageDetails } from "@/utils/Types/host/services/common/commonTypes";
 import { useNavigate } from "react-router-dom";
 import base64ToFile from "@/utils/Base64ToFile";
 import Spinner from "@/components/Spinner";
 import { serviceTypes } from "@/redux/Slice/host/common/serviceTypeSlice";
-import { ServiceFormUnion } from "@/utils/Types/host/services/commonTypes";
+import { ServiceFormUnion } from "@/utils/Types/host/services/common/commonTypes";
 
 const LocationForm = () => {
   const [loading, setLoading] = useState(false);
@@ -35,6 +35,7 @@ const LocationForm = () => {
   const venue = useSelector((state: RootState) => state.venue);
   const rentcar = useSelector((state: RootState) => state.rentcar);
   const caters = useSelector((state: RootState) => state.caters);
+  const studio = useSelector((state : RootState) => state.studio)
   const images = useSelector<RootState, string[]>(
     (state) => state.images.croppedImages
   );
@@ -50,6 +51,9 @@ const LocationForm = () => {
       break;
     case "caters":
       serviceForm = caters;
+      break;
+    case "studio":
+      serviceForm = studio;
       break;
     default:
       throw new Error("Invalid service type");

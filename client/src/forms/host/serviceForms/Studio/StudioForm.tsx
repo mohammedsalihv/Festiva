@@ -5,12 +5,12 @@ import { Clock } from "lucide-react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
-import { studioFormState , initialStudioFormState , studioFormErrorState } from "@/utils/Types/host/services/studioTypess";
+import { studioFormState , studioFormErrorState , initialStudioFormState } from "@/utils/Types/host/services/studio/studioForm.types";
 import { useDispatch } from "react-redux";
 import Spinner from "@/components/Spinner";
 import { setServiceType } from "@/redux/Slice/host/common/serviceTypeSlice";
 import { setCatersForm } from "@/redux/Slice/host/caters/catersSlice";
-import { validateStudioForm } from "@/utils/validations/host/service/studioFormValidation";
+import { validateStudioForm } from "@/utils/validations/host/service/studio/studioFormValidation";
 
 
 const StudioForm = () => {
@@ -145,7 +145,7 @@ const StudioForm = () => {
     dispatch(setServiceType("caters"));
     dispatch(setCatersForm(studioForm));
     toast.success("Saving...");
-    setTimeout(() => navigate("/host/studio-packages"), 5000);
+    setTimeout(() => navigate("/host/list/studio-details"), 5000);
   };
 
   return (

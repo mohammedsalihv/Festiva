@@ -10,7 +10,7 @@ const studioSchema = new Schema<IStudio>(
         payment: { type: String, required: true },
         packageIncludes: [{ type: String, required: true }],
         manPower: { type: String, required: true },
-        equipments: { type: String, required: true },
+        equipments: [{ type: String, required: true }],
         deliveryTime: { type: String, required: true },
         validity: { type: String, required: true },
       },
