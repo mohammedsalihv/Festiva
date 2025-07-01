@@ -9,9 +9,8 @@ import { studioFormState , studioFormErrorState , initialStudioFormState } from 
 import { useDispatch } from "react-redux";
 import Spinner from "@/components/Spinner";
 import { setServiceType } from "@/redux/Slice/host/common/serviceTypeSlice";
-import { setCatersForm } from "@/redux/Slice/host/caters/catersSlice";
 import { validateStudioForm } from "@/utils/validations/host/service/studio/studioFormValidation";
-
+import { setStudioFormStates } from "@/redux/Slice/host/studio/studioSlice";
 
 const StudioForm = () => {
   const [studioForm, setStudioForm] = useState<studioFormState>(initialStudioFormState);
@@ -142,8 +141,8 @@ const StudioForm = () => {
       return;
     }
 
-    dispatch(setServiceType("caters"));
-    dispatch(setCatersForm(studioForm));
+    dispatch(setServiceType("studio"));
+    dispatch(setStudioFormStates(studioForm))
     toast.success("Saving...");
     setTimeout(() => navigate("/host/list/studio-details"), 5000);
   };

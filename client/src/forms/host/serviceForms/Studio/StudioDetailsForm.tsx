@@ -64,8 +64,10 @@ const StudioDetailsForm: React.FC = () => {
       return;
     }
 
-    const { isValid, errors: validationErrors } =
-      validateStudioDetailsForm(studioDetailsForm);
+    const { isValid, errors: validationErrors } = validateStudioDetailsForm({
+      ...studioDetailsForm,
+      packages,
+    });
 
     if (!isValid) {
       setErrors({
@@ -74,18 +76,25 @@ const StudioDetailsForm: React.FC = () => {
       });
 
       toast.error("Please correct the errors in the form.");
+      console.log(validationErrors);
       setTimeout(() => setErrors(initialStudioDetailsFormErrorState), 5000);
       return;
     }
 
     setLoading(true);
-    dispatch(setStudioDetailsFormStates(studioDetailsForm));
+    dispatch(
+      setStudioDetailsFormStates({
+        ...studioDetailsForm,
+        packages,
+      })
+    );
+
     toast.success("Saving...");
     setTimeout(() => navigate("/host/list/image-upload"), 1500);
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-3 sm:mt-16 py-8 font-prompt relative z-0">
+    <div className="max-w-7xl mx-auto px-3 sm:mt-16 py-8 font-prompt relative">
       <h2 className="text-xl sm:text-2xl font-bold mb-4">
         What key features does your service have?
       </h2>

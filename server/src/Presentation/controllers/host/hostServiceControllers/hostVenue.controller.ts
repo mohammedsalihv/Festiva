@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { IVenue } from "../../../../domain/entities/serviceInterface/interface.venue";
+import { IHostVenueController } from "../../../../domain/controlInterface/host/interface.hostVenueController";
 import { HostVenueUseCase } from "../../../../application/use-cases/host/hostServices/usecase.hostVenue";
 import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostAssetLocationRepostory";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
@@ -19,46 +20,35 @@ export interface MulterRequest extends Request {
   auth?: JwtPayload & { id: string; role?: string };
 }
 
-export class HostVenueController {
+export class HostVenueController implements IHostVenueController {
   constructor(
     private hostVenueUseCase: HostVenueUseCase,
     private hostAssetlocationRepository: IHostAssetLocationRepository
   ) {}
 
-  async addVenue(req: MulterRequest, res: Response): Promise<void> {
+  async addVenueService(req: MulterRequest, res: Response): Promise<void> {
+    const hostId = req.auth?.id;
+
+    if (!hostId) {
+      res
+        .status(statusCodes.unAuthorized)
+        .json({ message: statusMessages.unAuthorized });
+      return;
+    }
+
     try {
-      const hostId = req.auth?.id;
-
-      if (!hostId) {
-        res
-          .status(statusCodes.unAuthorized)
-          .json({ message: statusMessages.unAuthorized });
-        return;
-      }
-
-      const newVenu = req.body;
+      const newVenue = req.body;
       const files = req.files?.["Images"] || [];
       const typeOfAsset = "venue";
 
-      try {
-        await assetFilesValidate({ files, typeOfAsset });
-      } catch (validationErr: any) {
-        console.error("❌ File validation failed:", validationErr);
-        res
-          .status(statusCodes.badRequest)
-          .json({ message: validationErr.message || "Invalid files" });
-        return;
-      }
+      await assetFilesValidate({ files, typeOfAsset });
 
       const newLocation = await this.hostAssetlocationRepository.addLocation(
-        newVenu.location
+        newVenue.location
       );
 
       if (!newLocation || !newLocation._id) {
-        res
-          .status(statusCodes.serverError)
-          .json({ message: "Failed to create location" });
-        return;
+        throw new ErrorHandler("Failed to create location", statusCodes.serverError);
       }
 
       const timestamp = Date.now();
@@ -87,7 +77,7 @@ export class HostVenueController {
         parkingFeatures,
         description,
         terms,
-      } = newVenu;
+      } = newVenue;
 
       const venue: IVenue = {
         venueName,
@@ -106,8 +96,8 @@ export class HostVenueController {
         location: newLocation._id,
         host: new Types.ObjectId(hostId),
       };
-      const createdVenue = await this.hostVenueUseCase.addVenue(venue);
 
+      const createdVenue = await this.hostVenueUseCase.addVenue(venue);
       res.status(statusCodes.Success).json(createdVenue);
     } catch (error: any) {
       logger.error(error);
@@ -115,13 +105,12 @@ export class HostVenueController {
         res
           .status(error.statusCode)
           .json({ message: error.message || "Something went wrong" });
-        return;
+      } else {
+        res.status(statusCodes.serverError).json({
+          message: "Failed to add new venue",
+          error: error.message || error,
+        });
       }
-
-      res.status(statusCodes.serverError).json({
-        message: "Failed to add new venue",
-        error: error.message || error,
-      });
     }
   }
 }

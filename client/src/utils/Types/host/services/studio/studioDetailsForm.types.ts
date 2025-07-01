@@ -12,17 +12,7 @@ export interface studioDetailsFormErrorState {
 
 
 export const initialStudioDetailsFormState: studioDetailsFormState = {
-  packages: [
-    {
-      packageName: "",
-      manPower: "",
-      payment: "",
-      packageIncludes: [],
-      equipments: [],
-      deliveryTime: "",
-      validity: "",
-    },
-  ],
+  packages: [],
   serviceFeatures: [],
 };
 

@@ -1,7 +1,7 @@
 import express, { Request, Response, RequestHandler } from "express";
-import { adminUserController } from "../../../infrastructure/DI/admin/adminUserManagement.DI";
-import { adminHostController } from "../../../infrastructure/DI/admin/adminHostManagement.DI";
-import { adminAssetController } from "../../../infrastructure/DI/admin/adminAssetManagement.DI";
+import { adminUserController } from "../../../infrastructure/DI/admin/management/adminUserManagement.DI";
+import { adminHostController } from "../../../infrastructure/DI/admin/management/adminHostManagement.DI";
+import { adminAssetController } from "../../../infrastructure/DI/admin/management/adminAssetManagement.DI";
 import { singleImageUpload } from "../../../utils/common/middlewares/multer";
 import {
   authenticateToken,

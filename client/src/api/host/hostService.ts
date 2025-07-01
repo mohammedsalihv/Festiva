@@ -14,3 +14,8 @@ export const addCaters = async (data: FormData) => {
   const response = await axiosInstance.post("/addCaters", data);
   return response.data;
 };
+
+export const addStudio = async (data: FormData) => {
+  const response = await axiosInstance.post("/addStudio", data);
+  return response.data;
+};

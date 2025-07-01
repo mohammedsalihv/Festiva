@@ -9,7 +9,7 @@ const catersSchema = new Schema<ICaters>(
     totalAmount: { type: String, required: true },
     timeSlots: [{ type: String }],
     availableDates: [{ type: String }],
-    description: [{ type: String }],
+    description: { type: String },
     features: [{ type: String }],
     serviceTypes: [{ type: String }],
     terms: { type: String },

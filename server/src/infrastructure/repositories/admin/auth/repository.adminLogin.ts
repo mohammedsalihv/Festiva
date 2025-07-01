@@ -1,4 +1,4 @@
-import { IAdminLoginRepository } from "../../../../domain/entities/repositoryInterface/admin/interface.adminLogin";
+import { IAdminLoginRepository } from "../../../../domain/entities/repositoryInterface/admin/authentication/interface.adminLogin";
 import { UserModal } from "../../../../domain/models/userModel";
 import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
 

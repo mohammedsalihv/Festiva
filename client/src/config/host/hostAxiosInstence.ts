@@ -6,7 +6,7 @@ const axiosInstance: AxiosInstance = axios.create({
   baseURL:
     import.meta.env.VITE_BASE_URL_USER || "http://localhost:4000/api/host",
   withCredentials: true,
-  timeout: 10000,
+  timeout: 30000,
 });
 
 axiosInstance.interceptors.request.use(

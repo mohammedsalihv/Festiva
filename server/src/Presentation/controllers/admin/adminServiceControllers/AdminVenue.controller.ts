@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
+import { IAdminVenueController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminVenueController";
 import { AdminVenueUseCase } from "../../../../application/use-cases/admin/adminServices/usecase.adminVenue";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
-export class AdminVenueController {
+export class AdminVenueController implements IAdminVenueController {
   constructor(private adminVenueUseCase: AdminVenueUseCase) {}
 
-  async venueDetails(req: Request, res: Response): Promise<void> {
+  async venueFullDetails(req: Request, res: Response): Promise<void> {
     try {
       const venueId = req.params.assetId;
       if (!venueId) {

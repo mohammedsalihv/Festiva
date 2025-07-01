@@ -27,6 +27,26 @@ const CatersForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  
+  
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+
+    setCaterForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (errors[name as keyof typeof errors]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+
   const [startTime, setStartTime] = useState({
     hour: "10",
     minute: "00",
@@ -41,6 +61,9 @@ const CatersForm = () => {
   const formatTime = (hour: string, minute: string, period: string) => {
     return `${hour.padStart(2, "0")}:${minute} ${period}`;
   };
+
+
+
 
   const handleAddTimeSlot = () => {
     const startFormatted = formatTime(
@@ -86,22 +109,6 @@ const CatersForm = () => {
     }));
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-
-    setCaterForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (errors[name as keyof typeof errors]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
 
   const handleAddDate = () => {
     if (!dateInput) {

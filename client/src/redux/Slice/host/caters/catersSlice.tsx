@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  CatersDetailsFormState,
-  CatersFormState,
+  catersDetailsFormState,
+  catersFormState,
   initialCatersDetailsFormState,
   initialCatersFormState,
 } from "@/utils/Types/host/services/catersTypes";
 
 interface catersState {
-  form: CatersFormState;
-  details: CatersDetailsFormState;
+  form: catersFormState;
+  details: catersDetailsFormState;
 }
 
 const initialCatersState: catersState = {
@@ -20,12 +20,12 @@ const catersFormSlice = createSlice({
   name: "caters",
   initialState: initialCatersState,
   reducers: {
-    setCatersForm: (state, action: PayloadAction<CatersFormState>) => {
+    setCatersForm: (state, action: PayloadAction<catersFormState>) => {
       state.form = { ...action.payload };
     },
     setCatersDetailsForm: (
       state,
-      action: PayloadAction<CatersDetailsFormState>
+      action: PayloadAction<catersDetailsFormState>
     ) => {
       state.details = { ...action.payload };
     },

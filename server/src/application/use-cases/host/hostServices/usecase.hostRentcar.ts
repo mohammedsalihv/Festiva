@@ -5,12 +5,12 @@ import { statusCodes } from "../../../../utils/common/messages/constantResponses
 import { IHostRentCarUseCase } from "../../../../domain/usecaseInterface/host/interface.rentCarUseCase";
 
 export class HostRentCarUseCase implements IHostRentCarUseCase {
-  constructor(private HostRentCarRepository: IHostRentCarRepository) {}
+  constructor(private hostRentCarRepository: IHostRentCarRepository) {}
 
   async addRentCar(rentCar: IRentCar): Promise<IRentCar> {
-    const addRentCar = await this.HostRentCarRepository.addRentCar(rentCar);
+    const addedRentCar = await this.hostRentCarRepository.addRentCar(rentCar);
 
-    if (!addRentCar) {
+    if (!addedRentCar) {
       throw new ErrorHandler("Rent car not added", statusCodes.serverError);
     }
     return rentCar;

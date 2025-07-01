@@ -1,6 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import { hostVenueController } from "../../../infrastructure/DI/host/hostVenue.DI";
 import { hostRentCarController } from "../../../infrastructure/DI/host/hostRentCar.DI";
+import { hostCatersController } from "../../../infrastructure/DI/host/hostCaters.DI";
+import { hostStudioController } from "../../../infrastructure/DI/host/hostStudio.DI";
 import {
   authenticateToken,
   isHost,
@@ -17,7 +19,7 @@ hostRoutes.post(
   authenticateToken,
   isHost,
   withImageUpload((req, res) =>
-    hostVenueController.addVenue(req as MulterRequest, res)
+    hostVenueController.addVenueService(req as MulterRequest, res)
   )
 );
 
@@ -26,7 +28,25 @@ hostRoutes.post(
   authenticateToken,
   isHost,
   withImageUpload((req, res) =>
-    hostRentCarController.addRentCar(req as MulterRequest, res)
+    hostRentCarController.addRentCarService(req as MulterRequest, res)
+  )
+);
+
+hostRoutes.post(
+  "/addCaters",
+  authenticateToken,
+  isHost,
+  withImageUpload((req, res) =>
+    hostCatersController.addCatersService(req as MulterRequest, res)
+  )
+);
+
+hostRoutes.post(
+  "/addStudio",
+  authenticateToken,
+  isHost,
+  withImageUpload((req, res) =>
+    hostStudioController.addStudioService(req as MulterRequest, res)
   )
 );
 

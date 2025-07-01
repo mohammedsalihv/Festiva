@@ -5,12 +5,12 @@ import { statusCodes } from "../../../../utils/common/messages/constantResponses
 import { IHostVenueUseCase } from "../../../../domain/usecaseInterface/host/interface.venueUseCase";
 
 export class HostVenueUseCase implements IHostVenueUseCase {
-  constructor(private HostVenueRepository: IHostVenueRepository) {}
+  constructor(private hostVenueRepository: IHostVenueRepository) {}
 
   async addVenue(venue: IVenue): Promise<IVenue> {
-    const addVenue = await this.HostVenueRepository.addVenue(venue);
+    const addedVenue = await this.hostVenueRepository.addVenue(venue);
 
-    if (!addVenue) {
+    if (!addedVenue) {
       throw new ErrorHandler("Venue not added", statusCodes.serverError);
     }
 

@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import CustomToastContainer from "../../../../reusable-components/Messages/ToastContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocationDetails } from "@/redux/Slice/host/common/locationSlice";
-import { handleFinalSubmit } from "../../submitForms/FinalSubmit";
+import { handleFinalSubmit } from "../../submitForms/finalSubmit";
 import { ImageDetails } from "@/utils/Types/host/services/common/commonTypes";
 import { useNavigate } from "react-router-dom";
 import base64ToFile from "@/utils/Base64ToFile";

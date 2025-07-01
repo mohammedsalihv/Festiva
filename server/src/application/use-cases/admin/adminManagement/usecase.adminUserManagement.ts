@@ -1,5 +1,5 @@
 import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
-import { IAdminUserManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/interface.adminUserManagement";
+import { IAdminUserManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminUserManagement";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { EditUserPayload } from "../../../../domain/adminInterface/interface.editUser";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";

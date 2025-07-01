@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { AdminAssetManagementUseCase } from "../../../../application/use-cases/admin/adminManagement/usecase.adminAssetManagement";
-import { AdminVenueController } from "../adminServiceControllers/AdminVenue.controller";
-import { AdminRentCarController } from "../adminServiceControllers/AdminRentCar.controller";
+import { AdminVenueController } from "../adminServiceControllers/adminVenue.controller";
+import { AdminRentCarController } from "../adminServiceControllers/adminRentCar.controller";
+import { AdminStudioController } from "../adminServiceControllers/adminStudio.controller";
+import { AdminCatersController } from "../adminServiceControllers/adminCaters.controller";
 import logger from "../../../../utils/common/messages/logger";
 import {
   statusCodes,
@@ -12,7 +14,9 @@ export class AdminAssetsController {
   constructor(
     private adminAssetManagementUseCase: AdminAssetManagementUseCase,
     private adminVenueController: AdminVenueController,
-    private adminRentCarController: AdminRentCarController
+    private adminRentCarController: AdminRentCarController,
+    private adminStudioController: AdminStudioController,
+    private adminCatersController: AdminCatersController
   ) {}
 
   async Assets(req: Request, res: Response): Promise<void> {
@@ -48,10 +52,16 @@ export class AdminAssetsController {
 
       switch (typeOfAsset) {
         case "venue":
-          await this.adminVenueController.venueDetails(req, res);
+          await this.adminVenueController.venueFullDetails(req, res);
           break;
         case "rentcar":
           await this.adminRentCarController.carFullDetails(req, res);
+          break;
+        case "studio":
+          await this.adminStudioController.studioFullDetails(req, res);
+          break;
+        case "caters":
+          await this.adminCatersController.catersFullDetails(req, res);
           break;
         default:
           res.status(statusCodes.forbidden).json({

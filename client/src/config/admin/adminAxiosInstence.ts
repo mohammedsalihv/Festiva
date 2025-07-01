@@ -6,7 +6,7 @@ const axiosInstance: AxiosInstance = axios.create({
   baseURL:
     import.meta.env.VITE_BASE_URL_ADMIN || "http://localhost:4000/api/admin",
   withCredentials: true,
-  timeout: 10000,
+  timeout: 30000,
 });
 
 axiosInstance.interceptors.request.use(

@@ -1,5 +1,5 @@
 import { IAssetBase } from "../../../../domain/entities/serviceInterface/interface.asset";
-import { IAdminAssetManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/interface.adminAssetManagement";
+import { IAdminAssetManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminAssetManagement";
 import { IAdminAssetManagementUseCase } from "../../../../domain/usecaseInterface/admin/interface.adminAssetManagementUseCase";
 
 export class AdminAssetManagementUseCase implements IAdminAssetManagementUseCase {

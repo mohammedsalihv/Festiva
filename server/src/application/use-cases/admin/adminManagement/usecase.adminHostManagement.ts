@@ -1,5 +1,5 @@
 import { responseHostDTO } from "../../../../types/DTO/host/dto.host";
-import { IAdminHostManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/interface.adminHostManagement";
+import { IAdminHostManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminHostManagement";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { EditHostPayload } from "../../../../domain/adminInterface/interface.editHost";
 import {

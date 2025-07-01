@@ -26,7 +26,7 @@ export class HostRentCarController implements IHostRentCarController {
     private hostAssetlocationRepository: IHostAssetLocationRepository
   ) {}
 
-  async addRentCar(req: MulterRequest, res: Response): Promise<void> {
+  async addRentCarService(req: MulterRequest, res: Response): Promise<void> {
     const hostId = req.auth?.id;
     if (!hostId) {
       throw new ErrorHandler(

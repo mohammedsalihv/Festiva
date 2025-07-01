@@ -1,4 +1,9 @@
-import { addVenue, addRentCar, addCaters } from "@/api/host/hostService";
+import {
+  addVenue,
+  addRentCar,
+  addCaters,
+  addStudio,
+} from "@/api/host/hostService";
 import { toast } from "react-toastify";
 import { NavigateFunction } from "react-router-dom";
 import { AppDispatch } from "@/redux/store";
@@ -48,6 +53,7 @@ import {
   resetStudioFormStates,
   resetStudioDetailsFormStates,
 } from "@/redux/Slice/host/studio/studioSlice";
+import { AxiosError } from "axios";
 
 interface finalSubmitParams {
   serviceType: serviceTypes;
@@ -173,17 +179,18 @@ export const handleFinalSubmit = async ({
         };
 
         const { timeSlots, availableDates, ...restOfCaterForm } = form;
-        const { features, ...restOfCatersDetailsForm } = details;
+        const { features, serviceTypes, ...restOfCatersDetailsForm } = details;
 
         Object.entries(restOfCaterForm).forEach(([key, value]) => {
           formData.append(key, String(value));
         });
+
         Object.entries(restOfCatersDetailsForm).forEach(([key, value]) => {
           formData.append(key, String(value));
         });
 
         timeSlots.forEach((slot) => {
-          formData.append("`timeSlots[]", String(slot));
+          formData.append("timeSlots[]", String(slot));
         });
 
         availableDates.forEach((date) => {
@@ -194,7 +201,11 @@ export const handleFinalSubmit = async ({
           formData.append("features[]", String(feature));
         });
 
-        await addCaters(formData);
+        serviceTypes?.forEach((types) => {
+          formData.append("serviceTypes[]", String(types));
+        });
+
+         await addCaters(formData);
         toast.success("Caters submitted successfully!");
 
         dispatch(resetCatersForm());
@@ -211,12 +222,15 @@ export const handleFinalSubmit = async ({
         const { timeSlots, availableDates, ...restOfStudioForm } = form;
         const { packages, serviceFeatures } = details;
 
+
+        console.log('pakges',packages)
+
         Object.entries(restOfStudioForm).forEach(([key, value]) => {
           formData.append(key, String(value));
         });
 
         timeSlots.forEach((slot) => {
-          formData.append("`timeSlots[]", String(slot));
+          formData.append("timeSlots[]", String(slot));
         });
 
         availableDates.forEach((date) => {
@@ -230,7 +244,7 @@ export const handleFinalSubmit = async ({
           formData.append("serviceFeatures[]", String(feature));
         });
 
-        await addCaters(formData);
+        await addStudio(formData);
         toast.success("Studio submitted successfully!");
 
         dispatch(resetStudioFormStates());
@@ -249,8 +263,12 @@ export const handleFinalSubmit = async ({
     setTimeout(() => {
       navigate("/host/kind-of-service");
     }, 2000);
-  } catch (error) {
-    console.error("Submission Error:", error);
-    toast.error("Something went wrong while submitting!");
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      console.log(error);
+      toast.error("Submission failed");
+    } else {
+      console.log(error);
+    }
   }
 };

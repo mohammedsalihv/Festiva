@@ -1,6 +1,6 @@
 import { IAdminRentCarUseCase } from "../../../../domain/usecaseInterface/admin/interface.adminRentCar";
 import { IRentCar } from "../../../../domain/entities/serviceInterface/interface.rentCar";
-import { IAdminRentCarRepository } from "../../../../domain/entities/repositoryInterface/admin/interface.adminRentCarRepository";
+import { IAdminRentCarRepository } from "../../../../domain/entities/repositoryInterface/admin/services/interface.adminRentCarRepository";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
