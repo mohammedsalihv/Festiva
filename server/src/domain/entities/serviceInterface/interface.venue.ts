@@ -23,9 +23,9 @@ export interface IVenue {
 
 export interface IVenueBase {
   _id: string;
-  venueName: string;
-  typeOfAsset: "venue";
-  rent?: number;
+  name: string;
+  assetType: "venue";
+  amount?: string;
   status?: "pending" | "approved" | "rejected";
   location: {
     _id: string;
@@ -40,9 +40,9 @@ export interface IVenueBase {
 
 export const mapVenueToBase = (venue: any): IVenueBase => ({
   _id: venue._id.toString(),
-  venueName: venue.venueName || "",
-  typeOfAsset: "venue",
-  rent: venue.rent,
+  name: venue.venueName,
+  assetType: venue.assetType,
+  amount: venue.rent,
   status: venue.status,
   Images: venue.Images,
   location: {

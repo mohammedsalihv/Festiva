@@ -5,6 +5,8 @@ import { singleImageUpload } from "../../../utils/common/middlewares/multer";
 import { authenticateToken } from "../../../utils/common/middlewares/auth";
 import { userVenueController } from "../../../infrastructure/DI/user/services/userVenue.DI";
 import { userRentCarController } from "../../../infrastructure/DI/user/services/userRentCar.DI";
+import { userStudioController } from "../../../infrastructure/DI/user/services/userStudio.DI";
+import { userCatersController } from "../../../infrastructure/DI/user/services/userCaters.DI";
 
 export interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -48,6 +50,19 @@ userRoutes.get(
 userRoutes.get(
   "/getRentcars",
   userRentCarController.getRentCars.bind(userRentCarController)
+);
+
+// caters
+userRoutes.get(
+  "/getCaters",
+  userCatersController.getCaters.bind(userCatersController)
+);
+
+
+// studio
+userRoutes.get(
+  "/getStudios",
+  userStudioController.getStudios.bind(userStudioController)
 );
 
 export default userRoutes;

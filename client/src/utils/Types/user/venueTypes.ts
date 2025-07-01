@@ -1,8 +1,8 @@
 export interface IVenueBase {
   _id: string;
-  venueName: string;
-  typeOfAsset: "venue";
-  rent?: number;
+  name: string;
+  assetType: "venue";
+  amount: string;
   status?: "pending" | "approved" | "rejected";
   location: {
     _id: string;
@@ -11,5 +11,5 @@ export interface IVenueBase {
     country?: string;
   };
   Images?: string[];
-  [key: string]: any;
+  [key: string]: unknown;
 }

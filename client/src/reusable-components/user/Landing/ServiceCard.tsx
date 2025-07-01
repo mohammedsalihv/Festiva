@@ -17,8 +17,10 @@ import { Images } from "@/assets";
 import Loader from "@/components/Loader";
 import Retry from "@/components/Retry";
 import { serviceOptions } from "@/utils/Options/user/serviceOptions";
+import { ICatersBase } from "@/utils/Types/user/catersTypes";
+import { IStudioBase } from "@/utils/Types/user/studioTypes";
 
-type Asset = IRentCarBase | IVenueBase;
+type Asset = IRentCarBase | IVenueBase | ICatersBase | IStudioBase;
 
 type ServicesCardProps = {
   assets: Asset[];
@@ -139,21 +141,21 @@ export default function ServicesCard({
       </div>
       <div className="flex flex-col sm:flex-row justify-between items-center mb-2 sm:mb-4 text-xs sm:text-sm text-gray-600 gap-1 sm:gap-2">
         {normalizedType === "venue" && (
-            <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-              <button className="px-3 py-1 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap">
-                All Spaces
-              </button>
-              <button className="px-3 py-1 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap">
-                Business spaces
-              </button>
-              <button className="px-3 py-1 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap">
-                Multi purpose
-              </button>
-              <button className="px-3 py-1 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap">
-                Warehouse
-              </button>
-            </div>
-          )}
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+            <button className="px-3 py-1 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap">
+              All Spaces
+            </button>
+            <button className="px-3 py-1 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap">
+              Business spaces
+            </button>
+            <button className="px-3 py-1 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap">
+              Multi purpose
+            </button>
+            <button className="px-3 py-1 text-xs sm:text-sm hover:bg-gray-200 whitespace-nowrap">
+              Warehouse
+            </button>
+          </div>
+        )}
         <p className="text-center sm:text-left"></p>
         <button
           className="flex items-center gap-1 text-xs sm:text-sm text-gray-600 hover:text-blue-500"
@@ -202,17 +204,20 @@ export default function ServicesCard({
             </div>
 
             <div className="p-2 sm:p-3 space-y-1">
-              <h3 className="text-2xl sm:text-sm font-poppins text-gray-800 line-clamp-2">
+              <h3 className="text-2xl sm:text-sm font-poppins text-gray-800 line-clamp-2 font-semibold">
                 {asset.name}
               </h3>
               <div className="flex items-center gap-1 text-xs sm:text-sm font-semibold text-gray-900">
-                <FaRupeeSign className="text-xs" />
-                <span className="text-lg">
-                  {asset.rent}
-                  <span className="text-gray-500 text-xs">/Day</span>
-                </span>
-                <span className="text-gray-500 font-normal">
-                  • {asset.responseTime || "Responds within 1 hr"}
+                {asset.packagesCount ? (
+                  <span>{String(asset.packagesCount ?? asset.amount)} available packages</span>
+                ) : (
+                  <div className="flex items-center">
+                    <FaRupeeSign className="text-[10px]" />
+                    <span className="text-base">{asset.amount}</span>
+                  </div>
+                )}
+                <span className="text-gray-500 text-[12px]">
+                  • "Responds within 1 hr"
                 </span>
               </div>
               <div className="text-xs sm:text-xs text-main_color flex items-center gap-1">
@@ -221,15 +226,6 @@ export default function ServicesCard({
                   {asset.location.state}, {asset.location.country}
                 </span>
               </div>
-              {asset.rating && (
-                <div className="text-xs sm:text-xs text-gray-600 font-medium flex items-center gap-1">
-                  <span className="text-green-600">★</span>
-                  <span>
-                    {asset.rating.toFixed(1)} (
-                    {Math.floor(Math.random() * 1000) + 1})
-                  </span>
-                </div>
-              )}
             </div>
           </div>
         ))}

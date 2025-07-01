@@ -23,3 +23,34 @@ export interface IStudio {
   location?: Types.ObjectId;
   host?: Types.ObjectId;
 }
+
+export interface IStudioBase {
+  _id: string;
+  packagesCount: number;
+  name: string;
+  assetType: "studio";
+  status?: "pending" | "approved" | "rejected";
+  location: {
+    _id: string;
+    city?: string;
+    state?: string;
+    country?: string;
+  };
+  Images?: string[];
+  [key: string]: any;
+}
+
+export const mapStudioToBase = (studio: any): IStudioBase => ({
+  _id: studio._id.toString(),
+  name: studio.name,
+  assetType: studio.assetType,
+  status: studio.status,
+  Images: studio.Images,
+  packagesCount: studio.packages?.length || 0,
+  location: {
+    _id: studio.location?._id?.toString(),
+    city: studio.location?.city,
+    state: studio.location?.state,
+    country: studio.location?.country,
+  },
+});

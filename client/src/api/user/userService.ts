@@ -25,3 +25,11 @@ export const getRentcars = async () => {
   const response = await axiosInstance.get("/getRentcars");
   return response.data.data;
 };
+export const getCaters = async () => {
+  const response = await axiosInstance.get("/getCaters");
+  return response.data.data;
+};
+export const getStudios = async () => {
+  const response = await axiosInstance.get("/getStudios");
+  return response.data.data;
+};

@@ -1,18 +1,24 @@
 import { Button } from "@/components/Button";
 import { Card, CardContent } from "@/components/Card";
-import { GiDoubleStreetLights } from "react-icons/gi";
-import { IoVideocamOff } from "react-icons/io5";
+import { TbPoint } from "react-icons/tb";
 import { CiCalendarDate, CiCircleCheck } from "react-icons/ci";
-import { LuDot } from "react-icons/lu";
+import { MdOutlineWifi, MdOutlineSecurity } from "react-icons/md";
+import {
+  FaMicrophoneAlt,
+  FaChair,
+  FaParking,
+  FaHandsHelping,
+  FaToilet,
+  FaBriefcase,
+} from "react-icons/fa";
+import { GiGreenPower, GiClothes, GiLockedChest } from "react-icons/gi";
+import { RiLiveLine, RiTeamLine } from "react-icons/ri";
+import { BsBrush } from "react-icons/bs";
+import { SiVirustotal } from "react-icons/si";
+import { PiSpeakerSimpleHighFill } from "react-icons/pi";
 import { IoMdTime } from "react-icons/io";
-import { CiWarning } from "react-icons/ci";
-import { FaRupeeSign } from "react-icons/fa";
-import { FaPhotoFilm } from "react-icons/fa6";
-import { FaBirthdayCake } from "react-icons/fa";
-import { GiDeliveryDrone } from "react-icons/gi";
-import { IoIosCloseCircleOutline } from "react-icons/io";
-import { MdMonochromePhotos } from "react-icons/md";
 import { studioRequestProps } from "@/utils/Types/admin/assetManagement/IStudio";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 import {
   assetRequestApprove,
   assetRequestReject,
@@ -81,23 +87,53 @@ const RentCarRequestView: React.FC<studioRequestProps> = ({ data }) => {
         </div>
         <div className="lg:col-span-2 space-y-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-xs md:text-sm">
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
-              <MdMonochromePhotos className="text-lg" />
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <FaMicrophoneAlt className="text-lg" /> Audio Equipment
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
-              <GiDeliveryDrone className="text-lg" />
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <BsBrush className="text-lg" /> Makeup Room
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
-              <FaBirthdayCake className="text-lg" /> Multipurpose event
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <GiClothes className="text-lg" /> Dressing Room
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
-              <GiDoubleStreetLights className="text-lg" /> Lights & Cameras
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <PiSpeakerSimpleHighFill className="text-lg" /> Speaker Setup
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
-              <IoVideocamOff className="text-lg" /> Video & photography
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <GiGreenPower className="text-lg" /> Power Backup
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
-              <FaPhotoFilm className="text-lg" /> Studio
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <MdOutlineWifi className="text-lg" /> High-Speed Wi-Fi
+            </div>
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <FaChair className="text-lg" /> Props & Furniture
+            </div>
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <FaParking className="text-lg" /> Parking Facility
+            </div>
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <FaHandsHelping className="text-lg" /> On-Site Support
+            </div>
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <GiLockedChest className="text-lg" /> Equipment Storage
+            </div>
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <FaToilet className="text-lg" /> Restroom Access
+            </div>
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <FaBriefcase className="text-lg" /> Lounge Area
+            </div>
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <SiVirustotal className="text-lg" /> Sanitized Environment
+            </div>
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <RiLiveLine className="text-lg" /> Live Streaming Setup
+            </div>
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <RiTeamLine className="text-lg" /> Virtual Team Support
+            </div>
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <MdOutlineSecurity className="text-lg" /> Studio Security
             </div>
           </div>
           <Card>
@@ -112,40 +148,54 @@ const RentCarRequestView: React.FC<studioRequestProps> = ({ data }) => {
           </Card>
           <Card>
             <CardContent className="p-4 grid grid-cols-1 gap-4">
+              <p className="text-sm font-semibold text-gray-500 mb-1">
+                Packages
+              </p>
               {packages && packages.length > 0 ? (
                 packages.map((pkg, i) => (
                   <div
                     key={pkg._id || i}
-                    className="border p-3 rounded-md shadow-sm bg-gray-50"
+                    className="border p-3 rounded-md shadow-sm bg-gray-10"
                   >
                     <p className="text-sm font-semibold text-black mb-1">
                       {pkg.packageName}
                     </p>
 
-                    <div className="text-xs text-gray-700 space-y-1">
+                    <div className="text-xsspace-y-1">
                       <p>
-                        <span className="font-medium">Payment:</span> ₹
-                        {pkg.payment.trim()}
+                        <span className="font-medium text-gray-500">
+                          Payment:
+                        </span>{" "}
+                        ₹{pkg.payment.trim()}
                       </p>
                       <p>
-                        <span className="font-medium">Manpower:</span>{" "}
+                        <span className="font-medium text-gray-500">
+                          Manpower:
+                        </span>{" "}
                         {pkg.manPower}
                       </p>
                       <p>
-                        <span className="font-medium">Delivery Time:</span>{" "}
+                        <span className="font-medium text-gray-500">
+                          Delivery Time:
+                        </span>{" "}
                         {pkg.deliveryTime}
                       </p>
                       <p>
-                        <span className="font-medium">Validity:</span>{" "}
+                        <span className="font-medium text-gray-500">
+                          Validity:
+                        </span>{" "}
                         {pkg.validity}
                       </p>
 
                       <div>
-                        <p className="font-medium">Includes:</p>
+                        <p className="font-medium text-gray-500">Includes:</p>
                         {pkg.packageIncludes?.length > 0 ? (
                           <ul className="list-disc list-inside ml-2">
                             {pkg.packageIncludes.map((inc, idx) => (
-                              <li key={idx}>{inc}</li>
+                              <li key={idx} className="flex items-center gap-1">
+                                <TbPoint className="text-blue-700" />
+                                {inc}
+                              </li>
                             ))}
                           </ul>
                         ) : (
@@ -154,11 +204,14 @@ const RentCarRequestView: React.FC<studioRequestProps> = ({ data }) => {
                       </div>
 
                       <div>
-                        <p className="font-medium">Equipments:</p>
+                        <p className="font-medium text-gray-500">Equipments:</p>
                         {pkg.equipments?.length > 0 ? (
                           <ul className="list-disc list-inside ml-2">
                             {pkg.equipments.map((equip, idx) => (
-                              <li key={idx}>{equip}</li>
+                              <li key={idx} className="flex items-center gap-1">
+                                <TbPoint className="text-blue-700" />
+                                {equip}
+                              </li>
                             ))}
                           </ul>
                         ) : (
@@ -187,7 +240,8 @@ const RentCarRequestView: React.FC<studioRequestProps> = ({ data }) => {
                         key={idx}
                         className="flex items-center gap-2 flex-wrap"
                       >
-                        <LuDot /> <span>{date}</span>
+                        <TbPoint className="text-blue-700" />{" "}
+                        <span>{date}</span>
                       </li>
                     ))}
                   </ul>
@@ -207,7 +261,8 @@ const RentCarRequestView: React.FC<studioRequestProps> = ({ data }) => {
                         key={idx}
                         className="flex items-center gap-2 flex-wrap"
                       >
-                        <LuDot /> <span>{slot}</span>
+                        <TbPoint className="text-blue-700" />{" "}
+                        <span>{slot}</span>
                       </li>
                     ))}
                   </ul>
@@ -266,7 +321,7 @@ const RentCarRequestView: React.FC<studioRequestProps> = ({ data }) => {
                     <ul className="text-xs text-black space-y-1">
                       {serviceFeatures.map((feat, i) => (
                         <li key={i} className="flex items-start gap-2">
-                          <CiWarning className="w-4 h-4 mt-1 flex-shrink-0 text-yellow-600" />
+                          <TbPoint className="w-4 h-4 mt-1 flex-shrink-0 text-blue-700" />
                           <span>{feat}</span>
                         </li>
                       ))}
@@ -278,18 +333,6 @@ const RentCarRequestView: React.FC<studioRequestProps> = ({ data }) => {
               ) : (
                 <p className="text-xs text-black">No features available</p>
               )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-4 flex justify-between items-center">
-              <div className="text-xl text-gray-800 flex items-center gap-1">
-                <FaRupeeSign className="text-sm" />
-                <span className="font-bold"></span>
-                <span className="text-xs font-semibold text-gray-500">
-                  /Day
-                </span>
-              </div>
             </CardContent>
           </Card>
           {status === "pending" ? (
@@ -316,9 +359,17 @@ const RentCarRequestView: React.FC<studioRequestProps> = ({ data }) => {
                 <span>Reject</span>
               </Button>
             </div>
+           ) : status === "approved" ? (
+            <h1 className="text-xs px-3 py-1 rounded border bg-blue-500 text-white font-mono">
+              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
+            </h1>
+          ) : status === "rejected" ? (
+            <h1 className="text-xs px-3 py-1 rounded border  bg-red-500 text-white font-mono">
+              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
+            </h1>
           ) : (
-            <h1 className="text-sm text-red-600 font-medium bg-red-300 px-3 py-1 rounded">
-              {status}
+            <h1 className="text-sm text-gray-700 font-medium bg-gray-200 px-3 py-1 rounded">
+              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
             </h1>
           )}
           <ConfirmDialog

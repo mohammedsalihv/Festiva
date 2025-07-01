@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IUserVenueController } from "../../../../domain/controlInterface/user/venues controller interfaces/interface.userVenueController";
-import { IUserVenueUseCase } from "../../../../domain/usecaseInterface/user/interface.userVenueUseCase";
+import { IUserVenueUseCase } from "../../../../domain/usecaseInterface/user/services/interface.userVenueUseCase";
 import logger from "../../../../utils/common/messages/logger";
 import {
   statusCodes,

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IUserRentCarUseCase } from "../../../../domain/usecaseInterface/user/interface.userRentCarUseCase";
+import { IUserRentCarUseCase } from "../../../../domain/usecaseInterface/user/services/interface.userRentCarUseCase";
 import { IUserRentCarController } from "../../../../domain/controlInterface/user/rentcars controller interfaces/interface.userRentCarController";
 import logger from "../../../../utils/common/messages/logger";
 import {

@@ -2,7 +2,7 @@ import { Button } from "@/components/Button";
 import { Card, CardContent } from "@/components/Card";
 import { FaParking, FaTree, FaRupeeSign } from "react-icons/fa";
 import { MdLocationOn, MdCelebration, MdBedtime } from "react-icons/md";
-import { LuShapes, LuArmchair, LuDot } from "react-icons/lu";
+import { LuShapes, LuArmchair} from "react-icons/lu";
 import { IoMdTime } from "react-icons/io";
 import { CiCalendarDate, CiCircleCheck } from "react-icons/ci";
 import { IoIosCloseCircleOutline } from "react-icons/io";
@@ -15,6 +15,7 @@ import {
   assetRequestReject,
 } from "@/api/admin/assetManagement.services";
 import { toast } from "react-toastify";
+import { TbPoint } from "react-icons/tb";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
 import { useState } from "react";
@@ -85,16 +86,16 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
 
         <div className="lg:col-span-2 space-y-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-xs md:text-sm">
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <MdLocationOn className="text-lg" /> Easy Location
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <MdCelebration className="text-lg" /> Celebration
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <LuShapes className="text-lg" /> {squareFeet} sq.ft
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <FaTree className="text-lg" /> Garden View
             </div>
           </div>
@@ -128,7 +129,8 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
                 </p>
                 {parkingFeatures?.length > 0 ? (
                   parkingFeatures.map((feat, i) => (
-                    <p key={i} className="text-xs text-black">
+                    <p key={i} className="text-xs text-black flex items-center gap-1">
+                      <TbPoint className="text-blue-700"/>
                       {feat}
                     </p>
                   ))
@@ -152,7 +154,7 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
                         key={idx}
                         className="flex items-center gap-2 flex-wrap"
                       >
-                        <LuDot /> <span>{date}</span>
+                        <TbPoint className="text-blue-700"/> <span>{date}</span>
                       </li>
                     ))}
                   </ul>
@@ -172,7 +174,7 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
                         key={idx}
                         className="flex items-center gap-2 flex-wrap"
                       >
-                        <LuDot /> <span>{slot}</span>
+                        <TbPoint className="text-blue-700"/> <span>{slot}</span>
                       </li>
                     ))}
                   </ul>
@@ -253,8 +255,6 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
               </div>
             </CardContent>
           </Card>
-
-          {/* Approve/Reject */}
           {status === "pending" ? (
             <div className="flex flex-col sm:flex-row gap-2 w-full">
               <Button
@@ -279,13 +279,19 @@ const VenueRequestView: React.FC<venueRequestProps> = ({ data }) => {
                 <span>Reject</span>
               </Button>
             </div>
+          ) : status === "approved" ? (
+            <h1 className="text-xs px-3 py-1 rounded border bg-blue-500 text-white font-mono">
+              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
+            </h1>
+          ) : status === "rejected" ? (
+            <h1 className="text-xs px-3 py-1 rounded border  bg-red-500 text-white font-mono">
+              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
+            </h1>
           ) : (
-            <h1 className="text-sm text-green-600 font-semibold bg-green-300 px-3 py-1 rounded">
-              {status}
+            <h1 className="text-sm text-gray-700 font-medium bg-gray-200 px-3 py-1 rounded">
+              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
             </h1>
           )}
-
-          {/* Confirm Dialog */}
           <ConfirmDialog
             isOpen={confirmAction}
             title={

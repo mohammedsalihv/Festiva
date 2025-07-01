@@ -2,10 +2,12 @@ import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import ServicesCard from "@/reusable-components/user/Landing/ServiceCard";
-import { getRentcars, getVenues } from "@/api/user/userService";
+import { getRentcars, getVenues , getCaters , getStudios} from "@/api/user/userService";
 import { useDispatch } from "react-redux";
 import { setVenues } from "@/redux/Slice/user/userVenueSlice";
 import { setRentCars } from "@/redux/Slice/user/userRentCarSlice";
+import { setStudios } from "@/redux/Slice/user/userStudioSlice";
+import { setCaters } from "@/redux/Slice/user/userCatersSlice";
 import { toast } from "react-toastify";
 import Loader from "@/components/Loader";
 
@@ -33,6 +35,18 @@ const ServicesPage = () => {
           const rentcars = await getRentcars();
           setAssets(rentcars);
           dispatch(setRentCars(rentcars));
+          break;
+        }
+        case "caters": {
+          const caters = await getCaters();
+          setAssets(caters);
+          dispatch(setStudios(caters));
+          break;
+        }
+        case "studio": {
+          const studio = await getStudios();
+          setAssets(studio);
+          dispatch(setCaters(studio));
           break;
         }
         default:

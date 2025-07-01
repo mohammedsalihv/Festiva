@@ -2,13 +2,12 @@ import { Button } from "@/components/Button";
 import { Card, CardContent } from "@/components/Card";
 import { GiMoneyStack } from "react-icons/gi";
 import { GiGearStickPattern } from "react-icons/gi";
+import { TbPoint } from "react-icons/tb";
 import { CiCalendarDate, CiCircleCheck } from "react-icons/ci";
 import { FaCar } from "react-icons/fa";
-import { LuDot } from "react-icons/lu";
+import { FcIdea } from "react-icons/fc";
 import { IoMdTime } from "react-icons/io";
-import { CiWarning } from "react-icons/ci";
 import { FaRupeeSign } from "react-icons/fa";
-import { IoIosColorFill } from "react-icons/io";
 import { IoPricetagsOutline } from "react-icons/io5";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { catersRequestProps } from "@/utils/Types/admin/assetManagement/ICaters";
@@ -86,22 +85,22 @@ const CatersRequestView: React.FC<catersRequestProps> = ({ data }) => {
         </div>
         <div className="lg:col-span-2 space-y-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-xs md:text-sm">
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <GiCampCookingPot className="text-lg" /> 24x7 Service
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <FaPeopleGroup className="text-lg" /> Experinced
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <GiGearStickPattern className="text-lg" /> Cordinating
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <IoPricetagsOutline className="text-lg" /> Flexibility
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
-              <IoIosColorFill className="text-lg" /> 
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
+              <FcIdea className="text-lg" /> Creativity
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <GiMoneyStack className="text-lg" /> Manpower: {manpower}
             </div>
           </div>
@@ -140,7 +139,11 @@ const CatersRequestView: React.FC<catersRequestProps> = ({ data }) => {
                 {serviceTypes ? (
                   serviceTypes.length > 0 ? (
                     serviceTypes.map((feat, i) => (
-                      <p key={i} className="text-xs text-black">
+                      <p
+                        key={i}
+                        className="text-xs flex items-center gap-1 text-black"
+                      >
+                        <TbPoint className="text-blue-700" />
                         {feat}
                       </p>
                     ))
@@ -167,7 +170,8 @@ const CatersRequestView: React.FC<catersRequestProps> = ({ data }) => {
                         key={idx}
                         className="flex items-center gap-2 flex-wrap"
                       >
-                        <LuDot /> <span>{date}</span>
+                        <TbPoint className="text-blue-700" />{" "}
+                        <span>{date}</span>
                       </li>
                     ))}
                   </ul>
@@ -187,7 +191,8 @@ const CatersRequestView: React.FC<catersRequestProps> = ({ data }) => {
                         key={idx}
                         className="flex items-center gap-2 flex-wrap"
                       >
-                        <LuDot /> <span>{slot}</span>
+                        <TbPoint className="text-blue-700" />{" "}
+                        <span>{slot}</span>
                       </li>
                     ))}
                   </ul>
@@ -257,7 +262,7 @@ const CatersRequestView: React.FC<catersRequestProps> = ({ data }) => {
                     <ul className="text-xs text-black space-y-1">
                       {features.map((feat, i) => (
                         <li key={i} className="flex items-start gap-2">
-                          <CiWarning className="w-4 h-4 mt-1 flex-shrink-0 text-yellow-600" />
+                          <TbPoint className="w-4 h-4 mt-1 flex-shrink-0 text-blue-700" />
                           <span>{feat}</span>
                         </li>
                       ))}
@@ -306,9 +311,17 @@ const CatersRequestView: React.FC<catersRequestProps> = ({ data }) => {
                 <span>Reject</span>
               </Button>
             </div>
+          ) : status === "approved" ? (
+            <h1 className="text-xs px-3 py-1 rounded border bg-blue-500 text-white font-mono">
+              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
+            </h1>
+          ) : status === "rejected" ? (
+            <h1 className="text-xs px-3 py-1 rounded border  bg-red-500 text-white font-mono">
+              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
+            </h1>
           ) : (
-            <h1 className="text-sm text-red-600 font-medium bg-red-300 px-3 py-1 rounded">
-              {status}
+            <h1 className="text-sm text-gray-700 font-medium bg-gray-200 px-3 py-1 rounded">
+              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
             </h1>
           )}
           <ConfirmDialog

@@ -4,11 +4,11 @@ import { GiMoneyStack } from "react-icons/gi";
 import { GiGearStickPattern } from "react-icons/gi";
 import { BsFillFuelPumpDieselFill } from "react-icons/bs";
 import { PiSeatLight } from "react-icons/pi";
+import { IoIosWarning } from "react-icons/io";
 import { CiCalendarDate, CiCircleCheck } from "react-icons/ci";
+import { TbPoint } from "react-icons/tb";
 import { FaCar } from "react-icons/fa";
-import { LuDot } from "react-icons/lu";
 import { IoMdTime } from "react-icons/io";
-import { CiWarning } from "react-icons/ci";
 import { FaRupeeSign } from "react-icons/fa";
 import { IoIosColorFill } from "react-icons/io";
 import { RiMapPinTimeLine } from "react-icons/ri";
@@ -94,22 +94,22 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
         </div>
         <div className="lg:col-span-2 space-y-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-xs md:text-sm">
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <LuCar className="text-lg" /> {make}
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <RiMapPinTimeLine className="text-lg" /> {model}
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <GiGearStickPattern className="text-lg" /> {transmission}
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <BsFillFuelPumpDieselFill className="text-lg" /> {fuel}
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <IoIosColorFill className="text-lg" /> {color}
             </div>
-            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl">
+            <div className="flex flex-col items-center bg-gray-100 rounded-lg p-3 shadow-md hover:shadow-xl border border-blue-300">
               <GiMoneyStack className="text-lg" /> Deposite: {deposite}
             </div>
           </div>
@@ -154,7 +154,8 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
                 {carFeatures ? (
                   carFeatures.length > 0 ? (
                     carFeatures.map((feat, i) => (
-                      <p key={i} className="text-xs text-black">
+                      <p key={i} className="text-xs text-black flex items-center gap-1">
+                         <TbPoint className="text-blue-700" /> 
                         {feat}
                       </p>
                     ))
@@ -172,7 +173,8 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
                 {additionalFeatures ? (
                   additionalFeatures.length > 0 ? (
                     additionalFeatures.map((feature, i) => (
-                      <p key={i} className="text-xs text-black">
+                      <p key={i} className="text-xs text-black flex items-center gap-1">
+                         <TbPoint className="text-blue-700" /> 
                         {feature}
                       </p>
                     ))
@@ -197,9 +199,9 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
                     {availableDates?.map((date, idx) => (
                       <li
                         key={idx}
-                        className="flex items-center gap-2 flex-wrap"
+                        className="flex items-center gap-1 flex-wrap"
                       >
-                        <LuDot /> <span>{date}</span>
+                        <TbPoint className="text-blue-700" /> <span>{date}</span>
                       </li>
                     ))}
                   </ul>
@@ -219,7 +221,7 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
                         key={idx}
                         className="flex items-center gap-2 flex-wrap"
                       >
-                        <LuDot /> <span>{slot}</span>
+                         <TbPoint className="text-blue-700" /> <span>{slot}</span>
                       </li>
                     ))}
                   </ul>
@@ -275,13 +277,13 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
               {termsOfUse ? (
                 <>
                   <h3 className="text-sm font-semibold text-gray-500 mb-2">
-                    Features
+                    Terms of use
                   </h3>
                   {termsOfUse.length > 0 ? (
                     <ul className="text-xs text-black space-y-1">
                       {termsOfUse.map((feat, i) => (
                         <li key={i} className="flex items-start gap-2">
-                          <CiWarning className="w-4 h-4 mt-1 flex-shrink-0 text-yellow-600" />
+                          <IoIosWarning className="w-4 h-4 mt-1 flex-shrink-0 text-yellow-400" />
                           <span>{feat}</span>
                         </li>
                       ))}
@@ -331,9 +333,17 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
                 <span>Reject</span>
               </Button>
             </div>
+          ) : status === "approved" ? (
+            <h1 className="text-xs px-3 py-1 rounded border bg-blue-500 text-white font-mono">
+              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
+            </h1>
+          ) : status === "rejected" ? (
+            <h1 className="text-xs px-3 py-1 rounded border  bg-red-500 text-white font-mono">
+              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
+            </h1>
           ) : (
-            <h1 className="text-sm text-red-600 font-medium bg-red-300 px-3 py-1 rounded">
-              {status}
+            <h1 className="text-sm text-gray-700 font-medium bg-gray-200 px-3 py-1 rounded">
+              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
             </h1>
           )}
           <ConfirmDialog

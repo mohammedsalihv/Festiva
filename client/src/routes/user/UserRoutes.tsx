@@ -8,6 +8,7 @@ import Venuetypes from "@/pages/user/service/venue/Venuetypes";
 import PrivateRoute from "@/routes/user/Protect/PrivateRoute";
 import ErrorAlert from "@/components/ErrorAlert";
 import ServicesPage from "@/pages/user/ServicesPage";
+import ServiceDetails from "@/pages/user/ServiceDetails";
 
 const UserRoutes: React.FC = () => {
   return (
@@ -50,6 +51,14 @@ const UserRoutes: React.FC = () => {
         element={
           <PrivateRoute>
             <ServicesPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/assets/details"
+        element={
+          <PrivateRoute>
+            <ServiceDetails />
           </PrivateRoute>
         }
       />

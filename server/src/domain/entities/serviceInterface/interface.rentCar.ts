@@ -31,7 +31,7 @@ export interface IRentCarBase {
   _id: string;
   name: string;
   assetType: "rentcar";
-  rent?: number;
+  amount?: string;
   status?: "pending" | "approved" | "rejected";
   location: {
     _id: string;
@@ -45,9 +45,9 @@ export interface IRentCarBase {
 
 export const mapRentCarToBase = (car: any): IRentCarBase => ({
   _id: car._id.toString(),
-  name: car.carName || "Unnamed Car",
-  assetType: "rentcar",
-  rent: Number(car.rent),
+  name: car.carName,
+  assetType: car.assetType,
+  amount: car.rent,
   status: car.status,
   Images: car.Images,
   location: {

@@ -1,10 +1,8 @@
-
-
 export interface IRentCarBase {
   _id: string;
   name: string;
   assetType: "rentcar";
-  rent?: number;
+  amount?: string;
   status?: "pending" | "approved" | "rejected";
   location: {
     _id: string;
@@ -13,5 +11,5 @@ export interface IRentCarBase {
     country?: string;
   };
   Images?: string[];
-  [key: string]: any;
+  [key: string]: unknown;
 }
