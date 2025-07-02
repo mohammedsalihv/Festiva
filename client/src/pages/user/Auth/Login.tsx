@@ -13,7 +13,7 @@ import {
   LoginUser,
   googleLogin,
   validateEmail,
-} from "@/api/user/userAuthService";
+} from "@/api/user/auth/userAuthService";
 import{ setUserDetails } from "@/redux/Slice/user/userSlice";
 import { AxiosError } from "axios";
 import {

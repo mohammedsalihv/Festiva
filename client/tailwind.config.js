@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         charcoal: "#202020",
         main_color: "#7155FF",
+        main_color_hover:"#6366F1",
         main_white: "#FFFFFF",
         main_host: "#ef4444",
         admin_bg: "#D9D9D9",

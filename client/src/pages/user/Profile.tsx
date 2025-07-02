@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Images } from "@/assets";
 import { RootState } from "@/redux/store";
 import { setUserDetails, logoutUser } from "@/redux/Slice/user/userSlice";
-import { changeProfile, profileEdit } from "@/api/user/userService";
+import { changeProfile, profileEdit } from "@/api/user/base/userService";
 import {
   deleteProfile,
   passwordModify,
@@ -14,7 +14,7 @@ import {
   userLogout,
   validateEmail,
   verifyOtp,
-} from "@/api/user/userAuthService";
+} from "@/api/user/auth/userAuthService";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { AxiosError } from "axios";

@@ -8,7 +8,8 @@ import Venuetypes from "@/pages/user/service/venue/Venuetypes";
 import PrivateRoute from "@/routes/user/Protect/PrivateRoute";
 import ErrorAlert from "@/components/ErrorAlert";
 import ServicesPage from "@/pages/user/ServicesPage";
-import ServiceDetails from "@/pages/user/ServiceDetails";
+import DetailPageHelper from "@/pages/user/service/serviceDetails/DetailPageHelper";
+
 
 const UserRoutes: React.FC = () => {
   return (
@@ -55,10 +56,10 @@ const UserRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/assets/details"
+        path="/services/:type/details/:id"
         element={
           <PrivateRoute>
-            <ServiceDetails />
+            <DetailPageHelper />
           </PrivateRoute>
         }
       />

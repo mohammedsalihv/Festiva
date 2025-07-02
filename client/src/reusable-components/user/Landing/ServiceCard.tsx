@@ -9,7 +9,7 @@ import {
   FaSearch,
 } from "react-icons/fa";
 import { FaSortAmountDownAlt } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaFilter } from "react-icons/fa";
 import { IRentCarBase } from "@/utils/Types/user/rentCarTypes";
 import { IVenueBase } from "@/utils/Types/user/venueTypes";
@@ -40,6 +40,7 @@ export default function ServicesCard({
   const normalizedType = type?.toLowerCase();
   const [selectedTab, setSelectedTab] = useState<string>("");
   const filterRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (normalizedType) {
@@ -168,7 +169,8 @@ export default function ServicesCard({
         {assets.map((asset) => (
           <div
             key={asset._id}
-            className="bg-white rounded-md overflow-hidden shadow-2xl hover:shadow-lg transition-shadow"
+            className="bg-white rounded-md overflow-hidden shadow-2xl hover:shadow-lg transition-shadow cursor-pointer"
+            onClick={() => navigate(`/services/${normalizedType}/details/${asset._id}`)}
           >
             <div className="relative h-36 sm:h-48 w-full group">
               <img

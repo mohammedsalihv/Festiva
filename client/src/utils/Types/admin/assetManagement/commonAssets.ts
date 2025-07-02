@@ -56,7 +56,7 @@ export const normalizeAssetData = (
   let image = "";
   const assetType = type;
 
-  const getFirstImage = (imgs: any) =>
+  const getFirstImage = (imgs: unknown) =>
     Array.isArray(imgs) && imgs.length > 0 ? imgs[0] : "";
 
   switch (type) {

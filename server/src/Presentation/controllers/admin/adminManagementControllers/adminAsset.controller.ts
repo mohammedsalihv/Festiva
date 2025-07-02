@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { AdminAssetManagementUseCase } from "../../../../application/use-cases/admin/adminManagement/usecase.adminAssetManagement";
-import { AdminVenueController } from "../adminServiceControllers/adminVenue.controller";
-import { AdminRentCarController } from "../adminServiceControllers/adminRentCar.controller";
+import { AdminVenueController } from "../adminServiceControllers/AdminVenue.controller";
+import { AdminRentCarController } from "../adminServiceControllers/AdminRentCar.controller";
 import { AdminStudioController } from "../adminServiceControllers/adminStudio.controller";
 import { AdminCatersController } from "../adminServiceControllers/adminCaters.controller";
 import logger from "../../../../utils/common/messages/logger";

@@ -8,7 +8,7 @@ import {
   resetPasswordErrorState,
   resetPasswordState
 } from "@/utils/Types/user/profileTypes";
-import { resetPassword } from "@/api/user/userAuthService";
+import { resetPassword } from "@/api/user/auth/userAuthService";
 import { validateResetPasswordForm } from "@/utils/validations/user/Auth/resetPasswordValidation";
 import { AxiosError } from "axios";
 
