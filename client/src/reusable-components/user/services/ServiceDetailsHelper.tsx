@@ -1,7 +1,7 @@
-import VenueDetails from "../../../pages/user/service/serviceDetails/VenueDetails";
-import StudioDetails from "../../../pages/user/service/serviceDetails/StudioDetails";
-import RentCarDetails from "../../../pages/user/service/serviceDetails/RentCarDetails";
-import CatersDetails from "../../../pages/user/service/serviceDetails/CatersDetails";
+import VenueDetails from "../../../pages/user/service/ServiceDetails/VenueDetails";
+import StudioDetails from "../../../pages/user/service/ServiceDetails/StudioDetails";
+import RentCarDetails from "../../../pages/user/service/ServiceDetails/RentCarDetails";
+import CatersDetails from "../../../pages/user/service/ServiceDetails/CatersDetails";
 import { IAsset } from "@/utils/Types/user/commonDetails";
 
 export interface serviceDetailsHelperProps {
