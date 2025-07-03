@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { fetchAssetDetails } from "@/api/user/base/assets";
+import { fetchAssetDetails } from "@/api/user/base/assetServices";
 import ServiceDetails from "./ServiceDetails";
 import Loader from "@/components/Loader";
 import Retry from "@/components/Retry";

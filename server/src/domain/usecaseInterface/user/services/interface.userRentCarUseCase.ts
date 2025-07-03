@@ -1,5 +1,9 @@
-import { IRentCarBase } from "../../../entities/serviceInterface/interface.rentCar";
+import {
+  IRentCarBase,
+  IRentCar,
+} from "../../../entities/serviceInterface/interface.rentCar";
 
 export interface IUserRentCarUseCase {
   allRentCars(): Promise<IRentCarBase[]>;
+  rentCarDetails(rentcarId: string): Promise<IRentCar>;
 }

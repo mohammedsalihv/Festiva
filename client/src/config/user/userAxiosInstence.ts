@@ -13,7 +13,7 @@ axiosInstance.interceptors.request.use(
   (config) => {
     console.log("🔍 Request URL:", `${config.baseURL ?? ""}${config.url}`);
     const state = store.getState();
-    const token = state.user.userInfo?.accessToken;
+    const token = state.user.userInfo;
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },

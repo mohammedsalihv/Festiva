@@ -1,4 +1,4 @@
-import axiosInstance from "@/config/user/userAxiosInstence";
+import axiosInstance from "@/config/user/userServiceAxiosInstence";
 
 export const fetchAssetDetails = async (
   type: "venue" | "studio" | "rentcar" | "caters",
