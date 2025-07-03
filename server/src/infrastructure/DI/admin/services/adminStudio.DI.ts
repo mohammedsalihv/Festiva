@@ -4,6 +4,6 @@ import { AdminStudioUseCase } from "../../../../application/use-cases/admin/admi
 
 const adminStudioRepository = new AdminStudioRepository();
 const adminStudioUseCase = new AdminStudioUseCase(adminStudioRepository);
-const aminStudioController = new AdminStudioController(adminStudioUseCase);
+const adminStudioController = new AdminStudioController(adminStudioUseCase);
 
-export { aminStudioController };
+export { adminStudioController };

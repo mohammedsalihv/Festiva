@@ -12,7 +12,7 @@ interface rentCarDetailsProps {
 
 const RentCarDetails: React.FC<rentCarDetailsProps> = ({data}) => {
   const [showGallery, setShowGallery] = useState(false);
- 
+ console.log(data)
    const allImages = [
      Images.conventionCenter_service,
      Images.cater_service,

@@ -3,7 +3,7 @@ import { AdminAssetManagementRepository } from "../../../repositories/admin/mana
 import { AdminAssetsController } from "../../../../Presentation/controllers/admin/adminManagementControllers/adminAsset.controller";
 import { adminVenueController } from "../services/adminVenue.DI";
 import { adminRentCarController } from "../services/adminRentCar.DI";
-import { aminStudioController } from "../services/adminStudio.DI";
+import { adminStudioController } from "../services/adminStudio.DI";
 import { adminCatersController } from "../services/adminCaters.DI";
 
 const adminAssetManagementRepository = new AdminAssetManagementRepository();
@@ -14,7 +14,7 @@ const adminAssetController = new AdminAssetsController(
   adminAssetManagementUseCase,
   adminVenueController,
   adminRentCarController,
-  aminStudioController,
+  adminStudioController,
   adminCatersController
 );
 

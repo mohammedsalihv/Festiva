@@ -1,6 +1,9 @@
-import logger from "../../../../utils/common/messages/logger";
+import { Request, Response } from "express";
 import { IUserServicesBaseController } from "../../../../domain/controlInterface/user/services interface/interface.userServicesBaseController";
-import { statusCodes , statusMessages } from "../../../../utils/common/messages/constantResponses";
+import {
+  statusCodes,
+  statusMessages,
+} from "../../../../utils/common/messages/constantResponses";
 import { UserCatersController } from "./userCaters.controller";
 import { UserStudioController } from "./userStudio.controller";
 import { UserRentCarController } from "./userRentCar.controller";
@@ -8,16 +11,15 @@ import { UserVenueController } from "./userVenue.controller";
 
 export class UserServiceBaseController implements IUserServicesBaseController {
   constructor(
-        private userVenueController: UserVenueController,
-        private userRentCarController: UserRentCarController,
-        private userStudioController: UserStudioController,
-        private userCatersController: UserCatersController
+    private userVenueController: UserVenueController,
+    private userRentCarController: UserRentCarController,
+    private userCatersController: UserCatersController,
+    private userStudioController: UserStudioController
   ) {}
 
   async getServiceDetails(req: Request, res: Response): Promise<void> {
     try {
-
-     const { typeOfAsset} = req.params.type;
+      const typeOfAsset = req.query.assetType;
       if (!typeOfAsset) {
         res.status(statusCodes.forbidden).json({
           success: false,

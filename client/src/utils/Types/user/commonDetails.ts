@@ -19,13 +19,11 @@ export interface assetDetailsHostInfo {
 }
 
 export interface assetDetailsLocationInfo {
-  location: {
-    _id: string;
-    houseNo?: string;
-    street?: string;
-    district?: string;
-    state?: string;
-    country?: string;
-    zip?: string;
-  };
+  _id: string;
+  houseNo?: string;
+  street?: string;
+  district?: string;
+  state?: string;
+  country?: string;
+  zip?: string;
 }

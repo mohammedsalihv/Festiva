@@ -1,4 +1,4 @@
-import { UserCatersController } from "../../../../Presentation/controllers/user/services/userCaters.controller";
+import { UserCatersController } from "../../../../Presentation/controllers/user/userServicesControllers/userCaters.controller";
 import { UserCatersRepository } from "../../../repositories/user/services/repository.userCaters";
 import { UserCatersUseCase } from "../../../../application/use-cases/user/services/usecase.userCaters";
 

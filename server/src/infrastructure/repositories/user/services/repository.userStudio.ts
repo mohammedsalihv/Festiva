@@ -1,5 +1,8 @@
 import { IUserStudioRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userStudioRepository";
-import { IStudioBase } from "../../../../domain/entities/serviceInterface/interface.studio";
+import {
+  IStudio,
+  IStudioBase,
+} from "../../../../domain/entities/serviceInterface/interface.studio";
 import { StudioModel } from "../../../../domain/models/studioModel";
 import { mapStudioToBase } from "../../../../domain/entities/serviceInterface/interface.studio";
 
@@ -10,5 +13,12 @@ export class UserStudioRepository implements IUserStudioRepository {
       .lean();
 
     return studios.map(mapStudioToBase);
+  }
+  async fetchStudioDetailsById(studioId: string): Promise<IStudio | null> {
+    return StudioModel.findById(studioId)
+      .populate({ path: "host", select: "-password" })
+      .populate("location")
+      .lean<IStudio>()
+      .exec();
   }
 }

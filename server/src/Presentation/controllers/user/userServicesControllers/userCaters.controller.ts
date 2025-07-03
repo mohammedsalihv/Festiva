@@ -40,11 +40,19 @@ export class UserCatersController implements IUserCatersController {
   }
   async getCatersDetails(req: Request, res: Response): Promise<void> {
     try {
-      const catersId = req.params.assetId;
+      const Id = req.query.assetId;
+
+      const catersId: string | undefined =
+        typeof Id === "string"
+          ? Id
+          : Array.isArray(Id) && typeof Id[0] === "string"
+          ? Id[0]
+          : undefined;
+
       if (!catersId) {
-        res.status(statusCodes.unAuthorized).json({
+        res.status(400).json({
           success: false,
-          message: "Caters ID required",
+          message: "Invalid or missing catersId",
         });
         return;
       }

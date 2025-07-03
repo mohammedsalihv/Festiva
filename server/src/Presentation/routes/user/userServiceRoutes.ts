@@ -1,13 +1,11 @@
 import express from "express";
-import logger from "../../../utils/common/messages/logger";
-import { authenticateToken } from "../../../utils/common/middlewares/auth";
+import { userServiceBaseController } from "../../../infrastructure/DI/user/services/userServiceBase.DI";
 
+const userServiceRoute = express.Router();
 
-const userServiceRoute = express.Router()
-
-
-userServiceRoute.get(`/asset/details` , )
-
-
+userServiceRoute.get(
+  `/asset/details`,
+  userServiceBaseController.getServiceDetails.bind(userServiceBaseController)
+);
 
 export default userServiceRoute;

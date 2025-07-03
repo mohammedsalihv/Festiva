@@ -1,6 +1,9 @@
 import { IUserRentCarRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userRentCarRepository";
 import { RentCarModel } from "../../../../domain/models/rentCarModel";
-import { mapRentCarToBase } from "../../../../domain/entities/serviceInterface/interface.rentCar";
+import {
+  IRentCar,
+  mapRentCarToBase,
+} from "../../../../domain/entities/serviceInterface/interface.rentCar";
 import { IRentCarBase } from "../../../../domain/entities/serviceInterface/interface.rentCar";
 
 export class UserRentCarRepository implements IUserRentCarRepository {
@@ -10,5 +13,12 @@ export class UserRentCarRepository implements IUserRentCarRepository {
       .lean();
 
     return cars.map(mapRentCarToBase);
+  }
+  async fetchRentCarDetailsById(rentcarId: string): Promise<IRentCar | null> {
+    return RentCarModel.findById(rentcarId)
+      .populate({ path: "host", select: "-password" })
+      .populate("location")
+      .lean<IRentCar>()
+      .exec();
   }
 }

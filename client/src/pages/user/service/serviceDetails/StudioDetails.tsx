@@ -13,6 +13,7 @@ interface studioDetailsProps {
 const StudioDetails: React.FC<studioDetailsProps> = ({data}) => {
  const [showGallery, setShowGallery] = useState(false);
 
+ console.log(data)
   const allImages = [
     Images.conventionCenter_service,
     Images.cater_service,

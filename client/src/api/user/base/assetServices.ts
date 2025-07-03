@@ -2,10 +2,10 @@ import axiosInstance from "@/config/user/userServiceAxiosInstence";
 
 export const fetchAssetDetails = async (
   type: "venue" | "studio" | "rentcar" | "caters",
-  id: string
+  Id: string
 ) => {
   const response = await axiosInstance.get(
-    `/asset/details/?assetId=${id}&type=${type}`
+    `/asset/details/?assetId=${Id}&assetType=${type}`
   );
   return response.data.data;
 };

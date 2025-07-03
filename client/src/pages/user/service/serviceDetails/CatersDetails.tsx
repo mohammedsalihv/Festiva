@@ -12,6 +12,7 @@ interface catersDetailsProps {
 
 const CatersDetails: React.FC<catersDetailsProps> = ({data}) => {
   const [showGallery, setShowGallery] = useState(false);
+  console.log(data)
  
    const allImages = [
      Images.conventionCenter_service,

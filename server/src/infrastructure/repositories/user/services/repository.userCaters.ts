@@ -1,5 +1,8 @@
 import { IUserCatersRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userCatersRepository";
-import { ICatersBase } from "../../../../domain/entities/serviceInterface/interface.caters";
+import {
+  ICaters,
+  ICatersBase,
+} from "../../../../domain/entities/serviceInterface/interface.caters";
 import { CatersModel } from "../../../../domain/models/catersModel";
 import { mapCatersToBase } from "../../../../domain/entities/serviceInterface/interface.caters";
 
@@ -10,5 +13,12 @@ export class UserCatersRepository implements IUserCatersRepository {
       .lean();
 
     return caters.map(mapCatersToBase);
+  }
+  async fetchCatersById(catersId:string): Promise<ICaters | null> {
+    return CatersModel.findById(catersId)
+      .populate({ path: "host", select: "-password" })
+      .populate("location")
+      .lean<ICaters>()
+      .exec();
   }
 }

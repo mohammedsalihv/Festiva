@@ -170,7 +170,7 @@ export default function ServicesCard({
           <div
             key={asset._id}
             className="bg-white rounded-md overflow-hidden shadow-2xl hover:shadow-lg transition-shadow cursor-pointer"
-            onClick={() => navigate(`/services/${normalizedType}/details/${asset._id}`)}
+            onClick={() => navigate(`/user/services/${normalizedType}/details/${asset._id}`)}
           >
             <div className="relative h-36 sm:h-48 w-full group">
               <img

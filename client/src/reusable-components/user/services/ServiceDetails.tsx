@@ -1,14 +1,15 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchAssetDetails } from "@/api/user/base/assetServices";
-import ServiceDetails from "./ServiceDetails";
+import { setServiceDetails } from "@/redux/Slice/user/userServiceBaseSlice";
+import ServiceDetailsHelper from "./ServiceDetailsHelper";
 import Loader from "@/components/Loader";
 import Retry from "@/components/Retry";
 import { IAsset } from "@/utils/Types/user/commonDetails";
 import { AssetType } from "@/utils/Types/user/commonDetails";
 import { toast } from "react-toastify";
 
-export default function DetailPageHelper() {
+export default function ServiceDetails() {
   const { type, id } = useParams();
   const [data, setData] = useState<IAsset | null>(null);
   const [loading, setLoading] = useState(true);
@@ -20,6 +21,7 @@ export default function DetailPageHelper() {
       fetchAssetDetails(type as AssetType, id)
         .then((res) => {
           setData(res);
+          setServiceDetails(res);
           setLoading(false);
         })
         .catch((err) => {
@@ -39,5 +41,5 @@ export default function DetailPageHelper() {
       />
     );
 
-  return <ServiceDetails data={data} />;
+  return <ServiceDetailsHelper data={data} />;
 }

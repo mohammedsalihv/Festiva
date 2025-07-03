@@ -42,7 +42,7 @@ const services = [
 
 const MainServices: React.FC = () => {
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 font-JosephicSans">
+    <div className="max-w-6xl mx-auto px-4 py-8 font-JosephicSans mt-12">
       <div className="mb-10">
         <img
           src={Images.main_service}

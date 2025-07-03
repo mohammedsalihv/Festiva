@@ -1,5 +1,8 @@
 import { IUserVenueRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userVenueRepository";
-import { IVenueBase } from "../../../../domain/entities/serviceInterface/interface.venue";
+import {
+  IVenue,
+  IVenueBase,
+} from "../../../../domain/entities/serviceInterface/interface.venue";
 import { VenueModel } from "../../../../domain/models/venueModel";
 import { mapVenueToBase } from "../../../../domain/entities/serviceInterface/interface.venue";
 
@@ -10,5 +13,13 @@ export class UserVenueRepository implements IUserVenueRepository {
       .lean();
 
     return venues.map(mapVenueToBase);
+  }
+
+  async fetchVenueDetailsById(venueId: string): Promise<IVenue | null> {
+    return VenueModel.findById(venueId)
+      .populate({ path: "host", select: "-password" })
+      .populate("location")
+      .lean<IVenue>()
+      .exec();
   }
 }

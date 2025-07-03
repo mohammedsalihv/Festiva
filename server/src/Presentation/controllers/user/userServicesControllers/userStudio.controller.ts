@@ -41,11 +41,19 @@ export class UserStudioController implements IUserStudioController {
 
   async getStudioDetails(req: Request, res: Response): Promise<void> {
     try {
-      const studioId = req.params.assetId;
+      const Id = req.query.assetId;
+
+      const studioId: string | undefined =
+        typeof Id === "string"
+          ? Id
+          : Array.isArray(Id) && typeof Id[0] === "string"
+          ? Id[0]
+          : undefined;
+
       if (!studioId) {
-        res.status(statusCodes.unAuthorized).json({
+        res.status(400).json({
           success: false,
-          message: "Studio ID required",
+          message: "Invalid or missing studio Id",
         });
         return;
       }
