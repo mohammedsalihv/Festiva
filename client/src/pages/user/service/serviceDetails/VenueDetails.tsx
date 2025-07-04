@@ -139,14 +139,6 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
             </ul>
           </div>
 
-          <div className="py-3">
-            <h3 className="font-semibold text-gray-800">Amenities</h3>
-            <div className="flex gap-4 flex-wrap text-sm text-gray-600">
-              <span>Wi-Fi</span>
-              <span>Restrooms</span>
-            </div>
-          </div>
-
           <div className="border-b py-3">
             <h3 className="text-xl font-semibold mb-2">
               Parking & Accessibility
@@ -169,92 +161,15 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
               <p>Full kitchen access</p>
             </div>
           </div>
-          <div className="py-3">
+          <div className="py-3 border-b">
             <h2 className="text-xl font-semibold mb-2">Description</h2>
             <p className="text-base text-gray-700">{data.description}</p>
           </div>
-          <div className="py-3">
+          <div className="py-3 border-b">
             <h2 className="text-xl font-semibold mb-2">Terms & Conditions</h2>
             <p className="text-base text-gray-700">{data.terms}</p>
           </div>
-          <div className="border-t pt-6 mt-6 space-y-4">
-            <h3 className="text-lg font-semibold text-gray-800">
-              5.0 · 2 reviews
-            </h3>
-            <div className="space-y-2 text-sm text-gray-700">
-              <div>
-                <p className="font-semibold">Kent S.</p>
-                <p>
-                  Nice little lounge for shooting. Had a great experience. The
-                  owners were friendly and easy to work with. Will definitely go
-                  back to shoot more.
-                </p>
-              </div>
-              <div>
-                <p className="font-semibold">Josh A.</p>
-                <p>
-                  Great space, responsive host as well as friendly and
-                  accommodating. Very smooth and relaxing experience.
-                </p>
-              </div>
-            </div>
-            <button className="text-main_color text-sm font-semibold hover:underline">
-              Show all 2 reviews
-            </button>
-          </div>
-          <div className="border-t  pt-6 mt-6 space-y-4">
-            <h3 className="text-lg font-semibold text-gray-800">
-              Other listings at this address
-            </h3>
-            <div className="space-y-4">
-              {[1, 2].map((item, idx) => (
-                <div key={idx} className="flex gap-4">
-                  <img
-                    src={Images.conventionCenter_service}
-                    alt="Other listing"
-                    className="w-28 h-20 rounded-md object-cover"
-                  />
-                  <div className="flex flex-col justify-between">
-                    <p className="text-sm font-semibold text-gray-800">
-                      Multi Set Production Studio, 90s Bedrooms + More
-                    </p>
-                    <p className="text-xs text-gray-600">
-                      Los Angeles, CA · 1 hr minimum · $75/hr
-                    </p>
-                    <span className="text-main_color text-xs font-semibold">
-                      5.0 (3)
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="border-t border-b pt-6 mt-6 grid sm:grid-cols-2 gap-6 p-4">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800">Questions</h3>
-              <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mt-1">
-                <li>
-                  What are the unique attractions I can visit at this location?
-                </li>
-                <li>What types of activities are allowed at this location?</li>
-                <li>How many guests can the location host?</li>
-                <li>How spacious is the location?</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold text-gray-800">
-                Location Rules
-              </h3>
-              <ul className="list-disc list-inside text-sm text-gray-700 space-y-1 mt-1">
-                <li>Adult filming</li>
-                <li>Alcohol</li>
-                <li>Electricity usage</li>
-                <li>Loud noises</li>
-                <li>Outside catering/food</li>
-                <li>Smoking</li>
-              </ul>
-            </div>
-          </div>
+
           <div className=" pt-6 mt-6 border border-gray-300 p-4 rounded-md bg-gray-100">
             <h3 className="text-base font-bold text-gray-800 mb-2">
               Hosted by <span className="font-bold">{data.host.name}</span>
@@ -303,8 +218,7 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                 <option>Attendees: 1 - 5 people</option>
               </select>
             </div>
-
-            <button className="w-full bg-green-600 text-white font-semibold py-2 rounded hover:bg-green-700 transition">
+            <button className="w-full bg-main_color text-white font-semibold py-2 rounded hover:bg-main_color_hover transition">
               Reserve
             </button>
 

@@ -42,7 +42,7 @@ export interface IStudioBase {
 
 export const mapStudioToBase = (studio: any): IStudioBase => ({
   _id: studio._id.toString(),
-  name: studio.name,
+  name: studio.studioName,
   assetType: studio.assetType,
   status: studio.status,
   Images: studio.Images,

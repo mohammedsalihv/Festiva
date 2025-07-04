@@ -12,6 +12,7 @@ import { MdAirlineSeatReclineExtra } from "react-icons/md";
 import { FaRegHandPointRight } from "react-icons/fa6";
 import { Button } from "@/components/Button";
 
+
 interface rentCarDetailsProps {
   data: IRentCar & { typeOfAsset: "rentcar" };
 }
@@ -204,11 +205,11 @@ const RentCarDetails: React.FC<rentCarDetailsProps> = ({ data }) => {
             <p className="text-base text-gray-700">{data.termsOfUse}</p>
           </div>
           
-          <div className="py-3">
+          <div className="py-3 border-b">
             <h2 className="text-xl font-semibold mb-2">Guidlines</h2>
             <p className="text-base text-gray-700">{data.guidelines}</p>
           </div>
-          <div className="border-t pt-6 mt-6 space-y-4">
+          {/* <div className="border-t pt-6 mt-6 space-y-4">
             <h3 className="text-lg font-semibold text-gray-800">
               5.0 · 2 reviews
             </h3>
@@ -285,7 +286,7 @@ const RentCarDetails: React.FC<rentCarDetailsProps> = ({ data }) => {
                 <li>Smoking</li>
               </ul>
             </div>
-          </div>
+          </div> */}
           <div className=" pt-6 mt-6 border border-gray-300 p-4 rounded-md bg-gray-100">
             <h3 className="text-base font-bold text-gray-800 mb-2">
               Hosted by <span className="font-bold">{data.host.name}</span>
@@ -335,7 +336,7 @@ const RentCarDetails: React.FC<rentCarDetailsProps> = ({ data }) => {
               </select>
             </div>
 
-            <button className="w-full bg-green-600 text-white font-semibold py-2 rounded hover:bg-green-700 transition">
+            <button className="w-full bg-main_color text-white font-semibold py-2 rounded hover:bg-main_color_hover transition">
               Reserve
             </button>
 
