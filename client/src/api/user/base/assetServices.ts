@@ -9,3 +9,10 @@ export const fetchAssetDetails = async (
   );
   return response.data.data;
 };
+
+export const filterAsset = async (type: string, filters: FilterParams) => {
+  const response = await axiosInstance.get(`/assets/${type}`, {
+    params: filters,
+  });
+  return response.data.data;
+};

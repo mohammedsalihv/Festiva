@@ -78,4 +78,23 @@ export class UserVenueController implements IUserVenueController {
       }
     }
   }
+  async filterVenues(req: Request, res: Response): Promise<void> {
+    try {
+      const filters = req.query;
+      const venues = await this.userVenueUseCase.filterVenues(filters);
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Filtered venues fetched successfully",
+        data: venues,
+      });
+    } catch (error) {
+      logger.error("Error filtering venues:", error);
+      res.status(statusCodes.serverError).json({
+        success: false,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
+      });
+    }
+  }
 }

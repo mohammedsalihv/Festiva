@@ -6,4 +6,5 @@ import {
 export interface IUserRentCarRepository {
   findAllRentCars(): Promise<IRentCarBase[]>;
   fetchRentCarDetailsById(rentcarId: string): Promise<IRentCar | null>;
+  findByFilters(filters: Record<string, any>): Promise<IRentCarBase[]>;
 }

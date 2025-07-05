@@ -1,5 +1,5 @@
-import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
-import { IUser } from "../../modelInterface/interface.user";
+import { responseUserDTO } from "../../../../../types/DTO/user/dto.user";
+import { IUser } from "../../../modelInterface/interface.user";
 
 export interface IUserSignupRepository {
   findByEmail(email: string): Promise<responseUserDTO | null>;

@@ -11,7 +11,8 @@ import { TbManualGearboxFilled } from "react-icons/tb";
 import { MdAirlineSeatReclineExtra } from "react-icons/md";
 import { FaRegHandPointRight } from "react-icons/fa6";
 import { Button } from "@/components/Button";
-
+import CustomCalendar from "@/components/CustomCalendar";
+import TimeSlotPicker from "@/components/TimeSlotPicker";
 
 interface rentCarDetailsProps {
   data: IRentCar & { typeOfAsset: "rentcar" };
@@ -20,6 +21,11 @@ interface rentCarDetailsProps {
 const RentCarDetails: React.FC<rentCarDetailsProps> = ({ data }) => {
   const [showGallery, setShowGallery] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showTimeSlots, setShowTimeSlots] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  console.log(selectedDate, selectedSlot);
 
   return (
     <div className="relative mt-16 sm:mt-20 md:mt-24 font-JosephicSans">
@@ -204,7 +210,7 @@ const RentCarDetails: React.FC<rentCarDetailsProps> = ({ data }) => {
             <h2 className="text-xl font-semibold mb-2">Terms & Conditions</h2>
             <p className="text-base text-gray-700">{data.termsOfUse}</p>
           </div>
-          
+
           <div className="py-3 border-b">
             <h2 className="text-xl font-semibold mb-2">Guidlines</h2>
             <p className="text-base text-gray-700">{data.guidelines}</p>
@@ -317,14 +323,39 @@ const RentCarDetails: React.FC<rentCarDetailsProps> = ({ data }) => {
 
             <div className="space-y-2 text-sm text-gray-700">
               <div className="flex justify-center gap-6 pb-3 cursor-pointer">
-                <div className="border-b-2 border-gray-300 px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition">
-                  Pick a Date
+                <div
+                  onClick={() => setShowCalendar(!showCalendar)}
+                  className={`border-b-2 ${
+                    showCalendar ? "border-main_color" : "border-gray-300"
+                  } px-4 py-4 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                >
+                  Pick a date
                 </div>
-                <div className="border-b-2 border-gray-300 px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition">
-                  Pick a Time
+                <div
+                  onClick={() => setShowTimeSlots(!showTimeSlots)}
+                  className={`border-b-2 ${
+                    showCalendar ? "border-main_color" : "border-gray-300"
+                  } px-4 py-4 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                >
+                  Pick a time
                 </div>
               </div>
-
+              {showCalendar && (
+                <div className="flex justify-center">
+                  <CustomCalendar
+                    availableDates={data.availableDates || []}
+                    onSelect={(date) => setSelectedDate(date)}
+                  />
+                </div>
+              )}
+              {showTimeSlots && (
+                <div className="flex justify-center">
+                  <TimeSlotPicker
+                    timeSlots={data.timeSlots || []}
+                    onSelect={(slot) => setSelectedSlot(slot)}
+                  />
+                </div>
+              )}
               <div className="text-right text-sm text-gray-500">
                 Total hours: 0
               </div>
@@ -399,14 +430,40 @@ const RentCarDetails: React.FC<rentCarDetailsProps> = ({ data }) => {
 
             <div className="space-y-2 text-sm text-gray-700">
               <div className="w-full border-b pb-3">
-                <div className="flex justify-center gap-6 cursor-pointer">
-                  <div className="border-b-2 border-gray-300 px-4 py-2 w-full text-center text-main_color hover:border-main_color transition">
-                    Pick a Date
+                <div className="flex justify-center gap-6 cursor-pointer mb-3">
+                  <div
+                    onClick={() => setShowCalendar(!showCalendar)}
+                    className={`border-b-2 ${
+                      showCalendar ? "border-main_color" : "border-gray-300"
+                    } px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                  >
+                    Pick a date
                   </div>
-                  <div className="border-b-2 border-gray-300 px-4 py-2 w-full text-center text-main_color hover:border-main_color transition">
-                    Pick a Time
+                  <div
+                    onClick={() => setShowTimeSlots(!showTimeSlots)}
+                    className={`border-b-2 ${
+                      showCalendar ? "border-main_color" : "border-gray-300"
+                    } px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                  >
+                    Pick a time
                   </div>
                 </div>
+                {showCalendar && (
+                  <div className="flex justify-center">
+                    <CustomCalendar
+                      availableDates={data.availableDates || []}
+                      onSelect={(date) => setSelectedDate(date)}
+                    />
+                  </div>
+                )}
+                {showTimeSlots && (
+                  <div className="flex justify-center">
+                    <TimeSlotPicker
+                      timeSlots={data.timeSlots || []}
+                      onSelect={(slot) => setSelectedSlot(slot)}
+                    />
+                  </div>
+                )}
               </div>
 
               <button className="text-sm text-main_color font-medium hover:underline">
@@ -424,7 +481,7 @@ const RentCarDetails: React.FC<rentCarDetailsProps> = ({ data }) => {
               </select>
             </div>
 
-            <button className="w-full bg-green-600 text-white font-semibold py-2 rounded hover:bg-green-700 transition">
+            <button className="w-full bg-main_color text-white font-semibold py-2 rounded hover:bg-main_color_hover transition">
               Reserve
             </button>
 

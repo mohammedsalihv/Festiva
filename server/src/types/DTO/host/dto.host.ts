@@ -49,3 +49,24 @@ export interface HostDetailsDTO {
   accessToken: string;
   refreshToken: string;
 }
+
+
+export function mapToResponseHostDTO(host: any): responseHostDTO {
+  return {
+    id: host._id?.toString(),
+    name: host.name,
+    email: host.email,
+    phone: host.phone,
+    location: host.location,
+    role: host.role ?? "host",
+    profilePic: host.profilePic ?? "",
+    isBlocked: host.isBlocked,
+    isVerified: host.isVerified ?? host.isVerfied,
+    isSubscriber: host.isSubscriber,
+    isActive: host.isActive,
+    listedAssets: host.listedAssets,
+    totalRequests: host.totalRequests,
+    acceptedRequests: host.acceptedRequests,
+    rejectedRequests: host.rejectedRequests,
+  };
+}

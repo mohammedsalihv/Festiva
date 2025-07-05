@@ -22,4 +22,21 @@ export class UserVenueRepository implements IUserVenueRepository {
       .lean<IVenue>()
       .exec();
   }
+  async findVenuesWithFilters(filters: any): Promise<IVenueBase[]> {
+    const query: Record<string, any> = { status: "approved" };
+
+    if (filters.state) query["location.state"] = filters.state;
+    if (filters.city) query["location.city"] = filters.city;
+    if (filters.country) query["location.country"] = filters.country;
+    if (filters.features) query["features"] = { $in: filters.features };
+    if (filters.minRent) query["rent"] = { $gte: filters.minRent };
+    if (filters.maxRent)
+      query["rent"] = { ...query["rent"], $lte: filters.maxRent };
+
+    const venues = await VenueModel.find(query)
+      .populate("location", "city state country")
+      .lean();
+
+    return venues.map(mapVenueToBase);
+  }
 }

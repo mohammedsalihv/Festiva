@@ -76,4 +76,24 @@ export class UserCatersController implements IUserCatersController {
       }
     }
   }
+  async filterCaters(req: Request, res: Response): Promise<void> {
+    try {
+      const filters = req.query;
+
+      const caters = await this.userCatersUseCase.filterCaters(filters);
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Filtered caters fetched successfully",
+        data: caters,
+      });
+    } catch (error) {
+      logger.error("Error filtering caters:", error);
+      res.status(statusCodes.serverError).json({
+        success: false,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
+      });
+    }
+  }
 }

@@ -21,4 +21,18 @@ export class UserRentCarRepository implements IUserRentCarRepository {
       .lean<IRentCar>()
       .exec();
   }
+  async findByFilters(filters: Record<string, any>): Promise<IRentCarBase[]> {
+    const query: any = {};
+
+    if (filters.color) query.color = filters.color;
+    if (filters.fuel) query.fuel = filters.fuel;
+    if (filters.transmission) query.transmission = filters.transmission;
+    if (filters.seats) query.seats = filters.seats;
+
+    const rentCars = await RentCarModel.find(query)
+      .populate("location", "city state country")
+      .lean();
+
+    return rentCars.map(mapRentCarToBase);
+  }
 }

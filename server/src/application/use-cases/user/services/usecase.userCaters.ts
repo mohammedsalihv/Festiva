@@ -5,9 +5,7 @@ import {
 } from "../../../../domain/entities/serviceInterface/interface.caters";
 import { IUserCatersUseCase } from "../../../../domain/usecaseInterface/user/services/interface.userCatersUseCase";
 import CustomError from "../../../../utils/common/errors/CustomError";
-import {
-  statusCodes
-} from "../../../../utils/common/messages/constantResponses";
+import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 export class UserCatersUseCase implements IUserCatersUseCase {
   constructor(private userCatersRepository: IUserCatersRepository) {}
   async allCaters(): Promise<ICatersBase[]> {
@@ -21,5 +19,8 @@ export class UserCatersUseCase implements IUserCatersUseCase {
     }
 
     return caters;
+  }
+  async filterCaters(filters: Record<string, any>): Promise<ICatersBase[]> {
+    return this.userCatersRepository.filterCaters(filters);
   }
 }

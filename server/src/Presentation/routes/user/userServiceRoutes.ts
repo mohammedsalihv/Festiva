@@ -8,4 +8,9 @@ userServiceRoute.get(
   userServiceBaseController.getServiceDetails.bind(userServiceBaseController)
 );
 
+userServiceRoute.get(
+  `/assets/:type`,
+  userServiceBaseController.filterAssets.bind(userServiceBaseController)
+);
+
 export default userServiceRoute;

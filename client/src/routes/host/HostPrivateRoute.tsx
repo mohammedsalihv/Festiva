@@ -13,11 +13,11 @@ const HostPrivateRoute: React.FC<HostPrivateRouteProps> = ({ children }) => {
   const location = useLocation();
 
   if (!hostInfo?.accessToken) {
-    return <Navigate to="/host/login" state={{ from: location }} replace />;
+    return <Navigate to="/host/landing" state={{ from: location }} replace />;
   }
 
   if (hostInfo.role !== "host") {
-    return <Navigate to="/host/login" replace />;
+    return <Navigate to="/host/landing" replace />;
   }
 
   return <HostLayout>{children}</HostLayout>;

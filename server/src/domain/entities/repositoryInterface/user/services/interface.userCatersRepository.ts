@@ -6,4 +6,5 @@ import {
 export interface IUserCatersRepository {
   findAllCaters(): Promise<ICatersBase[]>;
   fetchCatersById(catersId: string): Promise<ICaters | null>;
+  filterCaters(filters: Record<string, any>): Promise<ICatersBase[]>;
 }

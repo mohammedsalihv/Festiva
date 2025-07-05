@@ -23,4 +23,7 @@ export class UserRentCarUseCase implements IUserRentCarUseCase {
 
     return car;
   }
+  async filterRentCars(filters: Record<string, any>): Promise<IRentCarBase[]> {
+    return this.userRentCarRepository.findByFilters(filters);
+  }
 }

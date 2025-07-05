@@ -5,9 +5,7 @@ import {
 } from "../../../../domain/entities/serviceInterface/interface.studio";
 import { IUserStudioUseCase } from "../../../../domain/usecaseInterface/user/services/interface.userStudioUseCase";
 import CustomError from "../../../../utils/common/errors/CustomError";
-import {
-  statusCodes
-} from "../../../../utils/common/messages/constantResponses";
+import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class UserStudioUseCase implements IUserStudioUseCase {
   constructor(private userStudioRepository: IUserStudioRepository) {}
@@ -25,5 +23,8 @@ export class UserStudioUseCase implements IUserStudioUseCase {
     }
 
     return studio;
+  }
+  async filterStudios(filters: Record<string, any>): Promise<IStudioBase[]> {
+    return await this.userStudioRepository.findByFilters(filters);
   }
 }

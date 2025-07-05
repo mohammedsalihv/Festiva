@@ -6,6 +6,8 @@ import { VscDebugBreakpointData } from "react-icons/vsc";
 import { BsCurrencyRupee } from "react-icons/bs";
 import { CiLocationOn } from "react-icons/ci";
 import { IoClose } from "react-icons/io5";
+import CustomCalendar from "@/components/CustomCalendar";
+import TimeSlotPicker from "@/components/TimeSlotPicker";
 
 interface catersDetailsProps {
   data: ICaters & { typeOfAsset: "caters" };
@@ -15,6 +17,11 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
   console.log(data);
   const [showGallery, setShowGallery] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showTimeSlots, setShowTimeSlots] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  console.log(selectedDate, selectedSlot);
 
   return (
     <div className="relative mt-16 sm:mt-20 md:mt-24 font-JosephicSans">
@@ -192,13 +199,39 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
 
             <div className="space-y-2 text-sm text-gray-700">
               <div className="flex justify-center gap-6 pb-3 cursor-pointer">
-                <div className="border-b-2 border-gray-300 px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition">
-                  Pick a Date
+                <div
+                  onClick={() => setShowCalendar(!showCalendar)}
+                  className={`border-b-2 ${
+                    showCalendar ? "border-main_color" : "border-gray-300"
+                  } px-4 py-4 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                >
+                  Pick a date
                 </div>
-                <div className="border-b-2 border-gray-300 px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition">
-                  Pick a Time
+                <div
+                  onClick={() => setShowTimeSlots(!showTimeSlots)}
+                  className={`border-b-2 ${
+                    showCalendar ? "border-main_color" : "border-gray-300"
+                  } px-4 py-4 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                >
+                  Pick a time
                 </div>
               </div>
+              {showCalendar && (
+                <div className="flex justify-center">
+                  <CustomCalendar
+                    availableDates={data.availableDates || []}
+                    onSelect={(date) => setSelectedDate(date)}
+                  />
+                </div>
+              )}
+              {showTimeSlots && (
+                <div className="flex justify-center">
+                  <TimeSlotPicker
+                    timeSlots={data.timeSlots || []}
+                    onSelect={(slot) => setSelectedSlot(slot)}
+                  />
+                </div>
+              )}
 
               <div className="text-right text-sm text-gray-500">
                 Total hours: 0
@@ -273,16 +306,41 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
 
             <div className="space-y-2 text-sm text-gray-700">
               <div className="w-full border-b pb-3">
-                <div className="flex justify-center gap-6 cursor-pointer">
-                  <div className="border-b-2 border-gray-300 px-4 py-2 w-full text-center text-main_color hover:border-main_color transition">
-                    Pick a Date
+                <div className="flex justify-center gap-6 cursor-pointer mb-3">
+                  <div
+                    onClick={() => setShowCalendar(!showCalendar)}
+                    className={`border-b-2 ${
+                      showCalendar ? "border-main_color" : "border-gray-300"
+                    } px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                  >
+                    Pick a date
                   </div>
-                  <div className="border-b-2 border-gray-300 px-4 py-2 w-full text-center text-main_color hover:border-main_color transition">
-                    Pick a Time
+                  <div
+                    onClick={() => setShowTimeSlots(!showTimeSlots)}
+                    className={`border-b-2 ${
+                      showCalendar ? "border-main_color" : "border-gray-300"
+                    } px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                  >
+                    Pick a time
                   </div>
                 </div>
+                {showCalendar && (
+                  <div className="flex justify-center">
+                    <CustomCalendar
+                      availableDates={data.availableDates || []}
+                      onSelect={(date) => setSelectedDate(date)}
+                    />
+                  </div>
+                )}
+                {showTimeSlots && (
+                  <div className="flex justify-center">
+                    <TimeSlotPicker
+                      timeSlots={data.timeSlots || []}
+                      onSelect={(slot) => setSelectedSlot(slot)}
+                    />
+                  </div>
+                )}
               </div>
-
               <button className="text-sm text-main_color font-medium hover:underline">
                 Add a day
               </button>
@@ -298,7 +356,7 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
               </select>
             </div>
 
-            <button className="w-full bg-green-600 text-white font-semibold py-2 rounded hover:bg-green-700 transition">
+            <button className="w-full bg-main_color text-white font-semibold py-2 rounded hover:bg-main_color_hover transition">
               Reserve
             </button>
 

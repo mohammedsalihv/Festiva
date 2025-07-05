@@ -76,4 +76,27 @@ export class UserRentCarController implements IUserRentCarController {
       }
     }
   }
+  async filterRentCars(req: Request, res: Response): Promise<void> {
+    try {
+      const filters = req.query;
+
+      const filteredCars = await this.userRentCarUseCase.filterRentCars(
+        filters
+      );
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Filtered rent cars fetched successfully",
+        data: filteredCars,
+      });
+    } catch (error) {
+      logger.error("Error filtering rent cars:", error);
+
+      res.status(statusCodes.serverError).json({
+        success: false,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
+      });
+    }
+  }
 }

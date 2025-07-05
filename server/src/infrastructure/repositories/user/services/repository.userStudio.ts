@@ -21,4 +21,23 @@ export class UserStudioRepository implements IUserStudioRepository {
       .lean<IStudio>()
       .exec();
   }
+  async findByFilters(filters: Record<string, any>): Promise<IStudioBase[]> {
+    const query: any = {
+      status: "approved",
+    };
+
+    if (filters.city) query["location.city"] = filters.city;
+    if (filters.state) query["location.state"] = filters.state;
+    if (filters.country) query["location.country"] = filters.country;
+
+    if (filters.equipment) query["packages.equipments"] = filters.equipment;
+    if (filters.manPower) query["packages.manPower"] = filters.manPower;
+    if (filters.payment) query["packages.payment"] = filters.payment;
+
+    const studios = await StudioModel.find(query)
+      .populate("location", "city state country")
+      .lean();
+
+    return studios.map(mapStudioToBase);
+  }
 }

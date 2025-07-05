@@ -1,9 +1,13 @@
 import LogoText from "@/components/LogoText";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import HostLogin from "@/pages/host/Auth/HostLogin";
+import { useState } from "react";
+import { Button } from "@/components/Button";
 
 const HostLandingHeader = () => {
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   return (
     <nav className="fixed top-0 left-0 w-full z-30 bg-white shadow border-b border-gray-200">
@@ -37,16 +41,17 @@ const HostLandingHeader = () => {
               </a>
             </li>
             <li>
-              <a
-                href="/host/login"
-                className="text-sm px-3 py-2 font-JosephicSans font-semibold text-black hover:text-white border rounded-md hover:bg-red-500 "
+              <Button
+                onClick={() => setShowLoginModal(true)}
+                className="text-sm px-3 py-1 font-JosephicSans font-semibold text-black hover:text-white border rounded-md hover:bg-red-500"
               >
                 Login
-              </a>
+              </Button>
             </li>
           </ul>
         </div>
       </div>
+      {showLoginModal && <HostLogin onClose={() => setShowLoginModal(false)} />}
     </nav>
   );
 };

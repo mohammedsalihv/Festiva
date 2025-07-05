@@ -77,4 +77,25 @@ export class UserStudioController implements IUserStudioController {
       }
     }
   }
+  async filterStudios(req: Request, res: Response): Promise<void> {
+    try {
+      const filters = req.query;
+
+      const studios = await this.userStudioUseCase.filterStudios(filters);
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Filtered studios fetched successfully",
+        data: studios,
+      });
+    } catch (error) {
+      logger.error("Error filtering studios:", error);
+
+      res.status(statusCodes.serverError).json({
+        success: false,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
+      });
+    }
+  }
 }

@@ -5,9 +5,7 @@ import {
 } from "../../../../domain/entities/serviceInterface/interface.venue";
 import { IUserVenueUseCase } from "../../../../domain/usecaseInterface/user/services/interface.userVenueUseCase";
 import CustomError from "../../../../utils/common/errors/CustomError";
-import {
-  statusCodes
-} from "../../../../utils/common/messages/constantResponses";
+import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class UserVenueUseCase implements IUserVenueUseCase {
   constructor(private userVenueRepository: IUserVenueRepository) {}
@@ -22,5 +20,8 @@ export class UserVenueUseCase implements IUserVenueUseCase {
       throw new CustomError("Venue not found", statusCodes.notfound);
     }
     return venue;
+  }
+  async filterVenues(filters: any): Promise<IVenueBase[]> {
+    return await this.userVenueRepository.findVenuesWithFilters(filters);
   }
 }

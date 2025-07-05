@@ -4,7 +4,7 @@ import { setHostDetails , logoutHost } from "@/redux/Slice/host/common/hostSlice
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL:
-    import.meta.env.VITE_BASE_URL_USER || "http://localhost:4000/api/host",
+    import.meta.env.VITE_BASE_URL_HOST || "http://localhost:4000/api/host",
   withCredentials: true,
   timeout: 30000,
 });
