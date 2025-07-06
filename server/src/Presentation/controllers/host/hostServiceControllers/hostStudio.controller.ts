@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { IStudio } from "../../../../domain/entities/serviceInterface/interface.studio";
 import { HostStudioUseCase } from "../../../../application/use-cases/host/hostServices/usecase.hostStudio";
 import { IHostStudioController } from "../../../../domain/controlInterface/host/interface.hostStudioController";
-import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostAssetLocationRepostory";
+import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetLocationRepostory";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";

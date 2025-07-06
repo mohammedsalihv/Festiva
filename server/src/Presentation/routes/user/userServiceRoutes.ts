@@ -9,8 +9,13 @@ userServiceRoute.get(
 );
 
 userServiceRoute.get(
-  `/assets/:type`,
+  `/assets/filter/:type`,
   userServiceBaseController.filterAssets.bind(userServiceBaseController)
+);
+
+userServiceRoute.get(
+  `/assets/sort/:type`,
+  userServiceBaseController.sortAssets.bind(userServiceBaseController)
 );
 
 export default userServiceRoute;

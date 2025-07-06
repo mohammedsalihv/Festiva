@@ -1,5 +1,5 @@
 import { IRentCar } from "../../../../domain/entities/serviceInterface/interface.rentCar";
-import { IHostRentCarRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostRentCarRepository";
+import { IHostRentCarRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostRentCarRepository";
 import { RentCarModel } from "../../../../domain/models/rentCarModel";
 
 export class HostRentCarRepository implements IHostRentCarRepository {

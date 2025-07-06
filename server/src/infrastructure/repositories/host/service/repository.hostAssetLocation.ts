@@ -1,4 +1,4 @@
-import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostAssetLocationRepostory";
+import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetLocationRepostory";
 import { ILocation } from "../../../../domain/entities/serviceInterface/interface.location";
 import { LocationModel } from "../../../../domain/models/locationModel";
 

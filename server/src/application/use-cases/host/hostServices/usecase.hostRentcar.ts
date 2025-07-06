@@ -1,4 +1,4 @@
-import { IHostRentCarRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostRentCarRepository";
+import { IHostRentCarRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostRentCarRepository";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IRentCar } from "../../../../domain/entities/serviceInterface/interface.rentCar";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";

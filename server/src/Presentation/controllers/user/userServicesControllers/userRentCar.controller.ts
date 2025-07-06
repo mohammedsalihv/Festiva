@@ -99,4 +99,21 @@ export class UserRentCarController implements IUserRentCarController {
       });
     }
   }
+
+  async sortRentCars(req: Request, res: Response): Promise<void> {
+    try {
+      const sorts = req.query;
+      const sortedCars = await this.userRentCarUseCase.sortRentCars(sorts);
+      res.status(200).json({
+        success: true,
+        message: "Sorted cars fetched successfully",
+        data: sortedCars,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Server error",
+      });
+    }
+  }
 }

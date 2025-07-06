@@ -67,19 +67,37 @@ export class AdminAssetManagementRepository
     id: string,
     typeOfAsset: string,
     assetStatus: string
-  ): Promise<boolean> {
+  ): Promise<{ _id: string; hostId: string } | null> {
     const model = this.getModelByType(typeOfAsset);
-    const result = await model.findByIdAndUpdate(id, { status: assetStatus });
-    return !!result;
+    const result = await model.findByIdAndUpdate(
+      id,
+      { status: assetStatus },
+      { new: true, projection: { _id: 1, host: 1 } }
+    );
+    if (!result) return null;
+
+    return {
+      _id: result._id.toString(),
+      hostId: result.host.toString(),
+    };
   }
 
   async assetReject(
     id: string,
     typeOfAsset: string,
     assetStatus: string
-  ): Promise<boolean> {
+  ): Promise<{ _id: string; hostId: string } | null> {
     const model = this.getModelByType(typeOfAsset);
-    const result = await model.findByIdAndUpdate(id, { status: assetStatus });
-    return !!result;
+    const result = await model.findByIdAndUpdate(
+      id,
+      { status: assetStatus },
+      { new: true, projection: { _id: 1, host: 1 } }
+    );
+    if (!result) return null;
+
+    return {
+      _id: result._id.toString(),
+      hostId: result.host.toString(),
+    };
   }
 }

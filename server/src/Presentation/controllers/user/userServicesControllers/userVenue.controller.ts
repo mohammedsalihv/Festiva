@@ -97,4 +97,22 @@ export class UserVenueController implements IUserVenueController {
       });
     }
   }
+
+  async sortVenues(req: Request, res: Response): Promise<void> {
+    try {
+      const sorts = req.query;
+      const venues = await this.userVenueUseCase.sortVenues(sorts);
+
+      res.status(200).json({
+        success: true,
+        message: "Sorted venues fetched successfully",
+        data: venues,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Server error",
+      });
+    }
+  }
 }

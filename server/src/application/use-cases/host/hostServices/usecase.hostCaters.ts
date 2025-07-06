@@ -1,4 +1,4 @@
-import { IHostCatersRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostCatersRepository";
+import { IHostCatersRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostCatersRepository";
 import { IHostCatersUseCase } from "../../../../domain/usecaseInterface/host/interface.catersUseCase";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { ICaters } from "../../../../domain/entities/serviceInterface/interface.caters";

@@ -36,5 +36,10 @@ export const carCompanies = [
   "Citroën",
   "Peugeot",
   "BYD",
-  "Tesla"
+  "Tesla",
 ];
+
+
+export const transmissions = ["Manual", "Automatic"];
+export const fuels = ["Petrol", "Diesel", "CNG", "Hybrid"];
+export const seats = ["4" , "5" , "7" , "8" , "10"]

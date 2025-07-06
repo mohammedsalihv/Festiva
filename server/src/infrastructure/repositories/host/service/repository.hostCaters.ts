@@ -1,5 +1,5 @@
 import { ICaters } from "../../../../domain/entities/serviceInterface/interface.caters";
-import { IHostCatersRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostCatersRepository";
+import { IHostCatersRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostCatersRepository";
 import { CatersModel } from "../../../../domain/models/catersModel";
 
 export class HostCatersRepository implements IHostCatersRepository {

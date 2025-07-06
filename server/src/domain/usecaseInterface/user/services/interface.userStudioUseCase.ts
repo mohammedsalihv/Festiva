@@ -6,4 +6,5 @@ export interface IUserStudioUseCase {
   allStudios(): Promise<IStudioBase[]>;
   studioDetails(studioId: string): Promise<IStudio>;
   filterStudios(filters: Record<string, any>): Promise<IStudioBase[]>;
+  sortStudios(sorts: any): Promise<IStudioBase[]>;
 }

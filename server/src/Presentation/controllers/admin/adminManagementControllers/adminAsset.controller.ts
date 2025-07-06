@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { AdminAssetManagementUseCase } from "../../../../application/use-cases/admin/adminManagement/usecase.adminAssetManagement";
-import { AdminVenueController } from "../adminServiceControllers/adminVenue.controller";
-import { AdminRentCarController } from "../adminServiceControllers/adminRentCar.controller";
+import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/interface.hostNotificationUseCase";
+import { AdminVenueController } from "../adminServiceControllers/AdminVenue.controller";
+import { AdminRentCarController } from "../adminServiceControllers/AdminRentCar.controller";
 import { AdminStudioController } from "../adminServiceControllers/adminStudio.controller";
 import { AdminCatersController } from "../adminServiceControllers/adminCaters.controller";
 import logger from "../../../../utils/common/messages/logger";
@@ -13,6 +14,7 @@ import {
 export class AdminAssetsController {
   constructor(
     private adminAssetManagementUseCase: AdminAssetManagementUseCase,
+    private notificationUseCase: IHostNotificationUseCase,
     private adminVenueController: AdminVenueController,
     private adminRentCarController: AdminRentCarController,
     private adminStudioController: AdminStudioController,
@@ -96,11 +98,20 @@ export class AdminAssetsController {
         String(type),
         String(assetStatus)
       );
-      if (result) {
-        res
-          .status(statusCodes.Success)
-          .json({ success: true, message: "Asset approved successfully" });
+
+      if (result && result.hostId) {
+        await this.notificationUseCase.createNotification({
+          receiverId: result.hostId,
+          assetId: result._id,
+          assetType: String(type) as any,
+          status: "approved",
+          message: `Your ${type} has been approved.`,
+        });
       }
+
+      res
+        .status(statusCodes.Success)
+        .json({ success: true, message: "Asset approved successfully" });
     } catch (error) {
       logger.error(error);
       res.status(statusCodes.serverError).json({
@@ -129,6 +140,17 @@ export class AdminAssetsController {
         String(type),
         String(assetStatus)
       );
+
+      if (result && result.hostId) {
+        await this.notificationUseCase.createNotification({
+          receiverId: result.hostId,
+          assetId: result._id,
+          assetType: String(type) as any,
+          status: "rejected",
+          message: `Your ${type} has been rejected.`,
+        });
+      }
+
       if (result) {
         res
           .status(statusCodes.Success)

@@ -1,4 +1,4 @@
-import { IHostVenueRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostVenueRepository";
+import { IHostVenueRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostVenueRepository";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IVenue } from "../../../../domain/entities/serviceInterface/interface.venue";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";

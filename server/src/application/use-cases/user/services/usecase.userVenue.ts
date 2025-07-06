@@ -24,4 +24,7 @@ export class UserVenueUseCase implements IUserVenueUseCase {
   async filterVenues(filters: any): Promise<IVenueBase[]> {
     return await this.userVenueRepository.findVenuesWithFilters(filters);
   }
+   async sortVenues(sorts: any): Promise<IVenueBase[]> {
+    return await this.userVenueRepository.sortVenues(sorts);
+  }
 }

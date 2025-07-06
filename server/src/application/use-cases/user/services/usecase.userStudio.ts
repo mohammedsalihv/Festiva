@@ -27,4 +27,7 @@ export class UserStudioUseCase implements IUserStudioUseCase {
   async filterStudios(filters: Record<string, any>): Promise<IStudioBase[]> {
     return await this.userStudioRepository.findByFilters(filters);
   }
+  async sortStudios(sorts: any): Promise<IStudioBase[]> {
+    return await this.userStudioRepository.sortStudios(sorts);
+  }
 }

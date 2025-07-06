@@ -1,5 +1,5 @@
-import { IHostLoginRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostLoginRepository";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostRepository";
+import { IHostLoginRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostLoginRepository";
+import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { TokenService } from "../../../tokenService/service.token";
 import bcrypt from "bcrypt";

@@ -1,5 +1,5 @@
 import { IVenue } from "../../../../domain/entities/serviceInterface/interface.venue";
-import { IHostVenueRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostVenueRepository";
+import { IHostVenueRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostVenueRepository";
 import { VenueModel } from "../../../../domain/models/venueModel";
 
 export class HostVenueRepository implements IHostVenueRepository {

@@ -1,4 +1,4 @@
-import { IHostStudioRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostStudioRepository";
+import { IHostStudioRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostStudioRepository";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IStudio } from "../../../../domain/entities/serviceInterface/interface.studio";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";

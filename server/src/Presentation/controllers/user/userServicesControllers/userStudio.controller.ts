@@ -98,4 +98,21 @@ export class UserStudioController implements IUserStudioController {
       });
     }
   }
+
+  async sortStudios(req: Request, res: Response): Promise<void> {
+    try {
+      const sorts = req.query;
+      const studios = await this.userStudioUseCase.sortStudios(sorts);
+      res.status(200).json({
+        success: true,
+        message: "Sorted studios fetched successfully",
+        data: studios,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error instanceof Error ? error.message : "Server error",
+      });
+    }
+  }
 }

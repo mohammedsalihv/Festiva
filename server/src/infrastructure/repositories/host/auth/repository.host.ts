@@ -1,4 +1,4 @@
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostRepository";
+import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
 import { HostModel } from "../../../../domain/models/hostModel";
 import { IHost } from "../../../../domain/entities/modelInterface/interface.host";
 

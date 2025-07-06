@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import ServiceCardFilter from "@/components/ServiceCardFilter";
+import ServiceCardSort from "@/components/ServiceCardSort";
 import {
   FaHeart,
   FaShareAlt,
@@ -9,29 +10,32 @@ import {
   FaSortAmountDownAlt,
   FaFilter,
 } from "react-icons/fa";
+import { IoIosClose } from "react-icons/io";
 import { useNavigate, useParams } from "react-router-dom";
-import { IRentCarBase } from "@/utils/Types/user/rentCarTypes";
-import { IVenueBase } from "@/utils/Types/user/venueTypes";
-import { ICatersBase } from "@/utils/Types/user/catersTypes";
-import { IStudioBase } from "@/utils/Types/user/studioTypes";
 import { Images } from "@/assets";
 import Loader from "@/components/Loader";
 import Retry from "@/components/Retry";
 import { serviceOptions } from "@/utils/Options/user/serviceOptions";
-import { filterAsset } from "@/api/user/base/assetServices";
-
-type Asset = IRentCarBase | IVenueBase | ICatersBase | IStudioBase;
+import { filterAsset, sortAssets } from "@/api/user/base/assetServices";
+import { Button } from "@/components/Button";
+import {
+  Asset,
+  filterParams,
+  sortParams,
+} from "@/utils/Types/user/filterSortTypes";
 
 export default function ServicesCard() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isSortOpen, setIsSortOpen] = useState(false);
   const { type } = useParams();
   const normalizedType = type?.toLowerCase();
   const [selectedTab, setSelectedTab] = useState<string>("");
-  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filters, setFilters] = useState<filterParams>({});
+  const [sorts, setSorts] = useState<sortParams>({});
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const filterRef = useRef<HTMLDivElement>(null);
+  const fetchRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   // Update selectedTab when route param changes
@@ -41,12 +45,11 @@ export default function ServicesCard() {
     }
   }, [normalizedType]);
 
-  // Close filter if clicked outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        filterRef.current &&
-        !filterRef.current.contains(event.target as Node)
+        fetchRef.current &&
+        !fetchRef.current.contains(event.target as Node)
       ) {
         setIsFilterOpen(false);
       }
@@ -57,15 +60,25 @@ export default function ServicesCard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isFilterOpen]);
 
-  // Fetch assets from backend
-  const fetchAssets = async (type: string, filters: Record<string, any>) => {
+  const fetchAssets = async (
+    type: string,
+    filters: filterParams,
+    sorts: sortParams
+  ) => {
     setLoading(true);
     try {
-      const response = await filterAsset(type, filters);
+      let response;
+
+      if (Object.keys(sorts).length > 0) {
+        response = await sortAssets(type, sorts);
+      } else {
+        response = await filterAsset(type, filters);
+      }
       setAssets(response);
       setError(null);
     } catch (err) {
       setError("Something went wrong while fetching assets.");
+      console.log(err);
     } finally {
       setLoading(false);
     }
@@ -73,9 +86,9 @@ export default function ServicesCard() {
 
   useEffect(() => {
     if (selectedTab) {
-      fetchAssets(selectedTab, filters);
+      fetchAssets(selectedTab, filters, sorts);
     }
-  }, [selectedTab, filters]);
+  }, [selectedTab, filters, sorts]);
 
   if (loading) {
     return (
@@ -90,14 +103,14 @@ export default function ServicesCard() {
     return (
       <Retry
         message={error}
-        onRetry={() => fetchAssets(selectedTab, filters)}
+        onRetry={() => fetchAssets(selectedTab, filters, sorts)}
       />
     );
   if (assets.length === 0)
     return (
       <Retry
         message="No assets found"
-        onRetry={() => fetchAssets(selectedTab, filters)}
+        onRetry={() => fetchAssets(selectedTab, filters, sorts)}
       />
     );
 
@@ -132,29 +145,111 @@ export default function ServicesCard() {
           </div>
 
           <div className="flex justify-end gap-2 w-full sm:w-auto">
-            <button
+            <Button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
               className="flex items-center gap-2 px-3 py-2 bg-main_color text-white text-xs sm:text-sm rounded-2xl hover:bg-indigo-500"
             >
               <FaFilter className="text-xs" />
-            </button>
-            <button className="flex items-center gap-2 px-3 py-2 bg-main_color text-white text-xs sm:text-sm rounded-2xl hover:bg-indigo-500">
+            </Button>
+            <Button
+              onClick={() => setIsSortOpen(!isSortOpen)}
+              className="flex items-center gap-2 px-3 py-2 bg-main_color text-white text-xs sm:text-sm rounded-2xl hover:bg-indigo-500"
+            >
               <FaSortAmountDownAlt className="text-xs" />
-            </button>
+            </Button>
+
             {isFilterOpen && (
               <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
                 <ServiceCardFilter
                   type={selectedTab}
-                  filterRef={filterRef}
+                  filterRef={fetchRef}
                   filterOpen={setIsFilterOpen}
                   onApplyFilter={(appliedFilters) => setFilters(appliedFilters)}
+                />
+              </div>
+            )}
+            {isSortOpen && (
+              <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
+                <ServiceCardSort
+                  type={selectedTab}
+                  sortRef={fetchRef}
+                  sortOpen={setIsSortOpen}
+                  onApplySort={(appliedSorts) => setSorts(appliedSorts)}
                 />
               </div>
             )}
           </div>
         </div>
       </div>
-
+      {(Object.keys(filters).length > 0 || Object.keys(sorts).length > 0) && (
+        <div className="flex flex-wrap items-center gap-2 mt-2 text-xs sm:text-sm mb-2">
+          {Object.entries(filters).map(([key, value]) => (
+            <div
+              key={`filter-${key}`}
+              className="border text-blue-600 px-3 py-2 rounded-md flex items-center gap-2"
+            >
+              <span className="capitalize">
+              <span className="text-black">{key}</span> : {String(value)}
+              </span>
+              <button
+                onClick={() =>
+                  setFilters((prev) => {
+                    const updated = { ...prev };
+                    delete updated[key];
+                    return updated;
+                  })
+                }
+                className="text-red-500 hover:text-red-700 font-bold"
+              >
+               <IoIosClose className="w-6 h-6"/>
+              </button>
+            </div>
+          ))}
+          {Object.entries(sorts).map(([key, value]) => (
+            <div
+              key={`sort-${key}`}
+              className=" border text-main_color px-3 py-2 rounded-md flex items-center gap-2"
+            >
+              <span className="capitalize">
+                <span className="text-black">{key}</span>:{" "}
+                {value === "asc"
+                  ? "A-Z / Oldest / Asc"
+                  : value === "desc"
+                  ? "Z-A / Newest / Desc"
+                  : value === "low-high"
+                  ? "Low → High"
+                  : value === "high-low"
+                  ? "High → Low"
+                  : value}
+              </span>
+              <button
+                onClick={() =>
+                  setSorts((prev) => {
+                    const updated = { ...prev };
+                    delete updated[key];
+                    return updated;
+                  })
+                }
+                className="text-red-500 hover:text-red-700 font-bold"
+              >
+                <IoIosClose className="w-6 h-6"/>
+              </button>
+            </div>
+          ))}
+          {(Object.keys(filters).length > 0 ||
+            Object.keys(sorts).length > 0) && (
+            <button
+              onClick={() => {
+                setFilters({});
+                setSorts({});
+              }}
+              className="ml-2 text-red-500 hover:text-red-700 hover:underline font-medium"
+            >
+              Clear All
+            </button>
+          )}
+        </div>
+      )}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
         {assets.map((asset) => (
           <div

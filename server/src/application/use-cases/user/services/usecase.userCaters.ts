@@ -23,4 +23,7 @@ export class UserCatersUseCase implements IUserCatersUseCase {
   async filterCaters(filters: Record<string, any>): Promise<ICatersBase[]> {
     return this.userCatersRepository.filterCaters(filters);
   }
+  async sortCaters(sorts: any): Promise<ICatersBase[]> {
+    return await this.userCatersRepository.sortCaters(sorts);
+  }
 }

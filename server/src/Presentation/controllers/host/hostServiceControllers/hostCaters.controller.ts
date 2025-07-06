@@ -1,7 +1,7 @@
 import { IHostCatersController } from "../../../../domain/controlInterface/host/interface.hostCatersController";
 import { HostCatersUseCase } from "../../../../application/use-cases/host/hostServices/usecase.hostCaters";
 import { ICaters } from "../../../../domain/entities/serviceInterface/interface.caters";
-import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostAssetLocationRepostory";
+import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetLocationRepostory";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { IVenue } from "../../../../domain/entities/serviceInterface/interface.venue";
 import { IHostVenueController } from "../../../../domain/controlInterface/host/interface.hostVenueController";
 import { HostVenueUseCase } from "../../../../application/use-cases/host/hostServices/usecase.hostVenue";
-import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostAssetLocationRepostory";
+import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetLocationRepostory";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";

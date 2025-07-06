@@ -96,4 +96,21 @@ export class UserCatersController implements IUserCatersController {
       });
     }
   }
+ async sortCaters(req: Request, res: Response): Promise<void> {
+  try {
+    const sorts = req.query;
+    const caters = await this.userCatersUseCase.sortCaters(sorts);
+    res.status(200).json({
+      success: true,
+      message: "Sorted caters fetched successfully",
+      data: caters,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error instanceof Error ? error.message : "Server error",
+    });
+  }
+}
+
 }

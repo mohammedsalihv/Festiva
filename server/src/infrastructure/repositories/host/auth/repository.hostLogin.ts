@@ -1,5 +1,5 @@
 import { HostModel } from "../../../../domain/models/hostModel";
-import { IHostLoginRepository } from "../../../../domain/entities/repositoryInterface/host/interface.hostLoginRepository";
+import { IHostLoginRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostLoginRepository";
 import { responseHostDTO } from "../../../../types/DTO/host/dto.host";
 
 export class HostLoginRepository implements IHostLoginRepository{
