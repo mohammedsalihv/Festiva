@@ -27,27 +27,27 @@ const Table = <T extends object>({
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200 text-center">
-          {data.map((row, index) => (
+          {data.map((row, rowIndex) => (
             <tr
               key={
                 typeof row === "object" && "_id" in row
-                  ? (row as { _id?: string })._id ?? index
-                  : index
+                  ? (row as { _id?: string })._id ?? rowIndex
+                  : rowIndex
               }
               className="cursor-pointer hover:bg-gray-100 transition-all duration-200"
               onClick={() => onRowClick?.(row)}
             >
               {renderRowStart && (
-                <td className="px-4 py-4">{renderRowStart(row, index)}</td>
+                <td className="px-4 py-4">{renderRowStart(row, rowIndex)}</td>
               )}
-              {columns.map((col, index) => (
+              {columns.map((col, colIndex) => (
                 <td
-                  key={index}
+                  key={colIndex}
                   className="px-4 py-4 text-[10px] lg:text-sm text-center"
                 >
                   {typeof col.accessor === "function" ? (
                     <div className="flex justify-center items-center">
-                      {col.accessor(row)}
+                      {col.accessor(row,rowIndex)}
                     </div>
                   ) : (
                     String(row[col.accessor])

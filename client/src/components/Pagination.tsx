@@ -1,86 +1,93 @@
 import React from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 
-type PaginationProps = {
+interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-};
+  maxVisiblePages?: number; 
+}
 
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,
+  maxVisiblePages = 5,
 }) => {
-  const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
+  if (totalPages <= 1) return null;
 
-    if (totalPages <= 7) {
-      for (let i = 1; i <= totalPages; i++) pages.push(i);
-    } else {
-      if (currentPage <= 4) {
-        pages.push(1, 2, 3, 4, 5, "...", totalPages);
-      } else if (currentPage >= totalPages - 3) {
-        pages.push(
-          1,
-          "...",
-          totalPages - 4,
-          totalPages - 3,
-          totalPages - 2,
-          totalPages - 1,
-          totalPages
-        );
-      } else {
-        pages.push(
-          1,
-          "...",
-          currentPage - 1,
-          currentPage,
-          currentPage + 1,
-          "...",
-          totalPages
-        );
-      }
+  const getPages = () => {
+    const pages: (number | string)[] = [];
+    const half = Math.floor(maxVisiblePages / 2);
+
+    let start = Math.max(2, currentPage - half);
+    let end = Math.min(totalPages - 1, currentPage + half);
+
+    if (currentPage <= half) {
+      start = 2;
+      end = maxVisiblePages;
     }
+
+    if (currentPage > totalPages - half) {
+      start = totalPages - maxVisiblePages + 1;
+      end = totalPages - 1;
+    }
+
+    start = Math.max(2, start);
+    end = Math.min(totalPages - 1, end);
+
+    pages.push(1);
+    if (start > 2) pages.push("...");
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (end < totalPages - 1) pages.push("...");
+    if (totalPages > 1) pages.push(totalPages);
 
     return pages;
   };
 
   return (
-    <div className="flex flex-wrap justify-center gap-2 items-center py-2">
+    <div className="flex items-center justify-center space-x-1 mt-6 overflow-x-auto">
       <button
-        className="px-3 py-1 border rounded-md text-sm disabled:opacity-50"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
+        className="p-2 rounded-full disabled:opacity-40 hover:bg-gray-200 transition"
       >
-        Previous
+        <ChevronLeftIcon className="h-4 w-4" />
       </button>
 
-      {getPageNumbers().map((page, index) =>
-        typeof page === "number" ? (
+      {getPages().map((page, index) =>
+        typeof page === "string" ? (
+          <span
+            key={index}
+            className="px-3 py-1 text-gray-400 text-sm cursor-default"
+          >
+            {page}
+          </span>
+        ) : (
           <button
             key={index}
-            className={`px-3 py-1 rounded-md text-sm border ${
-              page === currentPage
-                ? "bg-blue-500 text-white"
-                : "hover:bg-gray-100"
-            }`}
             onClick={() => onPageChange(page)}
+            className={`w-8 h-8 rounded-md text-sm ${
+              currentPage === page
+                ? "bg-blue-600 text-white shadow"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            } transition`}
           >
             {page}
           </button>
-        ) : (
-          <span key={index} className="px-2 text-sm">
-            ...
-          </span>
         )
       )}
 
       <button
-        className="px-3 py-1 border rounded-md text-sm disabled:opacity-50"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
+        className="p-2 rounded-full disabled:opacity-40 hover:bg-gray-200 transition"
       >
-        Next
+        <ChevronRightIcon className="h-4 w-4" />
       </button>
     </div>
   );

@@ -7,7 +7,11 @@ export class HostAssetRequestUseCase implements IHostAssetRequestUseCase {
     private hostAssetRequestRepository: IHostAssetRequestRepository
   ) {}
 
-  async getAllRequests(): Promise<AssetRequestDTO[]> {
-    return await this.hostAssetRequestRepository.getAllRequests();
+  async getAllRequests(hostId: string, page: number, limit: number) {
+    return await this.hostAssetRequestRepository.getAllRequests(
+      hostId,
+      page,
+      limit
+    );
   }
 }

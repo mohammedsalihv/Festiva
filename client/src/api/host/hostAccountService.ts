@@ -6,7 +6,10 @@ export const allNotification = async () => {
 };
 
 
-export const getAllAssetRequests = async () => {
-  const response = await axiosInstance.get("/requests");
-  return response.data;
+export const getAllAssetRequests = async (page = 1, limit = 10) => {
+  const response = await axiosInstance.get("/requests", {
+    params: { page, limit },
+  });
+
+  return response.data; 
 };
