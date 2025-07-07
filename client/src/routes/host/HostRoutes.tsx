@@ -16,11 +16,18 @@ import ImageUpload from "@/forms/host/serviceForms/Common/ImageUpload";
 import LocationForm from "@/forms/host/serviceForms/Common/LocationForm";
 import ErrorAlert from "@/components/ErrorAlert";
 
+import { AssetStatus } from "@/pages/host/landing/AssetStatus";
+
 const HostRoutes: React.FC = () => {
   return (
     <Routes>
       <Route path="dashboard" element={<HostDashboard />} />
+      <Route path="/asset/status" element={<AssetStatus />} />
+
+
+
       <Route path="kind-of-service" element={<KindOfService />} />
+
 
       <Route path="/list/venue-service" element={<VenueForm />} />
       <Route path="/list/venue-details" element={<VenueDetailsForm />} />
@@ -33,6 +40,9 @@ const HostRoutes: React.FC = () => {
 
       <Route path="/list/image-upload" element={<ImageUpload />} />
       <Route path="/list/location-details" element={<LocationForm />} />
+
+
+
       <Route path="*" element={<ErrorAlert statusCode={404} />} />
     </Routes>
   );

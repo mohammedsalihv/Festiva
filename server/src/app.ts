@@ -9,6 +9,7 @@ import userAuthRoutes from "./Presentation/routes/user/userAuthRoutes";
 import userRoutes from "./Presentation/routes/user/userRoutes";
 import userServiceRoute from "./Presentation/routes/user/userServiceRoutes";
 import hostAuthRoutes from "./Presentation/routes/host/hostAuthRoutes";
+import hostAccountRoutes from "./Presentation/routes/host/hostAccountRoutes";
 import hostRoutes from "./Presentation/routes/host/hostRoutes";
 import adminAuthRoutes from "./Presentation/routes/admin/adminauthRoutes";
 import adminRoutes from "./Presentation/routes/admin/adminRoutes";
@@ -58,8 +59,12 @@ app.use(
 app.use("/api/user/auth", userAuthRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/user/service", userServiceRoute);
+
 app.use("/api/host/auth", hostAuthRoutes);
 app.use("/api/host", hostRoutes);
+app.use("/api/host/account", hostAccountRoutes);
+
+
 app.use("/api/admin/auth", adminAuthRoutes);
 app.use("/api/admin", adminRoutes);
 

@@ -3,7 +3,7 @@ export const carCompanies = [
   "Honda",
   "Hyundai",
   "Kia",
-  "Maruti Suzuki",
+  "Suzuki",
   "Tata Motors",
   "Mahindra",
   "Volkswagen",

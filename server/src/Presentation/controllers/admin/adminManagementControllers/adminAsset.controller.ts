@@ -1,15 +1,20 @@
 import { Request, Response } from "express";
+import { JwtPayload } from "jsonwebtoken";
 import { AdminAssetManagementUseCase } from "../../../../application/use-cases/admin/adminManagement/usecase.adminAssetManagement";
-import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/interface.hostNotificationUseCase";
-import { AdminVenueController } from "../adminServiceControllers/AdminVenue.controller";
+import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/account usecase interfaces/interface.hostNotificationUseCase";
 import { AdminRentCarController } from "../adminServiceControllers/AdminRentCar.controller";
 import { AdminStudioController } from "../adminServiceControllers/adminStudio.controller";
 import { AdminCatersController } from "../adminServiceControllers/adminCaters.controller";
+import { AdminVenueController } from "../adminServiceControllers/AdminVenue.controller";
 import logger from "../../../../utils/common/messages/logger";
 import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
+
+interface AuthRequest extends Request {
+  auth?: JwtPayload & { id: string; role?: string };
+}
 
 export class AdminAssetsController {
   constructor(
@@ -80,7 +85,7 @@ export class AdminAssetsController {
     }
   }
 
-  async approveAsset(req: Request, res: Response): Promise<void> {
+  async approveAsset(req: AuthRequest, res: Response): Promise<void> {
     try {
       const { assetStatus, type } = req.query;
       const id = req.params.assetId;
@@ -101,6 +106,7 @@ export class AdminAssetsController {
 
       if (result && result.hostId) {
         await this.notificationUseCase.createNotification({
+          createrId: req.auth!.id,
           receiverId: result.hostId,
           assetId: result._id,
           assetType: String(type) as any,
@@ -122,7 +128,7 @@ export class AdminAssetsController {
     }
   }
 
-  async rejectAsset(req: Request, res: Response): Promise<void> {
+  async rejectAsset(req: AuthRequest, res: Response): Promise<void> {
     try {
       const { assetStatus, type } = req.query;
       const id = req.params.assetId;
@@ -143,11 +149,13 @@ export class AdminAssetsController {
 
       if (result && result.hostId) {
         await this.notificationUseCase.createNotification({
+          createrId: req.auth!.id,
           receiverId: result.hostId,
           assetId: result._id,
           assetType: String(type) as any,
           status: "rejected",
           message: `Your ${type} has been rejected.`,
+
         });
       }
 

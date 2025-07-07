@@ -1,6 +1,6 @@
 export interface Column<T> {
   header: string;
-  accessor: keyof T | ((row: T) => React.ReactNode);
+  accessor: keyof T | ((row: T, index?: number) => React.ReactNode);
   center?: boolean;
 }
 

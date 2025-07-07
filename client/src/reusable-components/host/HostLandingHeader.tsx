@@ -5,6 +5,7 @@ import HostLogin from "@/pages/host/Auth/HostLogin";
 import { useState } from "react";
 import { Button } from "@/components/Button";
 
+
 const HostLandingHeader = () => {
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const [showLoginModal, setShowLoginModal] = useState(false);

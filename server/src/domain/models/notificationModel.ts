@@ -3,6 +3,11 @@ import { INotification } from "../entities/serviceInterface/interface.notificati
 
 const notificationSchema = new Schema<INotification>(
   {
+    createrId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     receiverId: {
       type: Schema.Types.ObjectId,
       ref: "Host",
@@ -10,17 +15,14 @@ const notificationSchema = new Schema<INotification>(
     },
     assetId: {
       type: Schema.Types.ObjectId,
-      required: true,
     },
     assetType: {
       type: String,
       enum: ["venue", "rentcar", "studio", "caters"],
-      required: true,
     },
     status: {
       type: String,
       enum: ["approved", "rejected"],
-      required: true,
     },
     message: {
       type: String,

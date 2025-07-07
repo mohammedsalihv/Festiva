@@ -1,18 +1,26 @@
 import { Request, Response } from "express";
-import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/interface.hostNotificationUseCase";
+import { JwtPayload } from "jsonwebtoken";
+import { HostNotificationUseCase } from "../../../../application/use-cases/host/host account/usecase.hostNotification";
 import { IHostNotificationController } from "../../../../domain/controlInterface/common/account controller interface/interface.hostNotificationController";
 
-export class HostNotificationController implements IHostNotificationController {
-  constructor(private hostNofificationUseCase: IHostNotificationUseCase) {}
+interface AuthRequest extends Request {
+  auth?: JwtPayload & { id: string; role?: string };
+}
 
-  async getNotifications(req: Request, res: Response) {
+export class HostNotificationController implements IHostNotificationController {
+  constructor(private hostNotificationUseCase: HostNotificationUseCase) {}
+
+  async getAllNotifications(req: AuthRequest, res: Response) {
     try {
-      const hostId = req.params.hostId;
+      const receiverId = req.auth!.id;
       const notifications =
-        await this.hostNofificationUseCase.getNotificationsByUser(hostId);
-      res.status(200).json(notifications);
-    } catch (err) {
-      res.status(500).json({ error: "Failed to fetch notifications" });
+        await this.hostNotificationUseCase.getNotifications(receiverId);
+      res.status(200).json({ success: true, data: notifications });
+    } catch (error) {
+      console.error("Notification error:", error);
+      res
+        .status(500)
+        .json({ success: false, message: "Failed to fetch notifications" });
     }
   }
 }
