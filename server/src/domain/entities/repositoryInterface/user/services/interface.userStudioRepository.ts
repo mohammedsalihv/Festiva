@@ -6,6 +6,14 @@ import {
 export interface IUserStudioRepository {
   findAllStudios(): Promise<IStudioBase[]>;
   fetchStudioDetailsById(studioId: string): Promise<IStudio | null>;
-  findByFilters(filters: Record<string, any>): Promise<IStudioBase[]>;
-  sortStudios(sorts: any): Promise<IStudioBase[]>;
+  findByFilters(
+    filters: Record<string, any>,
+    page: number,
+    limit: number
+  ): Promise<{ data: IStudioBase[]; totalPages: number; currentPage: number }>;
+  sortStudios(
+    sorts: any,
+    page: number,
+    limit: number
+  ): Promise<{ data: IStudioBase[]; totalPages: number; currentPage: number }>;
 }

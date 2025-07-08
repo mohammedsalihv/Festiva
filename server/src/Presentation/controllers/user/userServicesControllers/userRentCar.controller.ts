@@ -50,7 +50,7 @@ export class UserRentCarController implements IUserRentCarController {
           : undefined;
 
       if (!carId) {
-        res.status(400).json({
+        res.status(statusCodes.forbidden).json({
           success: false,
           message: "Invalid or missing carId",
         });
@@ -79,15 +79,18 @@ export class UserRentCarController implements IUserRentCarController {
   async filterRentCars(req: Request, res: Response): Promise<void> {
     try {
       const filters = req.query;
-
-      const filteredCars = await this.userRentCarUseCase.filterRentCars(
-        filters
+      const page = parseInt(filters.page as string) || 1;
+      const limit = parseInt(filters.limit as string) || 10;
+      const result = await this.userRentCarUseCase.filterRentCars(
+        filters,
+        page,
+        limit
       );
 
       res.status(statusCodes.Success).json({
         success: true,
         message: "Filtered rent cars fetched successfully",
-        data: filteredCars,
+        ...result,
       });
     } catch (error) {
       logger.error("Error filtering rent cars:", error);
@@ -103,16 +106,23 @@ export class UserRentCarController implements IUserRentCarController {
   async sortRentCars(req: Request, res: Response): Promise<void> {
     try {
       const sorts = req.query;
-      const sortedCars = await this.userRentCarUseCase.sortRentCars(sorts);
-      res.status(200).json({
+      const page = parseInt(sorts.page as string) || 1;
+      const limit = parseInt(sorts.limit as string) || 10;
+      const result = await this.userRentCarUseCase.sortRentCars(
+        sorts,
+        page,
+        limit
+      );
+
+      res.status(statusCodes.Success).json({
         success: true,
         message: "Sorted cars fetched successfully",
-        data: sortedCars,
+        ...result, 
       });
     } catch (error) {
-      res.status(500).json({
+      res.status(statusCodes.serverError).json({
         success: false,
-        message: error instanceof Error ? error.message : "Server error",
+        message: error instanceof Error ? error.message : statusMessages.serverError,
       });
     }
   }

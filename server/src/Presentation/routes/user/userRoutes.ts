@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import { USER_ROUTES } from "../../../infrastructure/constants/user.routes";
 import logger from "../../../utils/common/messages/logger";
 import { userProfileController } from "../../../infrastructure/DI/user/account/userAccount.DI";
 import { singleImageUpload } from "../../../utils/common/middlewares/multer";
@@ -15,7 +16,7 @@ export interface MulterRequest extends Request {
 const userRoutes = express.Router();
 
 userRoutes.put(
-  "/setProfilePhoto",
+  USER_ROUTES.UserAccount.setProfilePhoto,
   authenticateToken,
   singleImageUpload,
   async (req, res) => {
@@ -23,49 +24,39 @@ userRoutes.put(
       await userProfileController.setProfilePic(req as MulterRequest, res);
     } catch (error) {
       logger.info(error);
-      res.status(500).json({
-        message: "An error occurred while changing the profile",
-      });
     }
   }
 );
 
 userRoutes.post(
-  "/profileModify",
+  USER_ROUTES.UserAccount.profileEdit,
   authenticateToken,
   userProfileController.profileEdit.bind(userProfileController)
 );
 
-
-
-
-// base api
-
-
 // venues
 
 userRoutes.get(
-  "/getVenues",
+  USER_ROUTES.VenueService.allVenues,
   userVenueController.getVenues.bind(userVenueController)
 );
 
 // rentcar
 
 userRoutes.get(
-  "/getRentcars",
+  USER_ROUTES.RentcarService.allRentcars,
   userRentCarController.getRentCars.bind(userRentCarController)
 );
 
 // caters
 userRoutes.get(
-  "/getCaters",
+  USER_ROUTES.CatersService.allCaters,
   userCatersController.getCaters.bind(userCatersController)
 );
 
-
 // studio
 userRoutes.get(
-  "/getStudios",
+  USER_ROUTES.StudioService.allStudios,
   userStudioController.getStudios.bind(userStudioController)
 );
 

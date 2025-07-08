@@ -3,17 +3,60 @@ import { IAdminHostManagementRepository } from "../../../../domain/entities/repo
 import { HostModel } from "../../../../domain/models/hostModel";
 import { pickDefinedFields } from "../../../../utils/user/pickDefinedFields";
 import { responseHostDTO } from "../../../../types/DTO/host/dto.host";
+import { responseAllHostsDTO } from "../../../../types/DTO/host/dto.host";
 
-export class AdminHostManagementRepostory implements IAdminHostManagementRepository {
-  async findAllHosts(): Promise<responseHostDTO[]> {
-    return HostModel.find().exec();
+export class AdminHostManagementRepostory
+  implements IAdminHostManagementRepository
+{
+  async findAllHosts(
+    page: number,
+    limit: number
+  ): Promise<responseAllHostsDTO> {
+    const skip = (page - 1) * limit;
+
+    const [rawHosts, totalItems] = await Promise.all([
+      HostModel.find().skip(skip).limit(limit).exec(),
+      HostModel.countDocuments().exec(),
+    ]);
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    const data: responseHostDTO[] = rawHosts.map((host) => ({
+      id: host._id.toString(),
+      name: host.name,
+      email: host.email,
+      phone: host.phone,
+      profilePic: host.profilePic,
+      isBlocked: host.isBlocked,
+      isActive: host.isActive,
+      isVerified: host.isVerified,
+      isSubscriber: host.isSubscriber,
+      role: host.role,
+      location: host.location,
+      listedAssets: host.listedAssets,
+      totalRequests: host.totalRequests,
+      acceptedRequests: host.acceptedRequests,
+      rejectedRequests: host.rejectedRequests,
+      timestamp: host.timestamp,
+    }));
+
+    return {
+      data,
+      totalItems,
+      totalPages,
+      currentPage: page,
+    };
   }
+
   async HostblockUnblock(hostId: string, isBlocked: boolean): Promise<boolean> {
     const response = await HostModel.updateOne({ _id: hostId }, { isBlocked });
     return response.modifiedCount > 0;
   }
 
-  async editHost(hostId: string, form: Partial<IHost>): Promise<responseHostDTO[]> {
+  async editHost(
+    hostId: string,
+    form: Partial<IHost>
+  ): Promise<responseHostDTO[]> {
     const allowedFields = [
       "name",
       "phone",
@@ -42,7 +85,10 @@ export class AdminHostManagementRepostory implements IAdminHostManagementReposit
     return HostModel.find().exec();
   }
 
-  async changeProfile(hostId: string, imageUrl: string): Promise<responseHostDTO> {
+  async changeProfile(
+    hostId: string,
+    imageUrl: string
+  ): Promise<responseHostDTO> {
     const updateHost = await HostModel.findByIdAndUpdate(
       hostId,
       { profilePic: imageUrl },

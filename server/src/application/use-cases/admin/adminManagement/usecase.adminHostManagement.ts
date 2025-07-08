@@ -1,4 +1,5 @@
 import { responseHostDTO } from "../../../../types/DTO/host/dto.host";
+import { IAdminHostManagementUseCase } from "../../../../domain/usecaseInterface/admin/Managemenet usecase interfaces/interface.adminHostManagementUseCase";
 import { IAdminHostManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminHostManagement";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { EditHostPayload } from "../../../../domain/adminInterface/interface.editHost";
@@ -6,23 +7,24 @@ import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
+import { responseAllHostsDTO } from "../../../../types/DTO/host/dto.host";
 
-export class AdminHostManagementUseCase {
+export class AdminHostManagementUseCase implements IAdminHostManagementUseCase{
   constructor(
     private AdminHostManagementRepository: IAdminHostManagementRepository
   ) {}
 
-  async execute(): Promise<responseHostDTO[]> {
-    const hosts = await this.AdminHostManagementRepository.findAllHosts();
+   async findAllHosts(page: number, limit: number): Promise<responseAllHostsDTO> {
+    const response = await this.AdminHostManagementRepository.findAllHosts(page, limit);
     
-    if (!hosts || hosts.length === 0) {
-      throw new CustomError("Users empty", statusCodes.notfound);
+    if (!response.data || response.data.length === 0) {
+      throw new CustomError("No hosts found", statusCodes.notfound);
     }
 
-    return hosts;
+    return response;
   }
 
-  async HostBlockUnblock(hostId: string, isBlocked: boolean): Promise<boolean> {
+  async HostblockUnblock(hostId: string, isBlocked: boolean): Promise<boolean> {
     const response = await this.AdminHostManagementRepository.HostblockUnblock(
       hostId,
       isBlocked

@@ -23,11 +23,15 @@ export class UserRentCarUseCase implements IUserRentCarUseCase {
 
     return car;
   }
-  async filterRentCars(filters: Record<string, any>): Promise<IRentCarBase[]> {
-    return this.userRentCarRepository.findByFilters(filters);
+  async filterRentCars(
+    filters: Record<string, any>,
+    page: number,
+    limit: number
+  ) {
+    return await this.userRentCarRepository.findByFilters(filters, page, limit);
   }
 
-  async sortRentCars(sorts: any): Promise<IRentCarBase[]> {
-    return await this.userRentCarRepository.sortRentCars(sorts);
+  async sortRentCars(sorts: any, page: number, limit: number) {
+    return await this.userRentCarRepository.sortRentCars(sorts, page, limit);
   }
 }

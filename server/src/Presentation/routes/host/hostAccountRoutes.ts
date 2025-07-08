@@ -1,4 +1,5 @@
 import express from "express";
+import { HOST_ROUTES } from "../../../infrastructure/constants/host.routes";
 import {
   authenticateToken,
   isHost,
@@ -9,7 +10,7 @@ import { hostAssetRequestController } from "../../../infrastructure/DI/host/acco
 const hostAccountRoutes = express.Router();
 
 hostAccountRoutes.get(
-  "/notifications",
+  HOST_ROUTES.HostAccount.notifications,
   authenticateToken,
   isHost,
   hostNotificationController.getAllNotifications.bind(
@@ -18,7 +19,7 @@ hostAccountRoutes.get(
 );
 
 hostAccountRoutes.get(
-  "/requests",
+  HOST_ROUTES.HostAccount.requests,
   authenticateToken,
   isHost,
   hostAssetRequestController.getAllRequests.bind(hostAssetRequestController)

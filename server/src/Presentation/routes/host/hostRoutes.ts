@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
+import { HOST_ROUTES } from "../../../infrastructure/constants/host.routes";
 import { hostVenueController } from "../../../infrastructure/DI/host/hostVenue.DI";
 import { hostRentCarController } from "../../../infrastructure/DI/host/hostRentCar.DI";
 import { hostCatersController } from "../../../infrastructure/DI/host/hostCaters.DI";
@@ -15,7 +16,7 @@ export interface MulterRequest extends Request {
 const hostRoutes = express.Router();
 
 hostRoutes.post(
-  "/addVenue",
+  HOST_ROUTES.VenueService.addVenue,
   authenticateToken,
   isHost,
   withImageUpload((req, res) =>
@@ -24,7 +25,7 @@ hostRoutes.post(
 );
 
 hostRoutes.post(
-  "/addRentCar",
+  HOST_ROUTES.RentcarService.addRentcar,
   authenticateToken,
   isHost,
   withImageUpload((req, res) =>
@@ -33,7 +34,7 @@ hostRoutes.post(
 );
 
 hostRoutes.post(
-  "/addCaters",
+  HOST_ROUTES.CatersService.addCaters,
   authenticateToken,
   isHost,
   withImageUpload((req, res) =>
@@ -42,7 +43,7 @@ hostRoutes.post(
 );
 
 hostRoutes.post(
-  "/addStudio",
+  HOST_ROUTES.StudioService.addStudio,
   authenticateToken,
   isHost,
   withImageUpload((req, res) =>

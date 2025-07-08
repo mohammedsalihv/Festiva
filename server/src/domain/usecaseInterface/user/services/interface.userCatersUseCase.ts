@@ -6,6 +6,14 @@ import {
 export interface IUserCatersUseCase {
   allCaters(): Promise<ICatersBase[]>;
   catersDetails(rentcarId: string): Promise<ICaters>;
-  filterCaters(filters: Record<string, any>): Promise<ICatersBase[]>;
-  sortCaters(sorts: any): Promise<ICatersBase[]>;
+  filterCaters(
+    filters: any,
+    page: number,
+    limit: number
+  ): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }>;
+  sortCaters(
+    sorts: any,
+    page: number,
+    limit: number
+  ): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }>;
 }

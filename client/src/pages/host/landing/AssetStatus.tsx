@@ -67,7 +67,7 @@ export const AssetStatus: React.FC = () => {
   const fetchRequests = async (page = 1) => {
     try {
       setLoading(true);
-      const { data, totalPages } = await getAllAssetRequests(page, 10);
+      const { data, totalPages } = await getAllAssetRequests(page, 7);
       setRequests(data);
       setTotalPages(totalPages);
     } catch (error) {

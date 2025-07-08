@@ -22,26 +22,26 @@ export class UserCatersRepository implements IUserCatersRepository {
       .exec();
   }
 
-
-  async filterCaters(filters: Record<string, any>): Promise<ICatersBase[]> {
+  async filterCaters(
+    filters: Record<string, any>,
+    page: number,
+    limit: number
+  ): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }> {
     const query: Record<string, any> = { status: "approved" };
 
- 
     if (filters.city) query["location.city"] = filters.city;
     if (filters.state) query["location.state"] = filters.state;
     if (filters.country) query["location.country"] = filters.country;
 
-   
     if (filters.serviceTypes?.length) {
       query["serviceTypes"] = {
         $in: filters.serviceTypes.map((item: string) => ({
           $regex: item,
-          $options: "i", 
+          $options: "i",
         })),
       };
     }
 
-    
     if (filters.catersFeatures?.length) {
       query["features"] = {
         $in: filters.catersFeatures.map((item: string) => ({
@@ -51,7 +51,6 @@ export class UserCatersRepository implements IUserCatersRepository {
       };
     }
 
-   
     if (filters.timeSlots?.length) {
       query["timeSlots"] = { $in: filters.timeSlots };
     }
@@ -62,19 +61,32 @@ export class UserCatersRepository implements IUserCatersRepository {
       };
     }
 
+    const total = await CatersModel.countDocuments(query);
+    const totalPages = Math.ceil(total / limit);
+    const skip = (page - 1) * limit;
+
     const caters = await CatersModel.find(query)
       .populate("location", "city state country")
+      .skip(skip)
+      .limit(limit)
       .lean();
 
-    return caters.map(mapCatersToBase);
+    return {
+      data: caters.map(mapCatersToBase),
+      totalPages,
+      currentPage: page,
+    };
   }
 
-
-
-  async sortCaters(sorts: any): Promise<ICatersBase[]> {
+  async sortCaters(
+    sorts: any,
+    page: number,
+    limit: number
+  ): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }> {
     const matchStage = { $match: { status: "approved" } };
 
     const pipeline: any[] = [matchStage];
+
     const needsNumericSort =
       sorts.totalAmount || sorts.charge || sorts.manpower;
 
@@ -114,7 +126,22 @@ export class UserCatersRepository implements IUserCatersRepository {
       { $unwind: "$location" }
     );
 
+    // Count total first
+    const countPipeline = [...pipeline, { $count: "total" }];
+    const countResult = await CatersModel.aggregate(countPipeline);
+    const total = countResult[0]?.total || 0;
+    const totalPages = Math.ceil(total / limit);
+
+    // Add pagination
+    pipeline.push({ $skip: (page - 1) * limit });
+    pipeline.push({ $limit: limit });
+
     const caters = await CatersModel.aggregate(pipeline);
-    return caters.map(mapCatersToBase);
+
+    return {
+      data: caters.map(mapCatersToBase),
+      totalPages,
+      currentPage: page,
+    };
   }
 }

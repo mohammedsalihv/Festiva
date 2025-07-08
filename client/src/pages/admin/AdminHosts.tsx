@@ -1,7 +1,6 @@
-
+import Pagination from "@/components/Pagination";
 import { LuUserSearch } from "react-icons/lu";
 import { Images } from "@/assets";
-import Pagination from "@/components/Pagination";
 import { useEffect, useState, FormEvent } from "react";
 import { IoMdArrowForward } from "react-icons/io";
 import Drawer from "@/components/Drawer";
@@ -39,7 +38,6 @@ import { FaTrashRestoreAlt } from "react-icons/fa";
 import Table from "@/components/Table";
 
 const AdminHosts = () => {
-  const [page, setPage] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,13 +45,17 @@ const AdminHosts = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [selectedHost, setSelectedHost] = useState<Host | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [confirmAction, setConfirmAction] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [editForm, setEditForm] = useState<typeof selectedHost | null>(null);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const hosts = useSelector((state: RootState) => state.hostManagement.hosts);
+
   const [form, setForm] = useState({
     name: selectedHost?.name || "",
     phone: selectedHost?.phone || "",
@@ -123,31 +125,37 @@ const AdminHosts = () => {
   };
 
   useEffect(() => {
-    (async () => {
+    const fetchPaginatedHosts = async () => {
       try {
         setLoading(true);
-        const data = await getAllHosts();
-        dispatch(setAllHosts(data));
-      } catch (error: unknown) {
+        const response = await getAllHosts(page, limit);
+        dispatch(setAllHosts(response.data));
+        setTotalPages(response.totalPages);
+      } catch (error) {
         const errorMessage =
           error instanceof AxiosError
             ? error.response?.data?.message || error.message
-            : "An unexpected error occurred";
-        console.error("Error fetching hosts:", error);
-        setError(errorMessage);
-        toast.error("Hosts list fetching failed");
+            : "Failed to load hosts";
+        toast.error(errorMessage);
       } finally {
         setLoading(false);
       }
-    })();
-  }, []);
+    };
+
+    fetchPaginatedHosts();
+  }, [page]);
 
   const handleBlockOrUnblock = async (hostId: string, isBlocked: boolean) => {
     try {
       const response = await blockUnblockHost(isBlocked, hostId);
-      const updatedHosts = await getAllHosts();
-      dispatch(setAllHosts(updatedHosts));
-      setSelectedHost(updatedHosts.find((h: Host) => h._id === hostId) || null);
+
+      const updatedRes = await getAllHosts(page, limit);
+      dispatch(setAllHosts(updatedRes.data));
+
+      setSelectedHost(
+        updatedRes.data.find((h: Host) => h._id === hostId) || null
+      );
+
       toast.success(response.message);
     } catch (error: unknown) {
       const errorMessage =
@@ -190,10 +198,10 @@ const AdminHosts = () => {
         const res = await editHostDetails(payload, selectedHost._id);
         toast.success(res.message);
 
-        const updatedHosts = await getAllHosts();
-        dispatch(setAllHosts(updatedHosts));
+        const updatedRes = await getAllHosts(page, limit);
+        dispatch(setAllHosts(updatedRes.data));
         setSelectedHost(
-          updatedHosts.find((h: Host) => h._id === selectedHost._id) || null
+          updatedRes.data.find((h: Host) => h._id === selectedHost._id) || null
         );
         setEditForm(null);
       } catch (err: unknown) {
@@ -259,8 +267,8 @@ const AdminHosts = () => {
   const handleDelete = async (hostId: string) => {
     try {
       await deleteHost(hostId);
-      const updatedHosts = await getAllHosts();
-      dispatch(setAllHosts(updatedHosts));
+      const updatedRes = await getAllHosts(page, limit);
+      dispatch(setAllHosts(updatedRes.data));
       setSelectedHost(null);
       toast.success("Host account deleted");
       navigate("/admin/hosts");
@@ -317,8 +325,7 @@ const AdminHosts = () => {
         <Loader size={64} color="#000" />
       </div>
     );
-  if (error)
-    return <div className="text-center font-bold px-4 py-4 mt-10">{error}</div>;
+
   return (
     <div>
       <div className="flex flex-col md:flex-row h-screen bg-main_white rounded-md font-prompt">
@@ -332,7 +339,10 @@ const AdminHosts = () => {
                   className="pl-8 pr-2 py-2 border rounded w-full text-sm md:text-base"
                   placeholder="Search by name, email"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setPage(1);
+                  }}
                 />
                 <LuUserSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm md:text-base" />
               </div>
@@ -347,7 +357,10 @@ const AdminHosts = () => {
               <div className="flex items-center gap-2">
                 <Dropdown
                   options={HostSortOptions}
-                  onSelect={(value: string) => setSort(value)}
+                  onSelect={(value: string) => {
+                    setSort(value);
+                    setPage(1);
+                  }}
                 />
               </div>
             </div>
@@ -361,11 +374,7 @@ const AdminHosts = () => {
                 header: "Person",
                 accessor: (host) => (
                   <img
-                    src={
-                      host.profilePic
-                        ? host.profilePic
-                        : Images.casual_user
-                    }
+                    src={host.profilePic ? host.profilePic : Images.casual_user}
                     alt="Profile"
                     className="w-8 h-8 rounded-full border"
                   />
@@ -383,14 +392,12 @@ const AdminHosts = () => {
               },
             ]}
           />
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
         </div>
-      </div>
-      <div className="p-1">
-        <Pagination
-          currentPage={page}
-          totalPages={10}
-          onPageChange={(p) => setPage(p)}
-        />
       </div>
       <Drawer
         isOpen={!!selectedHost}

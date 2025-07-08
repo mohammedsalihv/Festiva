@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { IAdminHostManagementController } from "../../../../domain/controlInterface/admin/management controller interfaces/interface.adminHostManagementController";
 import { AdminHostManagementUseCase } from "../../../../application/use-cases/admin/adminManagement/usecase.adminHostManagement";
 import logger from "../../../../utils/common/messages/logger";
 import { AuthRequest } from "../../../../domain/controlInterface/common/authentication/authType";
@@ -14,21 +15,28 @@ interface MulterRequest extends Request {
   auth?: JwtPayload & { id: string; role?: string };
 }
 
-export class AdminHostsController {
+export class AdminHostsController implements IAdminHostManagementController {
   constructor(private AdminHostManagementUseCase: AdminHostManagementUseCase) {}
 
-  async Hosts(req: Request, res: Response): Promise<void> {
+  async getAllHosts(req: Request, res: Response): Promise<void> {
     try {
-      const users = await this.AdminHostManagementUseCase.execute();
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+
+      const users = await this.AdminHostManagementUseCase.findAllHosts(
+        page,
+        limit
+      );
+
       res.status(statusCodes.Success).json({
         message: "Hosts list fetched successfully",
         success: true,
-        data: users,
+        ...users,
       });
     } catch (error) {
       res.status(statusCodes.serverError).json({
         success: false,
-        message: "Hosts lists currently not available",
+        message: "Hosts list currently not available",
       });
       logger.error(error);
     }
@@ -47,7 +55,7 @@ export class AdminHostsController {
     }
 
     try {
-      const response = await this.AdminHostManagementUseCase.HostBlockUnblock(
+      const response = await this.AdminHostManagementUseCase.HostblockUnblock(
         hostId,
         isBlocked
       );
@@ -98,7 +106,7 @@ export class AdminHostsController {
     }
   }
 
-  async changeProfile(req: MulterRequest, res: Response) {
+  async changeProfile(req: MulterRequest, res: Response): Promise<void> {
     try {
       const hostId = req.params.hostId;
       const file = req.file;
@@ -108,12 +116,15 @@ export class AdminHostsController {
           success: false,
           message: "No image file uploaded.",
         });
+        return;
       }
+
       if (!hostId) {
-        return res.status(statusCodes.unAuthorized).json({
+        res.status(statusCodes.unAuthorized).json({
           success: false,
           message: "Unauthorized. No host ID found in request.",
         });
+        return;
       }
 
       const image = await uploadProfileImage({
@@ -134,20 +145,23 @@ export class AdminHostsController {
           ...updatedHost,
         },
       });
+      return;
     } catch (error: any) {
       logger.error("Profile change Error:", error);
 
       if (error.message === "Host not found") {
-        return res.status(statusCodes.notfound).json({
+        res.status(statusCodes.notfound).json({
           success: false,
           message: "Host not found",
         });
+        return;
       }
 
       res.status(statusCodes.serverError).json({
         success: false,
         message: error.message || statusMessages.serverError,
       });
+      return;
     }
   }
 

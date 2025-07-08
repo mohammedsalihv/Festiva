@@ -20,10 +20,19 @@ export class UserCatersUseCase implements IUserCatersUseCase {
 
     return caters;
   }
-  async filterCaters(filters: Record<string, any>): Promise<ICatersBase[]> {
-    return this.userCatersRepository.filterCaters(filters);
+  async filterCaters(
+    filters: Record<string, any>,
+    page: number,
+    limit: number
+  ): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }> {
+    return await this.userCatersRepository.filterCaters(filters, page, limit);
   }
-  async sortCaters(sorts: any): Promise<ICatersBase[]> {
-    return await this.userCatersRepository.sortCaters(sorts);
+
+  async sortCaters(
+    sorts: any,
+    page: number,
+    limit: number
+  ): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }> {
+    return await this.userCatersRepository.sortCaters(sorts, page, limit);
   }
 }

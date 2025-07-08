@@ -20,6 +20,9 @@ export interface EditHostResponse {
 
 export interface GetHostsResponse {
   data: Host[];
+  totalPages: number;
+  currentPage: number;
+  totalItems: number;
   message: string;
   success: boolean;
 }

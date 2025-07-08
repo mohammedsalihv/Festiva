@@ -1,5 +1,5 @@
 import axiosInstance from "@/config/user/userServiceAxiosInstence";
-import { filterParams , sortParams } from "@/utils/Types/user/filterSortTypes";
+import { filterParams, sortParams } from "@/utils/Types/user/filterSortTypes";
 
 export const fetchAssetDetails = async (
   type: "venue" | "studio" | "rentcar" | "caters",
@@ -11,17 +11,24 @@ export const fetchAssetDetails = async (
   return response.data.data;
 };
 
-export const filterAsset = async (type: string, filters: filterParams) => {
+
+export const filterAsset = async (
+  type: string,
+  filters: filterParams & { page?: number; limit?: number }
+): Promise<{ data: any[]; totalPages: number; currentPage: number }> => {
   const response = await axiosInstance.get(`/assets/filter/${type}`, {
     params: filters,
   });
-  return response.data.data;
+  return response.data;
 };
 
 
-export const sortAssets = async (type: string, sorts: sortParams) => {
+export const sortAssets = async (
+  type: string,
+  sorts: sortParams & { page?: number; limit?: number }
+): Promise<{ data: any[]; totalPages: number; currentPage: number }> => {
   const response = await axiosInstance.get(`/assets/sort/${type}`, {
     params: sorts,
   });
-  return response.data.data;
+  return response.data;
 };

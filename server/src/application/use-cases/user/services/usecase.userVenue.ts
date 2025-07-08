@@ -21,10 +21,12 @@ export class UserVenueUseCase implements IUserVenueUseCase {
     }
     return venue;
   }
-  async filterVenues(filters: any): Promise<IVenueBase[]> {
-    return await this.userVenueRepository.findVenuesWithFilters(filters);
-  }
-   async sortVenues(sorts: any): Promise<IVenueBase[]> {
-    return await this.userVenueRepository.sortVenues(sorts);
-  }
+  async filterVenues(filters: any, page: number, limit: number) {
+  return await this.userVenueRepository.findVenuesWithFilters(filters, page, limit);
+}
+
+async sortVenues(sorts: any, page: number, limit: number) {
+  return await this.userVenueRepository.sortVenues(sorts, page, limit);
+}
+
 }

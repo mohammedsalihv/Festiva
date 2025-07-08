@@ -50,7 +50,7 @@ export class UserVenueController implements IUserVenueController {
           : undefined;
 
       if (!venueId) {
-        res.status(400).json({
+        res.status(statusCodes.forbidden).json({
           success: false,
           message: "Invalid or missing venueId",
         });
@@ -73,7 +73,7 @@ export class UserVenueController implements IUserVenueController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected server error",
+          message: statusMessages.serverError,
         });
       }
     }
@@ -81,12 +81,18 @@ export class UserVenueController implements IUserVenueController {
   async filterVenues(req: Request, res: Response): Promise<void> {
     try {
       const filters = req.query;
-      const venues = await this.userVenueUseCase.filterVenues(filters);
+      const page = parseInt(filters.page as string) || 1;
+      const limit = parseInt(filters.limit as string) || 10;
+      const result = await this.userVenueUseCase.filterVenues(
+        filters,
+        page,
+        limit
+      );
 
       res.status(statusCodes.Success).json({
         success: true,
         message: "Filtered venues fetched successfully",
-        data: venues,
+        ...result,
       });
     } catch (error) {
       logger.error("Error filtering venues:", error);
@@ -101,17 +107,19 @@ export class UserVenueController implements IUserVenueController {
   async sortVenues(req: Request, res: Response): Promise<void> {
     try {
       const sorts = req.query;
-      const venues = await this.userVenueUseCase.sortVenues(sorts);
+      const page = parseInt(sorts.page as string) || 1;
+      const limit = parseInt(sorts.limit as string) || 10;
+      const result = await this.userVenueUseCase.sortVenues(sorts, page, limit);
 
-      res.status(200).json({
+      res.status(statusCodes.Success).json({
         success: true,
         message: "Sorted venues fetched successfully",
-        data: venues,
+        ...result,
       });
     } catch (error) {
-      res.status(500).json({
+       res.status(statusCodes.serverError).json({
         success: false,
-        message: error instanceof Error ? error.message : "Server error",
+        message: error instanceof Error ? error.message : statusMessages.serverError,
       });
     }
   }

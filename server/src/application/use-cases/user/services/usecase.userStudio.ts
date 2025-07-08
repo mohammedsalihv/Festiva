@@ -24,10 +24,15 @@ export class UserStudioUseCase implements IUserStudioUseCase {
 
     return studio;
   }
-  async filterStudios(filters: Record<string, any>): Promise<IStudioBase[]> {
-    return await this.userStudioRepository.findByFilters(filters);
+  async filterStudios(
+    filters: Record<string, any>,
+    page: number,
+    limit: number
+  ) {
+    return await this.userStudioRepository.findByFilters(filters, page, limit);
   }
-  async sortStudios(sorts: any): Promise<IStudioBase[]> {
-    return await this.userStudioRepository.sortStudios(sorts);
+
+  async sortStudios(sorts: any, page: number, limit: number) {
+    return await this.userStudioRepository.sortStudios(sorts, page, limit);
   }
 }

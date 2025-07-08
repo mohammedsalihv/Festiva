@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { IAdminUserManagementController } from "../../../../domain/controlInterface/admin/management controller interfaces/interface.adminUserManagementController";
 import { AdminUserManagementUseCase } from "../../../../application/use-cases/admin/adminManagement/usecase.adminUserManagement";
 import logger from "../../../../utils/common/messages/logger";
 import { JwtPayload } from "jsonwebtoken";
@@ -13,12 +14,17 @@ interface MulterRequest extends Request {
   auth?: JwtPayload & { id: string; role?: string };
 }
 
-export class AdminUsersController {
-  constructor(private AdminUserManagementUseCase: AdminUserManagementUseCase) {}
+export class AdminUsersController implements IAdminUserManagementController {
+  constructor(private adminUserManagementUseCase: AdminUserManagementUseCase) {}
 
-  async Users(req: Request, res: Response): Promise<void> {
+  async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
-      const users = await this.AdminUserManagementUseCase.execute();
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const users = await this.adminUserManagementUseCase.findAllUsers(
+        page,
+        limit
+      );
       res.status(statusCodes.Success).json({
         message: "Users list fetched successfully",
         success: true,
@@ -46,7 +52,7 @@ export class AdminUsersController {
     }
 
     try {
-      const response = await this.AdminUserManagementUseCase.UserBlockUnblock(
+      const response = await this.adminUserManagementUseCase.userBlockUnblock(
         userId,
         isBlocked
       );
@@ -79,7 +85,7 @@ export class AdminUsersController {
     }
 
     try {
-      const users = await this.AdminUserManagementUseCase.editUser(
+      const users = await this.adminUserManagementUseCase.editUser(
         userId,
         formData
       );
@@ -97,23 +103,25 @@ export class AdminUsersController {
     }
   }
 
-  async changeProfile(req: MulterRequest, res: Response) {
+  async changeProfile(req: MulterRequest, res: Response): Promise<void> {
     try {
       const userId = req.params.userId;
       const file = req.file;
 
       if (!file) {
-        return res.status(statusCodes.forbidden).json({
+        res.status(statusCodes.forbidden).json({
           success: false,
           message: "No image file uploaded.",
         });
+        return;
       }
 
       if (!userId) {
-        return res.status(statusCodes.unAuthorized).json({
+        res.status(statusCodes.unAuthorized).json({
           success: false,
           message: "Unauthorized. No user ID found in request.",
         });
+        return;
       }
 
       const image = await uploadProfileImage({
@@ -121,7 +129,7 @@ export class AdminUsersController {
         buffer: file.buffer,
       });
 
-      const updatedUser = await this.AdminUserManagementUseCase.changeProfile(
+      const updatedUser = await this.adminUserManagementUseCase.changeProfile(
         userId,
         image.url
       );
@@ -138,10 +146,11 @@ export class AdminUsersController {
       logger.error("Profile change Error:", error);
 
       if (error.message === "User not found") {
-        return res.status(statusCodes.notfound).json({
+        res.status(statusCodes.notfound).json({
           success: false,
           message: "User not found",
         });
+        return;
       }
 
       res.status(statusCodes.serverError).json({
@@ -163,7 +172,7 @@ export class AdminUsersController {
     }
 
     try {
-      const isDeleted = await this.AdminUserManagementUseCase.deleteUser(
+      const isDeleted = await this.adminUserManagementUseCase.deleteUser(
         userId
       );
       if (!isDeleted) {

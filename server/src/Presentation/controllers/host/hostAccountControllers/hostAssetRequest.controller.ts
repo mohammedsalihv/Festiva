@@ -7,7 +7,7 @@ import { statusCodes } from "../../../../utils/common/messages/constantResponses
 interface AuthRequest extends Request {
   auth?: JwtPayload & { id: string; role?: string };
 }
-// controllers/HostAssetRequestController.ts
+
 export class HostAssetRequestController implements IHostAssetRequestController {
   constructor(private hostAssetRequestUseCase: IHostAssetRequestUseCase) {}
 

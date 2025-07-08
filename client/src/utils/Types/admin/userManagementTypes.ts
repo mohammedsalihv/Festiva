@@ -1,7 +1,12 @@
 import { User } from "../user/authTypes";
 
 export interface GetUsersResponse {
-  data: User[];
+  data: {
+    data: User[];
+    totalPages: number;
+    currentPage: number;
+    totalItems: number;
+  };
   message: string;
   success: boolean;
 }

@@ -6,6 +6,14 @@ import {
 export interface IUserCatersRepository {
   findAllCaters(): Promise<ICatersBase[]>;
   fetchCatersById(catersId: string): Promise<ICaters | null>;
-  filterCaters(filters: Record<string, any>): Promise<ICatersBase[]>;
-  sortCaters(sorts: any): Promise<ICatersBase[]>;
+  filterCaters(
+    filters: Record<string, any>,
+    page: number,
+    limit: number
+  ): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }>;
+  sortCaters(
+    sorts: Record<string, any>,
+    page: number,
+    limit: number
+  ): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }>;
 }

@@ -51,7 +51,7 @@ export class UserStudioController implements IUserStudioController {
           : undefined;
 
       if (!studioId) {
-        res.status(400).json({
+        res.status(statusCodes.forbidden).json({
           success: false,
           message: "Invalid or missing studio Id",
         });
@@ -72,7 +72,7 @@ export class UserStudioController implements IUserStudioController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected server error",
+          message: statusMessages.serverError,
         });
       }
     }
@@ -80,17 +80,21 @@ export class UserStudioController implements IUserStudioController {
   async filterStudios(req: Request, res: Response): Promise<void> {
     try {
       const filters = req.query;
-
-      const studios = await this.userStudioUseCase.filterStudios(filters);
+      const page = parseInt(filters.page as string) || 1;
+      const limit = parseInt(filters.limit as string) || 10;
+      const result = await this.userStudioUseCase.filterStudios(
+        filters,
+        page,
+        limit
+      );
 
       res.status(statusCodes.Success).json({
         success: true,
         message: "Filtered studios fetched successfully",
-        data: studios,
+        ...result,
       });
     } catch (error) {
       logger.error("Error filtering studios:", error);
-
       res.status(statusCodes.serverError).json({
         success: false,
         message:
@@ -102,16 +106,24 @@ export class UserStudioController implements IUserStudioController {
   async sortStudios(req: Request, res: Response): Promise<void> {
     try {
       const sorts = req.query;
-      const studios = await this.userStudioUseCase.sortStudios(sorts);
-      res.status(200).json({
+      const page = parseInt(sorts.page as string) || 1;
+      const limit = parseInt(sorts.limit as string) || 10;
+      const result = await this.userStudioUseCase.sortStudios(
+        sorts,
+        page,
+        limit
+      );
+
+      res.status(statusCodes.Success).json({
         success: true,
         message: "Sorted studios fetched successfully",
-        data: studios,
+        ...result,
       });
     } catch (error) {
-      res.status(500).json({
+      res.status(statusCodes.serverError).json({
         success: false,
-        message: error instanceof Error ? error.message : "Server error",
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
       });
     }
   }

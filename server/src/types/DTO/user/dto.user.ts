@@ -12,6 +12,13 @@ export interface responseUserDTO {
   isBlocked: boolean;
 }
 
+export interface responseAllUsersDTO {
+  data: responseUserDTO[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+}
+
 export interface registerUserDTO {
   firstname: string;
   lastname: string;

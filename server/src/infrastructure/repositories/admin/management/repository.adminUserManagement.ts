@@ -3,12 +3,46 @@ import { IAdminUserManagementRepository } from "../../../../domain/entities/repo
 import { UserModal } from "../../../../domain/models/userModel";
 import { pickDefinedFields } from "../../../../utils/user/pickDefinedFields";
 import { EditUserPayload } from "../../../../domain/adminInterface/interface.editUser";
-import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
+import {
+  responseUserDTO,
+  responseAllUsersDTO,
+} from "../../../../types/DTO/user/dto.user";
 import { toResponseUserDTO } from "../../../../types/DTO/user/dto.user";
 
-export class AdminUserManagementRepository implements IAdminUserManagementRepository {
-  async findAll(): Promise<responseUserDTO[]> {
-    return UserModal.find().exec();
+export class AdminUserManagementRepository
+  implements IAdminUserManagementRepository
+{
+  async findAllUsers(
+    page: number,
+    limit: number
+  ): Promise<responseAllUsersDTO> {
+    const skip = (page - 1) * limit;
+    const [rawUsers, totalItems] = await Promise.all([
+      UserModal.find().skip(skip).limit(limit).exec(),
+      UserModal.countDocuments().exec(),
+    ]);
+    const totalPages = Math.ceil(totalItems / limit);
+
+    const data: responseUserDTO[] = rawUsers.map((user) => ({
+      id: user._id.toString(),
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      phone: user.phone,
+      profilePic: user.profilePic,
+      role: user.role,
+      googleId: user.googleId,
+      isActive: user.isActive,
+      timestamp: user.timestamp,
+      isBlocked: user.isBlocked,
+    }));
+
+    return {
+      data,
+      totalItems,
+      totalPages,
+      currentPage: page,
+    };
   }
 
   async UserBlockUnblock(userId: string, isBlocked: boolean): Promise<boolean> {

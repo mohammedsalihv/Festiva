@@ -22,35 +22,38 @@ export class UserVenueRepository implements IUserVenueRepository {
       .lean<IVenue>()
       .exec();
   }
-  async findVenuesWithFilters(filters: any): Promise<IVenueBase[]> {
-    const query: Record<string, any> = {
-      status: "approved",
-    };
+  async findVenuesWithFilters(
+    filters: any,
+    page: number,
+    limit: number
+  ): Promise<{
+    data: IVenueBase[];
+    totalPages: number;
+    currentPage: number;
+  }> {
+    const query: Record<string, any> = { status: "approved" };
 
-    if (filters.shift) {
-      query.shift = filters.shift;
-    }
+    if (filters.shift) query.shift = filters.shift;
 
-    if (filters.timeSlots?.length) {
+    if (filters.timeSlots?.length)
       query["timeSlots"] = { $in: filters.timeSlots };
-    }
 
     if (filters.venueFeaturesOptions?.length) {
-      const regexArray = filters.venueFeaturesOptions.map(
-        (feature: string) => ({
+      query.features = {
+        $in: filters.venueFeaturesOptions.map((feature: string) => ({
           $regex: feature,
           $options: "i",
-        })
-      );
-      query.features = { $in: regexArray };
+        })),
+      };
     }
 
     if (filters.parkingFeatures?.length) {
-      const regexArray = filters.parkingFeatures.map((feature: string) => ({
-        $regex: feature,
-        $options: "i",
-      }));
-      query.features = { $in: regexArray };
+      query.features = {
+        $in: filters.parkingFeatures.map((feature: string) => ({
+          $regex: feature,
+          $options: "i",
+        })),
+      };
     }
 
     if (filters.price) {
@@ -59,14 +62,32 @@ export class UserVenueRepository implements IUserVenueRepository {
       };
     }
 
+    const total = await VenueModel.countDocuments(query);
+    const totalPages = Math.ceil(total / limit);
+    const skip = (page - 1) * limit;
+
     const venues = await VenueModel.find(query)
       .populate("location", "city state country")
+      .skip(skip)
+      .limit(limit)
       .lean();
 
-    return venues.map(mapVenueToBase);
+    return {
+      data: venues.map(mapVenueToBase),
+      totalPages,
+      currentPage: page,
+    };
   }
 
-  async sortVenues(sorts: any): Promise<IVenueBase[]> {
+  async sortVenues(
+    sorts: any,
+    page: number,
+    limit: number
+  ): Promise<{
+    data: IVenueBase[];
+    totalPages: number;
+    currentPage: number;
+  }> {
     const sortQuery: Record<string, 1 | -1> = {};
 
     if (sorts.rent) sortQuery.rent = sorts.rent === "low-high" ? 1 : -1;
@@ -78,11 +99,22 @@ export class UserVenueRepository implements IUserVenueRepository {
     if (sorts.createdAt)
       sortQuery.createdAt = sorts.createdAt === "asc" ? 1 : -1;
 
-    const venues = await VenueModel.find({ status: "approved" })
+    const query = { status: "approved" };
+    const total = await VenueModel.countDocuments(query);
+    const totalPages = Math.ceil(total / limit);
+    const skip = (page - 1) * limit;
+
+    const venues = await VenueModel.find(query)
       .sort(sortQuery)
       .populate("location", "city state country")
+      .skip(skip)
+      .limit(limit)
       .lean();
 
-    return venues.map(mapVenueToBase);
+    return {
+      data: venues.map(mapVenueToBase),
+      totalPages,
+      currentPage: page,
+    };
   }
 }

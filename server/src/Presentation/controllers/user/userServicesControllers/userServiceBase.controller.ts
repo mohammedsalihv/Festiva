@@ -59,14 +59,16 @@ export class UserServiceBaseController implements IUserServicesBaseController {
   async filterAssets(req: Request, res: Response): Promise<void> {
     try {
       const typeOfAsset = req.params.type;
-      const filters = req.query;
 
       switch (typeOfAsset) {
         case "venue":
           await this.userVenueController.filterVenues(req, res);
           break;
         case "rentcar":
-          await this.userRentCarController.filterRentCars(req, res);
+          await this.userRentCarController.filterRentCars(
+            req,
+            res
+          );
           break;
         case "studio":
           await this.userStudioController.filterStudios(req, res);
@@ -76,21 +78,21 @@ export class UserServiceBaseController implements IUserServicesBaseController {
           break;
         default:
           res
-            .status(400)
+            .status(statusCodes.notfound)
             .json({ success: false, message: "Invalid asset type" });
       }
     } catch (error) {
-      res.status(500).json({
+      res.status(statusCodes.serverError).json({
         success: false,
-        message: error instanceof Error ? error.message : "Server error",
+        message: error instanceof Error ? error.message : statusMessages.serverError,
       });
     }
   }
+
   async sortAssets(req: Request, res: Response): Promise<void> {
     try {
       const typeOfAsset = req.params.type;
-      const filters = req.query;
-
+     
       switch (typeOfAsset) {
         case "venue":
           await this.userVenueController.sortVenues(req, res);
@@ -106,13 +108,13 @@ export class UserServiceBaseController implements IUserServicesBaseController {
           break;
         default:
           res
-            .status(400)
+            .status(statusCodes.notfound)
             .json({ success: false, message: "Invalid asset type" });
       }
     } catch (error) {
-      res.status(500).json({
+      res.status(statusCodes.serverError).json({
         success: false,
-        message: error instanceof Error ? error.message : "Server error",
+        message: error instanceof Error ? error.message : statusMessages.serverError,
       });
     }
   }

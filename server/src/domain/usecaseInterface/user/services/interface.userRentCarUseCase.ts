@@ -6,6 +6,14 @@ import {
 export interface IUserRentCarUseCase {
   allRentCars(): Promise<IRentCarBase[]>;
   rentCarDetails(rentcarId: string): Promise<IRentCar>;
-  filterRentCars(filters: Record<string, any>): Promise<IRentCarBase[]>;
-  sortRentCars(sorts: any): Promise<IRentCarBase[]>;
+  filterRentCars(
+    filters: any,
+    page: number,
+    limit: number
+  ): Promise<{ data: IRentCarBase[]; totalPages: number; currentPage: number }>;
+  sortRentCars(
+    sorts: any,
+    page: number,
+    limit: number
+  ): Promise<{ data: IRentCarBase[]; totalPages: number; currentPage: number }>;
 }

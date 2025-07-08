@@ -16,9 +16,8 @@ export interface registerHostDTO {
   rejectedRequests?: number;
 }
 
-
 export interface responseHostDTO {
-  id?:string;
+  id?: string;
   name: string;
   email: string;
   phone: string;
@@ -35,6 +34,12 @@ export interface responseHostDTO {
   rejectedRequests?: number;
 }
 
+export interface responseAllHostsDTO {
+  data: responseHostDTO[];
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
+}
 
 export interface HostDetailsDTO {
   host: {
@@ -43,13 +48,12 @@ export interface HostDetailsDTO {
     phone: string;
     email: string;
     role: string;
-    location:string;
-    profilePic:string;
+    location: string;
+    profilePic: string;
   };
   accessToken: string;
   refreshToken: string;
 }
-
 
 export function mapToResponseHostDTO(host: any): responseHostDTO {
   return {

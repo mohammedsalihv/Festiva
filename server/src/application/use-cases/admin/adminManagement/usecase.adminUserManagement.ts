@@ -1,24 +1,36 @@
-import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
+import { IAdminUserManagementUseCase } from "../../../../domain/usecaseInterface/admin/Managemenet usecase interfaces/interface.adminUserManagementUseCase";
+import {
+  responseUserDTO,
+  responseAllUsersDTO,
+} from "../../../../types/DTO/user/dto.user";
 import { IAdminUserManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminUserManagement";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { EditUserPayload } from "../../../../domain/adminInterface/interface.editUser";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
-export class AdminUserManagementUseCase {
-  constructor(private AdminUserManagementRepository: IAdminUserManagementRepository) {}
+export class AdminUserManagementUseCase implements IAdminUserManagementUseCase {
+  constructor(
+    private adminUserManagementRepository: IAdminUserManagementRepository
+  ) {}
 
-  async execute(): Promise<responseUserDTO[]> {
-    const users = await this.AdminUserManagementRepository.findAll();
+  async findAllUsers(
+    page: number,
+    limit: number
+  ): Promise<responseAllUsersDTO> {
+    const response = await this.adminUserManagementRepository.findAllUsers(
+      page,
+      limit
+    );
 
-    if (!users || users.length === 0) {
+    if (!response || response.data.length === 0) {
       throw new CustomError("Users empty", statusCodes.notfound);
     }
 
-    return users;
+    return response;
   }
 
-  async UserBlockUnblock(userId: string, isBlocked: boolean): Promise<boolean> {
-    const response = await this.AdminUserManagementRepository.UserBlockUnblock(
+  async userBlockUnblock(userId: string, isBlocked: boolean): Promise<boolean> {
+    const response = await this.adminUserManagementRepository.UserBlockUnblock(
       userId,
       isBlocked
     );
@@ -33,7 +45,10 @@ export class AdminUserManagementUseCase {
     userId: string,
     form: EditUserPayload
   ): Promise<responseUserDTO[]> {
-    const response = await this.AdminUserManagementRepository.editUser(userId, form);
+    const response = await this.adminUserManagementRepository.editUser(
+      userId,
+      form
+    );
 
     if (!response || response.length === 0) {
       throw new CustomError("User update failed", statusCodes.serverError);
@@ -43,7 +58,7 @@ export class AdminUserManagementUseCase {
   }
 
   changeProfile(userId: string, imageUrl: string): Promise<responseUserDTO> {
-    const response = this.AdminUserManagementRepository.changeProfile(
+    const response = this.adminUserManagementRepository.changeProfile(
       userId,
       imageUrl
     );
@@ -58,7 +73,7 @@ export class AdminUserManagementUseCase {
   }
 
   async deleteUser(userId: string): Promise<boolean> {
-    const result = await this.AdminUserManagementRepository  .deleteUser(userId);
+    const result = await this.adminUserManagementRepository.deleteUser(userId);
     if (!result) {
       throw new CustomError("Deleting failed", statusCodes.serverError);
     }

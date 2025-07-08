@@ -23,7 +23,11 @@ export class UserStudioRepository implements IUserStudioRepository {
       .exec();
   }
 
-  async findByFilters(filters: Record<string, any>): Promise<IStudioBase[]> {
+  async findByFilters(
+    filters: Record<string, any>,
+    page: number,
+    limit: number
+  ): Promise<{ data: IStudioBase[]; totalPages: number; currentPage: number }> {
     const query: any = { status: "approved" };
 
     if (filters.city) query["location.city"] = filters.city;
@@ -68,14 +72,28 @@ export class UserStudioRepository implements IUserStudioRepository {
       };
     }
 
+    const total = await StudioModel.countDocuments(query);
+    const totalPages = Math.ceil(total / limit);
+    const skip = (page - 1) * limit;
+
     const studios = await StudioModel.find(query)
       .populate("location", "city state country")
+      .skip(skip)
+      .limit(limit)
       .lean();
 
-    return studios.map(mapStudioToBase);
+    return {
+      data: studios.map(mapStudioToBase),
+      totalPages,
+      currentPage: page,
+    };
   }
 
-  async sortStudios(sorts: any): Promise<IStudioBase[]> {
+  async sortStudios(
+    sorts: any,
+    page: number,
+    limit: number
+  ): Promise<{ data: IStudioBase[]; totalPages: number; currentPage: number }> {
     const pipeline: any[] = [{ $match: { status: "approved" } }];
 
     if (sorts.packagePrice) {
@@ -89,14 +107,11 @@ export class UserStudioRepository implements IUserStudioRepository {
     const sortStage: Record<string, 1 | -1> = {};
 
     if (sorts.name) sortStage["studioName"] = sorts.name === "asc" ? 1 : -1;
-
     if (sorts.packagePrice)
       sortStage["convertedPackagePrice"] =
         sorts.packagePrice === "low-high" ? 1 : -1;
-
     if (sorts.createdAt)
       sortStage["createdAt"] = sorts.createdAt === "asc" ? 1 : -1;
-
     if (sorts.location)
       sortStage["location.state"] = sorts.location === "asc" ? 1 : -1;
 
@@ -110,9 +125,24 @@ export class UserStudioRepository implements IUserStudioRepository {
         as: "location",
       },
     });
+
     pipeline.push({ $unwind: "$location" });
 
+    // Count total
+    const countPipeline = [...pipeline, { $count: "total" }];
+    const totalResult = await StudioModel.aggregate(countPipeline);
+    const total = totalResult[0]?.total || 0;
+    const totalPages = Math.ceil(total / limit);
+    const skip = (page - 1) * limit;
+
+    pipeline.push({ $skip: skip }, { $limit: limit });
+
     const studios = await StudioModel.aggregate(pipeline);
-    return studios.map(mapStudioToBase);
+
+    return {
+      data: studios.map(mapStudioToBase),
+      totalPages,
+      currentPage: page,
+    };
   }
 }

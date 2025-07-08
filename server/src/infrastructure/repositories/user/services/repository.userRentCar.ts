@@ -7,9 +7,6 @@ import {
 import { IRentCarBase } from "../../../../domain/entities/serviceInterface/interface.rentCar";
 
 export class UserRentCarRepository implements IUserRentCarRepository {
-
-
-
   async findAllRentCars(): Promise<IRentCarBase[]> {
     const cars = await RentCarModel.find({ status: "approved" })
       .populate("location", "city state country")
@@ -17,8 +14,6 @@ export class UserRentCarRepository implements IUserRentCarRepository {
 
     return cars.map(mapRentCarToBase);
   }
-
-
 
   async fetchRentCarDetailsById(rentcarId: string): Promise<IRentCar | null> {
     return RentCarModel.findById(rentcarId)
@@ -28,12 +23,17 @@ export class UserRentCarRepository implements IUserRentCarRepository {
       .exec();
   }
 
-
-
-  async findByFilters(filters: Record<string, any>): Promise<IRentCarBase[]> {
+  async findByFilters(
+    filters: Record<string, any>,
+    page: number,
+    limit: number
+  ): Promise<{
+    data: IRentCarBase[];
+    totalPages: number;
+    currentPage: number;
+  }> {
     const pipeline: any[] = [{ $match: { status: "approved" } }];
 
-    
     pipeline.push({
       $addFields: {
         modelInt: { $toInt: "$model" },
@@ -43,27 +43,22 @@ export class UserRentCarRepository implements IUserRentCarRepository {
 
     const match: Record<string, any> = {};
 
-   
     if (filters.make?.length) {
       match.make = { $in: filters.make };
     }
 
-  
     if (filters.transmission) {
       match.transmission = filters.transmission;
     }
 
-  
     if (filters.fuel) {
       match.fuel = filters.fuel;
     }
 
-   
     if (filters.seats) {
       match.seatsInt = parseInt(filters.seats);
     }
 
-  
     if (filters.modelStart || filters.modelEnd) {
       match.modelInt = {};
       if (filters.modelStart)
@@ -71,25 +66,22 @@ export class UserRentCarRepository implements IUserRentCarRepository {
       if (filters.modelEnd) match.modelInt.$lte = parseInt(filters.modelEnd);
     }
 
-   
     if (filters.rentCarFeatures?.length) {
       const regexArray = filters.rentCarFeatures.map((item: string) => ({
         $regex: item,
         $options: "i",
       }));
-
       match.$or = [
         { carFeatures: { $in: regexArray } },
         { additionalFeatures: { $in: regexArray } },
       ];
     }
 
-    
-   if (filters.timeSlots?.length) {
+    if (filters.timeSlots?.length) {
       match["timeSlots"] = { $in: filters.timeSlots };
     }
-  
-   if (filters.price) {
+
+    if (filters.price) {
       match.$expr = {
         $lte: [{ $toDouble: "$rent" }, filters.price],
       };
@@ -97,12 +89,31 @@ export class UserRentCarRepository implements IUserRentCarRepository {
 
     pipeline.push({ $match: match });
 
-   
+    const countPipeline = [...pipeline, { $count: "total" }];
+    const totalResult = await RentCarModel.aggregate(countPipeline);
+    const total = totalResult[0]?.total || 0;
+    const totalPages = Math.ceil(total / limit);
+    const skip = (page - 1) * limit;
+
+    pipeline.push({ $skip: skip }, { $limit: limit });
+
     const rentCars = await RentCarModel.aggregate(pipeline);
-    return rentCars.map(mapRentCarToBase);
+    return {
+      data: rentCars.map(mapRentCarToBase),
+      totalPages,
+      currentPage: page,
+    };
   }
 
-  async sortRentCars(sorts: any): Promise<IRentCarBase[]> {
+  async sortRentCars(
+    sorts: any,
+    page: number,
+    limit: number
+  ): Promise<{
+    data: IRentCarBase[];
+    totalPages: number;
+    currentPage: number;
+  }> {
     const pipeline: any[] = [{ $match: { status: "approved" } }];
 
     if (sorts.rent || sorts.deposite) {
@@ -118,15 +129,11 @@ export class UserRentCarRepository implements IUserRentCarRepository {
 
     if (sorts.businessName)
       sortStage.businessName = sorts.businessName === "asc" ? 1 : -1;
-
     if (sorts.carName) sortStage.carName = sorts.carName === "asc" ? 1 : -1;
-
     if (sorts.rent)
       sortStage.convertedRent = sorts.rent === "low-high" ? 1 : -1;
-
     if (sorts.deposite)
       sortStage.convertedDeposite = sorts.deposite === "low-high" ? 1 : -1;
-
     if (sorts.createdAt)
       sortStage.createdAt = sorts.createdAt === "asc" ? 1 : -1;
 
@@ -143,7 +150,20 @@ export class UserRentCarRepository implements IUserRentCarRepository {
 
     pipeline.push({ $unwind: "$location" });
 
+    // Count total
+    const countPipeline = [...pipeline, { $count: "total" }];
+    const totalResult = await RentCarModel.aggregate(countPipeline);
+    const total = totalResult[0]?.total || 0;
+    const totalPages = Math.ceil(total / limit);
+    const skip = (page - 1) * limit;
+
+    pipeline.push({ $skip: skip }, { $limit: limit });
+
     const result = await RentCarModel.aggregate(pipeline);
-    return result.map(mapRentCarToBase);
+    return {
+      data: result.map(mapRentCarToBase),
+      totalPages,
+      currentPage: page,
+    };
   }
 }

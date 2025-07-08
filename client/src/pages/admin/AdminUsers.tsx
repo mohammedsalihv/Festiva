@@ -45,6 +45,7 @@ const AdminUsers = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [sort, setSort] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<unknown>(null);
@@ -54,11 +55,12 @@ const AdminUsers = () => {
   const [confirmAction, setConfirmAction] = useState(false);
   const [editForm, setEditForm] = useState<typeof selectedUser | null>(null);
   const [page, setPage] = useState(1);
+  const [limit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userData = useSelector(
-    (state: RootState) => state.userManagement.users
-  );
+  const users =
+    useSelector((state: RootState) => state.userManagement.users) || [];
 
   const [form, setForm] = useState({
     firstname: selectedUser?.firstname || "",
@@ -83,6 +85,9 @@ const AdminUsers = () => {
       });
     }
   }, [selectedUser]);
+  useEffect(() => {
+    setSelectedUser(null);
+  }, []);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -115,31 +120,36 @@ const AdminUsers = () => {
   };
 
   useEffect(() => {
-    (async () => {
+    const fetchPaginatedUsers = async () => {
       try {
         setLoading(true);
-        const data = await AllUsers();
-        dispatch(setAllUsers(data));
-      } catch (error: unknown) {
-        if (error instanceof AxiosError) {
-          console.error("Axios error:", error.response?.data || error.message);
-          setError(error.response?.data || error.message);
-        } else {
-          console.error("Unexpected error:", error);
-          setError("An unexpected error occurred");
-        }
+        const response = await AllUsers(page, limit);
+        dispatch(setAllUsers(response.data));
+        setTotalPages(response.totalPages);
+        setSelectedUserId(null); 
+        setSelectedUser(null);
+      } catch (error) {
+        const errorMessage =
+          error instanceof AxiosError
+            ? error.response?.data?.message || error.message
+            : "Failed to load users";
+        toast.error(errorMessage);
       } finally {
         setLoading(false);
       }
-    })();
-  }, [dispatch, page]);
+    };
+
+    fetchPaginatedUsers();
+  }, [page]);
 
   const handleBlockOrUnblock = async (userId: string, isBlocked: boolean) => {
     try {
       const response = await blockUnblockUser(isBlocked, userId);
-      const updatedUsers = await AllUsers();
-      dispatch(setAllUsers(updatedUsers));
-      setSelectedUser(updatedUsers.find((u: User) => u._id === userId) || null);
+      const updatedUsers = await AllUsers(page, limit);
+      dispatch(setAllUsers(updatedUsers.data));
+      setSelectedUser(
+        updatedUsers.data.find((u: User) => u._id === userId) || null
+      );
       toast.success(response.message);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -164,6 +174,7 @@ const AdminUsers = () => {
 
   const handleEditForm = async (e: FormEvent) => {
     e.preventDefault();
+    setError({});
 
     if (!selectedUser?._id) {
       toast.error("No user selected");
@@ -182,13 +193,11 @@ const AdminUsers = () => {
         const res = await editUserDetails(payload, selectedUser?._id);
         toast.success(res.message);
 
-        const updatedUsers = await AllUsers().catch((err) => {
-          console.error("Failed to fetch users:", err);
-          return [];
-        });
-        dispatch(setAllUsers(updatedUsers));
+        const updatedUsers = await AllUsers(page, limit);
+        dispatch(setAllUsers(updatedUsers.data));
         setSelectedUser(
-          updatedUsers.find((u: User) => u._id === selectedUser._id) || null
+          updatedUsers.data.find((u: User) => u._id === selectedUser._id) ||
+            null
         );
         setEditForm(null);
         navigate("/admin/users");
@@ -259,8 +268,8 @@ const AdminUsers = () => {
   const handleDelete = async (userId: string) => {
     try {
       await deleteUser(userId);
-      const updatedUser = await AllUsers();
-      dispatch(setAllUsers(updatedUser));
+      const updatedUser = await AllUsers(page, limit);
+      dispatch(setAllUsers(updatedUser.data));
       setSelectedUser(null);
       toast.success("User account deleted");
       navigate("/admin/users");
@@ -273,7 +282,7 @@ const AdminUsers = () => {
     }
   };
 
-  const filteredUsers = userData
+  const filteredUsers = users
     .filter((user) => {
       const query = searchQuery.toLowerCase();
       return (
@@ -385,8 +394,12 @@ const AdminUsers = () => {
             renderRowStart={(user) => (
               <input
                 type="checkbox"
-                checked={selectedUser?._id === user._id}
-                readOnly
+                checked={selectedUserId === user._id}
+                onChange={() => {
+                  const isSelected = selectedUserId === user._id;
+                  setSelectedUserId(isSelected ? null : user._id);
+                  setSelectedUser(isSelected ? null : user);
+                }}
               />
             )}
             columns={[
@@ -410,6 +423,11 @@ const AdminUsers = () => {
               { header: "Email", accessor: "email" },
               { header: "Role", accessor: "role" },
             ]}
+          />
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => setPage(newPage)}
           />
         </div>
         {selectedUser && (
@@ -752,13 +770,11 @@ const AdminUsers = () => {
           </>
         )}
       </Drawer>
-      <div className="p-2">
-        <Pagination
-          currentPage={page}
-          totalPages={10}
-          onPageChange={(p) => setPage(p)}
-        />
-      </div>
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={(newPage) => setPage(newPage)}
+      />
     </div>
   );
 };

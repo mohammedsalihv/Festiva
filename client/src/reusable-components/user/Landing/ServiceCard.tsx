@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import ServiceCardFilter from "@/components/ServiceCardFilter";
 import ServiceCardSort from "@/components/ServiceCardSort";
+import Pagination from "@/components/Pagination";
 import {
   FaHeart,
   FaShareAlt,
@@ -36,6 +37,9 @@ export default function ServicesCard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const fetchRef = useRef<HTMLDivElement>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 8;
   const navigate = useNavigate();
 
   // Update selectedTab when route param changes
@@ -63,22 +67,33 @@ export default function ServicesCard() {
   const fetchAssets = async (
     type: string,
     filters: filterParams,
-    sorts: sortParams
+    sorts: sortParams,
+    page = 1
   ) => {
     setLoading(true);
     try {
+      const params = {
+        ...filters,
+        ...sorts,
+        page,
+        limit: pageSize,
+      };
+
       let response;
 
       if (Object.keys(sorts).length > 0) {
-        response = await sortAssets(type, sorts);
+        response = await sortAssets(type, params);
       } else {
-        response = await filterAsset(type, filters);
+        response = await filterAsset(type, params);
       }
-      setAssets(response);
+
+      setAssets(response.data);
+      setTotalPages(response.totalPages);
+      setCurrentPage(page);
       setError(null);
     } catch (err) {
-      setError("Something went wrong while fetching assets.");
       console.log(err);
+      setError("Something went wrong while fetching assets.");
     } finally {
       setLoading(false);
     }
@@ -86,9 +101,13 @@ export default function ServicesCard() {
 
   useEffect(() => {
     if (selectedTab) {
-      fetchAssets(selectedTab, filters, sorts);
+      fetchAssets(selectedTab, filters, sorts, 1);
     }
   }, [selectedTab, filters, sorts]);
+
+  const handlePageChange = (page: number) => {
+    fetchAssets(selectedTab, filters, sorts, page);
+  };
 
   if (loading) {
     return (
@@ -189,7 +208,7 @@ export default function ServicesCard() {
               className="border text-blue-600 px-3 py-2 rounded-md flex items-center gap-2"
             >
               <span className="capitalize">
-              <span className="text-black">{key}</span> : {String(value)}
+                <span className="text-black">{key}</span> : {String(value)}
               </span>
               <button
                 onClick={() =>
@@ -201,7 +220,7 @@ export default function ServicesCard() {
                 }
                 className="text-red-500 hover:text-red-700 font-bold"
               >
-               <IoIosClose className="w-6 h-6"/>
+                <IoIosClose className="w-6 h-6" />
               </button>
             </div>
           ))}
@@ -232,7 +251,7 @@ export default function ServicesCard() {
                 }
                 className="text-red-500 hover:text-red-700 font-bold"
               >
-                <IoIosClose className="w-6 h-6"/>
+                <IoIosClose className="w-6 h-6" />
               </button>
             </div>
           ))}
@@ -311,6 +330,13 @@ export default function ServicesCard() {
             </div>
           </div>
         ))}
+      </div>
+      <div className="mt-6">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

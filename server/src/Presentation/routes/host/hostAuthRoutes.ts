@@ -1,4 +1,5 @@
 import express from "express";
+import { HOST_ROUTES } from "../../../infrastructure/constants/host.routes";
 import {
   hostSignupController,
   hostLoginController,
@@ -8,7 +9,7 @@ import logger from "../../../utils/common/messages/logger";
 
 const hostAuthRoutes = express.Router();
 
-hostAuthRoutes.post("/signup", async (req, res) => {
+hostAuthRoutes.post(HOST_ROUTES.Authentiation.hostSignup, async (req, res) => {
   try {
     await hostSignupController.hostSignup(req, res);
   } catch (error) {
@@ -16,7 +17,7 @@ hostAuthRoutes.post("/signup", async (req, res) => {
   }
 });
 
-hostAuthRoutes.post("/login", async (req, res) => {
+hostAuthRoutes.post(HOST_ROUTES.Authentiation.hostLogin, async (req, res) => {
   try {
     await hostLoginController.hostLogin(req, res);
   } catch (error) {
@@ -25,7 +26,7 @@ hostAuthRoutes.post("/login", async (req, res) => {
 });
 
 hostAuthRoutes.post(
-  "/refresh",
+  HOST_ROUTES.Authentiation.Refresh_Token,
   refreshTokenController.refreshAccessToken.bind(refreshTokenController)
 );
 
