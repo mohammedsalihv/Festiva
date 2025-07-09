@@ -4,10 +4,10 @@ import { IVenue } from "../entities/serviceInterface/interface.venue";
 const venueSchema = new Schema<IVenue>(
   {
     venueName: { type: String, required: true },
-    rent: { type: Number, required: true },
-    capacity: { type: Number },
+    rent: { type: String, required: true },
+    capacity: { type: String },
     shift: { type: String },
-    squareFeet: { type: Number },
+    squareFeet: { type: String },
     timeSlots: [{ type: String }],
     availableDates: [{ type: String }],
     about: { type: String },

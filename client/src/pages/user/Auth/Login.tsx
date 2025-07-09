@@ -9,24 +9,14 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
-import {
-  LoginUser,
-  googleLogin,
-  validateEmail,
-} from "@/api/user/auth/userAuthService";
-import{ setUserDetails } from "@/redux/Slice/user/userSlice";
+import { LoginUser, validateEmail } from "@/api/user/auth/userAuthService";
+import { setUserDetails } from "@/redux/Slice/user/userSlice";
 import { AxiosError } from "axios";
 import {
   validateLoginForm,
   FormState,
 } from "@/utils/validations/user/Auth/loginValidation";
-import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
-import {
-  DecodedToken,
-  ErrorState,
-  GoogleLoginData,
-} from "@/utils/Types/user/authTypes";
+import { ErrorState } from "@/utils/Types/user/authTypes";
 import EmailVerification from "@/reusable-components/user/Auth/EmailVerification";
 import logger from "@/utils/logger";
 import ResetPassword from "@/reusable-components/user/Auth/ResetPassword";
@@ -52,13 +42,10 @@ const Login = () => {
   const handleValidateEmail = async (email: string) => {
     try {
       await validateEmail(email);
-       toast.success(
-      "Email verifeid"
-    );
+      toast.success("Email verifeid");
       setEmailForReset(email);
       setShowEmailComp(false);
       setshowResetPasswordComp(true);
-    
     } catch (error) {
       if (error instanceof AxiosError) {
         logger.error(error?.response?.status);
@@ -68,11 +55,10 @@ const Login = () => {
   };
 
   const handlePasswordResetSuccess = () => {
-     toast.success(
+    toast.success(
       "Password reset successfully. You can now login with your new password."
     );
     setshowResetPasswordComp(false);
-   
   };
 
   const handleCloseEmailVerification = () => {
@@ -151,56 +137,56 @@ const Login = () => {
     mutation.mutate(loginForm);
   };
 
-  const googleLoginMutation = useMutation({
-    mutationFn: googleLogin,
-    onSuccess: (data) => {
-      const userData = {
-        id: data.user._id,
-        firstname: data.user.firstname,
-        lastname: data.user.lastname,
-        email: data.user.email,
-        role: data.user.role,
-        phone: data.user.phone,
-        profilePic: data.user.profilePic,
-        isActive: data.user.isActive,
-        isBlocked: data.user.isBlocked,
-        timestamp: data.user.timestamp,
-        accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
-      };
-      dispatch(setUserDetails(userData));
-      toast.success("Google Login successful!");
-      navigate("/landing");
-    },
-    onError: (error: unknown) => {
-      if (error instanceof AxiosError) {
-        if (error.response && error.response.status === 403) {
-          toast.error(error.response.data.message);
-        } else {
-          toast.error("Google login failed. Please try again.");
-        }
-      }
-    },
-  });
+  // const googleLoginMutation = useMutation({
+  //   mutationFn: googleLogin,
+  //   onSuccess: (data) => {
+  //     const userData = {
+  //       id: data.user._id,
+  //       firstname: data.user.firstname,
+  //       lastname: data.user.lastname,
+  //       email: data.user.email,
+  //       role: data.user.role,
+  //       phone: data.user.phone,
+  //       profilePic: data.user.profilePic,
+  //       isActive: data.user.isActive,
+  //       isBlocked: data.user.isBlocked,
+  //       timestamp: data.user.timestamp,
+  //       accessToken: data.accessToken,
+  //       refreshToken: data.refreshToken,
+  //     };
+  //     dispatch(setUserDetails(userData));
+  //     toast.success("Google Login successful!");
+  //     navigate("/landing");
+  //   },
+  //   onError: (error: unknown) => {
+  //     if (error instanceof AxiosError) {
+  //       if (error.response && error.response.status === 403) {
+  //         toast.error(error.response.data.message);
+  //       } else {
+  //         toast.error("Google login failed. Please try again.");
+  //       }
+  //     }
+  //   },
+  // });
 
-  const handleGoogleLogin = (credentialResponse: CredentialResponse) => {
-    if (!credentialResponse.credential) {
-      toast.error("Google login failed. No credentials received.");
-      return;
-    }
+  // const handleGoogleLogin = (credentialResponse: CredentialResponse) => {
+  //   if (!credentialResponse.credential) {
+  //     toast.error("Google login failed. No credentials received.");
+  //     return;
+  //   }
 
-    const decodedToken: DecodedToken = jwtDecode<DecodedToken>(
-      credentialResponse.credential
-    );
+  //   const decodedToken: DecodedToken = jwtDecode<DecodedToken>(
+  //     credentialResponse.credential
+  //   );
 
-    const googleLoginData: GoogleLoginData = {
-      name: decodedToken.name,
-      email: decodedToken.email,
-      sub: decodedToken.sub,
-    };
+  //   const googleLoginData: GoogleLoginData = {
+  //     name: decodedToken.name,
+  //     email: decodedToken.email,
+  //     sub: decodedToken.sub,
+  //   };
 
-    googleLoginMutation.mutate(googleLoginData);
-  };
+  //   googleLoginMutation.mutate(googleLoginData);
+  // };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -327,18 +313,18 @@ const Login = () => {
                   </button>
                 </div>
               </div>
-              <div className="flex items-center justify-center my-6">
+              {/* <div className="flex items-center justify-center my-6">
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
                 <span className="mx-4 whitespace-nowrap text-sm text-neutral-500">
                   or login with
                 </span>
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
-              </div>
+              </div> */}
               <div className="flex items-center justify-center space-x-4">
-                <GoogleLogin
+                {/* <GoogleLogin
                   onSuccess={handleGoogleLogin}
                   onError={() => toast.error("Google login failed")}
-                />
+                /> */}
               </div>
             </CardContent>
           </div>

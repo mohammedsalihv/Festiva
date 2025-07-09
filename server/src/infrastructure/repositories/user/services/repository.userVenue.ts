@@ -22,6 +22,7 @@ export class UserVenueRepository implements IUserVenueRepository {
       .lean<IVenue>()
       .exec();
   }
+
   async findVenuesWithFilters(
     filters: any,
     page: number,
@@ -31,42 +32,60 @@ export class UserVenueRepository implements IUserVenueRepository {
     totalPages: number;
     currentPage: number;
   }> {
-    const query: Record<string, any> = { status: "approved" };
+    const andConditions: any[] = [];
 
-    if (filters.shift) query.shift = filters.shift;
+    andConditions.push({ status: "approved" });
 
-    if (filters.timeSlots?.length)
-      query["timeSlots"] = { $in: filters.timeSlots };
-
-    if (filters.venueFeaturesOptions?.length) {
-      query.features = {
-        $in: filters.venueFeaturesOptions.map((feature: string) => ({
-          $regex: feature,
-          $options: "i",
-        })),
-      };
+    if (filters.shift) {
+      andConditions.push({ shift: filters.shift });
     }
 
-    if (filters.parkingFeatures?.length) {
-      query.features = {
-        $in: filters.parkingFeatures.map((feature: string) => ({
-          $regex: feature,
-          $options: "i",
-        })),
-      };
+    if (filters.timeSlots?.length) {
+      andConditions.push({ timeSlots: { $in: filters.timeSlots } });
     }
 
-    if (filters.price) {
-      query.$expr = {
-        $lte: [{ $toDouble: "$rent" }, filters.price],
-      };
+    if (filters.features?.length || filters.parkingFeatures?.length) {
+      const orConditions: any[] = [];
+
+      if (filters.features?.length) {
+        orConditions.push(
+          ...filters.features.map((feature: string) => ({
+            features: { $regex: feature, $options: "i" },
+          }))
+        );
+      }
+
+      if (filters.parkingFeatures?.length) {
+        orConditions.push(
+          ...filters.parkingFeatures.map((feature: string) => ({
+            parkingFeatures: { $regex: feature, $options: "i" },
+          }))
+        );
+      }
+
+      if (orConditions.length > 0) {
+        andConditions.push({ $or: orConditions });
+      }
     }
 
-    const total = await VenueModel.countDocuments(query);
-    const totalPages = Math.ceil(total / limit);
+    console.log(typeof filters.price); 
+    const price = Number(filters.price);
+    if (!isNaN(price)) {
+      andConditions.push({
+        $expr: {
+          $lte: [{ $toDouble: "$rent" }, price],
+        },
+      });
+    }
+
+    const finalQuery =
+      andConditions.length === 1 ? andConditions[0] : { $and: andConditions };
+
     const skip = (page - 1) * limit;
+    const total = await VenueModel.countDocuments(finalQuery);
+    const totalPages = Math.ceil(total / limit);
 
-    const venues = await VenueModel.find(query)
+    const venues = await VenueModel.find(finalQuery)
       .populate("location", "city state country")
       .skip(skip)
       .limit(limit)

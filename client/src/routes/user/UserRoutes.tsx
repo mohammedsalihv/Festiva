@@ -1,4 +1,5 @@
 import React from "react";
+import { USER_ROUTE } from "@/utils/constants/routes/user.routes";
 import { Routes, Route } from "react-router-dom";
 import Home from "@/pages/user/Home";
 import MyBookings from "@/pages/user/MyBookings";
@@ -14,16 +15,16 @@ const UserRoutes: React.FC = () => {
   return (
     <Routes>
       <Route
-        path="/home"
+        path={USER_ROUTE.userPages.home}
         element={
           <PrivateRoute>
             <Home />
           </PrivateRoute>
         }
       />
-      <Route path="/profile" element={<Profile />} />
+      <Route path={USER_ROUTE.userPages.profile} element={<Profile />} />
       <Route
-        path="/bookings"
+        path={USER_ROUTE.userPages.bookings}
         element={
           <PrivateRoute>
             <MyBookings />
@@ -31,7 +32,7 @@ const UserRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/services"
+        path={USER_ROUTE.userPages.services}
         element={
           <PrivateRoute>
             <MainServices />
@@ -39,7 +40,7 @@ const UserRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/venues/types"
+        path={USER_ROUTE.venuService.venueTypesPage}
         element={
           <PrivateRoute>
             <Venuetypes />
@@ -47,7 +48,7 @@ const UserRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/assets/:type"
+        path={USER_ROUTE.userPages.assetType}
         element={
           <PrivateRoute>
             <ServicesPage />
@@ -55,14 +56,17 @@ const UserRoutes: React.FC = () => {
         }
       />
       <Route
-        path="/services/:type/details/:id"
+        path={USER_ROUTE.userPages.assetDetails}
         element={
           <PrivateRoute>
             <ServiceDetails />
           </PrivateRoute>
         }
       />
-      <Route path="*" element={<ErrorAlert statusCode={404} />} />
+      <Route
+        path={USER_ROUTE.notfound}
+        element={<ErrorAlert statusCode={404} />}
+      />
     </Routes>
   );
 };

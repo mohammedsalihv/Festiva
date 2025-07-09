@@ -1,4 +1,5 @@
 import axiosInstance from "@/config/host/hostAxiosInstence";
+import { HOST_API } from "@/utils/constants/api endpoints/host.api";
 
 export interface HostRegisterData {
   name: string;
@@ -14,12 +15,18 @@ export interface HostLoginData {
 }
 
 export const hostLogin = async (data: HostLoginData) => {
-  const response = await axiosInstance.post("/auth/login", data);
+  const response = await axiosInstance.post(
+    HOST_API.Authentication.hostLogin,
+    data
+  );
   return response.data;
 };
 
 export const hostSignup = async (data: HostRegisterData) => {
-  const response = await axiosInstance.post("/auth/signup", data);
+  const response = await axiosInstance.post(
+    HOST_API.Authentication.hostSignup,
+    data
+  );
   console.log(response);
   return response.data;
 };

@@ -1,4 +1,5 @@
 import React from "react";
+import { ADMIN_ROUTES } from "@/utils/constants/routes/admin.routes";
 import { Routes, Route } from "react-router-dom";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminUsers from "@/pages/admin/AdminUsers";
@@ -11,7 +12,7 @@ const AdminRoutes: React.FC = () => {
   return (
     <Routes>
       <Route
-        path="dashboard"
+        path={ADMIN_ROUTES.adminPages.dashboard}
         element={
           <LoaderPage>
             <AdminDashboard />
@@ -19,7 +20,7 @@ const AdminRoutes: React.FC = () => {
         }
       />
       <Route
-        path="users"
+        path={ADMIN_ROUTES.adminPages.users}
         element={
           <LoaderPage>
             <AdminUsers />
@@ -27,7 +28,7 @@ const AdminRoutes: React.FC = () => {
         }
       />
       <Route
-        path="hosts"
+        path={ADMIN_ROUTES.adminPages.hosts}
         element={
           <LoaderPage>
             <AdminHosts />
@@ -35,7 +36,7 @@ const AdminRoutes: React.FC = () => {
         }
       />
       <Route
-        path="assets"
+        path={ADMIN_ROUTES.adminPages.assets}
         element={
           <LoaderPage>
             <AdminServices />
@@ -43,7 +44,7 @@ const AdminRoutes: React.FC = () => {
         }
       />
       <Route
-        path="asset/request"
+        path={ADMIN_ROUTES.adminPages.assetRequests}
         element={
           <LoaderPage>
             <RequestedAsset />

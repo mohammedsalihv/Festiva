@@ -1,4 +1,5 @@
 import axiosInstance from "@/config/admin/adminAxiosInstence";
+import { ADMIN_API } from "@/utils/constants/api endpoints/admin.api";
 import {
   singleAssetResponse,
   allAssetsResponse,
@@ -8,15 +9,18 @@ import {
 
 export const allAssets = async (typeOfAsset: string) => {
   const response = await axiosInstance.get<allAssetsResponse>(
-    `/assets/${typeOfAsset}`
+    ADMIN_API.assetManagement.getAllAssets(typeOfAsset)
   );
   return response.data.data;
 };
 
-export const singleAssetDetails = async (assetId: string, typeOfAsset: string) => {
-  const response = await axiosInstance.get<
-    singleAssetResponse<assetDetailTypes>
-  >(`/assets/details/${assetId}?type=${typeOfAsset}`);
+export const singleAssetDetails = async (
+  assetId: string,
+  typeOfAsset: string
+) => {
+  const response = await axiosInstance.get<singleAssetResponse<assetDetailTypes>>(
+    ADMIN_API.assetManagement.getSingleAssetDetails(assetId, typeOfAsset)
+  );
   return response.data.data;
 };
 
@@ -25,7 +29,7 @@ export const assetRequestApprove = async (
   typeOfAsset: string
 ) => {
   const response = await axiosInstance.put<assetStatusResponse>(
-    `/assets/approve/${assetId}?assetStatus=approved&type=${typeOfAsset}`
+    ADMIN_API.assetManagement.approveAsset(assetId, typeOfAsset)
   );
   return response.data;
 };
@@ -35,7 +39,7 @@ export const assetRequestReject = async (
   typeOfAsset: string
 ) => {
   const response = await axiosInstance.put<assetStatusResponse>(
-    `/assets/reject/${assetId}?assetStatus=rejected&type=${typeOfAsset}`
+    ADMIN_API.assetManagement.rejectAsset(assetId, typeOfAsset)
   );
   return response.data;
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { IoCheckmarkDone, IoClose } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { notificationProps } from "@/utils/Types/host/pages/notification";
 import { TbViewportTall } from "react-icons/tb";
@@ -19,10 +19,10 @@ const NotificationPanel: React.FC<notificationProps> = ({
       <div className="flex justify-between items-center px-4 py-3 border-b">
         <IoClose className="cursor-pointer h-6 w-6" onClick={onClose} />
         <h3 className="text-[16px] font-semibold">Your notifications</h3>
-        <div className="flex items-center gap-2 text-sm text-blue-600 cursor-pointer">
+        {/* <div className="flex items-center gap-2 text-sm text-blue-600 cursor-pointer">
           <IoCheckmarkDone />
           <span className="hover:underline">Mark all as read</span>
-        </div>
+        </div> */}
       </div>
 
       <div className="flex flex-col gap-4 px-4 py-2">

@@ -24,25 +24,29 @@ import {
   filterParams,
   sortParams,
 } from "@/utils/Types/user/filterSortTypes";
+import { Input } from "@/components/Input";
 
 export default function ServicesCard() {
+  const { type } = useParams(); // ✅ must be before using it
+  const normalizedType = type?.toLowerCase();
+  const navigate = useNavigate();
+
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
-  const { type } = useParams();
-  const normalizedType = type?.toLowerCase();
   const [selectedTab, setSelectedTab] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<filterParams>({});
   const [sorts, setSorts] = useState<sortParams>({});
   const [assets, setAssets] = useState<Asset[]>([]);
+  const [hasTriedRetry, setHasTriedRetry] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const fetchRef = useRef<HTMLDivElement>(null);
+  const [retryCount, setRetryCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 8;
-  const navigate = useNavigate();
 
-  // Update selectedTab when route param changes
   useEffect(() => {
     if (normalizedType) {
       setSelectedTab(normalizedType);
@@ -51,10 +55,7 @@ export default function ServicesCard() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        fetchRef.current &&
-        !fetchRef.current.contains(event.target as Node)
-      ) {
+      if (fetchRef.current && !fetchRef.current.contains(event.target as Node)) {
         setIsFilterOpen(false);
       }
     };
@@ -72,20 +73,11 @@ export default function ServicesCard() {
   ) => {
     setLoading(true);
     try {
-      const params = {
-        ...filters,
-        ...sorts,
-        page,
-        limit: pageSize,
-      };
-
-      let response;
-
-      if (Object.keys(sorts).length > 0) {
-        response = await sortAssets(type, params);
-      } else {
-        response = await filterAsset(type, params);
-      }
+      const params = { ...filters, ...sorts, page, limit: pageSize };
+      const response =
+        Object.keys(sorts).length > 0
+          ? await sortAssets(type, params)
+          : await filterAsset(type, params);
 
       setAssets(response.data);
       setTotalPages(response.totalPages);
@@ -101,6 +93,8 @@ export default function ServicesCard() {
 
   useEffect(() => {
     if (selectedTab) {
+      setHasTriedRetry(false);
+      setRetryCount(0);
       fetchAssets(selectedTab, filters, sorts, 1);
     }
   }, [selectedTab, filters, sorts]);
@@ -118,39 +112,53 @@ export default function ServicesCard() {
     );
   }
 
-  if (error)
+  if (error || (assets.length === 0 && !hasTriedRetry)) {
     return (
       <Retry
-        message={error}
-        onRetry={() => fetchAssets(selectedTab, filters, sorts)}
+        message={error || "No matching assets found for your filters."}
+        onRetry={() => {
+          if (retryCount === 0) {
+            setRetryCount(1);
+            fetchAssets(selectedTab, filters, sorts);
+          } else {
+            setFilters({});
+            setSorts({});
+            setRetryCount(0);
+            setHasTriedRetry(false);
+            fetchAssets(selectedTab, {}, {}, 1);
+          }
+        }}
       />
     );
-  if (assets.length === 0)
-    return (
-      <Retry
-        message="No assets found"
-        onRetry={() => fetchAssets(selectedTab, filters, sorts)}
-      />
-    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6 font-JosephicSans mt-14">
+      {/* Search & Filters */}
       <div className="flex flex-col sm:flex-row items-center justify-between mb-2 sm:mb-4 gap-2 sm:gap-3 border-b">
+        {/* Search */}
         <div className="w-full relative">
-          <FaSearch className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs sm:text-sm" />
-          <input
+          <FaSearch className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs sm:text-base" />
+          <Input
             type="text"
             placeholder="Add keywords..."
-            className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-1 sm:py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-1 sm:py-2 rounded-lg text-xs sm:text-base border-0 focus:outline-none focus:ring-0"
           />
         </div>
+
+        {/* Tabs + Filters */}
         <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 border-b pb-2">
           <div className="w-full overflow-x-auto whitespace-nowrap scrollbar-hide sm:overflow-visible">
             <div className="inline-flex gap-2 px-1">
               {serviceOptions.map((option) => (
                 <button
                   key={option.value}
-                  onClick={() => setSelectedTab(option.value)}
+                  onClick={() => {
+                    setSelectedTab(option.value);
+                    navigate(`/user/assets/${option.value}`);
+                  }}
                   className={`px-4 py-1.5 rounded-full text-xs sm:text-sm transition ${
                     selectedTab === option.value
                       ? "bg-main_color text-white"
@@ -166,7 +174,7 @@ export default function ServicesCard() {
           <div className="flex justify-end gap-2 w-full sm:w-auto">
             <Button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="flex items-center gap-2 px-3 py-2 bg-main_color text-white text-xs sm:text-sm rounded-2xl hover:bg-indigo-500"
+              className="flex items-center gap-2 px-3 py-2 bg-main_color text-white  text-xs sm:text-sm rounded-2xl hover:bg-indigo-500"
             >
               <FaFilter className="text-xs" />
             </Button>
@@ -200,6 +208,8 @@ export default function ServicesCard() {
           </div>
         </div>
       </div>
+
+      {/* Filter/Sort pills */}
       {(Object.keys(filters).length > 0 || Object.keys(sorts).length > 0) && (
         <div className="flex flex-wrap items-center gap-2 mt-2 text-xs sm:text-sm mb-2">
           {Object.entries(filters).map(([key, value]) => (
@@ -227,7 +237,7 @@ export default function ServicesCard() {
           {Object.entries(sorts).map(([key, value]) => (
             <div
               key={`sort-${key}`}
-              className=" border text-main_color px-3 py-2 rounded-md flex items-center gap-2"
+              className="border text-main_color px-3 py-2 rounded-md flex items-center gap-2"
             >
               <span className="capitalize">
                 <span className="text-black">{key}</span>:{" "}
@@ -255,82 +265,93 @@ export default function ServicesCard() {
               </button>
             </div>
           ))}
-          {(Object.keys(filters).length > 0 ||
-            Object.keys(sorts).length > 0) && (
-            <button
-              onClick={() => {
-                setFilters({});
-                setSorts({});
-              }}
-              className="ml-2 text-red-500 hover:text-red-700 hover:underline font-medium"
-            >
-              Clear All
-            </button>
-          )}
+          <button
+            onClick={() => {
+              setFilters({});
+              setSorts({});
+            }}
+            className="ml-2 text-red-500 hover:text-red-700 hover:underline font-medium"
+          >
+            Clear All
+          </button>
         </div>
       )}
+
+      {/* Card Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-        {assets.map((asset) => (
-          <div
-            key={asset._id}
-            className="bg-white rounded-md overflow-hidden shadow-2xl hover:shadow-lg transition-shadow cursor-pointer"
-            onClick={() =>
-              navigate(`/user/services/${normalizedType}/details/${asset._id}`)
-            }
-          >
-            <div className="relative h-36 sm:h-48 w-full group">
-              <img
-                src={
-                  Array.isArray(asset.Images) ? asset.Images[0] : Images.imageNA
-                }
-                alt={asset.name || "Asset"}
-                className="w-full h-full object-cover rounded-t-lg transition-opacity duration-300 group-hover:opacity-0"
-              />
-              {Array.isArray(asset.Images) && asset.Images[1] && (
+        {assets
+          .filter((asset) => {
+            if (!searchTerm.trim()) return true;
+            const keyword = searchTerm.toLowerCase();
+            return (
+              asset.name?.toLowerCase().includes(keyword) ||
+              asset.location?.state?.toLowerCase().includes(keyword) ||
+              asset.location?.country?.toLowerCase().includes(keyword)
+            );
+          })
+          .map((asset) => (
+            <div
+              key={asset._id}
+              className="bg-white rounded-md overflow-hidden shadow-2xl hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() =>
+                navigate(`/user/services/${normalizedType}/details/${asset._id}`)
+              }
+            >
+              <div className="relative h-36 sm:h-48 w-full group">
                 <img
-                  src={asset.Images[1]}
-                  alt={asset.name || "Asset preview"}
-                  className="absolute top-0 left-0 w-full h-full object-cover rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  src={
+                    Array.isArray(asset.Images)
+                      ? asset.Images[0]
+                      : Images.imageNA
+                  }
+                  alt={asset.name || "Asset"}
+                  className="w-full h-full object-cover rounded-t-lg transition-opacity duration-300 group-hover:opacity-0"
                 />
-              )}
-              <div className="absolute top-2 right-2 flex gap-2 z-10">
-                <button className="bg-white/80 rounded-full p-1 hover:bg-white">
-                  <FaHeart className="text-gray-600 hover:text-red-500 text-xs" />
-                </button>
-                <button className="bg-white/80 rounded-full p-1 hover:bg-white">
-                  <FaShareAlt className="text-gray-600 hover:text-blue-400 text-xs" />
-                </button>
-              </div>
-            </div>
-            <div className="p-2 sm:p-3 space-y-1">
-              <h3 className="text-sm font-semibold text-gray-800 line-clamp-2">
-                {asset.name}
-              </h3>
-              <div className="flex items-center gap-1 text-xs font-semibold text-gray-900">
-                {"packagesCount" in asset ? (
-                  <span>{`${
-                    asset.packagesCount ?? asset.amount
-                  } available packages`}</span>
-                ) : (
-                  <div className="flex items-center">
-                    <FaRupeeSign className="text-[10px]" />
-                    <span className="text-base">{asset.amount}</span>
-                  </div>
+                {Array.isArray(asset.Images) && asset.Images[1] && (
+                  <img
+                    src={asset.Images[1]}
+                    alt={asset.name || "Asset preview"}
+                    className="absolute top-0 left-0 w-full h-full object-cover rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  />
                 )}
-                <span className="text-gray-500 text-[12px]">
-                  • Responds within 1 hr
-                </span>
+                <div className="absolute top-2 right-2 flex gap-2 z-10">
+                  <button className="bg-white/80 rounded-full p-1 hover:bg-white">
+                    <FaHeart className="text-gray-600 hover:text-red-500 text-xs" />
+                  </button>
+                  <button className="bg-white/80 rounded-full p-1 hover:bg-white">
+                    <FaShareAlt className="text-gray-600 hover:text-blue-400 text-xs" />
+                  </button>
+                </div>
               </div>
-              <div className="text-xs text-main_color flex items-center gap-1">
-                <FaLocationArrow className="text-xs" />
-                <span>
-                  {asset.location?.state}, {asset.location?.country}
-                </span>
+              <div className="p-2 sm:p-3 space-y-1">
+                <h3 className="text-sm font-semibold text-gray-800 line-clamp-2">
+                  {asset.name}
+                </h3>
+                <div className="flex items-center gap-1 text-xs font-semibold text-gray-900">
+                  {"packagesCount" in asset ? (
+                    <span>{`${asset.packagesCount ?? asset.amount} available packages`}</span>
+                  ) : (
+                    <div className="flex items-center">
+                      <FaRupeeSign className="text-[10px]" />
+                      <span className="text-base">{asset.amount}</span>
+                    </div>
+                  )}
+                  <span className="text-gray-500 text-[12px]">
+                    • Responds within 1 hr
+                  </span>
+                </div>
+                <div className="text-xs text-main_color flex items-center gap-1">
+                  <FaLocationArrow className="text-xs" />
+                  <span>
+                    {asset.location?.state}, {asset.location?.country}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
+
+      {/* Pagination */}
       <div className="mt-6">
         <Pagination
           currentPage={currentPage}

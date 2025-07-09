@@ -1,23 +1,35 @@
 import axiosInstance from "@/config/user/userAxiosInstence";
+import { USER_API } from "@/utils/constants/api endpoints/user.api";
 import {
   GoogleLoginData,
   SignupData,
   LoginData,
 } from "@/utils/Types/user/authTypes";
-import { changePasswordState ,resetPaswordPayload } from "@/utils/Types/user/profileTypes";
+import {
+  changePasswordState,
+  resetPaswordPayload,
+} from "@/utils/Types/user/profileTypes";
 
 export const registerUser = async (data: SignupData) => {
-  const response = await axiosInstance.post("/auth/signup", data);
+  const response = await axiosInstance.post(
+    USER_API.Authentication.userSignup,
+    data
+  );
   return response.data;
 };
 
 export const LoginUser = async (data: LoginData) => {
-  const response = await axiosInstance.post("/auth/login", data);
+  const response = await axiosInstance.post(
+    USER_API.Authentication.userLogin,
+    data
+  );
   return response.data;
 };
 
 export const sendOtp = async ({ email }: { email: string }) => {
-  const response = await axiosInstance.post("/auth/send-otp", { email });
+  const response = await axiosInstance.post(USER_API.Authentication.sendOtp, {
+    email,
+  });
   return response.data;
 };
 
@@ -28,37 +40,54 @@ export const verifyOtp = async ({
   email: string;
   otp: string;
 }) => {
-  const response = await axiosInstance.post("/auth/verifyOtp", { email, otp });
+  const response = await axiosInstance.post(USER_API.Authentication.sendOtp, {
+    email,
+    otp,
+  });
   return response.data;
 };
 
 export const validateEmail = async (email: string) => {
-  const response = await axiosInstance.get(`/auth/checkMail/${email}`);
+  const response = await axiosInstance.get(
+    USER_API.Authentication.validateEmail(email)
+  );
   return response.data;
 };
 
 export const passwordModify = async (data: changePasswordState) => {
-  const response = await axiosInstance.post("/auth/passwordModify", data);
+  const response = await axiosInstance.post(
+    USER_API.Authentication.passwordChange,
+    data
+  );
   return response.data;
 };
 
 export const resetPassword = async (data: resetPaswordPayload) => {
-  const response = await axiosInstance.post("/auth/password/reset", data);
+  const response = await axiosInstance.post(
+    USER_API.Authentication.passwordReset,
+    data
+  );
   return response.data;
 };
 
-
 export const googleLogin = async (data: GoogleLoginData) => {
-  const response = await axiosInstance.post("/auth/google-login", data);
+  const response = await axiosInstance.post(
+    USER_API.Authentication.userGoogleLogin,
+    data
+  );
   return response.data;
 };
 
 export const deleteProfile = async () => {
-  const response = await axiosInstance.delete('/auth/profile/delete');
+  const response = await axiosInstance.delete(
+    USER_API.userAccount.profileDelete
+  );
   return response.data;
 };
 
 export const userLogout = async () => {
-  const response = await axiosInstance.delete("/auth/logout");
+  const response = await axiosInstance.delete(
+    USER_API.Authentication.userLogout
+  );
   return response.data;
 };

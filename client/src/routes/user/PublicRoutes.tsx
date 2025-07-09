@@ -1,3 +1,4 @@
+import { USER_ROUTE } from "@/utils/constants/routes/user.routes";
 import Login from "@/pages/user/Auth/Login";
 import Signup from "@/pages/user/Auth/Signup";
 import { Routes, Route } from "react-router-dom";
@@ -7,10 +8,10 @@ import PublicOnlyRoute from "./Protect/PublicOnlyRoute";
 
 const PublicRoutes = () => (
   <Routes>
-    <Route path="/" element={<Landing />} />
+    <Route path={USER_ROUTE.Authentication.userLanding} element={<Landing />} />
 
     <Route
-      path="/login"
+      path={USER_ROUTE.Authentication.userLogin}
       element={
         <PublicOnlyRoute>
           <Login />
@@ -18,14 +19,17 @@ const PublicRoutes = () => (
       }
     />
     <Route
-      path="/signup"
+      path={USER_ROUTE.Authentication.userSignup}
       element={
         <PublicOnlyRoute>
           <Signup />
         </PublicOnlyRoute>
       }
     />
-    <Route path="*" element={<ErrorAlert statusCode={404} />} />
+    <Route
+      path={USER_ROUTE.notfound}
+      element={<ErrorAlert statusCode={404} />}
+    />
   </Routes>
 );
 

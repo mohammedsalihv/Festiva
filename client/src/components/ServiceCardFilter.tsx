@@ -14,7 +14,10 @@ import {
   rentCarAdditionalFeatures,
   rentCarFeatures,
 } from "@/utils/Options/host/rentcar/rentcarFeatures";
-import { venueFeaturesOptions } from "@/utils/Options/host/venue/venueFeatures";
+import {
+  venueFeaturesOptions,
+  venueParkingOptions,
+} from "@/utils/Options/host/venue/venueFeatures";
 import { venueShifts } from "@/utils/Options/user/venueFilterOptions";
 import {
   catersFeatures,
@@ -73,13 +76,22 @@ const ServiceCardFilter: React.FC<filterProps> = ({
           value !== "" &&
           (!Array.isArray(value) || isArrayValid);
 
-        if (isValueValid) {
+        if (!isValueValid) return acc;
+
+        if (key === "venueFeaturesOptions") {
+          acc["features"] = value;
+        } else {
           acc[key] = value;
         }
+
         return acc;
       },
       {} as Record<string, any>
     );
+
+    if (selectedShift) {
+      cleanedFilters.shift = selectedShift;
+    }
 
     if (selectedTimeSlot) {
       cleanedFilters.timeSlots = [selectedTimeSlot];
@@ -89,6 +101,12 @@ const ServiceCardFilter: React.FC<filterProps> = ({
       cleanedFilters.packageSearch = packageSearch.trim();
     }
 
+    if(price){
+      cleanedFilters.price = price;
+
+    }
+
+    console.log("Final filters sent:", cleanedFilters);
     onApplyFilter(cleanedFilters);
     filterOpen(false);
   };
@@ -111,9 +129,10 @@ const ServiceCardFilter: React.FC<filterProps> = ({
         </button>
         {type === "venue" && (
           <div className="border">
+            {/* Venue Features */}
             <div className="mb-2 sm:mb-4 p-2 sm:p-4">
               <h4 className="text-sm sm:text-base font-bold text-gray-800 mb-1 sm:mb-2">
-                Venue features
+                Venue Features
               </h4>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-2">
                 {venueFeaturesOptions.map((feature, i) => (
@@ -135,6 +154,32 @@ const ServiceCardFilter: React.FC<filterProps> = ({
                 ))}
               </div>
             </div>
+
+            {/* Parking Features */}
+            <div className="mb-2 sm:mb-4 p-2 sm:p-4">
+              <h4 className="text-sm sm:text-base font-bold text-gray-800 mb-1 sm:mb-2">
+                Parking Features
+              </h4>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-2">
+                {venueParkingOptions.map((feature, i) => (
+                  <label
+                    key={i}
+                    className="flex items-center gap-2 text-xs sm:text-sm text-gray-700"
+                  >
+                    <Checkbox
+                      className="accent-blue-500 border border-blue-500"
+                      checked={localFilters.parkingFeatures?.includes(feature)}
+                      onCheckedChange={() =>
+                        handleCheckboxChange("parkingFeatures", feature)
+                      }
+                    />
+                    {feature}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Shifts */}
             <div className="border mb-2 sm:mb-4 p-2 sm:p-4">
               <h4 className="text-sm sm:text-base font-bold text-gray-800 mb-1 sm:mb-2">
                 Shifts
@@ -443,9 +488,9 @@ const ServiceCardFilter: React.FC<filterProps> = ({
           <div className="px-1 sm:px-2">
             <input
               type="range"
-              min={500}
-              max={10000}
-              step={100}
+              min={1000}
+              max={100000}
+              step={1000}
               value={price}
               onChange={(e) => setPrice(Number(e.target.value))}
               className="w-full accent-main_color"

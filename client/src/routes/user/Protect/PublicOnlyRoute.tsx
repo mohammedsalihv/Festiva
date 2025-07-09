@@ -1,4 +1,4 @@
-
+import { USER_ROUTE } from "@/utils/constants/routes/user.routes";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { RootState } from "@/redux/store";
@@ -13,7 +13,7 @@ const PublicOnlyRoute: React.FC<Props> = ({ children }) => {
   const isAuthenticated = userInfo?.accessToken;
 
   if (isAuthenticated) {
-    return <Navigate to="/user/home" replace />;
+    return <Navigate to={USER_ROUTE.userRedirectLinks.toUserHome} replace />;
   }
 
   return <>{children}</>;

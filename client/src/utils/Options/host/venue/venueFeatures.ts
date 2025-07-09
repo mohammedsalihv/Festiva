@@ -15,4 +15,8 @@ export const venueParkingOptions = [
   "Own place",
   "Extra space",
   "Access options Street Level",
+  "Valet",
+  "Covered Parking",
+  "Wheelchair Access",
+  "EV Charging",
 ];

@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { HOST_ROUTES } from "@/utils/constants/routes/host.routes";
 import { Navigate, useLocation } from "react-router-dom";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
@@ -13,11 +14,17 @@ const HostPrivateRoute: React.FC<HostPrivateRouteProps> = ({ children }) => {
   const location = useLocation();
 
   if (!hostInfo?.accessToken) {
-    return <Navigate to="/host/landing" state={{ from: location }} replace />;
+    return (
+      <Navigate
+        to={HOST_ROUTES.Authentication.hostLandingPage}
+        state={{ from: location }}
+        replace
+      />
+    );
   }
 
   if (hostInfo.role !== "host") {
-    return <Navigate to="/host/landing" replace />;
+    return <Navigate to={HOST_ROUTES.Authentication.hostLandingPage} replace />;
   }
 
   return <HostLayout>{children}</HostLayout>;

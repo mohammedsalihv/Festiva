@@ -1,4 +1,5 @@
 import axiosInstance from "@/config/admin/adminAxiosInstence";
+import { ADMIN_API } from "@/utils/constants/api endpoints/admin.api";
 import {
   EditHostPayload,
   EditHostResponse,
@@ -6,24 +7,21 @@ import {
   BlockHostResponse,
 } from "@/utils/Types/admin/hostManagementTypes";
 
-export const getAllHosts = async (
-  page: number = 1,
-  limit: number = 10
-) => {
-  const response = await axiosInstance.get<GetHostsResponse>("/hosts", {
-    params: { page, limit },
-  });
+export const getAllHosts = async (page = 1, limit = 10) => {
+  const response = await axiosInstance.get<GetHostsResponse>(
+    ADMIN_API.hostManagement.getAllHosts,
+    { params: { page, limit } }
+  );
   return response.data;
 };
-
 
 export const blockUnblockHost = async (
   isBlocked: boolean,
   hostId: string
 ): Promise<BlockHostResponse> => {
   const response = await axiosInstance.patch<BlockHostResponse>(
-    `hosts/blockUnblock/${hostId}`,
-    { isBlocked: isBlocked }
+    ADMIN_API.hostManagement.blockUnblock(hostId),
+    { isBlocked }
   );
   return response.data;
 };
@@ -33,15 +31,18 @@ export const editHostDetails = async (
   hostId: string
 ): Promise<EditHostResponse> => {
   const response = await axiosInstance.patch<EditHostResponse>(
-    `hosts/edit/${hostId}`,
+    ADMIN_API.hostManagement.editHost(hostId),
     formData
   );
   return response.data;
 };
 
-export const changeProfile = async (formData: FormData, hostId: string) => {
+export const changeProfile = async (
+  formData: FormData,
+  hostId: string
+) => {
   const response = await axiosInstance.put(
-    `hosts/changeprofile/${hostId}`,
+    ADMIN_API.hostManagement.changeProfile(hostId),
     formData,
     {
       headers: {
@@ -53,6 +54,8 @@ export const changeProfile = async (formData: FormData, hostId: string) => {
 };
 
 export const deleteHost = async (hostId: string) => {
-  const response = await axiosInstance.delete(`hosts/${hostId}`);
+  const response = await axiosInstance.delete(
+    ADMIN_API.hostManagement.deleteHost(hostId)
+  );
   return response.data.data;
 };

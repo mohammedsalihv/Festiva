@@ -1,4 +1,5 @@
 import axiosInstance from "@/config/admin/adminAxiosInstence";
+import { ADMIN_API } from "@/utils/constants/api endpoints/admin.api";
 import {
   EditUserPayload,
   EditUserResponse,
@@ -16,9 +17,12 @@ export const AllUsers = async (
   totalPages: number;
   totalItems: number;
 }> => {
-  const response = await axiosInstance.get<GetUsersResponse>("/users", {
-    params: { page, limit },
-  });
+  const response = await axiosInstance.get<GetUsersResponse>(
+    ADMIN_API.userManagement.getAllUsers,
+    {
+      params: { page, limit },
+    }
+  );
   return response.data.data;
 };
 
@@ -27,8 +31,8 @@ export const blockUnblockUser = async (
   userId: string
 ): Promise<BlockUserResponse> => {
   const response = await axiosInstance.patch<BlockUserResponse>(
-    `users/blockUnblock/${userId}`,
-    { isBlocked: isBlocked }
+    ADMIN_API.userManagement.blockUnblock(userId),
+    { isBlocked }
   );
   return response.data;
 };
@@ -38,7 +42,7 @@ export const editUserDetails = async (
   userId: string
 ): Promise<EditUserResponse> => {
   const response = await axiosInstance.patch<EditUserResponse>(
-    `users/edit/${userId}`,
+    ADMIN_API.userManagement.editUser(userId),
     formData
   );
   return response.data;
@@ -46,7 +50,7 @@ export const editUserDetails = async (
 
 export const changeProfile = async (formData: FormData, userId: string) => {
   const response = await axiosInstance.put(
-    `users/changeprofile/${userId}`,
+    ADMIN_API.userManagement.changeProfile(userId),
     formData,
     {
       headers: {
@@ -58,6 +62,8 @@ export const changeProfile = async (formData: FormData, userId: string) => {
 };
 
 export const deleteUser = async (userId: string) => {
-  const response = await axiosInstance.delete(`users/${userId}`);
+  const response = await axiosInstance.delete(
+    ADMIN_API.userManagement.deleteUser(userId)
+  );
   return response.data.data;
 };
