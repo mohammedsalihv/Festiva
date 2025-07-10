@@ -1,4 +1,5 @@
 export const USER_ROUTE = {
+  userRoutes: "/user/*",
   Authentication: {
     userLanding: "/",
     userLogin: "/login",

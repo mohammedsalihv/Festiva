@@ -1,4 +1,5 @@
 export const ADMIN_ROUTES = {
+  adminRoutes: "/admin/*",
   Authentication: {
     adminLogin: "/admin/login",
   },

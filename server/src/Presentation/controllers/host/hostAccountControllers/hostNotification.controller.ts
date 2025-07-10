@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import { HostNotificationUseCase } from "../../../../application/use-cases/host/host account/usecase.hostNotification";
-import { IHostNotificationController } from "../../../../domain/controlInterface/common/account controller interface/interface.hostNotificationController";
+import { IHostNotificationController } from "../../../../domain/controlInterface/common/account/interface.hostNotificationController";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 interface AuthRequest extends Request {

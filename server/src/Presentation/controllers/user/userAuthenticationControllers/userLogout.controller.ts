@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserLogoutUseCase } from "../../../../application/use-cases/user/userAuthentication/usecase.userLogout";
+import { UserLogoutUseCase } from "../../../../application/use-cases/user/authentication/usecase.userLogout";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import logger from "../../../../utils/common/messages/logger";
 import {

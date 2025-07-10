@@ -40,7 +40,7 @@ export const verifyOtp = async ({
   email: string;
   otp: string;
 }) => {
-  const response = await axiosInstance.post(USER_API.Authentication.sendOtp, {
+  const response = await axiosInstance.post(USER_API.Authentication.verifyOtp, {
     email,
     otp,
   });

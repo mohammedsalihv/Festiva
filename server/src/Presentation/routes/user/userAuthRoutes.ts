@@ -3,13 +3,12 @@ import { USER_ROUTES } from "../../../infrastructure/constants/user.routes";
 import {
   userController,
   userSignupController,
-  otpController,
-  verifyOtpController,
   userLoginController,
   refreshTokenController,
   userGoogleLoginController,
   userLogoutController,
 } from "../../../infrastructure/DI/user/authentication/userAuth.DI";
+import { otpController } from "../../../infrastructure/DI/base/authentication/otp.DI";
 import { userProfileController } from "../../../infrastructure/DI/user/account/userAccount.DI";
 import logger from "../../../utils/common/messages/logger";
 import { authenticateToken } from "../../../utils/common/middlewares/auth";
@@ -30,14 +29,14 @@ userAuthRoutes.post(
 );
 userAuthRoutes.post(USER_ROUTES.Authentiation.sendOtp, async (req, res) => {
   try {
-    await otpController.sendOTP(req, res);
+    await otpController.otpSending(req, res);
   } catch (error) {
     logger.info(error);
   }
 });
 userAuthRoutes.post(
   USER_ROUTES.Authentiation.verifyOtp,
-  verifyOtpController.verifyOTP.bind(verifyOtpController)
+  otpController.otpVerification.bind(otpController)
 );
 
 userAuthRoutes.post(

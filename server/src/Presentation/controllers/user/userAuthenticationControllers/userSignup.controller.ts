@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { registerUserDTO } from "../../../../types/DTO/user/dto.user";
-import { UserSignupUseCase } from "../../../../application/use-cases/user/userAuthentication/usecase.userSignup";
+import { UserSignupUseCase } from "../../../../application/use-cases/user/authentication/usecase.userSignup";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class UserSignupController {

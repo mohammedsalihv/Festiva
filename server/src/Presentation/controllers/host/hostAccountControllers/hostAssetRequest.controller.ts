@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
-import { IHostAssetRequestController } from "../../../../domain/controlInterface/common/account controller interface/interface.hostAssetRequestController";
+import { IHostAssetRequestController } from "../../../../domain/controlInterface/common/account/interface.hostAssetRequestController";
 import { IHostAssetRequestUseCase } from "../../../../domain/usecaseInterface/host/account usecase interfaces/interface.hostRequestsUseCase";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 

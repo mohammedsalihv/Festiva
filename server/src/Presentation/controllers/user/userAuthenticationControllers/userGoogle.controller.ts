@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserGoogleLoginUseCase } from "../../../../application/use-cases/user/userAuthentication/usecase.userGoogleLogin";
+import { UserGoogleLoginUseCase } from "../../../../application/use-cases/user/authentication/usecase.userGoogleLogin";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class UserGoogleLoginController {

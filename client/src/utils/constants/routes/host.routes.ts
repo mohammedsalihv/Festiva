@@ -1,8 +1,9 @@
 export const HOST_ROUTES = {
+  hostRoutes: "/host/*",
+  hostPublicRoutes: "/*",
   Authentication: {
-    hostLogin: "",
-    hostLandingPage:"/host/landing",
-    
+    hostLogin: "/host/login",
+    hostLandingPage: "/host/landing",
   },
   hostAccount: {
     hostDashboard: "dashboard",
@@ -32,4 +33,5 @@ export const HOST_ROUTES = {
     locationDetails: "/list/location-details",
   },
   notfound: "*",
+  error: "/error",
 } as const;

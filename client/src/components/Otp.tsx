@@ -1,9 +1,8 @@
 import { Card, CardContent } from "@/components/Card";
 import { Input } from "@/components/Input";
-import { Button } from "@/components/Button"; 
+import { Button } from "@/components/Button";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { useState, useEffect, useRef } from "react";
-
 
 interface otpVerificationProps {
   email: string;
@@ -12,12 +11,16 @@ interface otpVerificationProps {
   loading?: boolean;
   errorMessage?: string;
   resendTimeOut?: number;
+  buttonColorClass?: string;
+  buttonTextColorClass?: string;
 }
 
 const Otp = ({
   email,
   onVerify,
   onResend,
+  buttonColorClass,
+  buttonTextColorClass,
   loading = false,
   resendTimeOut = 60,
   errorMessage = "",
@@ -77,18 +80,18 @@ const Otp = ({
     }
   };
 
-  setTimeout(()=>{
-    errorMessage = ""
-  },2000)
+  setTimeout(() => {
+    errorMessage = "";
+  }, 2000);
 
   return (
- <div className="fixed top-0 left-0 w-full h-full z-50 flex justify-center items-center backdrop-blur-sm bg-black/30 px-4">
+    <div className="fixed top-0 left-0 w-full h-full z-50 flex justify-center items-center backdrop-blur-sm bg-black/30 px-4">
       <Card className="bg-white shadow-2xl rounded-lg w-full max-w-xs md:max-w-md">
-         {errorMessage && (
-            <p className="text-red-500 text-sm text-center font-bold py-5">
-              {errorMessage}
-            </p>
-          )}
+        {errorMessage && (
+          <p className="text-red-500 text-sm text-center font-bold py-5">
+            {errorMessage}
+          </p>
+        )}
         <CardContent className="p-6 md:p-10">
           <h2 className="text-xl md:text-2xl font-bold text-center mb-4">
             Enter OTP
@@ -120,7 +123,7 @@ const Otp = ({
 
             <Button
               type="submit"
-              className="h-10 md:h-12 w-full bg-main_color text-white py-2 md:py-3 rounded-lg hover:bg-main_color_dark transition duration-200"
+              className={`h-10 md:h-12 w-full ${buttonColorClass ?? "bg-main_color hover:bg-main_color_dark"} ${buttonTextColorClass ?? "text-white"} py-2 md:py-3 rounded-lg transition duration-200`}
               disabled={loading}
             >
               {loading ? "Verifying..." : "Verify OTP"}

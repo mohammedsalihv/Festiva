@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserLoginUseCase } from "../../../../application/use-cases/user/userAuthentication/usecase.userLogin";
+import { UserLoginUseCase } from "../../../../application/use-cases/user/authentication/usecase.userLogin";
 import logger from "../../../../utils/common/messages/logger";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";

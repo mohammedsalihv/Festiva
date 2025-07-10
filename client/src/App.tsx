@@ -1,11 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HOST_ROUTES } from "./utils/constants/routes/host.routes";
+import { ADMIN_ROUTES } from "./utils/constants/routes/admin.routes";
+import { USER_ROUTE } from "./utils/constants/routes/user.routes";
 import UserRoutes from "./routes/user/UserRoutes";
 import HostRoutes from "./routes/host/HostRoutes";
 import AdminRoutes from "./routes/admin/AdminRoutes";
 import PublicRoutes from "./routes/user/PublicRoutes";
 import HostLanding from "@/pages/host/landing/HostLanding";
-import HostRegister from "./pages/host/Auth/HostSignup";
 import HostPrivateRoute from "./routes/host/HostPrivateRoute";
 import UserPrivateRoute from "./routes/user/Protect/UserPrivateRoute";
 import AdminPrivateRoute from "./routes/admin/AdminPrivateRoutes";
@@ -16,16 +18,20 @@ import CustomToastContainer from "./reusable-components/Messages/ToastContainer"
 const App: React.FC = () => {
   return (
     <Router>
-
-      <CustomToastContainer/>
+      <CustomToastContainer />
       <Routes>
-        <Route path="/*" element={<PublicRoutes />} />
-        <Route path="/error" element={<RobotError statusCode={404} />} />
-        <Route path="/host/landing" element={<HostLanding />} />
-        <Route path="/host/register" element={<HostRegister />} />
+        <Route path={HOST_ROUTES.hostPublicRoutes} element={<PublicRoutes />} />
+        <Route
+          path={HOST_ROUTES.error}
+          element={<RobotError statusCode={404} />}
+        />
+        <Route
+          path={HOST_ROUTES.Authentication.hostLandingPage}
+          element={<HostLanding />}
+        />
 
         <Route
-          path="/user/*"
+          path={USER_ROUTE.userRoutes}
           element={
             <UserPrivateRoute>
               <UserRoutes />
@@ -34,7 +40,7 @@ const App: React.FC = () => {
         />
 
         <Route
-          path="/host/*"
+          path={HOST_ROUTES.hostRoutes}
           element={
             <HostPrivateRoute>
               <HostRoutes />
@@ -42,14 +48,17 @@ const App: React.FC = () => {
           }
         />
         <Route
-          path="/admin/*"
+          path={ADMIN_ROUTES.adminRoutes}
           element={
             <AdminPrivateRoute>
               <AdminRoutes />
             </AdminPrivateRoute>
           }
         />
-        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path={ADMIN_ROUTES.Authentication.adminLogin}
+          element={<AdminLogin />}
+        />
       </Routes>
     </Router>
   );

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { resetPasswordDTO } from "../../../../types/DTO/user/dto.user";
-import { UserPasswordResetUseCase } from "../../../../application/use-cases/user/userAuthentication/usecase.passwordReset";
+import { UserPasswordResetUseCase } from "../../../../application/use-cases/user/authentication/usecase.passwordReset";
 import {
   statusCodes,
   statusMessages,
