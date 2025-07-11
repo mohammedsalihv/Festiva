@@ -12,6 +12,7 @@ interface HostPrivateRouteProps {
 const HostPrivateRoute: React.FC<HostPrivateRouteProps> = ({ children }) => {
   const hostInfo = useSelector((state: RootState) => state.host.hostInfo);
   const location = useLocation();
+  console.log('----',hostInfo)
 
   if (!hostInfo?.accessToken) {
     return (

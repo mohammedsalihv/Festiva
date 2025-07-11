@@ -2,6 +2,7 @@ export const HOST_ROUTES = {
   Authentiation: {
     hostSignup: "/signup",
     hostLogin: "/login",
+    hostEmailValidation:"/validateEmail",
     Refresh_Token: "/refresh",
   },
   HostAccount: {

@@ -13,14 +13,13 @@ import {
 import { RootState } from "@/redux/store";
 import { Button } from "@/components/Button";
 import LogoText from "@/components/LogoText";
-import HostLogin from "@/pages/host/Auth/HostLogin";
-import HostSignup from "@/pages/host/Auth/HostSignup";
+import HostAuthModal from "@/pages/host/Auth/HostAuthModal";
 
 const HostLandingHeader = () => {
   const host = useSelector((state: RootState) => state.host.hostInfo);
-  const [showDrawer, setShowDrawer] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showSignupModal, setShowSignupModal] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);;
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isLoginMode, setIsLoginMode] = useState(true);
 
   if (host) return null;
 
@@ -76,18 +75,20 @@ const HostLandingHeader = () => {
 
         <div className="p-4 space-y-4">
           <Button
-            className="w-full bg-red-500 text-white"
+            className="w-full bg-red-500 hover:bg-red-600 text-white rounded-none"
             onClick={() => {
-              setShowLoginModal(true);
+              setIsLoginMode(true);
+              setShowAuthModal(true);
               setShowDrawer(false);
             }}
           >
             Login
           </Button>
           <Button
-            className="w-full border border-red-500 text-red-500"
-             onClick={() => {
-              setShowSignupModal(true);
+            className="w-full border border-red-500 text-red-500 rounded-none"
+            onClick={() => {
+              setIsLoginMode(false);
+              setShowAuthModal(true);
               setShowDrawer(false);
             }}
           >
@@ -126,11 +127,11 @@ const HostLandingHeader = () => {
         />
       )}
 
-      {showLoginModal && (
-        <HostLogin onClose={() => setShowLoginModal(false)} />
-      )}
-      {showSignupModal && (
-        <HostSignup onClose={() => setShowSignupModal(false)} />
+      {showAuthModal && (
+        <HostAuthModal
+          isLogin={isLoginMode}
+          onClose={() => setShowAuthModal(false)}
+        />
       )}
     </>
   );

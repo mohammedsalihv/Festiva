@@ -13,6 +13,7 @@ import {
   Settings,
   HelpCircle,
   Bell,
+  UserCog
 } from "lucide-react";
 
 interface MoreDrawerProps {
@@ -29,6 +30,7 @@ const links = [
   { name: "Team", icon: Users, path: "/host/team" },
   { name: "Messages", icon: MessageCircle, path: "/host/chat" },
   { name: "Notifications", icon: Bell, path: "/host/notifications" },
+  {name : "Profile" , icon: UserCog , path:"/host/profile"},
   { name: "Settings", icon: Settings, path: "/host/settings" },
   { name: "Help", icon: HelpCircle, path: "/host/help" },
 ];
@@ -43,7 +45,7 @@ export const MoreDrawer: React.FC<MoreDrawerProps> = ({ isOpen, onClose }) => {
         isOpen ? "translate-x-0" : "translate-x-full"
       )}
     >
-      {/* Header */}
+
       <div className="flex justify-between items-center p-4 border-b">
         <h3 className="text-lg font-semibold">More Options</h3>
         <button onClick={onClose}>
@@ -51,7 +53,7 @@ export const MoreDrawer: React.FC<MoreDrawerProps> = ({ isOpen, onClose }) => {
         </button>
       </div>
 
-      {/* Scrollable content */}
+
       <div className="overflow-y-auto h-[calc(100%-64px)] p-4">
         <ul className="space-y-2">
           {links.map(({ name, icon: Icon, path }) => (

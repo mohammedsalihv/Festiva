@@ -1,5 +1,5 @@
 import { IHostCatersRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostCatersRepository";
-import { IHostCatersUseCase } from "../../../../domain/usecaseInterface/host/interface.catersUseCase";
+import { IHostCatersUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.catersUseCase";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { ICaters } from "../../../../domain/entities/serviceInterface/interface.caters";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";

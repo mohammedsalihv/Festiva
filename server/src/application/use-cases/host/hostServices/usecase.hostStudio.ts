@@ -2,7 +2,7 @@ import { IHostStudioRepository } from "../../../../domain/entities/repositoryInt
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IStudio } from "../../../../domain/entities/serviceInterface/interface.studio";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
-import { IHostStudioUseCase } from "../../../../domain/usecaseInterface/host/interface.studioUseCase";
+import { IHostStudioUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.studioUseCase";
 
 export class HostStudioUseCase implements IHostStudioUseCase {
   constructor(private hostStudioRepository: IHostStudioRepository) {}

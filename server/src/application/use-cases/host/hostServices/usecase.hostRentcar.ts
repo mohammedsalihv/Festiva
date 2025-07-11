@@ -2,7 +2,7 @@ import { IHostRentCarRepository } from "../../../../domain/entities/repositoryIn
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IRentCar } from "../../../../domain/entities/serviceInterface/interface.rentCar";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
-import { IHostRentCarUseCase } from "../../../../domain/usecaseInterface/host/interface.rentCarUseCase";
+import { IHostRentCarUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.rentCarUseCase";
 
 export class HostRentCarUseCase implements IHostRentCarUseCase {
   constructor(private hostRentCarRepository: IHostRentCarRepository) {}

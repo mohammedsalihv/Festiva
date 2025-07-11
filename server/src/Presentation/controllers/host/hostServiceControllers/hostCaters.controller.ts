@@ -1,4 +1,4 @@
-import { IHostCatersController } from "../../../../domain/controlInterface/host/interface.hostCatersController";
+import { IHostCatersController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostCatersController";
 import { HostCatersUseCase } from "../../../../application/use-cases/host/hostServices/usecase.hostCaters";
 import { ICaters } from "../../../../domain/entities/serviceInterface/interface.caters";
 import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetLocationRepostory";

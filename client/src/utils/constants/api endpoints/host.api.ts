@@ -2,6 +2,7 @@ export const HOST_API = {
   Authentication: {
     hostLogin: "/auth/login",
     hostSignup: "/auth/signup",
+    validateEmail: () => `/auth/validateEmail`
   },
   hostAccount: {
     notifications: "/notifications",

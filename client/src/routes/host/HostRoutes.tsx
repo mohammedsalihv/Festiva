@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { HOST_ROUTES } from "@/utils/constants/routes/host.routes";
 import HostDashboard from "@/pages/host/landing/HostDashboard";
+import HostProfile from "@/reusable-components/host/HostProfile";
 import KindOfService from "@/forms/host/serviceForms/Common/KindOfService";
 import VenueForm from "@/forms/host/serviceForms/Venues/VenueForm";
 import VenueDetailsForm from "@/forms/host/serviceForms/Venues/VenueDetails";
@@ -29,7 +30,10 @@ const HostRoutes: React.FC = () => {
         path={HOST_ROUTES.hostAccount.assetStatus}
         element={<AssetStatus />}
       />
-
+      <Route
+        path={HOST_ROUTES.hostAccount.hostProfile}
+        element={<HostProfile />}
+      />
       <Route
         path={HOST_ROUTES.hostPages.kindOfServicePage}
         element={<KindOfService />}

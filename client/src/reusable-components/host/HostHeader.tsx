@@ -55,14 +55,14 @@ const HostHeader: React.FC = () => {
   };
 
   return (
-    <header className="border-b border-gray-200 bg-white px-4 py-4 md:px-6 sticky top-0 z-50">
+    <header className=" bg-white px-4 py-4 sm:px-8 md:px-10 sticky top-0 z-50">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <LogoText />
           <h1 className="text-lg font-semibold text-gray-800 hidden md:block"></h1>
         </div>
 
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-2">
           <TooltipIcon
             icon={
               <MessageSquareDiff

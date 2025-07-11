@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { IRentCar } from "../../../../domain/entities/serviceInterface/interface.rentCar";
 import { HostRentCarUseCase } from "../../../../application/use-cases/host/hostServices/usecase.hostRentcar";
-import { IHostRentCarController } from "../../../../domain/controlInterface/host/interface.hostRentCarController";
+import { IHostRentCarController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostRentCarController";
 import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetLocationRepostory";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";

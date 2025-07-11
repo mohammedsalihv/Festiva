@@ -18,6 +18,7 @@ export const registerUser = async (data: SignupData) => {
   return response.data;
 };
 
+
 export const LoginUser = async (data: LoginData) => {
   const response = await axiosInstance.post(
     USER_API.Authentication.userLogin,

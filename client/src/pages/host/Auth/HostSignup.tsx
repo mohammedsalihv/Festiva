@@ -1,12 +1,20 @@
 import React, { useState } from "react";
-import { hostSignup } from "@/api/host/hostAuthService";
-import { validateHostRegisterForm, FormState } from "@/utils/validations/host/auth/hostRegisterValidation";
+import { hostSignup, validateEmail } from "@/api/host/hostAuthService";
+import { useMutation } from "@tanstack/react-query";
+import {
+  validateHostRegisterForm,
+  FormState,
+} from "@/utils/validations/host/auth/hostRegisterValidation";
+import { sendOtp, verifyOtp } from "@/api/user/auth/userAuthService";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
-import { Link } from "react-router-dom";
 import { GrFormClose } from "react-icons/gr";
+import { Button } from "@/components/Button";
+import { Input } from "@/components/Input";
+import { FcGoogle } from "react-icons/fc";
+import Otp from "@/components/Otp";
 
 interface ErrorState {
   name?: string;
@@ -18,9 +26,10 @@ interface ErrorState {
 
 interface Props {
   onClose: () => void;
+  showLogin: () => void;
 }
 
-const HostSignup = ({ onClose }: Props) => {
+const HostSignup = ({ onClose, showLogin }: Props) => {
   const [formData, setFormData] = useState<FormState>({
     name: "",
     email: "",
@@ -29,10 +38,11 @@ const HostSignup = ({ onClose }: Props) => {
     location: "",
   });
 
-  const [success, setSuccess] = useState("");
-  const [submitError, setSubmitError] = useState("");
   const [errors, setErrors] = useState<ErrorState>({});
   const [isOpen, setIsOpen] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [showOtp, setShowOtp] = useState(false);
+  const [otpError, setOtpError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,176 +52,261 @@ const HostSignup = ({ onClose }: Props) => {
     }));
   };
 
+  const { mutate: registerMutation, isPending: registering } = useMutation({
+    mutationFn: hostSignup,
+    onSuccess: () => {
+      toast.success("Registration successful!");
+      navigate("/host/dashboard");
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      toast.error(
+        error.response?.data?.message ||
+          "Registration failed. Please try again."
+      );
+    },
+  });
+
+  const { mutate: sendOtpMutation, isPending: sendingOtp } = useMutation({
+    mutationFn: sendOtp,
+    onSuccess: () => {
+      toast.success("OTP sent successfully!");
+      setShowOtp(true);
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      toast.error(
+        error.response?.data?.message || "Failed to send OTP. Please try again."
+      );
+    },
+  });
+
+  const { mutate: verifyOtpMutation, isPending: verifyingOtp } = useMutation({
+    mutationFn: verifyOtp,
+    onSuccess: () => {
+      handleRegister();
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      setOtpError(
+        error.response?.data?.message || "Invalid OTP. Please try again."
+      );
+    },
+  });
+
+  const { mutate: resendOtpMutation, isPending: resendingOtp } = useMutation({
+    mutationFn: sendOtp,
+    onMutate: () => {
+      toast.dismiss("resend-toast");
+      toast.loading("Sending OTP...", { toastId: "resend-toast" });
+    },
+    onSuccess: () => {
+      toast.dismiss("resend-toast");
+      toast.success("OTP resent successfully!", { autoClose: 3000 });
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      toast.dismiss("resend-toast");
+      toast.error(error.response?.data?.message || "Failed to resend OTP");
+    },
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { isValid, errors: validationErrors } = validateHostRegisterForm(formData);
+    setLoading(true);
+    const { isValid, errors: validationErrors } =
+      validateHostRegisterForm(formData);
     if (!isValid) {
       setErrors(validationErrors);
       toast.error("Please correct the errors in the form.");
-      if (submitError) toast.error(submitError);
       setTimeout(() => setErrors({}), 5000);
+      setLoading(false);
       return;
     }
 
-    try {
-      await hostSignup(formData);
-      setSuccess("Host registration successful!");
-      toast.success("Host registration successful!");
-      setFormData({ name: "", email: "", phone: "", password: "", location: "" });
-      setErrors({});
-      setSubmitError("");
-      navigate("/host/login");
-    } catch (err: unknown) {
-      let errorMessage = "Something went wrong.";
-      if (err instanceof AxiosError) {
-        const backendData = err.response?.data;
-        if (typeof backendData?.message === "string") {
-          toast.error(backendData.message);
-          errorMessage = backendData.message;
-        } else if (typeof backendData === "object" && backendData !== null) {
-          Object.entries(backendData).forEach(([field, message]) => {
-            if (typeof message === "string") {
-              toast.error(`${field}: ${message}`);
-            }
-          });
-        }
-      } else toast.error(errorMessage);
-      setSubmitError(errorMessage);
-    }
+    await validateEmail(formData.email)
+      .then(() => {
+        sendOtpMutation({ email: formData.email });
+      })
+      .catch((error: AxiosError<{ message?: string }>) => {
+        toast.error(error.response?.data?.message || "Email validation failed");
+        setLoading(false);
+      });
+  };
+
+  const handleVerifyOtp = (otp: string) => {
+    setOtpError("");
+    verifyOtpMutation({ email: formData.email, otp });
+  };
+
+  const handleResendOtp = () => {
+    resendOtpMutation({ email: formData.email });
+  };
+
+  const handleRegister = () => {
+    registerMutation(formData);
   };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex justify-center items-center px-4">
-      <div className="relative w-full max-w-2xl bg-white rounded-xl shadow-xl p-6 sm:p-8 text-black space-y-5">
-        <button
-          onClick={() =>{
-            onClose()
-             setIsOpen(false)
+      <div className="relative w-full max-w-xl bg-white shadow-xl p-6 sm:p-8 text-black space-y-5">
+        <GrFormClose
+          className="absolute top-3 right-3 text-black hover:text-red-500 cursor-pointer"
+          onClick={() => {
+            onClose();
+            setIsOpen(false);
           }}
-          className="absolute top-4 right-4 text-gray-600 hover:text-black text-xl"
-        >
-          <GrFormClose />
-        </button>
+        />
 
-        <h1 className="text-2xl font-bold text-center">Join as a Host</h1>
-
-        {/* Google Button */}
-        <button
-          type="button"
-          className="w-full border border-gray-300 rounded-md py-2 flex items-center justify-center gap-2 hover:bg-gray-100"
-        >
-          <img src="https://img.icons8.com/color/16/google-logo.png" alt="Google" />
-          Sign up with Google
-        </button>
-
-        {/* Divider */}
-        <div className="flex items-center justify-between gap-4">
-          <div className="border-t border-gray-300 flex-grow" />
-          <p className="text-sm text-gray-500">or</p>
-          <div className="border-t border-gray-300 flex-grow" />
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-6 mt-6 text-center sm:text-left">
+          <h2 className="text-xl font-bold text-gray-800">Join as Host</h2>
+          <p className="text-sm text-gray-600">
+            Already have an account?{" "}
+            <span
+              onClick={() => {
+                setIsOpen(false);
+                showLogin();
+              }}
+              className="text-main_host hover:text-red-600 cursor-pointer hover:underline"
+            >
+              Log In
+            </span>
+          </p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Name"
-                className={`w-full border px-4 py-2 rounded-md focus:outline-none ${
-                  errors.name ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
+        {!showOtp ? (
+          <>
+            <div className="space-y-3 mb-4">
+              <Button className="flex gap-2 items-center w-full border border-gray-300 rounded-none py-5 justify-center hover:bg-gray-100 ">
+                <FcGoogle size={20} />
+                <span>Sign up with Google</span>
+              </Button>
             </div>
-            <div>
-              <input
-                type="text"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email"
-                className={`w-full border px-4 py-2 rounded-md focus:outline-none ${
-                  errors.email ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
+
+            <div className="flex items-center justify-between gap-4">
+              <div className="border-t border-gray-300 flex-grow" />
+              <p className="text-sm text-gray-500">or</p>
+              <div className="border-t border-gray-300 flex-grow" />
             </div>
-            <div>
-              <input
-                type="text"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="Phone"
-                className={`w-full border px-4 py-2 rounded-md focus:outline-none ${
-                  errors.phone ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.phone && <p className="text-red-500 text-xs">{errors.phone}</p>}
-            </div>
-            <div>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Password"
-                className={`w-full border px-4 py-2 rounded-md focus:outline-none ${
-                  errors.password ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.password && <p className="text-red-500 text-xs">{errors.password}</p>}
-            </div>
-            <div className="md:col-span-2">
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                placeholder="Location"
-                className={`w-full border px-4 py-2 rounded-md focus:outline-none ${
-                  errors.location ? "border-red-500" : "border-gray-300"
-                }`}
-              />
-              {errors.location && <p className="text-red-500 text-xs">{errors.location}</p>}
-            </div>
-          </div>
 
-          {success && <p className="text-green-500 text-sm">{success}</p>}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    disabled={sendingOtp}
+                    placeholder="Name"
+                    className={`w-full border px-4 py-2 focus:outline-none ${
+                      errors.name ? "border-red-500" : "border-gray-300"
+                    }`}
+                  />
+                  {errors.name && (
+                    <p className="text-red-500 text-xs">{errors.name}</p>
+                  )}
+                </div>
 
-          <button
-            type="submit"
-            className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md font-semibold transition"
-          >
-            Sign up
-          </button>
+                <div>
+                  <Input
+                    type="text"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    disabled={sendingOtp}
+                    placeholder="Email"
+                    className={`w-full border px-4 py-2 focus:outline-none ${
+                      errors.email ? "border-red-500" : "border-gray-300"
+                    }`}
+                  />
+                  {errors.email && (
+                    <p className="text-red-500 text-xs">{errors.email}</p>
+                  )}
+                </div>
 
-          <p className="text-xs text-center text-gray-500 mt-2">
-            By signing up, you agree to our{" "}
-            <span className="underline cursor-pointer">Terms of Service</span> and{" "}
-            <span className="underline cursor-pointer">Privacy Policy</span>.
-          </p>
+                <div>
+                  <Input
+                    type="text"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    disabled={sendingOtp}
+                    placeholder="Phone"
+                    className={`w-full border px-4 py-2 focus:outline-none ${
+                      errors.phone ? "border-red-500" : "border-gray-300"
+                    }`}
+                  />
+                  {errors.phone && (
+                    <p className="text-red-500 text-xs">{errors.phone}</p>
+                  )}
+                </div>
 
-          <p className="text-sm text-center mt-2">
-            Already have an account?{" "}
-            <Link to="/host/login" className="text-green-600 font-medium underline">
-              Log in
-            </Link>
-          </p>
+                <div>
+                  <Input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    disabled={sendingOtp}
+                    placeholder="Password"
+                    className={`w-full border px-4 py-2 focus:outline-none ${
+                      errors.password ? "border-red-500" : "border-gray-300"
+                    }`}
+                  />
+                  {errors.password && (
+                    <p className="text-red-500 text-xs">{errors.password}</p>
+                  )}
+                </div>
 
-          <p className="text-sm text-center">
-            Want to book instead?{" "}
-            <Link to="/user/home" className="text-blue-600 font-medium underline">
-              Switch to User
-            </Link>
-          </p>
-        </form>
+                <div className="md:col-span-2">
+                  <Input
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    disabled={sendingOtp}
+                    placeholder="Location"
+                    className={`w-full border px-4 py-2 focus:outline-none ${
+                      errors.location ? "border-red-500" : "border-gray-300"
+                    }`}
+                  />
+                  {errors.location && (
+                    <p className="text-red-500 text-xs">{errors.location}</p>
+                  )}
+                </div>
+              </div>
+
+              <p className="text-xs text-center text-gray-500 mt-2">
+                By signing up, you agree to our{" "}
+                <span className="underline cursor-pointer text-main_host">
+                  Terms of Service
+                </span>{" "}
+                and{" "}
+                <span className="underline cursor-pointer text-main_host">
+                  Privacy Policy
+                </span>
+                .
+              </p>
+
+              <Button
+                type="submit"
+                className="w-full bg-main_host hover:bg-red-600 text-white py-2 font-semibold transition rounded-none"
+              >
+                {loading ? "Sending OTP..." : "Sign up"}
+              </Button>
+            </form>
+          </>
+        ) : (
+          <Otp
+            email={formData.email}
+            onVerify={handleVerifyOtp}
+            onResend={handleResendOtp}
+            buttonColorClass="bg-main_host hover:bg-red-600"
+            buttonTextColorClass="text-white"
+            loading={verifyingOtp || resendingOtp || registering}
+            errorMessage={otpError}
+            resendTimeOut={60}
+          />
+        )}
 
         <CustomToastContainer />
       </div>

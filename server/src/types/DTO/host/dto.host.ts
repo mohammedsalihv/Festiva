@@ -74,3 +74,9 @@ export function mapToResponseHostDTO(host: any): responseHostDTO {
     rejectedRequests: host.rejectedRequests,
   };
 }
+
+export interface mailValidation {
+  success: boolean;
+  message: string;
+  status: number;
+}

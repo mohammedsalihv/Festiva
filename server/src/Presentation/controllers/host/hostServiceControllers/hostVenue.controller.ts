@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IVenue } from "../../../../domain/entities/serviceInterface/interface.venue";
-import { IHostVenueController } from "../../../../domain/controlInterface/host/interface.hostVenueController";
+import { IHostVenueController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostVenueController";
 import { HostVenueUseCase } from "../../../../application/use-cases/host/hostServices/usecase.hostVenue";
 import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetLocationRepostory";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";

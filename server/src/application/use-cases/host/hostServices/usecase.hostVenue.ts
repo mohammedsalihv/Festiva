@@ -2,7 +2,7 @@ import { IHostVenueRepository } from "../../../../domain/entities/repositoryInte
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IVenue } from "../../../../domain/entities/serviceInterface/interface.venue";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
-import { IHostVenueUseCase } from "../../../../domain/usecaseInterface/host/interface.venueUseCase";
+import { IHostVenueUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.venueUseCase";
 
 export class HostVenueUseCase implements IHostVenueUseCase {
   constructor(private hostVenueRepository: IHostVenueRepository) {}
