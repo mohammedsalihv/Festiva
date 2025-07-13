@@ -82,7 +82,7 @@ const HostProfile: React.FC = () => {
       : accounts.filter((a) => a.ctgry === activeTab);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-10 text-center">
+    <div className="max-w-7xl mx-auto px-4 py-10 text-center font-poppins">
       <h2 className="text-xl md:text-2xl font-semibold mb-1">
         We Found Sam's Accounts
       </h2>

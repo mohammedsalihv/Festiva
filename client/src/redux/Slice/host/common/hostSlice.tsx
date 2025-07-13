@@ -2,12 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface HostState {
   hostInfo: {
-    refreshToken: string;
-    accessToken: string;
-    role: "host";
+    id: string;
     name: string;
     email: string;
-    id: string;
+    phone: string;
+    profilePic: string;
+    role: "host";
+    refreshToken: string;
+    accessToken: string;
   } | null;
 }
 

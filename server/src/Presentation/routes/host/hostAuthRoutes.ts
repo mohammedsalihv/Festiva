@@ -1,8 +1,13 @@
 import express from "express";
 import { HOST_ROUTES } from "../../../infrastructure/constants/host.routes";
-import { hostSignupController , hostLoginController , refreshTokenController } from "../../../infrastructure/DI/host/auth dependency Injection/hostAuth.DI";
+import {
+  hostSignupController,
+  hostLoginController,
+  refreshTokenController,
+} from "../../../infrastructure/DI/host/auth dependency Injection/hostAuth.DI";
 import logger from "../../../utils/common/messages/logger";
 import { hostController } from "../../../infrastructure/DI/host/host.DI";
+import { hostLogoutController } from "../../../infrastructure/DI/host/auth dependency Injection/hostAuth.DI";
 
 const hostAuthRoutes = express.Router();
 
@@ -22,18 +27,28 @@ hostAuthRoutes.post(HOST_ROUTES.Authentiation.hostLogin, async (req, res) => {
   }
 });
 
-
-hostAuthRoutes.post(HOST_ROUTES.Authentiation.hostEmailValidation, async (req, res) => {
-  try {
-    await hostController.mailValidation(req, res);
-  } catch (error) {
-    logger.info(error);
+hostAuthRoutes.post(
+  HOST_ROUTES.Authentiation.hostEmailValidation,
+  async (req, res) => {
+    try {
+      await hostController.mailValidation(req, res);
+    } catch (error) {
+      logger.info(error);
+    }
   }
-});
+);
 
 hostAuthRoutes.post(
   HOST_ROUTES.Authentiation.Refresh_Token,
   refreshTokenController.refreshAccessToken.bind(refreshTokenController)
 );
+
+hostAuthRoutes.delete(HOST_ROUTES.Authentiation.hostLogout, async (req, res) => {
+  try {
+    await hostLogoutController.hostLogout(req, res);
+  } catch (error) {
+    logger.info(error);
+  }
+});
 
 export default hostAuthRoutes;

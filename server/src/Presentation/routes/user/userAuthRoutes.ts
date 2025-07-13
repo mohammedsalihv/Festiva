@@ -74,7 +74,7 @@ userAuthRoutes.delete(
   USER_ROUTES.Authentiation.userLogout,
   async (req, res) => {
     try {
-      await userLogoutController.logout(req, res);
+      await userLogoutController.userLogout(req, res);
     } catch (err) {
       logger.error(err);
     }

@@ -20,6 +20,8 @@ export class HostLoginController {
           id: host.id,
           name: host.name,
           email: host.email,
+          phone:host.phone,
+          profilePic:host.profilePic,
           role: "host",
           accessToken,
           refreshToken,

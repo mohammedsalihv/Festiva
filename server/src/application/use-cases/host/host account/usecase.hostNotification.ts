@@ -15,4 +15,7 @@ export class HostNotificationUseCase implements IHostNotificationUseCase {
   async createNotification(data: CreateAssetNotificationDTO): Promise<void> {
     await this.hostNotificationRepository.createNotification(data);
   }
+  async markAllNotifications(hostId: string): Promise<void> {
+    await this.hostNotificationRepository.markAllRead(hostId);
+  }
 }

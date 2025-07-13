@@ -13,19 +13,23 @@ const Table = <T extends object>({
         <thead className="bg-gray-50 text-center">
           <tr>
             {renderRowStart && (
-              <th className="px-6 lg:px-3 py-2">
+              <th className="px-4 py-3 text-xs sm:text-sm md:text-base font-medium whitespace-nowrap">
                 <div className="flex justify-center">
                   <VscListSelection />
                 </div>
               </th>
             )}
             {columns.map((col, idx) => (
-              <th key={idx} className="px-4 py-4 text-center">
+              <th
+                key={idx}
+                className="px-4 py-3 text-xs sm:text-sm md:text-base font-semibold whitespace-nowrap"
+              >
                 {col.header}
               </th>
             ))}
           </tr>
         </thead>
+
         <tbody className="bg-white divide-y divide-gray-200 text-center">
           {data.map((row, rowIndex) => (
             <tr
@@ -43,11 +47,11 @@ const Table = <T extends object>({
               {columns.map((col, colIndex) => (
                 <td
                   key={colIndex}
-                  className="px-4 py-4 text-[10px] lg:text-sm text-center"
+                  className="px-4 py-4 text-[10px] sm:text-xs lg:text-sm whitespace-nowrap"
                 >
                   {typeof col.accessor === "function" ? (
                     <div className="flex justify-center items-center">
-                      {col.accessor(row,rowIndex)}
+                      {col.accessor(row, rowIndex)}
                     </div>
                   ) : (
                     String(row[col.accessor])

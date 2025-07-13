@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import CustomToastContainer from "../../../../reusable-components/Messages/ToastContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocationDetails } from "@/redux/Slice/host/common/locationSlice";
-import { handleFinalSubmit } from "../../submitForms/finalSubmit";
+import { handleFinalSubmit } from "../../submitForms/FinalSubmit";
 import { ImageDetails } from "@/utils/Types/host/services/common/commonTypes";
 import { useNavigate } from "react-router-dom";
 import base64ToFile from "@/utils/Base64ToFile";
@@ -106,7 +106,7 @@ const LocationForm = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 md:px-2 sm:mt-16 py-10 font-prompt">
+    <div className="max-w-5xl mx-auto px-4 md:px-2 sm:mt-16 py-10 font-poppins">
       <div className="grid lg:grid-cols-[2fr_1fr] gap-8 items-start">
         <div>
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-black mb-1">

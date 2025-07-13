@@ -4,6 +4,7 @@ import ExploreButton from "@/components/ExploreButton";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import HostHeader from "@/reusable-components/host/HostHeader";
 
 const services = [
   {
@@ -38,10 +39,10 @@ const infoCards = [
 ];
 
 const HostLanding = () => {
-  const hostInfo = useSelector((state: RootState) => state.host.hostInfo);
+  const host = useSelector((state: RootState) => state.host.hostInfo);
   return (
     <div className="relative">
-      <HostLandingHeader />
+      {host?.accessToken ? <HostHeader /> : <HostLandingHeader />}
       <section className="w-full h-[50vh] sm:h-screen overflow-hidden flex items-center justify-center border border-red-500 mt-4 md:mt-5">
         <img
           src={Images.host_landing}
@@ -96,7 +97,7 @@ const HostLanding = () => {
           <h1 className="text-black font-bold text-md sm:text-2xl text-center">
             Ready to get started?
           </h1>
-          {hostInfo ? (
+          {host ? (
             <Link to={"/host/dashboard"}>
               <ExploreButton
                 className="w-40 m-4 bg-red-500"

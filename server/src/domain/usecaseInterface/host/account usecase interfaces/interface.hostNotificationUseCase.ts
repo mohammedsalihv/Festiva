@@ -1,6 +1,7 @@
 import { CreateAssetNotificationDTO } from "../../../../types/DTO/common/notification";
 
 export interface IHostNotificationUseCase {
-  getNotifications(receiverId: string): Promise<any[]>; 
+  getNotifications(receiverId: string): Promise<any[]>;
   createNotification(data: CreateAssetNotificationDTO): Promise<void>;
+  markAllNotifications(hostId: string): Promise<void>;
 }

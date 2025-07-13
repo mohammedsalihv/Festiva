@@ -6,7 +6,7 @@ module.exports = {
       colors: {
         charcoal: "#202020",
         main_color: "#7155FF",
-        main_color_hover:"#6366F1",
+        main_color_hover: "#6366F1",
         main_white: "#FFFFFF",
         main_host: "#ef4444",
         admin_bg: "#D9D9D9",
@@ -21,6 +21,15 @@ module.exports = {
         lilita: ["Lilita One", "cursive"],
         JosephicSans: ["Josefin Sans"],
         Exo: ["Exo 2"],
+        pacifico: ["Pacifico", "cursive"],
+        playfair: ["Playfair Display", "serif"],
+        cinzel: ["Cinzel", "serif"],
+        bebas: ["Bebas Neue", "cursive"],
+        dancing: ["Dancing Script", "cursive"],
+        vibes: ["Great Vibes", "cursive"],
+        orbitron: ["Orbitron", "sans-serif"],
+        bungee: ["Bungee", "cursive"],
+        raleway: ["Raleway", "sans-serif"],
       },
       keyframes: {
         zoomOut: {
@@ -30,6 +39,18 @@ module.exports = {
         "slide-in": {
           "0%": { transform: "translateX(100%)" },
           "100%": { transform: "translateX(0%)" },
+        },
+        slideUp: {
+          "0%": { transform: "translateY(100%)" },
+          "100%": { transform: "translateY(0)" },
+        },
+        slideUpRight: {
+          "0%": { transform: "translateY(100%)", opacity: 0 },
+          "100%": { transform: "translateY(0)", opacity: 1 },
+        },
+        slideUpFull: {
+          "0%": { transform: "translateY(100%)" },
+          "100%": { transform: "translateY(0)" },
         },
         moveX: {
           "0%, 25%": { backgroundPosition: "10px bottom" },
@@ -49,6 +70,9 @@ module.exports = {
         moveX: "moveX 0.5s linear infinite",
         rotateLoader: "rotateLoader 0.5s linear infinite",
         "slide-in": "slide-in 0.3s ease-out forwards",
+        "slide-up": "slideUp 0.3s ease-out",
+        "slide-up-right": "slideUpRight 0.3s ease-out",
+        "slide-up-full": "slideUpFull 0.3s ease-out",
       },
     },
     container: {

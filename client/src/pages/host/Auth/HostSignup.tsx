@@ -146,10 +146,10 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex justify-center items-center px-4">
+    <div className="fixed inset-0 z-50 bg-black/50 flex justify-center items-center px-4 font-poppins">
       <div className="relative w-full max-w-xl bg-white shadow-xl p-6 sm:p-8 text-black space-y-5">
         <GrFormClose
-          className="absolute top-3 right-3 text-black hover:text-red-500 cursor-pointer"
+          className="absolute top-3 right-3 text-black hover:text-red-500 cursor-pointer text-xl"
           onClick={() => {
             onClose();
             setIsOpen(false);
@@ -157,15 +157,15 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
         />
 
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-6 mt-6 text-center sm:text-left">
-          <h2 className="text-xl font-bold text-gray-800">Join as Host</h2>
-          <p className="text-sm text-gray-600">
+          <h2 className="text-xl font-bold text-gray-800 font-poppins">Join as Host</h2>
+          <p className="text-sm text-gray-600 font-poppins">
             Already have an account?{" "}
             <span
               onClick={() => {
                 setIsOpen(false);
                 showLogin();
               }}
-              className="text-main_host hover:text-red-600 cursor-pointer hover:underline"
+              className="text-main_host hover:text-red-600 cursor-pointer hover:underline font-poppins"
             >
               Log In
             </span>
@@ -177,7 +177,7 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
             <div className="space-y-3 mb-4">
               <Button className="flex gap-2 items-center w-full border border-gray-300 rounded-none py-5 justify-center hover:bg-gray-100 ">
                 <FcGoogle size={20} />
-                <span>Sign up with Google</span>
+                <span className="font-poppins">Sign up with Google</span>
               </Button>
             </div>
 
@@ -275,7 +275,7 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
                 </div>
               </div>
 
-              <p className="text-xs text-center text-gray-500 mt-2">
+              <p className="text-xs text-center text-gray-500 mt-2 font-poppins">
                 By signing up, you agree to our{" "}
                 <span className="underline cursor-pointer text-main_host">
                   Terms of Service
@@ -289,7 +289,7 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
 
               <Button
                 type="submit"
-                className="w-full bg-main_host hover:bg-red-600 text-white py-2 font-semibold transition rounded-none"
+                className="w-full bg-main_host hover:bg-red-600 text-white py-2 font-poppins transition rounded-none"
               >
                 {loading ? "Sending OTP..." : "Sign up"}
               </Button>

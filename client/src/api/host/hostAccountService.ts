@@ -6,6 +6,14 @@ export const allNotification = async () => {
   return response.data;
 };
 
+
+export const markAllNotificationsAsRead  = async () => {
+  const response = await axiosInstance.patch(HOST_API.hostAccount.markAllReadNotifications);
+  return response.data;
+};
+
+
+
 export const getAllAssetRequests = async (page = 1, limit = 10) => {
   const response = await axiosInstance.get(HOST_API.hostAccount.requets, {
     params: { page, limit },

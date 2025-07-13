@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Calendar,
   Users,
@@ -10,7 +10,7 @@ import {
 import { CiMenuFries } from "react-icons/ci";
 import { Images } from "@/assets";
 import ConfirmDialog from "../user/Landing/ConfirmDialog";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutHost } from "@/redux/Slice/host/common/hostSlice";
 import TooltipIcon from "@/components/TooltipIcon";
@@ -18,14 +18,19 @@ import { toast } from "react-toastify";
 import CustomToastContainer from "../Messages/ToastContainer";
 import LogoText from "@/components/LogoText";
 import { IoMdArrowDropdown } from "react-icons/io";
-import { CgDetailsMore } from "react-icons/cg";
+import { LuUserRoundCog } from "react-icons/lu";
 import { MoreDrawer } from "./MoreDrawer";
 import { IoNotificationsOutline } from "react-icons/io5";
 import NotificationPanel from "@/components/NotificationPanel";
 import { INotification } from "@/utils/Types/host/pages/notification";
 import { allNotification } from "@/api/host/hostAccountService";
+import { hostLogout } from "@/api/host/hostAuthService";
+import { AxiosError } from "axios";
+import { HOST_ROUTES } from "@/utils/constants/routes/host.routes";
+import { RootState } from "@/redux/store";
 
 const HostHeader: React.FC = () => {
+  const host = useSelector((state: RootState) => state.host.hostInfo);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [confirmLogout, setConfirmLogout] = useState(false);
@@ -36,22 +41,32 @@ const HostHeader: React.FC = () => {
     INotification[]
   >([]);
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const response = await allNotification();
-        setFetchedNotifications(response?.data || []);
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
-      }
-    };
-
-    fetchNotifications();
+  const fetchNotifications = useCallback(async () => {
+    try {
+      const response = await allNotification();
+      setFetchedNotifications(response?.data || []);
+    } catch (error) {
+      console.error("Failed to fetch notifications", error);
+    }
   }, []);
-  const handleLogout = () => {
-    dispatch(logoutHost());
-    toast.success("Logout successful");
-    navigate("/host/login");
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [fetchNotifications]);
+
+  const handleLogout = async () => {
+    try {
+      await hostLogout();
+      toast.success("Logout successful");
+      dispatch(logoutHost());
+      setTimeout(() => {
+        navigate(HOST_ROUTES.redirectRoutes.toLanding);
+      }, 1500);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        toast.error("Logout failed");
+      }
+    }
   };
 
   return (
@@ -94,23 +109,27 @@ const HostHeader: React.FC = () => {
             icon={
               <div
                 onClick={() => {
-                  setOpenNotification((prev) => !prev);
+                  const open = !openNotification;
+                  setOpenNotification(open);
+                  if (open) fetchNotifications();
                   setMenuOpen(false);
                 }}
                 className="relative w-11 h-11 flex items-center justify-center"
               >
                 <IoNotificationsOutline className="h-6 w-6 text-black hover:text-white cursor-pointer" />
-                {fetchedNotifications.length > 0 && (
+
+                {fetchedNotifications.some((n) => !n.isRead) && (
                   <span className="absolute top-1 right-1 bg-red-600 text-white text-[10px] font-semibold px-1.5 py-[2px] rounded-full">
-                    {fetchedNotifications.length > 99
+                    {fetchedNotifications.filter((n) => !n.isRead).length > 99
                       ? "99+"
-                      : fetchedNotifications.length}
+                      : fetchedNotifications.filter((n) => !n.isRead).length}
                   </span>
                 )}
               </div>
             }
             label="Notifications"
           />
+
           <TooltipIcon
             icon={
               <MessageCircle
@@ -120,27 +139,12 @@ const HostHeader: React.FC = () => {
             }
             label="Chat"
           />
-          <TooltipIcon
-            icon={
-              <LogOut
-                className="h-11 w-11 text-red-600 hover:text-white cursor-pointer"
-                onClick={() => setConfirmLogout(true)}
-              />
-            }
-            label="Logout"
-          />
-          <TooltipIcon
-            icon={
-              <CgDetailsMore
-                className="h-11 w-11 text-main_host hover:text-white cursor-pointer"
-                onClick={() => setDrawerOpen(true)}
-              />
-            }
-            label="More"
-          />
-          <div className="flex items-baseline cursor-pointer">
+          <div
+            onClick={() => setDrawerOpen(true)}
+            className="flex items-baseline cursor-pointer"
+          >
             <img
-              src={Images.default_profile}
+              src={host?.profilePic || Images.default_profile}
               alt="avatar"
               className="h-11 w-11 object-cover cursor-pointer"
             />
@@ -160,8 +164,14 @@ const HostHeader: React.FC = () => {
         isOpen={openNotification}
         onClose={() => setOpenNotification(false)}
         notifications={fetchedNotifications}
+        setNotifications={setFetchedNotifications}
       />
-      <MoreDrawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} />
+
+      <MoreDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        onLogout={() => setConfirmLogout(true)}
+      />
 
       {menuOpen && (
         <div className="fixed inset-0 z-50 bg-black/50">
@@ -199,7 +209,9 @@ const HostHeader: React.FC = () => {
               <div className="relative w-6 h-6 flex items-center justify-center">
                 <IoNotificationsOutline
                   onClick={() => {
-                    setOpenNotification((prev) => !prev);
+                    const open = !openNotification;
+                    setOpenNotification(open);
+                    if (open) fetchNotifications();
                     setMenuOpen(false);
                   }}
                   className="h-6 w-6 text-black cursor-pointer"
@@ -220,24 +232,19 @@ const HostHeader: React.FC = () => {
                   setMenuOpen(false);
                 }}
               />
+              <LuUserRoundCog
+                className="h-6 w-6 text-black cursor-pointer"
+                onClick={() => {
+                  setMenuOpen(false);
+                  setDrawerOpen(true);
+                }}
+              />
               <LogOut
                 className="h-6 w-6 text-red-600 cursor-pointer"
                 onClick={() => {
                   setConfirmLogout(true);
                   setMenuOpen(false);
                 }}
-              />
-              <CgDetailsMore
-                className="h-6 w-6 text-main_host cursor-pointer"
-                onClick={() => {
-                  setMenuOpen(false);
-                  setDrawerOpen(true);
-                }}
-              />
-              <img
-                src={Images.default_profile}
-                alt="avatar"
-                className="h-10 w-10 rounded-full mt-4"
               />
             </div>
           </div>

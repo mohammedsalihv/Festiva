@@ -56,4 +56,11 @@ export class HostNotificationRepository implements IHostNotificationRepository {
   async createNotification(data: CreateAssetNotificationDTO): Promise<void> {
     await NotificationModel.create(data);
   }
+
+  async markAllRead(hostId: string): Promise<void> {
+    await NotificationModel.updateMany(
+      { receiverId: hostId, isRead: false },
+      { $set: { isRead: true } }
+    );
+  }
 }

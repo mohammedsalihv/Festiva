@@ -17,4 +17,5 @@ export interface notificationProps {
   isOpen: boolean;
   onClose: () => void;
   notifications: INotification[];
+  setNotifications: React.Dispatch<React.SetStateAction<INotification[]>>;
 }

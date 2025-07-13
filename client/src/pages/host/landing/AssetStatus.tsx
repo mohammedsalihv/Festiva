@@ -82,7 +82,7 @@ export const AssetStatus: React.FC = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    setCurrentPage(1); // Reset to first page on tab change
+    setCurrentPage(1);
   }, [activeTab]);
 
   const filteredData =
@@ -92,7 +92,7 @@ export const AssetStatus: React.FC = () => {
 
   return (
     <div className="px-4 py-3 sm:px-6 md:px-20 font-poppins">
-      <h2 className="text-xl font-semibold mb-4">My Requests</h2>
+      <h2 className="text-base sm:text-xl font-semibold mb-4">My Requests</h2>
 
       <div className="flex border-b border-gray-200 mb-10">
         {tabs.map((tab) => (
@@ -100,7 +100,7 @@ export const AssetStatus: React.FC = () => {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={clsx(
-              "px-4 py-2 text-sm font-medium",
+              "px-4 py-2 text-xs sm:text-base md:text-base",
               activeTab === tab
                 ? "border-b-2 border-black text-black"
                 : "text-gray-500 hover:text-black"

@@ -11,6 +11,7 @@ import { FaRupeeSign } from "react-icons/fa";
 import { IoPricetagsOutline } from "react-icons/io5";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { catersRequestProps } from "@/utils/Types/admin/assetManagement/ICaters";
+import { HiOutlineRefresh } from "react-icons/hi";
 import {
   assetRequestApprove,
   assetRequestReject,
@@ -48,6 +49,7 @@ const CatersRequestView: React.FC<catersRequestProps> = ({ data }) => {
   const [actionType, setActionType] = useState<"approve" | "reject" | null>(
     null
   );
+  const [showActions, setShowActions] = useState(false);
 
   const navigate = useNavigate();
 
@@ -287,43 +289,62 @@ const CatersRequestView: React.FC<catersRequestProps> = ({ data }) => {
               </div>
             </CardContent>
           </Card>
-          {status === "pending" ? (
-            <div className="flex flex-col sm:flex-row gap-2 w-full ">
-              <Button
-                className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white"
-                onClick={() => {
-                  setActionType("approve");
-                  setConfirmAction(true);
-                }}
-              >
-                <CiCircleCheck className="w-6 h-6" />
-                <span>Approve</span>
-              </Button>
+          <div className="w-full">
+            {status === "pending" || showActions ? (
+              <div className="flex flex-col sm:flex-row gap-2 w-full">
+                <Button
+                  className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+                  onClick={() => {
+                    setActionType("approve");
+                    setConfirmAction(true);
+                    setShowActions(false);
+                  }}
+                >
+                  <CiCircleCheck className="w-6 h-6" />
+                  <span>Approve</span>
+                </Button>
 
-              <Button
-                className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white"
-                onClick={() => {
-                  setActionType("reject");
-                  setConfirmAction(true);
-                }}
-              >
-                <IoIosCloseCircleOutline className="w-6 h-6" />
-                <span>Reject</span>
-              </Button>
-            </div>
-          ) : status === "approved" ? (
-            <h1 className="text-xs px-3 py-1 rounded border bg-blue-500 text-white font-mono">
-              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
-            </h1>
-          ) : status === "rejected" ? (
-            <h1 className="text-xs px-3 py-1 rounded border  bg-red-500 text-white font-mono">
-              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
-            </h1>
-          ) : (
-            <h1 className="text-sm text-gray-700 font-medium bg-gray-200 px-3 py-1 rounded">
-              {status ? status.charAt(0).toUpperCase() + status.slice(1) : ""}
-            </h1>
-          )}
+                <Button
+                  className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white"
+                  onClick={() => {
+                    setActionType("reject");
+                    setConfirmAction(true);
+                    setShowActions(false);
+                  }}
+                >
+                  <IoIosCloseCircleOutline className="w-6 h-6" />
+                  <span>Reject</span>
+                </Button>
+              </div>
+            ) : (
+              <div className="w-full flex justify-between items-center gap-2">
+                <div
+                  className={`flex-1 text-xs px-4 py-2 rounded text-white font-semibold text-center ${
+                    status === "approved"
+                      ? "bg-blue-500"
+                      : status === "rejected"
+                      ? "bg-red-500"
+                      : "bg-gray-400"
+                  }`}
+                >
+                  {status
+                    ? status.charAt(0).toUpperCase() + status.slice(1)
+                    : ""}
+                </div>
+
+                <div className="flex-shrink-0">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowActions(true)}
+                    className="flex items-center justify-center gap-2 text-sm bg-black text-white hover:bg-slate-800"
+                  >
+                    Re-call <HiOutlineRefresh className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+
           <ConfirmDialog
             isOpen={confirmAction}
             title={

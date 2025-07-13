@@ -36,6 +36,7 @@ export const HOST_ROUTES = {
 
   redirectRoutes: {
     toDashboard: "/host/dashbaord",
+    toLanding:"/host/landing"
   },
   notfound: "*",
   error: "/error",

@@ -30,12 +30,17 @@ export const hostSignup = async (data: HostRegisterData) => {
   return response.data;
 };
 
-
-
 export const validateEmail = async (email: string) => {
   const response = await axiosInstance.post(
     HOST_API.Authentication.validateEmail(),
     { email }
+  );
+  return response.data;
+};
+
+export const hostLogout = async () => {
+  const response = await axiosInstance.delete(
+    HOST_API.Authentication.hostLogout
   );
   return response.data;
 };

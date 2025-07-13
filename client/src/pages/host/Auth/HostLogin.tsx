@@ -70,7 +70,7 @@ const HostLogin = ({ onClose, showSignup }: Props) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 px-2">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 px-2 font-poppins">
       <div className="relative w-full sm:max-w-md max-h-[90vh] bg-white shadow-xl overflow-y-auto p-4 sm:p-6 pt-8">
         <IoClose
           onClick={onClose}
@@ -93,7 +93,7 @@ const HostLogin = ({ onClose, showSignup }: Props) => {
         <div className="space-y-3 mb-4">
           <Button className="flex items-center w-full border border-gray-300 rounded-none py-5 justify-center hover:bg-gray-50">
             <FcGoogle className="text-lg mr-2" />
-            <span>Log in with Google</span>
+            <span className="font-poppins">Log in with Google</span>
           </Button>
         </div>
 
@@ -133,7 +133,7 @@ const HostLogin = ({ onClose, showSignup }: Props) => {
             type="button"
             disabled={mutation.isPending}
             onClick={handleSubmit}
-            className="w-full mt-2 bg-main_host text-white rounded-none hover:bg-red-600 font-semibold text-sm px-2 py-5 gap-2"
+            className="w-full mt-2 bg-main_host text-white rounded-none hover:bg-red-600 font-poppins text-sm px-2 py-5 gap-2"
           >
             {mutation.isPending ? "Logging in..." : "Log In With Password"}
           </Button>

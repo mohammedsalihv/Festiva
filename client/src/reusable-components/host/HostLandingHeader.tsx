@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { RiMenuFold4Line } from "react-icons/ri";
 import { FaUserCircle } from "react-icons/fa";
-import { MdKeyboardArrowDown } from "react-icons/md";
 import { GrFormClose } from "react-icons/gr";
 import {
   FiHelpCircle,
@@ -25,29 +25,29 @@ const HostLandingHeader = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full z-30 bg-white shadow-sm border-b border-gray-200">
+      <nav className="fixed top-0 left-0 w-full z-30 bg-white font-poppins">
         <div className="w-full px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
           <LogoText />
           <div className="hidden sm:flex items-center gap-4">
             <a
-              href="/browse"
+              href="/user/login"
               className="text-sm font-semibold text-black hover:text-red-500"
             >
-              Browse Location
+              Switch to Renter
             </a>
-            <a
-              href="/host/list-space"
-              className="text-sm font-semibold text-black hover:text-red-500"
+            <p
+              onClick={() => {
+              setIsLoginMode(true);
+              setShowAuthModal(true);
+            }}
+              className="text-sm font-semibold text-black hover:text-red-500 cursor-pointer"
             >
               List Your Space
-            </a>
-            <div
-              onClick={() => setShowDrawer(true)}
-              className="flex items-center cursor-pointer"
-            >
-              <FaUserCircle className="text-2xl text-gray-700 hover:text-red-500" />
-              <MdKeyboardArrowDown className="text-xl text-gray-700 hover:text-red-500" />
-            </div>
+            </p>
+            <RiMenuFold4Line  
+            className="cursor-pointer text-2xl text-black hover:text-red-500"
+            onClick={() => setShowDrawer(true)}
+            />
           </div>
           <div className="sm:hidden">
             <button
@@ -65,17 +65,16 @@ const HostLandingHeader = () => {
           showDrawer ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex justify-between items-center p-4 border-b">
-          <h2 className="text-base font-semibold">Welcome</h2>
+        <div className="flex justify-end p-2">
           <GrFormClose
             onClick={() => setShowDrawer(false)}
-            className="text-xl cursor-pointer"
+            className="text-2xl cursor-pointer text-right"
           />
         </div>
 
-        <div className="p-4 space-y-4">
+        <div className="p-2 space-y-2">
           <Button
-            className="w-full bg-red-500 hover:bg-red-600 text-white rounded-none"
+            className="w-full bg-red-500 hover:bg-red-600 text-white rounded-none font-poppins"
             onClick={() => {
               setIsLoginMode(true);
               setShowAuthModal(true);
@@ -85,7 +84,7 @@ const HostLandingHeader = () => {
             Login
           </Button>
           <Button
-            className="w-full border border-red-500 text-red-500 rounded-none"
+            className="w-full border border-red-500 text-red-500 rounded-none font-poppins"
             onClick={() => {
               setIsLoginMode(false);
               setShowAuthModal(true);
@@ -95,25 +94,22 @@ const HostLandingHeader = () => {
             Signup
           </Button>
 
-          <div className="mt-6">
-            <h3 className="text-sm font-semibold text-gray-500 mb-2">
-              Explore
-            </h3>
+         <div className="font-poppins px-1 py-1">
             <ul className="divide-y divide-gray-200">
-              <li className="py-2 flex items-center gap-3 text-sm hover:text-red-500 cursor-pointer">
-                <FiHelpCircle className="text-lg" />
+              <li className="py-3 flex items-center gap-3 text-sm hover:text-red-500 cursor-pointer">
+                <FiHelpCircle className="text-lg text-gray-500" />
                 Help
               </li>
-              <li className="py-2 flex items-center gap-3 text-sm hover:text-red-500 cursor-pointer">
-                <FiBookOpen className="text-lg" />
+              <li className="py-3 flex items-center gap-3 text-sm hover:text-red-500 cursor-pointer">
+                <FiBookOpen className="text-lg text-gray-500" />
                 Hosting Guide
               </li>
-              <li className="py-2 flex items-center gap-3 text-sm hover:text-red-500 cursor-pointer">
-                <FiUsers className="text-lg" />
+              <li className="py-3 flex items-center gap-3 text-sm hover:text-red-500 cursor-pointer">
+                <FiUsers className="text-lg text-gray-500" />
                 Community
               </li>
-              <li className="py-2 flex items-center gap-3 text-sm hover:text-red-500 cursor-pointer">
-                <FiHeadphones className="text-lg" />
+              <li className="py-3 flex items-center gap-3 text-sm hover:text-red-500 cursor-pointer">
+                <FiHeadphones className="text-lg text-gray-500" />
                 Contact Support
               </li>
             </ul>

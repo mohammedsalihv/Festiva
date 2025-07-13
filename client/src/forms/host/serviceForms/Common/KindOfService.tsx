@@ -138,7 +138,7 @@ const KindOfService = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 font-prompt bg-white">
+    <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 font-poppins bg-white">
   {error && (
     <p className="text-red-600 text-sm font-medium text-center mb-3">
       Please select at least one option before continuing.

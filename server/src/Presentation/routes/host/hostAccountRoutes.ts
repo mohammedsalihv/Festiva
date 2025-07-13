@@ -18,11 +18,20 @@ hostAccountRoutes.get(
   )
 );
 
+hostAccountRoutes.patch(
+  HOST_ROUTES.HostAccount.notificationsMarkAllRead,
+  authenticateToken,
+  isHost,
+  hostNotificationController.markAllRead.bind(hostNotificationController)
+);
+
 hostAccountRoutes.get(
   HOST_ROUTES.HostAccount.requests,
   authenticateToken,
   isHost,
   hostAssetRequestController.getAllRequests.bind(hostAssetRequestController)
 );
+
+
 
 export default hostAccountRoutes;

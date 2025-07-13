@@ -4,9 +4,11 @@ export const HOST_ROUTES = {
     hostLogin: "/login",
     hostEmailValidation:"/validateEmail",
     Refresh_Token: "/refresh",
+    hostLogout: "/logout",
   },
   HostAccount: {
     notifications: "/notifications",
+    notificationsMarkAllRead: "/notifications/mark-all-read",
     requests: "/requests",
   },
   VenueService: {

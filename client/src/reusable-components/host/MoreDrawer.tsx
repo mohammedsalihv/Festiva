@@ -13,12 +13,13 @@ import {
   Settings,
   HelpCircle,
   Bell,
-  UserCog
+  UserCog,
+  LogOut,
 } from "lucide-react";
-
 interface MoreDrawerProps {
   isOpen: boolean;
   onClose: () => void;
+  onLogout: () => void;
 }
 
 const links = [
@@ -30,12 +31,17 @@ const links = [
   { name: "Team", icon: Users, path: "/host/team" },
   { name: "Messages", icon: MessageCircle, path: "/host/chat" },
   { name: "Notifications", icon: Bell, path: "/host/notifications" },
-  {name : "Profile" , icon: UserCog , path:"/host/profile"},
+  { name: "Profile", icon: UserCog, path: "/host/profile" },
   { name: "Settings", icon: Settings, path: "/host/settings" },
   { name: "Help", icon: HelpCircle, path: "/host/help" },
+  { name: "Logout", icon: LogOut, path: "/host/landing" },
 ];
 
-export const MoreDrawer: React.FC<MoreDrawerProps> = ({ isOpen, onClose }) => {
+export const MoreDrawer: React.FC<MoreDrawerProps> = ({
+  isOpen,
+  onClose,
+  onLogout,
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -45,7 +51,6 @@ export const MoreDrawer: React.FC<MoreDrawerProps> = ({ isOpen, onClose }) => {
         isOpen ? "translate-x-0" : "translate-x-full"
       )}
     >
-
       <div className="flex justify-between items-center p-4 border-b">
         <h3 className="text-lg font-semibold">More Options</h3>
         <button onClick={onClose}>
@@ -53,20 +58,24 @@ export const MoreDrawer: React.FC<MoreDrawerProps> = ({ isOpen, onClose }) => {
         </button>
       </div>
 
-
       <div className="overflow-y-auto h-[calc(100%-64px)] p-4">
         <ul className="space-y-2">
           {links.map(({ name, icon: Icon, path }) => (
             <li
               key={name}
-              className="flex items-center gap-3 text-gray-800 hover:bg-gray-100 p-2 rounded cursor-pointer transition"
+              className="flex items-center gap-3 text-gray-800 hover:bg-gray-200 p-2 rounded cursor-pointer transition"
               onClick={() => {
-                navigate(path);
+                if (name.toLowerCase() === "logout") {
+                  onLogout();
+                } else {
+                  navigate(path);
+                }
+
                 onClose();
               }}
             >
-              <Icon className="w-5 h-5 text-gray-600" />
-              <span className="text-sm font-medium">{name}</span>
+              <Icon className={`w-5 h-5 ${name.toLowerCase() === 'logout' ? "text-red-600 hover:text-red-700" : "text-gray-500"}`} />
+              <span className={`text-sm font-medium  ${name.toLowerCase() === 'logout' ? "text-red-600 hover:text-red-700" : "text-black"}`}>{name}</span>
             </li>
           ))}
         </ul>
