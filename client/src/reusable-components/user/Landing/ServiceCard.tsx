@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import ServiceCardFilter from "@/components/ServiceCardFilter";
 import ServiceCardSort from "@/components/ServiceCardSort";
+import LocationSearchBar from "@/components/LocationSearchBar";
 import Pagination from "@/components/Pagination";
 import {
   FaHeart,
@@ -27,7 +28,7 @@ import {
 import { Input } from "@/components/Input";
 
 export default function ServicesCard() {
-  const { type } = useParams(); // ✅ must be before using it
+  const { type } = useParams();
   const normalizedType = type?.toLowerCase();
   const navigate = useNavigate();
 
@@ -45,6 +46,7 @@ export default function ServicesCard() {
   const [retryCount, setRetryCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [userLocation , setUserLocation] = useState<{lat:number; lng:number} | null>(null)
   const pageSize = 8;
 
   useEffect(() => {
@@ -103,6 +105,20 @@ export default function ServicesCard() {
     fetchAssets(selectedTab, filters, sorts, page);
   };
 
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position)=>{
+      setUserLocation({
+        lat:position.coords.latitude,
+        lng:position.coords.longitude
+      })
+    },
+    (err) => console.warn("Geolocation error", err),
+     { enableHighAccuracy: true }
+  )
+  })
+
+
   if (loading) {
     return (
       <div className="text-center py-12 mt-32">
@@ -134,9 +150,7 @@ export default function ServicesCard() {
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6 font-JosephicSans mt-14">
-      {/* Search & Filters */}
       <div className="flex flex-col sm:flex-row items-center justify-between mb-2 sm:mb-4 gap-2 sm:gap-3 border-b">
-        {/* Search */}
         <div className="w-full relative">
           <FaSearch className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs sm:text-base" />
           <Input
@@ -147,8 +161,14 @@ export default function ServicesCard() {
             className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-1 sm:py-2 rounded-lg text-xs sm:text-base border-0 focus:outline-none focus:ring-0"
           />
         </div>
+        <div className="mt-3">
+          <LocationSearchBar
+            onLocationSelect={(location) => {
+              setFilters((prev) => ({ ...prev, lat: location.lat, lng: location.lng }));
+            }}
+          />
+        </div>
 
-        {/* Tabs + Filters */}
         <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 border-b pb-2">
           <div className="w-full overflow-x-auto whitespace-nowrap scrollbar-hide sm:overflow-visible">
             <div className="inline-flex gap-2 px-1">
@@ -209,7 +229,6 @@ export default function ServicesCard() {
         </div>
       </div>
 
-      {/* Filter/Sort pills */}
       {(Object.keys(filters).length > 0 || Object.keys(sorts).length > 0) && (
         <div className="flex flex-wrap items-center gap-2 mt-2 text-xs sm:text-sm mb-2">
           {Object.entries(filters).map(([key, value]) => (
@@ -277,7 +296,7 @@ export default function ServicesCard() {
         </div>
       )}
 
-      {/* Card Grid */}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
         {assets
           .filter((asset) => {
@@ -350,8 +369,6 @@ export default function ServicesCard() {
             </div>
           ))}
       </div>
-
-      {/* Pagination */}
       <div className="mt-6">
         <Pagination
           currentPage={currentPage}
