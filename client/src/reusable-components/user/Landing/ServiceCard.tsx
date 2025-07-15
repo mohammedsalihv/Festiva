@@ -128,7 +128,6 @@ export default function ServicesCard() {
     return (
       <div className="text-center py-12 mt-32">
         <Loader />
-        <p className="mt-5 text-sm text-gray-500">Loading assets...</p>
       </div>
     );
   }
@@ -179,7 +178,6 @@ export default function ServicesCard() {
               className="flex items-center px-3 py-2 bg-main_color text-white text-xs rounded-2xl"
             >
               <FaFilter className="mr-1 text-xs" />
-
             </Button>
           </div>
 
@@ -265,6 +263,26 @@ export default function ServicesCard() {
             </button>
           ))}
         </div>
+        {isFilterOpen && (
+          <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
+            <ServiceCardFilter
+              type={selectedTab}
+              filterRef={fetchRef}
+              filterOpen={setIsFilterOpen}
+              onApplyFilter={(appliedFilters) => setFilters(appliedFilters)}
+            />
+          </div>
+        )}
+        {isSortOpen && (
+          <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
+            <ServiceCardSort
+              type={selectedTab}
+              sortRef={fetchRef}
+              sortOpen={setIsSortOpen}
+              onApplySort={(appliedSorts) => setSorts(appliedSorts)}
+            />
+          </div>
+        )}
       </div>
 
       {(Object.keys(filters).length > 0 || Object.keys(sorts).length > 0) && (
@@ -334,7 +352,7 @@ export default function ServicesCard() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 p-2 md:p-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 p-2 md:p-5">
         {assets
           .filter((asset) => {
             if (!searchTerm.trim()) return true;
@@ -348,14 +366,14 @@ export default function ServicesCard() {
           .map((asset) => (
             <div
               key={asset._id}
-              className="bg-white rounded-md overflow-hidden shadow-2xl hover:shadow-lg transition-shadow cursor-pointer"
+              className="bg-white overflow-hidden shadow-2xl hover:shadow-lg transition-shadow cursor-pointer"
               onClick={() =>
                 navigate(
                   `/user/services/${normalizedType}/details/${asset._id}`
                 )
               }
             >
-              <div className="relative h-48 sm:h-60 w-full group">
+              <div className="relative h-52 sm:h-60 w-full group">
                 <img
                   src={
                     Array.isArray(asset.Images)
@@ -363,7 +381,7 @@ export default function ServicesCard() {
                       : Images.imageNA
                   }
                   alt={asset.name || "Asset"}
-                  className="w-full h-full object-cover rounded-t-lg transition-opacity duration-300 group-hover:opacity-0"
+                  className="w-full h-full object-cover rounded-t-md transition-opacity duration-300 group-hover:opacity-0"
                 />
                 {Array.isArray(asset.Images) && asset.Images[1] && (
                   <img

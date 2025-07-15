@@ -5,6 +5,7 @@ import {
 } from "../../../../domain/entities/serviceInterface/interface.caters";
 import { CatersModel } from "../../../../domain/models/catersModel";
 import { mapCatersToBase } from "../../../../domain/entities/serviceInterface/interface.caters";
+import { LocationModel } from "../../../../domain/models/locationModel";
 
 export class UserCatersRepository implements IUserCatersRepository {
   async findAllCaters(): Promise<ICatersBase[]> {
@@ -22,61 +23,80 @@ export class UserCatersRepository implements IUserCatersRepository {
       .exec();
   }
 
-  async filterCaters(
-    filters: Record<string, any>,
-    page: number,
-    limit: number
-  ): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }> {
-    const query: Record<string, any> = { status: "approved" };
+ async filterCaters(
+  filters: Record<string, any>,
+  page: number,
+  limit: number
+): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }> {
+  const query: Record<string, any> = { status: "approved" };
 
-    if (filters.city) query["location.city"] = filters.city;
-    if (filters.state) query["location.state"] = filters.state;
-    if (filters.country) query["location.country"] = filters.country;
+  // Location-based filter using coordinates
+  if (filters.lat && filters.lng) {
+    const radiusInMeters = (filters.radius || 50) * 1000; // default 50km
 
-    if (filters.serviceTypes?.length) {
-      query["serviceTypes"] = {
-        $in: filters.serviceTypes.map((item: string) => ({
-          $regex: item,
-          $options: "i",
-        })),
-      };
-    }
+    // Step 1: Find matching location IDs within radius
+    const nearbyLocations = await LocationModel.find({
+      coordinates: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [filters.lng, filters.lat],
+          },
+          $maxDistance: radiusInMeters,
+        },
+      },
+    }).select("_id");
 
-    if (filters.catersFeatures?.length) {
-      query["features"] = {
-        $in: filters.catersFeatures.map((item: string) => ({
-          $regex: item,
-          $options: "i",
-        })),
-      };
-    }
+    const nearbyLocationIds = nearbyLocations.map((loc) => loc._id);
+    query["location"] = { $in: nearbyLocationIds };
+  }
 
-    if (filters.timeSlots?.length) {
-      query["timeSlots"] = { $in: filters.timeSlots };
-    }
-
-    if (filters.price) {
-      query.$expr = {
-        $lte: [{ $toDouble: "$totalAmount" }, filters.price],
-      };
-    }
-
-    const total = await CatersModel.countDocuments(query);
-    const totalPages = Math.ceil(total / limit);
-    const skip = (page - 1) * limit;
-
-    const caters = await CatersModel.find(query)
-      .populate("location", "city state country")
-      .skip(skip)
-      .limit(limit)
-      .lean();
-
-    return {
-      data: caters.map(mapCatersToBase),
-      totalPages,
-      currentPage: page,
+  // Other filters
+  if (filters.serviceTypes?.length) {
+    query["serviceTypes"] = {
+      $in: filters.serviceTypes.map((item: string) => ({
+        $regex: item,
+        $options: "i",
+      })),
     };
   }
+
+  if (filters.catersFeatures?.length) {
+    query["features"] = {
+      $in: filters.catersFeatures.map((item: string) => ({
+        $regex: item,
+        $options: "i",
+      })),
+    };
+  }
+
+  if (filters.timeSlots?.length) {
+    query["timeSlots"] = { $in: filters.timeSlots };
+  }
+
+  if (filters.price) {
+    query.$expr = {
+      $lte: [{ $toDouble: "$totalAmount" }, filters.price],
+    };
+  }
+
+  const total = await CatersModel.countDocuments(query);
+  const totalPages = Math.ceil(total / limit);
+  const skip = (page - 1) * limit;
+
+  const caters = await CatersModel.find(query)
+    .populate("location", "houseNo street district city state country zip coordinates")
+    .skip(skip)
+    .limit(limit)
+    .lean();
+
+  return {
+    data: caters.map(mapCatersToBase),
+    totalPages,
+    currentPage: page,
+  };
+}
+
 
   async sortCaters(
     sorts: any,

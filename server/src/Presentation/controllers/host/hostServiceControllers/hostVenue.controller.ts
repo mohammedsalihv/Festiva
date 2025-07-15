@@ -93,7 +93,7 @@ export class HostVenueController implements IHostVenueController {
         description,
         terms,
         Images: imageUrls,
-        location: newLocation._id,
+        location:  new Types.ObjectId(newLocation._id),
         host: new Types.ObjectId(hostId),
       };
 

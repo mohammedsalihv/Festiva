@@ -109,7 +109,7 @@ export class HostRentCarController implements IHostRentCarController {
           guidelines,
           userDocument,
           Images: imageUrls,
-          location: newLocation._id,
+          location:  new Types.ObjectId(newLocation._id),
           host: new Types.ObjectId(hostId),
         };
 

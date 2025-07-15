@@ -13,6 +13,7 @@ import {
 import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
 import { assetFilesValidate } from "../../../../utils/host/assetFilesValidate";
 import { Request, Response } from "express";
+import { geocodeAddress } from "../../../../utils/common/geocoding/geocodeAddress";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -42,6 +43,15 @@ export class HostCatersController implements IHostCatersController {
 
       try {
         await assetFilesValidate({ files, typeOfAsset });
+
+        const fullAddress = `${newCaters.location.houseNo}, ${newCaters.location.street}, ${newCaters.location.district}, ${newCaters.location.state}, ${newCaters.location.country}, ${newCaters.location.zip}`;
+
+        const { lat, lng } = await geocodeAddress(fullAddress);
+
+        newCaters.location.coordinates = {
+          type: "Point",
+          coordinates: [lng, lat],
+        };
 
         const newLocation = await this.hostAssetlocationRepository.addLocation(
           newCaters.location
@@ -96,8 +106,8 @@ export class HostCatersController implements IHostCatersController {
           conditions,
           about,
           Images: imageUrls,
-          location: newLocation._id,
-          host: new Types.ObjectId(hostId)
+          location: new Types.ObjectId(newLocation._id),
+          host: new Types.ObjectId(hostId),
         };
 
         const createdCaters = await this.hostCatersUseCase.addCaters(caters);
