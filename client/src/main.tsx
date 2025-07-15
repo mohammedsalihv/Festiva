@@ -9,6 +9,7 @@ import "./index.css";
 import App from "./App";
 
 const mapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+const libraries: ("places" | "core")[] = ["places", "core"];
 if (!mapsApiKey) {
   console.error(
     "Google Maps API key is missing. Please set VITE_GOOGLE_MAPS_API_KEY in .env"
@@ -34,7 +35,11 @@ createRoot(rootElement).render(
     <PersistGate loading={null} persistor={persistor}>
       <GoogleOAuthProvider clientId={clientId}>
         <QueryClientProvider client={queryClient}>
-          <LoadScript googleMapsApiKey={mapsApiKey} libraries={["places"]}>
+          <LoadScript
+            googleMapsApiKey={mapsApiKey}
+            libraries={libraries}
+            version="beta"
+          >
             <App />
           </LoadScript>
         </QueryClientProvider>

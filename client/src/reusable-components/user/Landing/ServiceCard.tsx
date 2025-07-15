@@ -46,7 +46,10 @@ export default function ServicesCard() {
   const [retryCount, setRetryCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [userLocation , setUserLocation] = useState<{lat:number; lng:number} | null>(null)
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
   const pageSize = 8;
 
   useEffect(() => {
@@ -57,7 +60,10 @@ export default function ServicesCard() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (fetchRef.current && !fetchRef.current.contains(event.target as Node)) {
+      if (
+        fetchRef.current &&
+        !fetchRef.current.contains(event.target as Node)
+      ) {
         setIsFilterOpen(false);
       }
     };
@@ -105,19 +111,18 @@ export default function ServicesCard() {
     fetchAssets(selectedTab, filters, sorts, page);
   };
 
-
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position)=>{
-      setUserLocation({
-        lat:position.coords.latitude,
-        lng:position.coords.longitude
-      })
-    },
-    (err) => console.warn("Geolocation error", err),
-     { enableHighAccuracy: true }
-  )
-  })
-
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      (err) => console.warn("Geolocation error", err),
+      { enableHighAccuracy: true }
+    );
+  });
 
   if (loading) {
     return (
@@ -149,83 +154,116 @@ export default function ServicesCard() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6 font-JosephicSans mt-14">
-      <div className="flex flex-col sm:flex-row items-center justify-between mb-2 sm:mb-4 gap-2 sm:gap-3 border-b">
-        <div className="w-full relative">
-          <FaSearch className="absolute left-2 sm:left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs sm:text-base" />
-          <Input
-            type="text"
-            placeholder="Add keywords..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-8 sm:pl-10 pr-3 sm:pr-4 py-1 sm:py-2 rounded-lg text-xs sm:text-base border-0 focus:outline-none focus:ring-0"
-          />
-        </div>
-        <div className="mt-3">
-          <LocationSearchBar
-            onLocationSelect={(location) => {
-              setFilters((prev) => ({ ...prev, lat: location.lat, lng: location.lng }));
-            }}
-          />
-        </div>
+    <div className="max-w-full sm:px-6 md:px- mx-auto px-2 py-4 sm:py-6 font-JosephicSans mt-14">
+      {/* Controls Row */}
+      <div className="w-full flex flex-col gap-3 mb-4 sm:gap-4 border-b py-3">
+        {/* Mobile Layout */}
+        <div className="flex flex-col gap-3 lg:hidden">
+          {/* Row 1: Location + Filter */}
+          <div className="flex gap-2">
+            {/* Location Input */}
+            <div className="flex-1 min-w-[150px]">
+              <LocationSearchBar
+                onLocationSelect={(location) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    lat: location.lat,
+                    lng: location.lng,
+                  }))
+                }
+              />
+            </div>
+            {/* Filter Button */}
+            <Button
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className="flex items-center px-3 py-2 bg-main_color text-white text-xs rounded-2xl"
+            >
+              <FaFilter className="mr-1 text-xs" />
 
-        <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 border-b pb-2">
-          <div className="w-full overflow-x-auto whitespace-nowrap scrollbar-hide sm:overflow-visible">
-            <div className="inline-flex gap-2 px-1">
-              {serviceOptions.map((option) => (
-                <button
-                  key={option.value}
-                  onClick={() => {
-                    setSelectedTab(option.value);
-                    navigate(`/user/assets/${option.value}`);
-                  }}
-                  className={`px-4 py-1.5 rounded-full text-xs sm:text-sm transition ${
-                    selectedTab === option.value
-                      ? "bg-main_color text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  {option.label}
-                </button>
-              ))}
+            </Button>
+          </div>
+
+          <div className="flex gap-2">
+            {/* Search Input */}
+            <div className="relative flex-1 min-w-[150px]">
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm" />
+              <Input
+                type="text"
+                placeholder="Add keywords..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-3 py-2 text-sm font-extralight"
+              />
+            </div>
+
+            <Button
+              onClick={() => setIsSortOpen(!isSortOpen)}
+              className="flex items-center px-3 py-2 bg-main_color text-white text-xs rounded-2xl"
+            >
+              <FaSortAmountDownAlt className="mr-1 text-xs" />
+            </Button>
+          </div>
+        </div>
+        <div className="hidden lg:flex w-full items-center justify-between gap-4 border-b p-2 border-t">
+          <div className="flex gap-20 flex-1 max-w-4xl mx-auto justify-center">
+            <div className="relative w-full max-w-[300px]">
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm" />
+              <Input
+                type="text"
+                placeholder="Add keywords..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-3 py-1 text-sm border-none"
+              />
+            </div>
+            <div className="w-full max-w-[300px]">
+              <LocationSearchBar
+                onLocationSelect={(location) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    lat: location.lat,
+                    lng: location.lng,
+                  }))
+                }
+              />
             </div>
           </div>
 
-          <div className="flex justify-end gap-2 w-full sm:w-auto">
-            <Button
-              onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="flex items-center gap-2 px-3 py-2 bg-main_color text-white  text-xs sm:text-sm rounded-2xl hover:bg-indigo-500"
-            >
-              <FaFilter className="text-xs" />
-            </Button>
+          {/* Right: Buttons */}
+          <div className="flex gap-2 shrink-0">
             <Button
               onClick={() => setIsSortOpen(!isSortOpen)}
-              className="flex items-center gap-2 px-3 py-2 bg-main_color text-white text-xs sm:text-sm rounded-2xl hover:bg-indigo-500"
+              className="flex items-center px-3 py-2 bg-main_color text-white text-sm rounded-2xl hover:bg-indigo-500"
             >
-              <FaSortAmountDownAlt className="text-xs" />
+              <FaSortAmountDownAlt className="mr-1 text-xs" />
             </Button>
-
-            {isFilterOpen && (
-              <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
-                <ServiceCardFilter
-                  type={selectedTab}
-                  filterRef={fetchRef}
-                  filterOpen={setIsFilterOpen}
-                  onApplyFilter={(appliedFilters) => setFilters(appliedFilters)}
-                />
-              </div>
-            )}
-            {isSortOpen && (
-              <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
-                <ServiceCardSort
-                  type={selectedTab}
-                  sortRef={fetchRef}
-                  sortOpen={setIsSortOpen}
-                  onApplySort={(appliedSorts) => setSorts(appliedSorts)}
-                />
-              </div>
-            )}
+            <Button
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className="flex items-center px-3 py-2 bg-main_color text-white text-sm rounded-2xl hover:bg-indigo-500"
+            >
+              <FaFilter className="mr-1 text-xs" />
+            </Button>
           </div>
+        </div>
+
+        {/* Tabs (Below All Inputs) */}
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide justify-start sm:justify-center lg:justify-center">
+          {serviceOptions.map((option) => (
+            <button
+              key={option.value}
+              onClick={() => {
+                setSelectedTab(option.value);
+                navigate(`/user/assets/${option.value}`);
+              }}
+              className={`px-4 py-1.5 rounded-full text-xs sm:text-sm whitespace-nowrap transition ${
+                selectedTab === option.value
+                  ? "bg-main_color text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -296,8 +334,7 @@ export default function ServicesCard() {
         </div>
       )}
 
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 p-2 md:p-5">
         {assets
           .filter((asset) => {
             if (!searchTerm.trim()) return true;
@@ -313,10 +350,12 @@ export default function ServicesCard() {
               key={asset._id}
               className="bg-white rounded-md overflow-hidden shadow-2xl hover:shadow-lg transition-shadow cursor-pointer"
               onClick={() =>
-                navigate(`/user/services/${normalizedType}/details/${asset._id}`)
+                navigate(
+                  `/user/services/${normalizedType}/details/${asset._id}`
+                )
               }
             >
-              <div className="relative h-36 sm:h-48 w-full group">
+              <div className="relative h-48 sm:h-60 w-full group">
                 <img
                   src={
                     Array.isArray(asset.Images)
@@ -348,7 +387,9 @@ export default function ServicesCard() {
                 </h3>
                 <div className="flex items-center gap-1 text-xs font-semibold text-gray-900">
                   {"packagesCount" in asset ? (
-                    <span>{`${asset.packagesCount ?? asset.amount} available packages`}</span>
+                    <span>{`${
+                      asset.packagesCount ?? asset.amount
+                    } available packages`}</span>
                   ) : (
                     <div className="flex items-center">
                       <FaRupeeSign className="text-[10px]" />
