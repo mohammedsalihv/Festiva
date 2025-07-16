@@ -18,6 +18,13 @@ import CustomToastContainer from "@/reusable-components/Messages/ToastContainer"
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
+import LocationSearchBar from "@/components/LocationSearchBar";
+import {
+  setFilters,
+  setSelectedLocation,
+} from "@/redux/Slice/user/assetSearchSlice";
+import { FaSearch } from "react-icons/fa";
+
 
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -35,6 +42,10 @@ const Header = () => {
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const isAuthenticated = !!userInfo?.accessToken;
   const profile = useSelector((state: RootState) => state.user.userInfo);
+  const types = ["venue", "rentcar", "caters", "studio"];
+  const isServicePage = types.some((type) =>
+    location.pathname.startsWith(`/user/assets/${type}`)
+  );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -86,21 +97,58 @@ const Header = () => {
           <div className="flex-shrink-0">
             <LogoText />
           </div>
-          <div
-            className={`${
-              showTransparent ? "text-white" : "text-black"
-            }  hidden lg:flex items-center justify-center gap-6 text-sm font-semibold`}
-          >
-            {NavbarMenu.map((item) => (
-              <a
-                key={item.id}
-                href={item.link}
-                className="hover:text-main_color font-prompt text-base"
-              >
-                {item.title}
-              </a>
-            ))}
+          {!isServicePage && (
+            <div
+              className={`${
+                showTransparent ? "text-white" : "text-black"
+              } hidden lg:flex items-center justify-center gap-6 text-sm font-semibold`}
+            >
+              {NavbarMenu.map((item) => (
+                <a
+                  key={item.id}
+                  href={item.link}
+                  className="hover:text-main_color font-prompt text-base"
+                >
+                  {item.title}
+                </a>
+              ))}
+            </div>
+          )}
+
+          <div className="hidden lg:flex items-center justify-center gap-6 text-sm font-semibold">
+            {isServicePage ? (
+<div className="flex items-center bg-white border rounded-md shadow px-2 py-1 gap-1">
+  <CiLocationOn />
+  <LocationSearchBar
+    onLocationSelect={(location) => {
+      dispatch(setSelectedLocation(location));
+      dispatch(
+        setFilters((prev: any) => ({
+          ...prev,
+          lat: location.lat,
+          lng: location.lng,
+          radius: 50,
+        }))
+      );
+    }}
+  />
+  <button className="bg-main_color hover:bg-main_color_hover text-white p-2 rounded-md ml-2">
+    <FaSearch />
+  </button>
+</div>
+            ) : (
+              NavbarMenu.map((item) => (
+                <a
+                  key={item.id}
+                  href={item.link}
+                  className="hover:text-main_color font-prompt text-base"
+                >
+                  {item.title}
+                </a>
+              ))
+            )}
           </div>
+
           <div className="flex items-center gap-3">
             <button
               className={`${

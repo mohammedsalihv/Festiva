@@ -1,8 +1,10 @@
+import { Images } from "@/assets"
+
 export const serviceOptions = [
-  { label: "venues", value: "venue" },
-  { label: "rent cars", value: "rentcar" },
-  { label: "studios", value: "studio" },
-  { label: "caters", value: "caters" },
+  { label: "Venues", value: "venue", icon: Images.venueTab },
+  { label: "Rent Cars", value: "rentcar", icon: Images.rentcarTab },
+  { label: "Studios", value: "studio", icon: Images.studioTab },
+  { label: "Caters", value: "caters", icon: Images.catersTab },
 ];
 
 export const timeSlots = [

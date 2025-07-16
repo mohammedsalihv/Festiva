@@ -30,6 +30,11 @@ import camera_video from "@/assets/images/camera_service.png";
 import catering from "@/assets/images/catering_service.png";
 import car_rent from "@/assets/images/car-rent_service.png";
 
+import venueTab from "@/assets/images/services/stage.png";
+import rentcarTab from "@/assets/images/services/car-insurance.png";
+import catersTab from "@/assets/images/services/catering.png";
+import studioTab from "@/assets/images/services/studio.png";
+
 // service images
 
 import car from "@/assets/images/cars.jpg";
@@ -161,5 +166,9 @@ export const Images = {
   convention_space,
   multiPurpose_space,
   event_space,
-  business_space
+  business_space,
+  venueTab,
+  rentcarTab,
+  catersTab,
+  studioTab
 };

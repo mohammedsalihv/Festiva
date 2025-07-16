@@ -145,14 +145,11 @@ export class UserCatersRepository implements IUserCatersRepository {
       },
       { $unwind: "$location" }
     );
-
-    // Count total first
     const countPipeline = [...pipeline, { $count: "total" }];
     const countResult = await CatersModel.aggregate(countPipeline);
     const total = countResult[0]?.total || 0;
     const totalPages = Math.ceil(total / limit);
 
-    // Add pagination
     pipeline.push({ $skip: (page - 1) * limit });
     pipeline.push({ $limit: limit });
 

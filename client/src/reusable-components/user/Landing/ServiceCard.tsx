@@ -25,17 +25,23 @@ import {
 } from "@/utils/Types/user/filterSortTypes";
 import { Input } from "@/components/Input";
 import LocationSearchBar from "@/components/LocationSearchBar";
+import {
+  setFilters,
+  setSelectedLocation,
+} from "@/redux/Slice/user/assetSearchSlice";
+import { RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ServicesCard() {
   const { type } = useParams();
   const normalizedType = type?.toLowerCase();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState<filterParams>({});
   const [sorts, setSorts] = useState<sortParams>({});
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,13 +49,13 @@ export default function ServicesCard() {
   const fetchRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [selectedLocation, setSelectedLocation] = useState<{
-    lat: number;
-    lng: number;
-    label: string;
-  } | null>(null);
+  const selectedLocation = useSelector(
+    (state: RootState) => state.assetSearch.selectedLocation
+  );
+  const filters = useSelector((state: RootState) => state.assetSearch.filters);
 
   const pageSize = 8;
+  console.log(error);
 
   useEffect(() => {
     if (normalizedType) setSelectedTab(normalizedType);
@@ -112,9 +118,9 @@ export default function ServicesCard() {
       </p>
       <button
         onClick={() => {
-          setFilters({});
+          dispatch(setFilters({}));
           setSorts({});
-          setSelectedLocation(null);
+          dispatch(setSelectedLocation({}));
         }}
         className="text-green-700 border border-green-700 px-4 py-1.5 rounded hover:bg-green-50 transition text-sm font-medium"
       >
@@ -131,13 +137,15 @@ export default function ServicesCard() {
             <div className="flex-1 min-w-[150px]">
               <LocationSearchBar
                 onLocationSelect={(location) => {
-                  setSelectedLocation(location);
-                  setFilters((prev) => ({
-                    ...prev,
-                    lat: location.lat,
-                    lng: location.lng,
-                    radius: 50,
-                  }));
+                  dispatch(setSelectedLocation(location));
+                  dispatch(
+                    setFilters({
+                      ...filters,
+                      lat: location.lat,
+                      lng: location.lng,
+                      radius: 50,
+                    })
+                  );
                 }}
               />
             </div>
@@ -168,52 +176,32 @@ export default function ServicesCard() {
             </Button>
           </div>
         </div>
-
-        {/* Large Layout */}
-        <div className="hidden lg:flex w-full items-center justify-between gap-4 border-b p-2 border-t">
-          <div className="flex gap-20 flex-1 max-w-4xl mx-auto justify-center">
-            <div className="relative w-full max-w-[300px] flex items-center">
-              <FaSearch className="absolute left-3 text-gray-500 text-base pointer-events-none" />
-              <input
-                type="text"
-                placeholder="Add keywords..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none"
-              />
+        <div className="hidden lg:flex w-full items-center border-b border-t justify-center py-4">
+          <div className="flex items-center bg-white p-1 gap-2 w-full justify-between">
+           <FaSearch className="text-black"/>
+            <Input
+              type="text"
+              placeholder="Add keywords..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-3 py-2 text-sm font-extralight border-none focus::border-none"
+            />
+            <div className="flex gap-2 ml-4">
+              <Button
+                onClick={() => setIsSortOpen(!isSortOpen)}
+                className="flex items-center px-3 py-2 text-black text-sm shadow-none hover:bg-gray-200 rounded-md"
+              >
+                <FaSortAmountDownAlt className="mr-1 text-xs" />
+              </Button>
+              <Button
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                className="flex items-center px-3 py-2 text-black text-sm shadow-none hover:bg-gray-200 rounded-md"
+              >
+                <FaFilter className="mr-1 text-xs" />
+              </Button>
             </div>
-
-            <div className="relative w-full max-w-[300px]">
-              <LocationSearchBar
-                onLocationSelect={(location) => {
-                  setSelectedLocation(location);
-                  setFilters((prev) => ({
-                    ...prev,
-                    lat: location.lat,
-                    lng: location.lng,
-                    radius: 50,
-                  }));
-                }}
-              />
-            </div>
-          </div>
-          <div className="flex gap-2 shrink-0">
-            <Button
-              onClick={() => setIsSortOpen(!isSortOpen)}
-              className="flex items-center px-3 py-2 bg-main_color text-white text-sm rounded-2xl hover:bg-indigo-500"
-            >
-              <FaSortAmountDownAlt className="mr-1 text-xs" />
-            </Button>
-            <Button
-              onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="flex items-center px-3 py-2 bg-main_color text-white text-sm rounded-2xl hover:bg-indigo-500"
-            >
-              <FaFilter className="mr-1 text-xs" />
-            </Button>
           </div>
         </div>
-
-        {/* Tabs */}
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide justify-start sm:justify-center lg:justify-center">
           {serviceOptions.map((option) => (
             <button
@@ -222,13 +210,23 @@ export default function ServicesCard() {
                 setSelectedTab(option.value);
                 navigate(`/user/assets/${option.value}`);
               }}
-              className={`px-4 py-1.5 rounded-full text-xs sm:text-sm whitespace-nowrap transition ${
-                selectedTab === option.value
-                  ? "bg-main_color text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
+              className={`flex flex-col items-center justify-center px-3 py-2 border-b-2 transition min-w-[64px]
+        ${
+          selectedTab === option.value
+            ? "border-main_color text-main_color"
+            : "border-transparent text-black hover:text-main_color"
+        }`}
             >
-              {option.label}
+              <img
+                src={option.icon}
+                alt={option.label}
+                className={`w- h-5 sm:w-7 sm:h-7 object-contain ${
+                  selectedTab === option.value ? "opacity-100" : "opacity-85"
+                }`}
+              />
+              <span className="text-[10px] sm:text-sm mt-1">
+                {option.label}
+              </span>
             </button>
           ))}
         </div>
@@ -238,19 +236,15 @@ export default function ServicesCard() {
           📍 {selectedLocation.label}
           <button
             onClick={() => {
-              setSelectedLocation(null);
-              setFilters((prev) => {
-                const { lat, lng, radius, ...rest } = prev;
-                return rest;
-              });
+              dispatch(setSelectedLocation(null));
+              const { lat, lng, radius, ...rest } = filters;
+              dispatch(setFilters(rest));
             }}
           >
             ❌
           </button>
         </div>
       )}
-
-      {/* Active Filters */}
       {(Object.keys(filters).length > 0 || Object.keys(sorts).length > 0) && (
         <div className="flex flex-wrap items-center gap-2 mt-2 text-xs sm:text-sm mb-2">
           {Object.entries(filters).map(([key, value]) => (
@@ -410,7 +404,9 @@ export default function ServicesCard() {
             type={selectedTab}
             filterRef={fetchRef}
             filterOpen={setIsFilterOpen}
-            onApplyFilter={(appliedFilters) => setFilters(appliedFilters)}
+            onApplyFilter={(appliedFilters) =>
+              dispatch(setFilters(appliedFilters))
+            }
           />
         </div>
       )}

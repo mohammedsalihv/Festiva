@@ -30,3 +30,8 @@
   background: transparent !important; /* Ensure no background */
   padding: 0 !important; /* Reset padding to avoid conflicts */
 }
+
+.geoapify-autocomplete-input:not(.custom-geoapify-input) {
+  display: none !important;
+}
+
