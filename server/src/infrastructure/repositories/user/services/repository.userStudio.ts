@@ -4,6 +4,7 @@ import {
   IStudioBase,
 } from "../../../../domain/entities/serviceInterface/interface.studio";
 import { StudioModel } from "../../../../domain/models/studioModel";
+import { LocationModel } from "../../../../domain/models/locationModel";
 import { mapStudioToBase } from "../../../../domain/entities/serviceInterface/interface.studio";
 
 export class UserStudioRepository implements IUserStudioRepository {
@@ -30,9 +31,25 @@ export class UserStudioRepository implements IUserStudioRepository {
   ): Promise<{ data: IStudioBase[]; totalPages: number; currentPage: number }> {
     const query: any = { status: "approved" };
 
-    if (filters.city) query["location.city"] = filters.city;
-    if (filters.state) query["location.state"] = filters.state;
-    if (filters.country) query["location.country"] = filters.country;
+    if (filters.lat && filters.lng) {
+      const radiusInMeters = (filters.radius || 50) * 1000; // default 50km
+
+      // Step 1: Find matching location IDs within radius
+      const nearbyLocations = await LocationModel.find({
+        coordinates: {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: [filters.lng, filters.lat],
+            },
+            $maxDistance: radiusInMeters,
+          },
+        },
+      }).select("_id");
+
+      const nearbyLocationIds = nearbyLocations.map((loc) => loc._id);
+      query["location"] = { $in: nearbyLocationIds };
+    }
 
     if (filters.studioServiceFeaturesOptions?.length) {
       const regexArray = filters.studioServiceFeaturesOptions.map(

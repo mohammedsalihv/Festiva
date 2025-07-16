@@ -5,6 +5,7 @@ import {
   mapRentCarToBase,
 } from "../../../../domain/entities/serviceInterface/interface.rentCar";
 import { IRentCarBase } from "../../../../domain/entities/serviceInterface/interface.rentCar";
+import { LocationModel } from "../../../../domain/models/locationModel";
 
 export class UserRentCarRepository implements IUserRentCarRepository {
   async findAllRentCars(): Promise<IRentCarBase[]> {
@@ -42,6 +43,26 @@ export class UserRentCarRepository implements IUserRentCarRepository {
     });
 
     const match: Record<string, any> = {};
+
+
+    if(filters.lat && filters.lng) {
+      const radiusInMeters = (filters.radius || 50) * 1000;
+
+      const nearbyLocations = await LocationModel.find({
+        coordinates:{
+          $near:{
+            $geometry:{
+              type:"Point",
+              coordinates:[filters.lng , filters.lat]
+            },
+            $maxDistance:radiusInMeters
+          }
+        }
+      }).select("_id")
+
+      const nearbyLocationIds = nearbyLocations.map((loc) => loc._id);
+      match["location"] = {$in:nearbyLocationIds};
+    }
 
     if (filters.make?.length) {
       match.make = { $in: filters.make };

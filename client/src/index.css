@@ -16,3 +16,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.geoapify-close-button {
+  display: none !important;
+}
+.geoapify-close-button {
+  display: none !important;
+}
+
+/* Ensure the input matches the desired style */
+.geoapify-autocomplete-input {
+  border: none !important; /* Remove any default border */
+  background: transparent !important; /* Ensure no background */
+  padding: 0 !important; /* Reset padding to avoid conflicts */
+}

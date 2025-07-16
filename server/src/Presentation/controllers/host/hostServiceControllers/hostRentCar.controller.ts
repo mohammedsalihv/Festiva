@@ -13,6 +13,7 @@ import {
 } from "../../../../utils/common/messages/constantResponses";
 import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
 import { assetFilesValidate } from "../../../../utils/host/assetFilesValidate";
+import { geocodeAddress } from "../../../../utils/common/geocoding/geocodeAddress";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -42,6 +43,15 @@ export class HostRentCarController implements IHostRentCarController {
 
       try {
         await assetFilesValidate({ files, typeOfAsset: typeOfAsset });
+        const fullAddress = `${newRentCar.location.houseNo}, ${newRentCar.location.street}, ${newRentCar.location.district}, ${newRentCar.location.state}, ${newRentCar.location.country}, ${newRentCar.location.zip}`;
+
+        const { lat, lng } = await geocodeAddress(fullAddress);
+
+        newRentCar.location.coordinates = {
+          type: "Point",
+          coordinates: [lng, lat],
+        };
+
         const newLocation = await this.hostAssetlocationRepository.addLocation(
           newRentCar.location
         );
@@ -109,7 +119,7 @@ export class HostRentCarController implements IHostRentCarController {
           guidelines,
           userDocument,
           Images: imageUrls,
-          location:  new Types.ObjectId(newLocation._id),
+          location: new Types.ObjectId(newLocation._id),
           host: new Types.ObjectId(hostId),
         };
 

@@ -1,57 +1,56 @@
-import { useEffect, useRef } from "react";
-import { CiLocationOn } from "react-icons/ci";
-import { FaSearch } from "react-icons/fa";
+import React, { useEffect } from "react";
+import {
+  GeoapifyContext,
+  GeoapifyGeocoderAutocomplete,
+} from "@geoapify/react-geocoder-autocomplete";
+import { FaLocationArrow } from "react-icons/fa";
 
-export default function LocationSearchBar({
+type Location = {
+  lat: number;
+  lng: number;
+  label: string;
+};
+
+interface LocationSearchBarProps {
+  onLocationSelect: (location: Location) => void;
+}
+
+const LocationSearchBar: React.FC<LocationSearchBarProps> = ({
   onLocationSelect,
-}: {
-  onLocationSelect: (loc: { lat: number; lng: number; name: string }) => void;
-}) {
-  const autocompleteRef = useRef<any>(null);
-
+}) => {
+  // Optional: JavaScript fallback to hide the clear icon
   useEffect(() => {
-    const autocomplete = autocompleteRef.current;
-    if (!autocomplete) return;
-
-    const handlePlaceSelect = () => {
-      const place = autocomplete.getPlace();
-      const location = place?.geometry?.location;
-      if (location) {
-        onLocationSelect({
-          lat: location.lat(),
-          lng: location.lng(),
-          name: place.formatted_address || place.name || "",
-        });
-      }
-    };
-
-    autocomplete.addEventListener("gmpx-placechange", handlePlaceSelect);
-
-    return () => {
-      autocomplete.removeEventListener("gmpx-placechange", handlePlaceSelect);
-    };
-  }, [onLocationSelect]);
+    const clearButton = document.querySelector(".geoapify-close-button");
+    if (clearButton) {
+      clearButton.style.display = "none";
+    }
+  }, []);
 
   return (
-    <div className="relative w-full max-w-[300px]">
-      <CiLocationOn className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg" />
-      <gmpx-place-autocomplete
-        ref={autocompleteRef}
-        fields={["geometry", "formatted_address", "name"]}
-        class="block w-full"
-      >
-        <input
-          type="text"
-          placeholder="Search location..."
-          className="w-full pl-10 pr-10 py-1 rounded-lg text-sm border-none"
-        />
-      </gmpx-place-autocomplete>
-      <button
-        type="button"
-        className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-main_color text-white hover:bg-main_color_hover px-2 py-2 rounded z-10"
-      >
-        <FaSearch className="text-base" />
-      </button>
-    </div>
+    <GeoapifyContext apiKey={import.meta.env.VITE_GEOAPIFY_API_KEY}>
+      <div className="relative w-full max-w-[300px] flex items-center">
+        {/* Location Icon */}
+        <FaLocationArrow className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-base pointer-events-none" />
+        {/* Input Wrapper */}
+        <div className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md">
+          <GeoapifyGeocoderAutocomplete
+            placeholder="Search location..."
+            skipIcons={true} // Attempt to suppress Geoapify icons
+            placeSelect={(value) => {
+              if (value?.properties?.lat && value?.properties?.lon) {
+                onLocationSelect({
+                  lat: value.properties.lat,
+                  lng: value.properties.lon,
+                  label: value.properties.formatted,
+                });
+              }
+            }}
+            inputClassName="w-full text-sm focus:outline-none bg-transparent"
+          />
+        </div>
+      </div>
+    </GeoapifyContext>
   );
-}
+};
+
+export default LocationSearchBar;

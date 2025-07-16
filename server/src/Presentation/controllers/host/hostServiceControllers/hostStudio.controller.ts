@@ -13,6 +13,7 @@ import {
 } from "../../../../utils/common/messages/constantResponses";
 import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
 import { assetFilesValidate } from "../../../../utils/host/assetFilesValidate";
+import { geocodeAddress } from "../../../../utils/common/geocoding/geocodeAddress";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -51,6 +52,15 @@ export class HostStudioController implements IHostStudioController {
 
       try {
         await assetFilesValidate({ files, typeOfAsset });
+
+        const fullAddress = `${newStudio.location.houseNo}, ${newStudio.location.street}, ${newStudio.location.district}, ${newStudio.location.state}, ${newStudio.location.country}, ${newStudio.location.zip}`;
+
+        const { lat, lng } = await geocodeAddress(fullAddress);
+
+        newStudio.location.coordinates = {
+          type: "Point",
+          coordinates: [lng, lat],
+        };
 
         const newLocation = await this.hostAssetlocationRepository.addLocation(
           newStudio.location
@@ -96,7 +106,7 @@ export class HostStudioController implements IHostStudioController {
           description,
           about,
           Images: imageUrls,
-          location:  new Types.ObjectId(newLocation._id),
+          location: new Types.ObjectId(newLocation._id),
           host: new Types.ObjectId(hostId),
         };
 

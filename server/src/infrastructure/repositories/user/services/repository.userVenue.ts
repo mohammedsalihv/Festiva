@@ -4,6 +4,7 @@ import {
   IVenueBase,
 } from "../../../../domain/entities/serviceInterface/interface.venue";
 import { VenueModel } from "../../../../domain/models/venueModel";
+import { LocationModel } from "../../../../domain/models/locationModel";
 import { mapVenueToBase } from "../../../../domain/entities/serviceInterface/interface.venue";
 
 export class UserVenueRepository implements IUserVenueRepository {
@@ -35,6 +36,26 @@ export class UserVenueRepository implements IUserVenueRepository {
     const andConditions: any[] = [];
 
     andConditions.push({ status: "approved" });
+
+    if (filters.lat && filters.lng) {
+      const radiusInMeters = (filters.radius || 50) * 1000;
+
+      const nearbyLocations = await LocationModel.find({
+        coordinates: {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: [filters.lng, filters.lat],
+            },
+            $maxDistance: radiusInMeters,
+          },
+        },
+      }).select("_id");
+
+      const nearbyLocationIds = nearbyLocations.map((loc) => loc._id);
+
+      andConditions.push({ location: { $in: nearbyLocationIds } });
+    }
 
     if (filters.shift) {
       andConditions.push({ shift: filters.shift });
@@ -68,7 +89,7 @@ export class UserVenueRepository implements IUserVenueRepository {
       }
     }
 
-    console.log(typeof filters.price); 
+    console.log(typeof filters.price);
     const price = Number(filters.price);
     if (!isNaN(price)) {
       andConditions.push({
