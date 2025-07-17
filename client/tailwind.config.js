@@ -10,6 +10,12 @@ module.exports = {
         main_white: "#FFFFFF",
         main_host: "#ef4444",
         admin_bg: "#D9D9D9",
+        neonPink: "#e879f9",
+        deepPurple: "#1a002f",
+        main_gradient: "linear-gradient(to right, #e879f9, #1a002f)",
+      },
+      backgroundImage: {
+        main_gradient: "linear-gradient(to right, #e879f9, #1a002f)",
       },
       boxShadow: {
         "r-lg": "10px 0 30px -10px rgba(0, 0, 0, 0.5)",
@@ -64,6 +70,20 @@ module.exports = {
             transform: "translate(-55%,-55%) rotate(90deg)",
           },
         },
+        slideInRight: {
+          "0%": {
+            transform: "translateX(100%)",
+            opacity: 0,
+          },
+          "100%": {
+            transform: "translateX(0%)",
+            opacity: 1,
+          },
+        },
+        "fade-in-right": {
+          "0%": { opacity: 0, transform: "translateX(50px) rotateY(90deg)" },
+          "100%": { opacity: 1, transform: "translateX(0) rotateY(0deg)" },
+        },
       },
       animation: {
         zoomOut: "zoomOut 1s ease-out forwards",
@@ -73,6 +93,9 @@ module.exports = {
         "slide-up": "slideUp 0.3s ease-out",
         "slide-up-right": "slideUpRight 0.3s ease-out",
         "slide-up-full": "slideUpFull 0.3s ease-out",
+        "slide-in-right": "slideInRight 0.4s ease forwards",
+        pulseSlow: "pulse 4s infinite",
+        "fade-in-right": "fade-in-right 0.6s ease-out forwards",
       },
     },
     container: {

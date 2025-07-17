@@ -1,12 +1,11 @@
 import { NavbarMenu } from "@/utils/Navbar/user/navLinks";
-import { CiSearch, CiLocationOn } from "react-icons/ci";
+import { RiMenu4Fill } from "react-icons/ri";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import { IoIosClose } from "react-icons/io";
-import { MdOutlineBookmarks } from "react-icons/md";
-import { MdMenu } from "react-icons/md";
+import { MdOutlineBookmarks, MdMenu } from "react-icons/md";
 import React, { useState, useRef, useEffect } from "react";
 import ResponsiveNavLinks from "../../../utils/Navbar/user/ResponsiveNavLinks";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import LogoText from "@/components/LogoText";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -17,17 +16,10 @@ import { userLogout } from "@/api/user/auth/userAuthService";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { useLocation } from "react-router-dom";
-import LocationSearchBar from "@/components/LocationSearchBar";
-import {
-  setFilters,
-  setSelectedLocation,
-} from "@/redux/Slice/user/assetSearchSlice";
-import { FaSearch } from "react-icons/fa";
-
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const [mainOpen, setMainOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const dropDownRef = useRef<HTMLDivElement>(null);
@@ -42,10 +34,6 @@ const Header = () => {
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const isAuthenticated = !!userInfo?.accessToken;
   const profile = useSelector((state: RootState) => state.user.userInfo);
-  const types = ["venue", "rentcar", "caters", "studio"];
-  const isServicePage = types.some((type) =>
-    location.pathname.startsWith(`/user/assets/${type}`)
-  );
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -57,16 +45,13 @@ const Header = () => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -89,81 +74,24 @@ const Header = () => {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 w-full z-30 transition-all duration-300 ${
-          showTransparent ? "bg-transparent" : "bg-white"
+        className={`fixed top-0 left-0 w-full z-30 transition-all duration-300 bg-transparent ${
+          showTransparent ? "" : "bg-white"
         } font-JosephicSans`}
       >
-        <div className="container mx-auto flex justify-between items-center px-2 py-5">
+        <div className="container mx-auto flex justify-between items-center px-2 py-3">
           <div className="flex-shrink-0">
             <LogoText />
           </div>
-          {!isServicePage && (
-            <div
-              className={`${
-                showTransparent ? "text-white" : "text-black"
-              } hidden lg:flex items-center justify-center gap-6 text-sm font-semibold`}
-            >
-              {NavbarMenu.map((item) => (
-                <a
-                  key={item.id}
-                  href={item.link}
-                  className="hover:text-main_color font-prompt text-base"
-                >
-                  {item.title}
-                </a>
-              ))}
-            </div>
-          )}
 
-          <div className="hidden lg:flex items-center justify-center gap-6 text-sm font-semibold">
-            {isServicePage ? (
-<div className="flex items-center bg-white border rounded-md shadow px-2 py-1 gap-1">
-  <CiLocationOn />
-  <LocationSearchBar
-    onLocationSelect={(location) => {
-      dispatch(setSelectedLocation(location));
-      dispatch(
-        setFilters((prev: any) => ({
-          ...prev,
-          lat: location.lat,
-          lng: location.lng,
-          radius: 50,
-        }))
-      );
-    }}
-  />
-  <button className="bg-main_color hover:bg-main_color_hover text-white p-2 rounded-md ml-2">
-    <FaSearch />
-  </button>
-</div>
-            ) : (
-              NavbarMenu.map((item) => (
-                <a
-                  key={item.id}
-                  href={item.link}
-                  className="hover:text-main_color font-prompt text-base"
-                >
-                  {item.title}
-                </a>
-              ))
-            )}
-          </div>
-
+          {/* Rest of the Header component remains unchanged */}
           <div className="flex items-center gap-3">
-            <button
-              className={`${
-                showTransparent ? "text-white border-gray-600" : "text-black"
-              } hover:text-main_color text-xl hover:border-main_color border rounded-full px-1 py-1`}
-            >
-              <CiSearch />
-            </button>
-            <button
-              className={`${
-                showTransparent ? "text-white border-gray-600" : "text-black"
-              } hover:text-main_color text-xl hover:border-main_color border rounded-full px-1 py-1`}
-            >
-              <CiLocationOn />
-            </button>
+            <div className="hidden lg:block" onClick={() => setMainOpen(true)}>
+              <RiMenu4Fill
+                className={`${
+                  showTransparent ? "text-gray-400" : "text-black"
+                } text-4xl cursor-pointer`}
+              />
+            </div>
 
             {isAuthenticated ? (
               <div className="relative hidden lg:block" ref={dropDownRef}>
@@ -178,21 +106,20 @@ const Header = () => {
                       : Images.default_profile
                   }
                   alt=""
-                  className="w-9 h-9 rounded-full cursor-pointer border border-gray-300"
+                  className="w-10 h-10 cursor-pointer rounded-full"
                 />
                 {dropDown && (
                   <div className="fixed inset-0 z-50 flex justify-end items-end pointer-events-none">
-                    <div className="w-64 h-full bg-white shadow-lg animate-slide-up-full pointer-events-auto font-JosephicSans">
+                    <div className="w-64 h-full bg-black shadow-lg animate-slide-up-full pointer-events-auto font-JosephicSans">
                       <div className="flex justify-end p-4">
                         <IoIosClose
                           onClick={() => setDropDown(false)}
-                          className="text-gray-500 text-xl"
+                          className="text-white text-2xl cursor-pointer"
                         />
                       </div>
-
                       <div className="px-4 py-4 space-y-3">
                         <button
-                          className="flex items-center justify-start gap-2 w-full py-2 rounded-md text-gray-800 hover:bg-gray-100 text-left"
+                          className="flex items-center justify-start gap-2 w-full py-2 px-3 rounded-md text-gray-200 hover:bg-gray-100 hover:text-black text-left"
                           onClick={() => {
                             navigate("/user/profile");
                             setDropDown(false);
@@ -203,7 +130,7 @@ const Header = () => {
                         </button>
 
                         <button
-                          className="flex items-center justify-start gap-2 w-full py-2 rounded-md text-gray-800 hover:bg-gray-100 text-left"
+                          className="flex items-center justify-start gap-2 w-full py-2 px-3 rounded-md text-gray-200 hover:bg-gray-100 hover:text-black text-left"
                           onClick={() => {
                             navigate("/user/bookings");
                             setDropDown(false);
@@ -214,7 +141,7 @@ const Header = () => {
                         </button>
 
                         <button
-                          className="flex items-center justify-start gap-2 w-full py-2 rounded-md text-gray-800 hover:bg-gray-100 text-left"
+                          className="flex items-center justify-start gap-2 w-full py-2 px-3 rounded-md text-gray-200 hover:bg-gray-100 hover:text-black text-left"
                           onClick={() => {
                             setConfirmLogout(true);
                             setDropDown(false);
@@ -249,6 +176,30 @@ const Header = () => {
         </div>
         <CustomToastContainer />
       </nav>
+      {mainOpen && (
+        <div className="hidden lg:flex fixed inset-0 z-[999] bg-black text-white flex-col items-start pt-28 px-20 gap-10 font-boldonse">
+          <button
+            onClick={() => setMainOpen(false)}
+            className="absolute top-6 right-6 text-5xl text-white"
+          >
+            <IoIosClose />
+          </button>
+
+          <div className="flex flex-col gap-6 w-full max-w-md">
+            {NavbarMenu.map((item, index) => (
+              <a
+                key={item.id}
+                href={item.link}
+                onClick={() => setOpen(false)}
+                className="text-3xl font-extrabold opacity-0 animate-fade-in-right hover:text-gray-500"
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                {item.title}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
 
       <ResponsiveNavLinks
         open={open}
@@ -257,7 +208,6 @@ const Header = () => {
         onLogout={() => setConfirmLogout(true)}
         navigate={navigate}
       />
-
       <ConfirmDialog
         isOpen={confirmLogout}
         title="Confirm Logout"

@@ -1,19 +1,14 @@
 import { Images } from "@/assets";
 import Header from "@/reusable-components/user/Landing/Header";
-import ExploreButton from "@/components/ExploreButton";
-import { useKeenSlider } from "keen-slider/react";
+
 import "keen-slider/keen-slider.min.css";
-import { useEffect } from "react";
+
 import CategoryCard from "@/components/CategoryCard";
 import WhoWeAre from "@/reusable-components/user/Landing/WhoWeAre";
 import FAQ from "@/reusable-components/user/Landing/FAQ";
 import Footer from "@/reusable-components/user/Landing/Footer";
 import Supporters from "@/reusable-components/user/Landing/Supporters";
 
-
-
-
-const images = [Images.Landing_1, Images.Landing_2];
 const featureCards = [
   { img: Images.service_247, label: "24/7 Availability" },
   { img: Images.unlimited, label: "Bespoke Planning" },
@@ -22,58 +17,73 @@ const featureCards = [
 ];
 
 const Home = () => {
-  const [sliderRef, instanceRef] = useKeenSlider({
-    loop: true,
-    slides: { perView: 1 },
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      instanceRef.current?.next();
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div className="relative">
       <Header />
-      <section className="relative w-full h-screen overflow-hidden ">
-        <div ref={sliderRef} className="keen-slider w-full h-full">
-          {images.map((img, index) => (
-            <div key={index} className="keen-slider__slide">
-              <img
-                src={img}
-                alt={`Slide ${index}`}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ))}
-        </div>
-        <div className="absolute inset-0 bg-black/30 z-10" />
-        <div className="absolute bottom-0 left-0 w-full bg-gradient-to-b from-transparent to-black z-20 py-6">
-          <div className="flex flex-row justify-between items-end w-full px-4 md:px-10 py-4">
-            <div>
-              <h1 className="text-main_color text-2xl sm:text-3xl md:text-4xl uppercase font-bold font-mono">
-                Festiva <span className="text-white font-light">Luxury</span>
-              </h1>
-              <div className="text-white font-thin text-2xl md:text-4xl uppercase leading-tight">
-                <div>lifestyle</div>
-                <div>management</div>
-              </div>
-            </div>
-            <div className="flex flex-col items-end text-left text-sm max-w-sm">
-              <p className="text-white font-JosephicSans text-sm md:text-lg mb-2">
-                Your local partner for an unforgettable and effortless luxury
-                lifestyle.
+      <section className="relative w-full min-h-screen bg-black text-white overflow-hidden flex flex-col justify-center items-center px-4 py-20 sm:py-28">
+        {/* Top-to-bottom gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0f001f] via-[#1a002f] to-black z-0" />
+
+        {/* Bottom-to-top matching gradient */}
+
+        {/* Glow & Pulse Effects */}
+        <div className="absolute bottom-[-40%] left-[-20%] w-[200%] h-[200%] bg-[radial-gradient(ellipse_at_center,_#e879f9_0%,_transparent_70%)] opacity-20" />
+        <div className="absolute right-0 top-[45%] w-72 h-72 bg-[#ff4de1] rounded-full blur-3xl opacity-40 z-0" />
+        <div className="absolute top-0 right-0 w-3 h-3 bg-white rounded-full blur-sm opacity-70 animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-3 h-3 bg-white rounded-full blur-sm opacity-70 animate-pulse" />
+
+        {/* Main Content */}
+        <div className="relative z-10 max-w-6xl w-full text-center">
+          <p className="text-xs sm:text-sm text-white/70 mb-4 font-pacifico">
+            🧠 Smart summaries from every meeting
+          </p>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight tracking-tight mb-6">
+            Turn talk into tasks.{" "}
+            <span className="text-[#ff4de1]">Instantly.</span>
+          </h1>
+         <p className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto mb-10">
+  Discover and book venues, caterers, rental cars, and studios — all in one place. We make planning simple, fast, and stress-free.
+</p>
+
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-16">
+            <button className="bg-[#ff4de1] hover:bg-[#ff77e7] text-white font-semibold px-6 py-3 rounded-full transition w-full sm:w-auto">
+              Start for free
+            </button>
+            <button className="border border-white/30 text-white hover:bg-white hover:text-black px-6 py-3 rounded-full transition w-full sm:w-auto">
+              Find services
+            </button>
+          </div>
+
+          {/* Features Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-2 sm:px-6 max-w-5xl mx-auto">
+            <div className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
+              <h3 className="font-semibold text-lg mb-2">Smarter Listings</h3>
+              <p className="text-white/60 text-sm">
+                Hosts can easily list their businesses with just a few steps.
               </p>
-              <ExploreButton
-                content="Try it out now"
-                className="w-40 text   flex items-center gap-2 px-3 py-3"
-              />
+            </div>
+            <div className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
+              <h3 className="font-semibold text-lg mb-2">
+                Find Services Easily
+              </h3>
+              <p className="text-white/60 text-sm">
+                Search, match, and book services that fit your needs.
+              </p>
+            </div>
+            <div className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
+              <h3 className="font-semibold text-lg mb-2">
+                Seamless Experience
+              </h3>
+              <p className="text-white/60 text-sm">
+                Booking, connecting, and coordinating — all made simple.
+              </p>
             </div>
           </div>
         </div>
       </section>
+
       <section className="w-full bg-black text-main_white py-10 px-4 z-20 relative">
         <div className="text-center">
           <h2 className="text-[10px] md:text-[22px] font-bold mb-10 tracking-wide font-boldonse">

@@ -78,7 +78,7 @@ const Venuetypes = () => {
               <p className="text-sm text-gray-600 mb-4">{item.description}</p>
               <button
                 onClick={() => navigate(item.link)}
-                className="bg-purple-600 text-white px-4 py-2 text-sm rounded hover:bg-purple-700"
+                className="bg-main_gradient text-white px-4 py-2 text-sm rounded hover:opacity-90 bg-gradient-to-r"
               >
                 View more
               </button>
