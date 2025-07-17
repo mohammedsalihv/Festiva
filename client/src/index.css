@@ -18,4 +18,23 @@
 @tailwind utilities;
 
 
+.mapboxgl-ctrl-geocoder {
+  background: transparent;
+  border: none;
+  box-shadow: none !important;
+}
 
+.mapboxgl-ctrl-geocoder--input {
+  padding-top: 0.5rem !important;     /* py-2 */
+  padding-bottom: 0.5rem !important;
+  padding-left: 0.75rem !important;   /* pl-3 */
+  padding-right: 2.5rem !important;   /* pr-10 (for icon on right) */
+  font-size: 1rem;                    /* text-base */
+  font-weight: 200;                   /* font-extralight */
+  color: black;
+  outline: none;
+  border: none;
+  background: transparent;
+  width: 25%;
+  height: auto;
+}

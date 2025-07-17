@@ -19,7 +19,11 @@ import { serviceOptions } from "@/utils/Options/user/serviceOptions";
 import { filterAsset, sortAssets } from "@/api/user/base/assetServices";
 import { Button } from "@/components/Button";
 import { MdLocationPin } from "react-icons/md";
-import { Asset, filterParams, sortParams } from "@/utils/Types/user/filterSortTypes";
+import {
+  Asset,
+  filterParams,
+  sortParams,
+} from "@/utils/Types/user/filterSortTypes";
 import { Input } from "@/components/Input";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "@/redux/Slice/user/assetSearchSlice";
@@ -102,9 +106,8 @@ export default function ServicesCard() {
   }, [dispatch, filters]);
 
   useEffect(() => {
-    // Initialize map only when selectedLocation exists
     if (mapContainerRef.current && selectedLocation) {
-      mapboxgl.accessToken = "YOUR_MAPBOX_ACCESS_TOKEN"; // Replace with your Mapbox token
+      mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
       const map = new mapboxgl.Map({
         container: mapContainerRef.current,
         style: "mapbox://styles/mapbox/streets-v11",
@@ -112,13 +115,11 @@ export default function ServicesCard() {
         zoom: 12,
       });
 
-      // Add user location marker
       new mapboxgl.Marker({ color: "#FF0000" })
         .setLngLat([selectedLocation.lng, selectedLocation.lat])
         .setPopup(new mapboxgl.Popup().setText(selectedLocation.label))
         .addTo(map);
 
-      // Add markers for assets
       assets.forEach((asset) => {
         if (asset.location?.lng && asset.location?.lat) {
           new mapboxgl.Marker()
@@ -203,6 +204,14 @@ export default function ServicesCard() {
     </div>
   );
 
+  if (error) {
+    return (
+      <div>
+        <p className="px-10 py-10">Failed to fetch</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-full sm:px-6 md:px-4 mx-auto px-2 py-4 sm:py-6 font-JosephicSans mt-14">
       <div className="w-full flex flex-col gap-3 mb-4 sm:gap-4 border-b py-3">
@@ -225,7 +234,7 @@ export default function ServicesCard() {
 
           <div className="flex gap-2">
             <div className="relative flex-1 min-w-[150px]">
-              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm" />
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs" />
               <Input
                 type="text"
                 placeholder="Add keywords..."
@@ -245,8 +254,9 @@ export default function ServicesCard() {
         <div className="hidden lg:flex w-full items-center border-b border-t justify-center py-2">
           <div className="flex items-center bg-white gap-2 w-full justify-between">
             <div className="flex flex-1 gap-2 min-w-0">
-              <div className="relative flex-[2] min-w-[180px]">
-                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-base" />
+              {/* Search input - wider */}
+              <div className="relative flex-[3] min-w-[200px]">
+                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm" />
                 <Input
                   type="text"
                   placeholder="Search keywords..."
@@ -255,14 +265,18 @@ export default function ServicesCard() {
                   className="w-full pl-10 pr-3 py-2 text-base text-black font-extralight outline-none focus:outline-none border-none focus:border-none ring-0 focus:ring-0"
                 />
               </div>
-              <div className="relative flex-[1] min-w-[120px] shadow-md">
-                <MdLocationPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-base z-10" />
+
+              {/* Location input - smaller */}
+              <div className="relative flex-[2] min-w-[160px]">
+                <MdLocationPin className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-base" />
                 <div
+                  id="mapbox-container"
                   ref={geocoderContainerRef}
-                  className="w-full pl-10 pr-3 py-2 text-base font-extralight"
+                  className="w-full pl-3 pr-10 py-2 text-base font-extralight"
                 />
               </div>
             </div>
+
             <div className="flex gap-2 ml-4">
               <Button
                 onClick={() => setIsSortOpen(!isSortOpen)}
