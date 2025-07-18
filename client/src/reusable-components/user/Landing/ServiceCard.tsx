@@ -32,6 +32,7 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import useDebounce from "@/utils/hooks/user/debounce";
 
 export default function ServicesCard() {
   const { type } = useParams();
@@ -58,17 +59,25 @@ export default function ServicesCard() {
     lng: number;
   } | null>(null);
   const filters = useSelector((state: RootState) => state.assetSearch.filters);
+  const [geocoderResult, setGeocoderResult] = useState<{
+    text: string;
+    geometry: { coordinates: [number, number] };
+  } | null>(null);
 
   const pageSize = 8;
 
+  // Reset filters on component mount to avoid stale location data
   useEffect(() => {
+    dispatch(setFilters({})); // Clear all filters on mount
     if (normalizedType) setSelectedTab(normalizedType);
-  }, [normalizedType]);
+  }, [normalizedType, dispatch]);
 
+  const debouncedGeocoderResult = useDebounce(geocoderResult, 500);
+
+  // Set up Mapbox geocoder
   useEffect(() => {
-    // Initialize Mapbox Geocoder
     const geocoder = new MapboxGeocoder({
-      accessToken: import.meta.env.VITE_MAPBOX_API_KEY, // Replace with your Mapbox token
+      accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
       types: "place,locality,neighborhood,address",
       placeholder: "Search location...",
     });
@@ -76,23 +85,14 @@ export default function ServicesCard() {
     if (geocoderContainerRef.current) {
       geocoderContainerRef.current.appendChild(geocoder.onAdd());
       geocoder.on("result", (e) => {
-        const { text, geometry } = e.result;
-        setSelectedLocation({
-          label: text,
-          lat: geometry.coordinates[1],
-          lng: geometry.coordinates[0],
+        setGeocoderResult({
+          text: e.result.text,
+          geometry: e.result.geometry,
         });
-        dispatch(
-          setFilters({
-            ...filters,
-            lat: geometry.coordinates[1],
-            lng: geometry.coordinates[0],
-            radius: 10, // Default radius in miles
-          })
-        );
       });
       geocoder.on("clear", () => {
         setSelectedLocation(null);
+        setGeocoderResult(null);
         const { lat, lng, radius, ...rest } = filters;
         dispatch(setFilters(rest));
       });
@@ -105,6 +105,27 @@ export default function ServicesCard() {
     };
   }, [dispatch, filters]);
 
+  // Handle geocoder result to set location and filters
+  useEffect(() => {
+    if (debouncedGeocoderResult) {
+      const { text, geometry } = debouncedGeocoderResult;
+      setSelectedLocation({
+        label: text,
+        lat: geometry.coordinates[1],
+        lng: geometry.coordinates[0],
+      });
+      dispatch(
+        setFilters({
+          ...filters,
+          lat: geometry.coordinates[1],
+          lng: geometry.coordinates[0],
+          radius: 10,
+        })
+      );
+    }
+  }, [debouncedGeocoderResult, dispatch, filters]);
+
+  // Initialize map when selectedLocation changes
   useEffect(() => {
     if (mapContainerRef.current && selectedLocation) {
       mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
@@ -133,6 +154,7 @@ export default function ServicesCard() {
     }
   }, [selectedLocation, assets]);
 
+  // Handle click outside to close filter/sort modals
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -155,7 +177,7 @@ export default function ServicesCard() {
   ) => {
     setLoading(true);
     try {
-      // Exclude location filters if no selectedLocation
+      // Only include location filters if selectedLocation is explicitly set
       const params = selectedLocation
         ? { ...filters, ...sorts, page, limit: pageSize }
         : { ...sorts, page, limit: pageSize };
@@ -176,12 +198,26 @@ export default function ServicesCard() {
     }
   };
 
+  // Fetch assets when selectedTab, filters, or sorts change
   useEffect(() => {
-    if (selectedTab) fetchAssets(selectedTab, filters, sorts, 1);
-  }, [selectedTab, filters, sorts]);
+    if (selectedTab) {
+      // Strip out location filters unless selectedLocation is set
+      const fetchParams = selectedLocation
+        ? filters
+        : { ...filters, lat: undefined, lng: undefined, radius: undefined };
+      fetchAssets(selectedTab, fetchParams, sorts, 1);
+    }
+  }, [selectedTab, filters, sorts, selectedLocation]);
+
+  const KewFilter = Object.keys(filters).filter(
+    (key) => !["lat", "lng", "radius"].includes(key)
+  );
 
   const handlePageChange = (page: number) => {
-    fetchAssets(selectedTab, filters, sorts, page);
+    const fetchParams = selectedLocation
+      ? filters
+      : { ...filters, lat: undefined, lng: undefined, radius: undefined };
+    fetchAssets(selectedTab, fetchParams, sorts, page);
   };
 
   const renderNoResults = () => (
@@ -196,6 +232,7 @@ export default function ServicesCard() {
           dispatch(setFilters({}));
           setSorts({});
           setSelectedLocation(null);
+          setGeocoderResult(null);
         }}
         className="text-green-700 border border-green-700 px-4 py-1.5 rounded hover:bg-green-50 transition text-sm font-medium"
       >
@@ -251,28 +288,26 @@ export default function ServicesCard() {
             </Button>
           </div>
         </div>
-        <div className="hidden lg:flex w-full items-center border-b border-t justify-center py-2">
+        <div className="hidden lg:flex w-full items-center border-b border-t justify-center py-1">
           <div className="flex items-center bg-white gap-2 w-full justify-between">
             <div className="flex flex-1 gap-2 min-w-0">
-              {/* Search input - wider */}
               <div className="relative flex-[3] min-w-[200px]">
-                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm" />
+                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-deepPurple text-sm" />
                 <Input
                   type="text"
                   placeholder="Search keywords..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-3 py-2 text-base text-black font-extralight outline-none focus:outline-none border-none focus:border-none ring-0 focus:ring-0"
+                  className="w-full pl-10 pr-3 text-base text-black font-extralight outline-none focus:outline-none border-none focus:border-none ring-0 focus:ring-0"
                 />
               </div>
 
-              {/* Location input - smaller */}
-              <div className="relative flex-[2] min-w-[160px]">
-                <MdLocationPin className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-base" />
+              <div className="relative flex-[2] min-w-[160px] w-full">
+                <MdLocationPin className="absolute right-3 top-1/2 -translate-y-1/2 text-deepPurple text-base pointer-events-none z-10" />
                 <div
                   id="mapbox-container"
                   ref={geocoderContainerRef}
-                  className="w-full pl-3 pr-10 py-2 text-base font-extralight"
+                  className="w-full pl-3 pr-10 py-1 text-base font-extralight"
                 />
               </div>
             </div>
@@ -301,13 +336,14 @@ export default function ServicesCard() {
               onClick={() => {
                 setSelectedTab(option.value);
                 navigate(`/user/assets/${option.value}`);
-                setSelectedLocation(null); // Reset location when changing tabs
-                dispatch(setFilters({})); // Reset filters when changing tabs
+                setSelectedLocation(null);
+                setGeocoderResult(null);
+                dispatch(setFilters({}));
               }}
               className={`flex flex-col items-center justify-center px-3 border-b-2 transition min-w-[64px]
                 ${
                   selectedTab === option.value
-                    ? "border-[#e879f9] bg-gradient-to-r from-[#e879f9] to-[#1a002f] bg-clip-text text-transparent"
+                    ? "text-deepPurple bg-deepPurple border-deepPurple bg-clip-text text-transparent"
                     : "border-transparent text-black hover:bg-gradient-to-r hover:from-[#e879f9] hover:to-[#1a002f] hover:bg-clip-text hover:text-transparent"
                 }`}
             >
@@ -326,52 +362,60 @@ export default function ServicesCard() {
         </div>
       </div>
       {selectedLocation && (
-        <div className="mb-2 text-sm text-gray-700 bg-gray-100 px-3 py-1 rounded-full inline-flex items-center gap-2">
-          📍 {selectedLocation.label}
-          <button
-            onClick={() => {
-              setSelectedLocation(null);
-              const { lat, lng, radius, ...rest } = filters;
-              dispatch(setFilters(rest));
-            }}
-          >
-            ❌
-          </button>
-        </div>
-      )}
-      {selectedLocation && (
         <div className="mb-4">
-          <div ref={mapContainerRef} className="w-full h-[400px] rounded-md" />
+          <div ref={mapContainerRef} className="w-full h-[400px] rounded-md " />
         </div>
       )}
-      {(Object.keys(filters).length > 0 || Object.keys(sorts).length > 0) && (
+      {(KewFilter.length > 0 || Object.keys(sorts).length > 0 || selectedLocation) && (
         <div className="flex flex-wrap items-center gap-2 mt-2 text-xs sm:text-sm mb-2">
-          {Object.entries(filters).map(([key, value]) => (
+          {/* Render location filter tag */}
+          {selectedLocation && (
             <div
-              key={`filter-${key}`}
-              className="border text-blue-600 px-3 py-2 rounded-md flex items-center gap-2"
+              key="filter-location"
+              className="border text-blue-600 p-2 rounded-md flex items-center gap-2"
             >
-              <span className="capitalize">
-                <span className="text-black">{key}</span>: {String(value)}
-              </span>
-              <button
-                onClick={() => {
-                  const updated = { ...filters };
-                  delete updated[key];
-                  if (key === "lat" || key === "lng" || key === "radius") {
+              <div className="capitalize flex items-center gap-4">
+                <span className="text-black">
+                  Location: {selectedLocation.label}
+                </span>
+                <button
+                  onClick={() => {
                     setSelectedLocation(null);
-                    const { lat, lng, radius, ...rest } = updated;
+                    setGeocoderResult(null);
+                    const { lat, lng, radius, ...rest } = filters;
                     dispatch(setFilters(rest));
-                  } else {
-                    dispatch(setFilters(updated));
-                  }
-                }}
-                className="text-red-500 hover:text-red-700 font-bold"
-              >
-                <IoIosClose className="w-6 h-6" />
-              </button>
+                  }}
+                  className="text-red-500 hover:text-red-700 font-bold"
+                >
+                  <IoIosClose className="w-6 h-6" />
+                </button>
+              </div>
             </div>
-          ))}
+          )}
+          {/* Render other non-location filters */}
+          {Object.entries(filters)
+            .filter(([key]) => !["lat", "lng", "radius"].includes(key))
+            .map(([key, value]) => (
+              <div
+                key={`filter-${key}`}
+                className="border text-blue-600 p-2 rounded-md flex items-center gap-2"
+              >
+                <div className="capitalize flex items-center gap-4">
+                  <span className="text-black">{String(value)}</span>
+                  <button
+                    onClick={() => {
+                      const updated = { ...filters };
+                      delete updated[key];
+                      dispatch(setFilters(updated));
+                    }}
+                    className="text-red-500 hover:text-red-700 font-bold"
+                  >
+                    <IoIosClose className="w-6 h-6" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          {/* Render sort tags */}
           {Object.entries(sorts).map(([key, value]) => (
             <div
               key={`sort-${key}`}
@@ -394,16 +438,20 @@ export default function ServicesCard() {
               </button>
             </div>
           ))}
-          <button
-            onClick={() => {
-              dispatch(setFilters({}));
-              setSorts({});
-              setSelectedLocation(null);
-            }}
-            className="ml-2 text-red-500 hover:text-red-700 hover:underline font-medium"
-          >
-            Clear All
-          </button>
+          {/* Only show Clear All button if non-location filters or sorts exist */}
+          {(KewFilter.length > 0 || Object.keys(sorts).length > 0) && (
+            <button
+              onClick={() => {
+                dispatch(setFilters({}));
+                setSorts({});
+                setSelectedLocation(null);
+                setGeocoderResult(null);
+              }}
+              className="ml-2 text-red-500 hover:text-red-700 hover:underline font-medium"
+            >
+              Clear All
+            </button>
+          )}
         </div>
       )}
       {loading ? (
