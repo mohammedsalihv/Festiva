@@ -8,7 +8,6 @@ const locationSchema = new Schema<ILocation>({
   state: { type: String },
   country: { type: String },
   zip: { type: String },
-
   coordinates: {
     type: {
       type: String,

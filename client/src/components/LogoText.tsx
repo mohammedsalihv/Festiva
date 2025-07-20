@@ -1,8 +1,30 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LogoText = () => {
+  const [scrolled, setIsScrolled] = useState(false);
+  const isHomePage = location.pathname === "/user/home";
+  const showTransparent = isHomePage && !scrolled;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="text-xl sm:text-2xl flex items-center gap-2 font-bold uppercase">
-      <span className="text-gray-400 font-orbitron text-2xl sm:text-3xl">
+    <div
+      onClick={() => navigate("/user/home")}
+      className="text-xl sm:text-2xl flex items-center gap-2 font-bold uppercase cursor-pointer"
+    >
+      <span
+        className={`${
+          showTransparent ? "text-gray-400" : "text-black"
+        } font-orbitron text-2xl sm:text-3xl`}
+      >
         Festiva.
       </span>
     </div>

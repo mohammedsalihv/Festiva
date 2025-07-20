@@ -105,25 +105,36 @@ export default function ServicesCard() {
     };
   }, [dispatch, filters]);
 
-  // Handle geocoder result to set location and filters
   useEffect(() => {
-    if (debouncedGeocoderResult) {
-      const { text, geometry } = debouncedGeocoderResult;
+  if (debouncedGeocoderResult) {
+    const { text, geometry } = debouncedGeocoderResult;
+    const newLat = geometry.coordinates[1];
+    const newLng = geometry.coordinates[0];
+
+    // Optional: Only update if location changed
+    if (
+      filters.lat !== newLat ||
+      filters.lng !== newLng ||
+      filters.radius !== 10
+    ) {
       setSelectedLocation({
         label: text,
-        lat: geometry.coordinates[1],
-        lng: geometry.coordinates[0],
+        lat: newLat,
+        lng: newLng,
       });
+
       dispatch(
         setFilters({
           ...filters,
-          lat: geometry.coordinates[1],
-          lng: geometry.coordinates[0],
+          lat: newLat,
+          lng: newLng,
           radius: 10,
         })
       );
     }
-  }, [debouncedGeocoderResult, dispatch, filters]);
+  }
+}, [debouncedGeocoderResult, dispatch]);
+
 
   // Initialize map when selectedLocation changes
   useEffect(() => {
@@ -291,7 +302,7 @@ export default function ServicesCard() {
         <div className="hidden lg:flex w-full items-center border-b border-t justify-center py-1">
           <div className="flex items-center bg-white gap-2 w-full justify-between">
             <div className="flex flex-1 gap-2 min-w-0">
-              <div className="relative flex-[3] min-w-[200px]">
+              <div className="relative flex-[3] min-w-[200px] border-r">
                 <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-deepPurple text-sm" />
                 <Input
                   type="text"
@@ -302,7 +313,7 @@ export default function ServicesCard() {
                 />
               </div>
 
-              <div className="relative flex-[2] min-w-[160px] w-full">
+              <div className="relative flex-[2] min-w-[160px] w-full border-r">
                 <MdLocationPin className="absolute right-3 top-1/2 -translate-y-1/2 text-deepPurple text-base pointer-events-none z-10" />
                 <div
                   id="mapbox-container"
@@ -315,7 +326,7 @@ export default function ServicesCard() {
             <div className="flex gap-2 ml-4">
               <Button
                 onClick={() => setIsSortOpen(!isSortOpen)}
-                className="flex items-center px-3 py-2 text-white text-sm shadow-none hover:bg-gray-200 rounded-md bg-main_gradient"
+                className="flex items-center px-3 py-2 text-white text-sm shadow-none hover:bg-deepPurple rounded-md bg-main_gradient"
               >
                 <FaSortAmountDownAlt className="mr-1 text-xs" />
               </Button>

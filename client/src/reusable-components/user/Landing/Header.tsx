@@ -78,12 +78,10 @@ const Header = () => {
           showTransparent ? "" : "bg-white"
         } font-JosephicSans`}
       >
-        <div className="container mx-auto flex justify-between items-center px-2 py-3">
+        <div className="container mx-auto flex justify-between items-center px-0 py-2">
           <div className="flex-shrink-0">
             <LogoText />
           </div>
-
-          {/* Rest of the Header component remains unchanged */}
           <div className="flex items-center gap-3">
             <div className="hidden lg:block" onClick={() => setMainOpen(true)}>
               <RiMenu4Fill

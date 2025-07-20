@@ -42,14 +42,7 @@ const services = [
 
 const MainServices: React.FC = () => {
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 font-JosephicSans mt-12">
-      <div className="mb-10">
-        <img
-          src={Images.main_service}
-          alt="Event Service Banner"
-          className="w-full h-96 object-cover rounded-md"
-        />
-      </div>
+    <div className="max-w-7xl mx-auto px-2 py-8 font-JosephicSans mt-20">
       <div className="space-y-10">
         {services.map((service) => (
           <div
@@ -61,10 +54,10 @@ const MainServices: React.FC = () => {
             <img
               src={service.image}
               alt={service.title}
-              className="w-full md:w-56 h-36 object-cover rounded-md"
+              className="w-full md:w-56 h-44 object-cover rounded-sm"
             />
             <div className="flex-1 space-y-2">
-              <h3 className="text-xl font-semibold text-gray-900">
+              <h3 className="text-base sm:text-xl md:text-xl font-semibold text-gray-900">
                 {service.title}
               </h3>
               <p className="text-gray-600 text-sm">{service.description}</p>
