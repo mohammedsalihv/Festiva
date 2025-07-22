@@ -6,18 +6,14 @@ export interface IVenueBase {
   assetType: "venue";
   amount: string;
   status?: "pending" | "approved" | "rejected";
-  location: {
-    _id: string;
-    city?: string;
-    state?: string;
-    country?: string;
-  };
+  location: assetDetailsLocationInfo;
   Images?: string[];
   [key: string]: unknown;
 }
 
 
 export interface IVenue {
+    _id?:string
     venueName?: string;
     rent?: number;
     capacity?: number;

@@ -1,28 +1,31 @@
 import mongoose, { Schema, model } from "mongoose";
 import { ILocation } from "../entities/serviceInterface/interface.location";
 
-const locationSchema = new Schema<ILocation>({
-  houseNo: { type: String },
-  street: { type: String },
-  district: { type: String },
-  state: { type: String },
-  country: { type: String },
-  zip: { type: String },
-  coordinates: {
-    type: {
-      type: String,
-      enum: ["Point"],
-      default: "Point",
-      required: true,
-    },
+const locationSchema = new Schema<ILocation>(
+  {
+    houseNo: { type: String },
+    street: { type: String },
+    district: { type: String },
+    state: { type: String },
+    country: { type: String },
+    zip: { type: String },
     coordinates: {
-      type: [Number], 
-      required: true,
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+        required: true,
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
     },
   },
-}, {
-  timestamps: true,
-});
+  {
+    timestamps: true,
+  }
+);
 
 locationSchema.index({ coordinates: "2dsphere" });
 

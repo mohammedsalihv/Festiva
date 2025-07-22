@@ -1,6 +1,7 @@
-import { assetDetailsHostInfo , assetDetailsLocationInfo } from "./commonDetails";
-
-
+import {
+  assetDetailsHostInfo,
+  assetDetailsLocationInfo,
+} from "./commonDetails";
 
 export interface IRentCarBase {
   _id: string;
@@ -8,18 +9,13 @@ export interface IRentCarBase {
   assetType: "rentcar";
   amount?: string;
   status?: "pending" | "approved" | "rejected";
-  location: {
-    _id: string;
-    city?: string;
-    state?: string;
-    country?: string;
-  };
+  location: assetDetailsLocationInfo;
   Images?: string[];
   [key: string]: unknown;
 }
 
-
 export interface IRentCar {
+  _id:string;
   businessName?: string;
   carName?: string;
   rent?: string;
@@ -45,4 +41,3 @@ export interface IRentCar {
   location: assetDetailsLocationInfo;
   host: assetDetailsHostInfo;
 }
-

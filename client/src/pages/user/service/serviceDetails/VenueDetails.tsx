@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Images } from "@/assets";
 import { X } from "lucide-react";
 import { IVenue } from "@/utils/Types/user/venueTypes";
@@ -8,6 +8,20 @@ import { CiLocationOn } from "react-icons/ci";
 import { IoClose } from "react-icons/io5";
 import CustomCalendar from "@/components/CustomCalendar";
 import TimeSlotPicker from "@/components/TimeSlotPicker";
+import { toast } from "react-toastify";
+import { Button } from "@/components/Button";
+import { Input } from "@/components/Input";
+import {
+  bookingErrorState,
+  bookingState,
+  validateBooking,
+} from "@/utils/validations/user/bookings/serviceBooking";
+import { useDispatch, useSelector } from "react-redux";
+import { setBooking } from "@/redux/Slice/user/bookingSlice";
+import { useNavigate } from "react-router-dom";
+import Spinner from "@/components/Spinner";
+import { IBookingBase } from "@/utils/Types/user/commonDetails";
+import { RootState } from "@/redux/store";
 
 interface VenueDetailsProps {
   data: IVenue & { typeOfAsset: "venue" };
@@ -15,13 +29,93 @@ interface VenueDetailsProps {
 
 const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
   console.log(data);
+
+  const user = useSelector((state: RootState) => state.user.userInfo);
   const [showGallery, setShowGallery] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTimeSlots, setShowTimeSlots] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
-  console.log(selectedDate, selectedSlot);
+  const [bookingForm, setBookingForm] = useState<bookingState>({
+    time: "",
+    date: "",
+    attendees: "",
+  });
+  const [errors, setErrors] = useState<bookingErrorState>({
+    time: "",
+    date: "",
+    attendees: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (selectedDate) {
+      setBookingForm((prev) => ({
+        ...prev,
+        date: selectedDate.toISOString(),
+      }));
+    }
+  }, [selectedDate]);
+
+  useEffect(() => {
+    if (selectedSlot) {
+      setBookingForm((prev) => ({
+        ...prev,
+        time: selectedSlot,
+      }));
+    }
+  }, [selectedSlot]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setBookingForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (errors[name as keyof typeof errors]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handleBooking = () => {
+    setLoading(true);
+
+    if (!selectedSlot || !selectedDate) {
+      toast.error("Please select date and time");
+      setLoading(false)
+      return;
+    }
+    const { isValid, errors: validationErrors } = validateBooking(bookingForm);
+    if (!isValid) {
+      setErrors(validationErrors as bookingErrorState);
+      toast.error("Please correct the errors in the form.");
+      setTimeout(() => setErrors({ time: "", date: "", attendees: "" }), 5000);
+      setLoading(false);
+      return;
+    }
+
+    const bookingPayload: IBookingBase = {
+      userId: user?.id,
+      assetId: data._id,
+      assetType: data.typeOfAsset,
+      selectedDate: bookingForm.date,
+      selectedTimeSlot: bookingForm.time,
+      attendeesCount: parseInt(bookingForm.attendees),
+      total: data.rent || "",
+      serviceData: data,
+    };
+
+    dispatch(setBooking(bookingPayload));
+    toast.success("Processing...");
+    setTimeout(() => navigate("/user/payment"), 5000);
+  };
 
   return (
     <div className="relative mt-16 sm:mt-20 md:mt-24 font-JosephicSans">
@@ -96,7 +190,7 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
       )}
       <div className="w-full max-w-[1350px] mx-auto grid lg:grid-cols-3 gap-4 p-3 pb-28">
         <div className="lg:col-span-2 space-y-4">
-          <h1 className="text-2xl font-bold">
+          <h1 className="text-md sm:text-lg md:text-2xl font-bold">
             {data.venueName?.toUpperCase()}
           </h1>
           <div className="flex flex-col sm:flex-row sm:items-center gap-1">
@@ -118,25 +212,24 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
           </div>
 
           <div className="border-b py-3">
-            <h2 className="text-xl font-semibold mb-1">About the Space</h2>
-            <p className="text-base text-gray-700">{data.about}</p>
+            <h2 className="text-base md:text-xl font-semibold mb-1">About the Space</h2>
+            <p className="text-sm sm:text-base md:text-base text-gray-800">{data.about}</p>
           </div>
 
           <div className="border-b py-3">
-            <h3 className="text-xl font-semibold mb-2">Details</h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 text-base text-gray-600 gap-y-2">
-              <div>Capacity: {data.capacity} persons</div>
-              <div>{data.shift} Shift available</div>
-              <div>{data.squareFeet} sq ft</div>
+            <h3 className="text-base md:text-xl font-semibold mb-2">Details</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 text-base text-gray-800 gap-y-2">
+              <div><span className="text-sm md:text-base font-bold">Capacity</span >: <span className="text-xs md:text-base">{data.capacity}</span> persons</div>
+              <div className="text-xs md:text-base">{data.shift} Shift available</div>
+              <div className="text-xs md:text-base">{data.squareFeet} sq ft</div>
             </div>
           </div>
 
           <div className="border-b py-3">
-            <h3 className="text-xl font-semibold mb-2">
+            <h3 className="text-base md:text-xl font-semibold mb-2">
               Features of the space
             </h3>
-            <ul className="list-inside text-base text-gray-600">
+            <ul className="list-inside text-sm sm:text-base md:text-base text-gray-800">
               {data.features.map((feature, i) => (
                 <div className="flex items-center gap-2">
                   <VscDebugBreakpointData className="text-black text-xs" />
@@ -147,10 +240,10 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
           </div>
 
           <div className="border-b py-3">
-            <h3 className="text-xl font-semibold mb-2">
+            <h3 className="text-base md:text-xl font-semibold mb-2">
               Parking & Accessibility
             </h3>
-            <div className="flex gap-4 flex-wrap text-base text-gray-600">
+            <div className="flex gap-4 flex-wrap text-sm sm:text-base md:text-base text-gray-800">
               {data.parkingFeatures.map((parkingFeature, i) => (
                 <div className="flex items-center gap-1">
                   <VscDebugBreakpointData className="text-black text-xs" />
@@ -159,22 +252,13 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
               ))}
             </div>
           </div>
-
-          <div className="border-b py-3">
-            <h3 className="text-xl font-semibold mb-2">Catering & Drinks</h3>
-            <div className="text-sm text-gray-600 space-y-1">
-              <p>BYO alcohol allowed</p>
-              <p>Bar menu available</p>
-              <p>Full kitchen access</p>
-            </div>
+          <div className="py-3 border-b">
+            <h2 className="text-base md:text-xl font-semibold mb-2">Description</h2>
+            <p className="text-sm sm:text-base md:text-base text-gray-800">{data.description}</p>
           </div>
           <div className="py-3 border-b">
-            <h2 className="text-xl font-semibold mb-2">Description</h2>
-            <p className="text-base text-gray-700">{data.description}</p>
-          </div>
-          <div className="py-3 border-b">
-            <h2 className="text-xl font-semibold mb-2">Terms & Conditions</h2>
-            <p className="text-base text-gray-700">{data.terms}</p>
+            <h2 className="text-base md:text-xl font-semibold mb-2">Terms & Conditions</h2>
+            <p className="text-sm sm:text-base md:text-base text-gray-800">{data.terms}</p>
           </div>
 
           <div className=" pt-6 mt-6 border border-gray-300 p-4 rounded-md bg-gray-100">
@@ -184,13 +268,13 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between text-sm text-gray-600">
               <div>
                 <p>Member since December 2022</p>
-                <p className="text-xs mt-1 text-main_color">
+                <p className="text-base mt-1 text-deepPurple">
                   Responds within a few hours
                 </p>
               </div>
-              <button className="text-base mt-2 sm:mt-0 bg-gray-200 text-gray-800 px-4 py-2 rounded border hover:border-main_color_hover hover:text-main_color_hover">
+              <Button className="text-base mt-2 sm:mt-0 bg-gray-200 hover:bg-deepPurple text-gray-800 px-4 py-3 rounded border hover:text-white">
                 Message Host
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -199,9 +283,9 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
             <div className="text-xl font-semibold flex items-center">
               <BsCurrencyRupee className="text-xl" />
               {data.rent}
-              <span className="text-gray-500 text-sm ml-1">/hr</span>
+              <span className="text-gray-500 text-sm ml-1">/Day</span>
               <span className="text-gray-500 text-sm ml-auto">
-                1 hr. minimum
+                1 day. minimum
               </span>
             </div>
 
@@ -210,20 +294,38 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                 <div
                   onClick={() => setShowCalendar(!showCalendar)}
                   className={`border-b-2 ${
-                    showCalendar ? "border-main_color" : "border-gray-300"
-                  } px-4 py-4 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                    showCalendar ? "border-deepPurple/80" : "border-gray-300"
+                  } px-4 py-4 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition ${selectedDate ? "border-neonPink text-neonPink" : "border-gray-300"}`}
                 >
-                  Pick a date
+                  <Input
+                    type="text"
+                    name="date"
+                    className="hidden"
+                    onChange={handleChange}
+                  />
+                  {selectedDate ? selectedDate.toLocaleDateString() : "Pick a date"}
                 </div>
+                {errors?.date && (
+                  <p className="text-red-600 text-xs mt-1">{errors.date}</p>
+                )}
                 <div
                   onClick={() => setShowTimeSlots(!showTimeSlots)}
                   className={`border-b-2 ${
-                    showCalendar ? "border-main_color" : "border-gray-300"
-                  } px-4 py-4 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                    showCalendar ? "border-deepPurple/80" : "border-gray-300"
+                  } px-4 py-4 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition ${selectedSlot ? "border-neonPink text-neonPink" : "border-gray-300"}`}
                 >
-                  Pick a time
+                  <Input
+                    type="text"
+                    name="time"
+                    className="hidden"
+                    onChange={handleChange}
+                  />
+                  {selectedSlot ? selectedSlot : "Pick a time"}
                 </div>
               </div>
+                {errors?.time && (
+                  <p className="text-red-600 text-xs text-end mt-1">{errors.time}</p>
+                )}
               {showCalendar && (
                 <div className="flex justify-center">
                   <CustomCalendar
@@ -240,20 +342,31 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                   />
                 </div>
               )}
-
-              <div className="text-right text-sm text-gray-500">
-                Total hours: 0
-              </div>
             </div>
 
             <div className="relative">
-              <select className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none">
-                <option>Attendees: 1 - 5 people</option>
+              <p className="px-1 py-1">Attendees</p>
+              <select
+                name="attendees"
+                value={bookingForm.attendees}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none"
+              >
+                <option value="">Select attendees</option>
+                <option value="100">100 - 500 people</option>
+                <option value="500">500 - 1500 people</option>
+                <option value="2000">2000 & above</option>
               </select>
+              {errors?.attendees && (
+                <p className="text-red-600 text-xs mt-1">{errors.attendees}</p>
+              )}
             </div>
-            <button className="w-full bg-main_color text-white font-semibold py-2 rounded hover:bg-main_color_hover transition">
-              Reserve
-            </button>
+            <Button
+              onClick={handleBooking}
+              className="w-full bg-main_gradient text-white font-semibold py-3 rounded transition"
+            >
+              {loading ? <Spinner text={"Booking started..."} /> : "Reserve"}
+            </Button>
 
             <p className="text-xs text-gray-400 text-center">
               Cancel for free within 24 hours <span className="ml-1">ℹ️</span>
@@ -270,9 +383,9 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                 Hosted by: {data.host.name}
               </p>
             </div>
-            <button className="w-full bg-gray-200 text-gray-800 py-2 rounded hover:bg-gray-300 transition">
+            <Button className="w-full bg-gray-200 text-deepPurple border hover:bg-deepPurple hover:text-white py-3 rounded transition">
               Message Host
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -282,12 +395,12 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
             <h2 className="text-lg font-semibold flex items-center">
               <BsCurrencyRupee className="text-lg" />
               {data.rent}
-              <span className="text-gray-500 text-sm ml-1">/hr</span>
+              <span className="text-gray-500 text-sm ml-1">/Day</span>
             </h2>
           </div>
           <button
             onClick={() => setShowOverlay(true)}
-            className="bg-main_color text-white px-4 py-2 rounded"
+            className="bg-main_gradient text-white px-4 py-2 rounded"
           >
             Instant Book
           </button>
@@ -308,7 +421,7 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
               {data.rent}
               <span className="text-gray-500 text-sm ml-1">/Day</span>
               <span className="text-gray-500 text-sm ml-auto">
-                1 hr. minimum
+                1 day. minimum
               </span>
             </div>
 
@@ -318,18 +431,30 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                   <div
                     onClick={() => setShowCalendar(!showCalendar)}
                     className={`border-b-2 ${
-                      showCalendar ? "border-main_color" : "border-gray-300"
-                    } px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                      showCalendar ? "border-deepPurple/80" : "border-gray-300"
+                    } px-4 py-2 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition`}
                   >
-                    Pick a date
+                    <Input
+                      type="text"
+                      name="date"
+                      className="hidden"
+                      onChange={handleChange}
+                    />
+                    {selectedDate ? selectedDate.toISOString() : "Pick a date"}
                   </div>
                   <div
                     onClick={() => setShowTimeSlots(!showTimeSlots)}
                     className={`border-b-2 ${
-                      showCalendar ? "border-main_color" : "border-gray-300"
-                    } px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                      showCalendar ? "border-deepPurple/80" : "border-gray-300"
+                    } px-4 py-2 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition`}
                   >
-                    Pick a time
+                    <Input
+                      type="text"
+                      name="time"
+                      className="hidden"
+                      onChange={handleChange}
+                    />
+                    {selectedSlot ? selectedSlot : "Pick a time"}
                   </div>
                 </div>
                 {showCalendar && (
@@ -349,25 +474,26 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                   </div>
                 )}
               </div>
-
-              <button className="text-sm text-main_color font-medium hover:underline">
-                Add a day
-              </button>
-
-              <div className="text-right text-sm text-gray-500">
-                Total hours: 0
-              </div>
             </div>
 
             <div className="relative">
-              <select className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none">
-                <option>Attendees: 1 - 5 people</option>
+              <p className="px-1 py-1">Attendees</p>
+              <select
+                name="attendees"
+                value={bookingForm.attendees}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none"
+              >
+                <option value="">Select attendees</option>
+                <option value="100">100 - 500 people</option>
+                <option value="500">500 - 1500 people</option>
+                <option value="2000">2000 & above</option>
               </select>
             </div>
 
-            <button className="w-full bg-main_color text-white font-semibold py-2 rounded hover:bg-main_color_hover transition">
-              Reserve
-            </button>
+            <Button className="w-full bg-main_gradient text-white font-semibold py-3 rounded transition">
+              {loading ? <Spinner text={"Booking started..."} /> : "Reserve"}
+            </Button>
 
             <p className="text-xs text-gray-400 text-center">
               Cancel for free within 24 hours <span className="ml-1">ℹ️</span>

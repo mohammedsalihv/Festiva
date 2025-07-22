@@ -26,4 +26,21 @@ export interface assetDetailsLocationInfo {
   state?: string;
   country?: string;
   zip?: string;
+  coordinates: {
+    type: "Point";
+    coordinates: [number, number];
+  };
+}
+
+
+export interface IBookingBase {
+  userId?: string;
+  assetId?: string;
+  assetType: AssetType;
+  selectedDate: string;
+  selectedTimeSlot: string;
+  attendeesCount?: number;
+  packageName?: string;
+  total: number | string;
+  serviceData: IVenue | ICaters | IRentCar | IStudio;
 }

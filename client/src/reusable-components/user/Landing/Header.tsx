@@ -78,7 +78,7 @@ const Header = () => {
           showTransparent ? "" : "bg-white"
         } font-JosephicSans`}
       >
-        <div className="container mx-auto flex justify-between items-center px-0 py-2">
+        <div className="container mx-auto flex justify-between items-center px-3 md:px-0 py-4">
           <div className="flex-shrink-0">
             <LogoText />
           </div>

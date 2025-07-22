@@ -9,17 +9,13 @@ export interface ICatersBase {
   assetType: "caters";
   amount?: string;
   status?: "pending" | "approved" | "rejected";
-  location: {
-    _id: string;
-    city?: string;
-    state?: string;
-    country?: string;
-  };
+  location: assetDetailsLocationInfo;
   Images?: string[];
   [key: string]: unknown;
 }
 
 export interface ICaters {
+  _id:string;
   catersName?: string;
   manpower: string;
   charge: string;

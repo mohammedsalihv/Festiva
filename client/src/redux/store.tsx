@@ -21,6 +21,7 @@ import userVenueReducer from "@/redux/Slice/user/userVenueSlice";
 import userRentcarReducer from "@/redux/Slice/user/userRentCarSlice";
 
 import assetSearchReducer from "@/redux/Slice/user/assetSearchSlice";
+import bookingReducer from "@/redux/Slice/user/bookingSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -39,7 +40,8 @@ const rootReducer = combineReducers({
   asset: assetManagementReducer,
   userVenue: userVenueReducer,
   userRentcar: userRentcarReducer,
-  assetSearch:assetSearchReducer
+  assetSearch:assetSearchReducer,
+  booking:bookingReducer
 });
 
 const persistConfig = {

@@ -340,7 +340,7 @@ export default function ServicesCard() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide justify-start sm:justify-center lg:justify-center">
+        <div className="flex items-center gap-2 sm:gap-4 md:gap-6 overflow-x-auto scrollbar-hide justify-start sm:justify-center lg:justify-center">
           {serviceOptions.map((option) => (
             <button
               key={option.value}
@@ -361,8 +361,8 @@ export default function ServicesCard() {
               <img
                 src={option.icon}
                 alt={option.label}
-                className={`w- h-5 sm:w-7 sm:h-7 object-contain ${
-                  selectedTab === option.value ? "opacity-100" : "opacity-85"
+                className={`w- h-5 sm:w-7 sm:h-7 object-contain mb-1 sm:mb-2 md:mb-3 ${
+                  selectedTab === option.value ? "opacity-100" : "opacity-75"
                 }`}
               />
               <span className="text-[10px] sm:text-sm mt-1">
@@ -539,7 +539,7 @@ export default function ServicesCard() {
                         • Responds within 1 hr
                       </span>
                     </div>
-                    <div className="text-xs text-main_color flex items-center gap-1">
+                    <div className="text-xs text-deepPurple flex items-center gap-1">
                       <FaLocationArrow className="text-xs" />
                       <span>
                         {asset.location?.state}, {asset.location?.country}

@@ -283,7 +283,7 @@ const Login = () => {
                 )}
                 <p
                   onClick={handleForgotPassword}
-                  className="text-right text-medium font-JosephicSans text-main_color cursor-pointer hover:text-[#7043e1]"
+                  className="text-right text-medium font-JosephicSans text-deepPurple cursor-pointer hover:text-deepPurple/80"
                 >
                   Forgot password?
                 </p>
@@ -293,7 +293,7 @@ const Login = () => {
                 <Button
                   onClick={handleLogin}
                   disabled={mutation.isPending}
-                  className="my-3 text-white w-full h-12 text-lg bg-main_color hover:bg-[#7043e1] disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="my-3 text-white w-full h-12 text-lg bg-main_gradient disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {mutation.isPending ? (
                     <span className="flex items-center justify-center gap-2">
@@ -307,7 +307,7 @@ const Login = () => {
                   Don't have an account?{" "}
                   <button
                     onClick={() => navigate("/signup")}
-                    className="text-[#7848F4] font-medium hover:underline focus:outline-none"
+                    className="text-deepPurple font-medium hover:underline focus:outline-none"
                   >
                     Sign up
                   </button>

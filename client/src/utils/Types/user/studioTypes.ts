@@ -1,25 +1,22 @@
-import { assetDetailsHostInfo ,assetDetailsLocationInfo } from "./commonDetails";
-
+import {
+  assetDetailsHostInfo,
+  assetDetailsLocationInfo,
+} from "./commonDetails";
 
 export interface IStudioBase {
   _id: string;
   packagesCount: number;
   name: string;
-  amount:string;
+  amount: string;
   assetType: "studio";
   status?: "pending" | "approved" | "rejected";
-  location: {
-    _id: string;
-    city?: string;
-    state?: string;
-    country?: string;
-  };
+  location: assetDetailsLocationInfo;
   Images?: string[];
   [key: string]: unknown;
 }
 
-
 export interface IStudio {
+  _id:string;
   studioName: string;
   packages: {
     packageName: string;
