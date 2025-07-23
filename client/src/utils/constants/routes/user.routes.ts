@@ -9,6 +9,7 @@ export const USER_ROUTE = {
     home: "/home",
     profile: "/profile",
     bookings: "/bookings",
+    payment:"/payment",
     services: "/services",
     assetType: "/assets/:type",
     assetDetails: "/services/:type/details/:id",

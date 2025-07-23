@@ -12,7 +12,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Bungee&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400..700&family=Great+Vibes&family=Orbitron:wght@400..900&family=Bungee&family=Raleway:wght@100..900&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -34,12 +34,11 @@
   border: none !important;
   outline: none !important;
   background: transparent !important;
-  padding: 0.2rem 0 !important;   /* vertical align */
+  padding: 0.2rem 0 !important; /* vertical align */
   font-size: 1rem !important;
-  font-family: 'Josefin Sans', sans-serif !important;
+  font-family: "Josefin Sans", sans-serif !important;
 }
-
 
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--icon-search {
   display: none !important;
-     gi add}
+}

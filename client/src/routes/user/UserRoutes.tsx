@@ -10,6 +10,7 @@ import PrivateRoute from "@/routes/user/Protect/PrivateRoute";
 import ErrorAlert from "@/components/ErrorAlert";
 import ServicesPage from "@/reusable-components/user/services/ServicesPage";
 import ServiceDetails from "@/reusable-components/user/services/ServiceDetails";
+import PaymentPage from "@/pages/user/PaymentPage";
 
 const UserRoutes: React.FC = () => {
   return (
@@ -28,6 +29,14 @@ const UserRoutes: React.FC = () => {
         element={
           <PrivateRoute>
             <MyBookings />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={USER_ROUTE.userPages.payment}
+        element={
+          <PrivateRoute>
+            <PaymentPage />
           </PrivateRoute>
         }
       />

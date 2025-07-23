@@ -41,10 +41,10 @@ const Home = () => {
             Turn talk into tasks.{" "}
             <span className="text-[#ff4de1]">Instantly.</span>
           </h1>
-         <p className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto mb-10">
-  Discover and book venues, caterers, rental cars, and studios — all in one place. We make planning simple, fast, and stress-free.
-</p>
-
+          <p className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto mb-10">
+            Discover and book venues, caterers, rental cars, and studios — all
+            in one place. We make planning simple, fast, and stress-free.
+          </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-16">

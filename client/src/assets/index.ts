@@ -95,7 +95,13 @@ import catering_manpower_sub from '@/assets/images/Host/manpower_sub.png';
 
 
 
+//payment icons
 
+import googlePay from "@/assets/images/payment/google-pay.png";
+import phonePe from "@/assets/images/payment/phone-pe.png";
+import cards from "@/assets/images/payment/cards.png";
+import paytm from "@/assets/images/payment/paytm.png";
+import paypal from "@/assets/images/payment/paypal.png";
 
 
 
@@ -170,5 +176,11 @@ export const Images = {
   venueTab,
   rentcarTab,
   catersTab,
-  studioTab
+  studioTab,
+
+  googlePay,
+  phonePe,
+  paypal,
+  paytm,
+  cards
 };
