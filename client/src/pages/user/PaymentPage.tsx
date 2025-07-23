@@ -1,16 +1,67 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Images } from "@/assets";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
+import {
+  validateUserInformation,
+  validateCard,
+  cardInformation,
+  userInformation,
+} from "@/utils/validations/user/bookings/payment";
+import Select from "react-select";
+import countryList from "react-select-country-list";
 
 const PaymentPage = () => {
   const [billing, setBilling] = useState("yearly");
   const [method, setMethod] = useState("card");
 
+  const countryOptions = useMemo(() => countryList().getData(), []);
+
+  const [cardForm, setCardForm] = useState<cardInformation>({
+    cardNumber: "",
+    expiryDate: "",
+    cvc: "",
+    nameOfCardHolder: "",
+  });
+
+  const [userForm, setUserForm] = useState<userInformation>({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    landmark: "",
+    city: "",
+    state: "",
+    country: "",
+  });
+
+  const [cardErrors, setCardErrors] = useState<
+    Partial<Record<keyof cardInformation, string>>
+  >({});
+  const [userErrors, setUserErrors] = useState<
+    Partial<Record<keyof userInformation, string>>
+  >({});
+
+  const handleSubmit = () => {
+    const cardErrs = validateCard(cardForm);
+    const userErrs = validateUserInformation(userForm);
+
+    setCardErrors(cardErrs);
+    setUserErrors(userErrs);
+
+    if (
+      Object.keys(cardErrs).length === 0 &&
+      Object.keys(userErrs).length === 0
+    ) {
+      console.log("✅ Form valid! Proceed to payment gateway...");
+    }
+  };
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-JosephicSans">
+      {/* Left Panel */}
       <div className="bg-gradient-to-br bg-main_gradient text-white px-3 py-20 sm:px-5 md:px-16 md:py-32 flex flex-col">
         <button className="flex items-center mb-8 text-white font-extrabold">
           <ChevronLeft className="w-5 h-5 mr-2 font-extrabold" /> Booked data
@@ -19,7 +70,70 @@ const PaymentPage = () => {
           <span className="text-gray-200 text-base md:text-xl">Total : </span>
           2,268.00
         </h1>
-        <p className="mb-6 text-sm md:text-base">
+
+        <div className="bg-white text-black rounded-md p-4 shadow-lg">
+          <div className="flex justify-between items-center mb-2">
+            <div className="w-full">
+              <h2 className="font-bold text-lg mb-2">Service Details</h2>
+              <div className="border w-full px-2 md:px-4 py-5 rounded-sm shadow-md">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                 
+                  <div className="w-full sm:w-32 h-24 bg-gray-100 rounded overflow-hidden">
+                    <img
+                      src="/path-to-service-image.jpg"
+                      alt="Selected Service"
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold">
+                      Deluxe Photography Studio
+                    </h3>
+                    <p className="text-gray-500 text-sm">
+                       AC | 1200 sq ft
+                    </p>
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <hr className="my-4" />
+
+                {/* Bottom: Time, Date, Attendees */}
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm text-gray-700">
+                  <div>
+                    <p className="font-medium text-gray-500">Date</p>
+                    <p className="text-black">Aug 5, 2025</p>
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-500">Time</p>
+                    <p className="text-black">10:00 AM - 1:00 PM</p>
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-500">Attendees</p>
+                    <p className="text-black">5 people</p>
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-500">Service type</p>
+                    <span className="bg-blue-600 text-white p-1 rounded-md">venue</span> 
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-between text-sm text-gray-600 px-3 pt-2">
+            <span>Subtotal</span>
+            <span>$2,268.00</span>
+          </div>
+           <div className="flex justify-between text-sm text-gray-600 px-3 pb-1">
+            <span>Platform fee</span>
+            <span>$2,268.00</span>
+          </div>
+          <div className="flex justify-between text-black font-semibold text-base md:text-lg px-3 ">
+            <span>Total payable amount</span>
+            <span>$189.00</span>
+          </div>
+        </div>
+        <p className=" text-sm md:text-base mt-4">
           This price includes platform fees. By subscribing, you agree to our{" "}
           <a
             href="/terms"
@@ -36,88 +150,47 @@ const PaymentPage = () => {
           </a>
           .
         </p>
-
-        <div className="bg-white text-black rounded-lg p-4 shadow-lg">
-          <div className="flex justify-between items-center mb-2">
-            <div>
-              <h2 className="font-bold">Standard pro</h2>
-              <p className="text-sm text-gray-600">
-                Up to 5 users in Figma. Great for small teams, agencies and
-                startups.
-              </p>
-            </div>
-            <span className="font-semibold">$189.00</span>
-          </div>
-          <input
-            type="text"
-            placeholder="Add promo code"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm mb-4"
-          />
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>Subtotal</span>
-            <span>$2,268.00</span>
-          </div>
-          <div className="flex justify-between text-black font-semibold text-lg">
-            <span>Total due today</span>
-            <span>$189.00</span>
-          </div>
-        </div>
       </div>
 
-      <div className="px-3 py-8 sm:px-5 sm:py-10 md:px-11 md:py-32 max-w-7xl w-full mx-auto">
+      {/* Right Panel */}
+      <div className="px-3 py-8 sm:px-5 sm:py-10 md:px-7 md:py-20 max-w-7xl w-full mx-auto">
         <h2 className="text-xl font-semibold mb-6">Billing frequency</h2>
         <div className="flex gap-4 mb-6">
-          <button
-            onClick={() => setBilling("monthly")}
-            className={cn(
-              "border rounded-lg px-2 py-2 max-w-xl",
-              billing === "monthly"
-                ? "border-blue-600 text-blue-600"
-                : "border-gray-300 text-gray-700"
-            )}
-          >
-            <div className="text-lg font-medium">$239/month</div>
-            <div className="text-sm">Pay monthly</div>
-          </button>
-          <button
-            onClick={() => setBilling("yearly")}
-            className={cn(
-              "border rounded-lg px-2 py-2 w-full",
-              billing === "yearly"
-                ? "border-blue-600 text-blue-600 bg-blue-50"
-                : "border-gray-300 text-gray-700"
-            )}
-          >
-            <div className="text-lg font-medium">$189/month</div>
-            <div className="text-sm">
-              Pay yearly <span className="text-green-600 ml-1">Save 20%</span>
-            </div>
-          </button>
+          {["monthly", "yearly"].map((val) => (
+            <button
+              key={val}
+              onClick={() => setBilling(val)}
+              className={cn(
+                "border rounded-lg px-2 py-2 w-full",
+                billing === val
+                  ? "border-blue-600 text-blue-600 bg-blue-50"
+                  : "border-gray-300 text-gray-700"
+              )}
+            >
+              <div className="text-lg font-medium">
+                {val === "monthly" ? "$239/month" : "$189/month"}
+              </div>
+              <div className="text-sm">
+                {val === "monthly" ? (
+                  "Pay monthly"
+                ) : (
+                  <>
+                    Pay yearly{" "}
+                    <span className="text-green-600 ml-1">Save 20%</span>
+                  </>
+                )}
+              </div>
+            </button>
+          ))}
         </div>
 
         <h2 className="text-xl font-semibold mb-4">Payment method</h2>
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           {[
-            {
-              id: "card",
-              label: "Credit or Debit card",
-              icon: Images.cards,
-            },
-            {
-              id: "googlepay",
-              label: "Google pay",
-              icon: Images.googlePay,
-            },
-            {
-              id: "phonepe",
-              label: "Phone Pe",
-              icon: Images.phonePe,
-            },
-            {
-              id: "paytm",
-              label: "Paytm",
-              icon: Images.paytm,
-            },
+            { id: "card", label: "Credit or Debit card", icon: Images.cards },
+            { id: "googlepay", label: "Google pay", icon: Images.googlePay },
+            { id: "phonepe", label: "Phone Pe", icon: Images.phonePe },
+            { id: "paytm", label: "Paytm", icon: Images.paytm },
           ].map((opt) => (
             <button
               key={opt.id}
@@ -140,58 +213,211 @@ const PaymentPage = () => {
         </div>
 
         {method === "card" && (
-          <div>
+          <>
             <h2 className="text-xl font-semibold mb-4">Payment information</h2>
             <div className="grid grid-cols-1 gap-4">
-              <Input className="border p-2 rounded" placeholder="Card number" />
               <Input
-                className="border p-2 rounded"
+                value={cardForm.cardNumber}
+                onChange={(e) =>
+                  setCardForm({ ...cardForm, cardNumber: e.target.value })
+                }
+                className={`border ${
+                  cardErrors.cardNumber ? "border-red-600" : "border-gray-200"
+                } p-2 rounded`}
+                placeholder="Card number"
+              />
+              {cardErrors.cardNumber && (
+                <p className="text-red-600 text-sm md:text-base">
+                  {cardErrors.cardNumber}
+                </p>
+              )}
+
+              <Input
+                value={cardForm.nameOfCardHolder}
+                onChange={(e) =>
+                  setCardForm({ ...cardForm, nameOfCardHolder: e.target.value })
+                }
+                className={`border ${
+                  cardErrors.nameOfCardHolder
+                    ? "border-red-600"
+                    : "border-gray-200"
+                } p-2 rounded`}
                 placeholder="Name on card"
               />
+              {cardErrors.nameOfCardHolder && (
+                <p className="text-red-600 text-sm md:text-base">
+                  {cardErrors.nameOfCardHolder}
+                </p>
+              )}
 
               <div className="flex gap-4">
                 <Input
-                  className="border p-2 rounded w-1/2"
+                  value={cardForm.expiryDate}
+                  onChange={(e) =>
+                    setCardForm({ ...cardForm, expiryDate: e.target.value })
+                  }
+                  className={`border ${
+                    cardErrors.expiryDate ? "border-red-600" : "border-gray-200"
+                  } p-2 rounded w-1/2`}
                   placeholder="Expiry date (MM/YY)"
                 />
-                <Input className="border p-2 rounded w-1/2" placeholder="CVC" />
+                <Input
+                  value={cardForm.cvc}
+                  onChange={(e) =>
+                    setCardForm({ ...cardForm, cvc: e.target.value })
+                  }
+                  className={`border ${
+                    cardErrors.cvc ? "border-red-600" : "border-gray-200"
+                  } p-2 rounded w-1/2`}
+                  placeholder="CVC"
+                />
               </div>
+              {(cardErrors.expiryDate || cardErrors.cvc) && (
+                <div className="flex gap-4">
+                  {cardErrors.expiryDate && (
+                    <p className="text-red-600 text-sm md:text-base w-1/2">
+                      {cardErrors.expiryDate}
+                    </p>
+                  )}
+                  {cardErrors.cvc && (
+                    <p className="text-red-600 text-sm md:text-base w-1/2">
+                      {cardErrors.cvc}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
-          </div>
+          </>
         )}
-        <div className="">
-          <h2 className="text-xl font-semibold mb-4 mt-6">User information</h2>
-          <div className="grid grid-cols-1 gap-4">
-            <Input className="border p-2 rounded" placeholder="Name" />
-            <div className="flex gap-4">
-              <Input className="border p-2 rounded w-1/2" placeholder="Email" />
-              <Input className="border p-2 rounded w-1/2" placeholder="Phone" />
-            </div>
+
+        <h2 className="text-xl font-semibold mb-4 mt-6">User information</h2>
+        <div className="grid grid-cols-1 gap-4">
+          <Input
+            value={userForm.name}
+            onChange={(e) => setUserForm({ ...userForm, name: e.target.value })}
+            className={`border ${
+              userErrors.name ? "border-red-600" : "border-gray-200"
+            } p-2 rounded`}
+            placeholder="Name"
+          />
+          {userErrors.name && (
+            <p className="text-red-600 text-sm md:text-base">
+              {userErrors.name}
+            </p>
+          )}
+
+          <div className="flex gap-4">
             <Input
-              className="border p-2 rounded"
-              placeholder="Street address or PO box"
+              value={userForm.email}
+              onChange={(e) =>
+                setUserForm({ ...userForm, email: e.target.value })
+              }
+              className={`border ${
+                userErrors.email ? "border-red-600" : "border-gray-200"
+              } p-2 rounded w-1/2`}
+              placeholder="Email"
             />
             <Input
-              className="border p-2 rounded"
-              placeholder="Apt, suite, unit (optional)"
+              value={userForm.phone}
+              onChange={(e) =>
+                setUserForm({ ...userForm, phone: e.target.value })
+              }
+              className={`border ${
+                userErrors.phone ? "border-red-600" : "border-gray-200"
+              } p-2 rounded w-1/2`}
+              placeholder="Phone"
             />
+          </div>
+          {(userErrors.email || userErrors.phone) && (
             <div className="flex gap-4">
-              <Input className="border p-2 rounded w-1/2" placeholder="City" />
-              <Input className="border p-2 rounded w-1/2" placeholder="State" />
+              {userErrors.email && (
+                <p className="text-red-600 text-sm md:text-base w-1/2">
+                  {userErrors.email}
+                </p>
+              )}
+              {userErrors.phone && (
+                <p className="text-red-600 text-sm md:text-base w-1/2">
+                  {userErrors.phone}
+                </p>
+              )}
             </div>
-            <select className="border p-2 rounded">
-              <option>Select country</option>
-              <option>United States</option>
-              <option>India</option>
-              <option>Canada</option>
-            </select>
+          )}
+
+          <Input
+            value={userForm.address}
+            onChange={(e) =>
+              setUserForm({ ...userForm, address: e.target.value })
+            }
+            className={`border ${
+              userErrors.address ? "border-red-600" : "border-gray-200"
+            } p-2 rounded`}
+            placeholder="Street address or PO box"
+          />
+          {userErrors.address && (
+            <p className="text-red-600 text-sm md:text-base">
+              {userErrors.address}
+            </p>
+          )}
+
+          <Input
+            value={userForm.landmark}
+            onChange={(e) =>
+              setUserForm({ ...userForm, landmark: e.target.value })
+            }
+            className="border p-2 rounded"
+            placeholder="Apt, suite, unit (optional)"
+          />
+
+          <div className="flex gap-4">
+            <Input
+              value={userForm.city}
+              onChange={(e) =>
+                setUserForm({ ...userForm, city: e.target.value })
+              }
+              className={`border ${
+                userErrors.city ? "border-red-600" : "border-gray-200"
+              } p-2 rounded w-1/2`}
+              placeholder="City"
+            />
+            <Input
+              value={userForm.state}
+              onChange={(e) =>
+                setUserForm({ ...userForm, state: e.target.value })
+              }
+              className={`border ${
+                userErrors.state ? "border-red-600" : "border-gray-200"
+              } p-2 rounded w-1/2`}
+              placeholder="State"
+            />
           </div>
-          <div className="">
-            <Button className="mt-4 bg-deepPurple text-white py-5 font-semibold hover:bg-deepPurple/80 transition-all w-full">
-              Pay & Confirm
-            </Button>
-          </div>
+
+          <Select
+            options={countryOptions}
+            value={
+              countryOptions.find((c) => c.label === userForm.country) || null
+            }
+            onChange={(selected) =>
+              setUserForm({ ...userForm, country: selected?.label || "" })
+            }
+            placeholder="Select country"
+            classNamePrefix="react-select"
+            className={`w-full ${
+              userErrors.country ? "border border-red-600 rounded" : ""
+            }`}
+          />
+          {userErrors.country && (
+            <p className="text-red-600 text-sm md:text-base">
+              {userErrors.country}
+            </p>
+          )}
         </div>
+
+        <Button
+          onClick={handleSubmit}
+          className="mt-4 bg-deepPurple text-white py-5 font-semibold hover:bg-deepPurple/80 transition-all w-full"
+        >
+          Pay & Confirm
+        </Button>
       </div>
     </div>
   );

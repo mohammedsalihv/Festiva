@@ -15,7 +15,7 @@ export interface ICatersBase {
 }
 
 export interface ICaters {
-  _id:string;
+  _id: string;
   catersName?: string;
   manpower: string;
   charge: string;
