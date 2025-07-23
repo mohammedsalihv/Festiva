@@ -13,3 +13,15 @@ export interface userInformation {
   state: string;
   country: string;
 }
+
+export interface cardInformation {
+  cardNumber: number;
+  expiryDate: Date;
+  cvc: number;
+  nameOfCardHolder: string;
+}
+
+export const validateCard = (form: cardInformation) => {
+  const errors: { [key: string]: string } = {};
+  if(!form.cardNumber < 8) errors.cardNumber = "Card number is "
+};

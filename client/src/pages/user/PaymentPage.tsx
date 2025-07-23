@@ -144,34 +144,17 @@ const PaymentPage = () => {
             <h2 className="text-xl font-semibold mb-4">Payment information</h2>
             <div className="grid grid-cols-1 gap-4">
               <Input className="border p-2 rounded" placeholder="Card number" />
+              <Input
+                className="border p-2 rounded"
+                placeholder="Name on card"
+              />
+
               <div className="flex gap-4">
                 <Input
                   className="border p-2 rounded w-1/2"
                   placeholder="Expiry date (MM/YY)"
                 />
                 <Input className="border p-2 rounded w-1/2" placeholder="CVC" />
-              </div>
-              <Input
-                className="border p-2 rounded"
-                placeholder="Name on card"
-              />
-              <Input
-                className="border p-2 rounded"
-                placeholder="Street address or PO box"
-              />
-              <Input
-                className="border p-2 rounded"
-                placeholder="Apt, suite, unit (optional)"
-              />
-              <div className="flex gap-4">
-                <Input
-                  className="border p-2 rounded w-1/2"
-                  placeholder="City"
-                />
-                <Input
-                  className="border p-2 rounded w-1/2"
-                  placeholder="State"
-                />
               </div>
             </div>
           </div>
