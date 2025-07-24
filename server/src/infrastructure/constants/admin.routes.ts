@@ -5,7 +5,7 @@ export const ADMIN_ROUTES = {
   },
   UserManagement: {
     allUsers: "/users",
-    blockAndUnblock: "/users/:userId/blockUnblock/:userId",
+    blockAndUnblock: "/users/blockUnblock/:userId",
     userEdit: "/users/edit/:userId",
     profileImageUpdate: "/users/changeprofile/:userId",
     userDelete: "/users/:userId",

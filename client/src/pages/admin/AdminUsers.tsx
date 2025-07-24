@@ -89,6 +89,8 @@ const AdminUsers = () => {
     setSelectedUser(null);
   }, []);
 
+  console.log('user' , selectedUser)
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -112,7 +114,7 @@ const AdminUsers = () => {
   };
 
   const handleSelect = (user: User) => {
-    if (selectedUser?._id === user._id) {
+    if (selectedUser?.id === user.id) {
       setSelectedUser(null);
     } else {
       setSelectedUser(user);
@@ -126,7 +128,7 @@ const AdminUsers = () => {
         const response = await AllUsers(page, limit);
         dispatch(setAllUsers(response.data));
         setTotalPages(response.totalPages);
-        setSelectedUserId(null); 
+        setSelectedUserId(null);
         setSelectedUser(null);
       } catch (error) {
         const errorMessage =
@@ -142,15 +144,20 @@ const AdminUsers = () => {
     fetchPaginatedUsers();
   }, [page]);
 
+
   const handleBlockOrUnblock = async (userId: string, isBlocked: boolean) => {
     try {
+      if(!userId){
+        toast("User ID required")
+        return;
+      }
       const response = await blockUnblockUser(isBlocked, userId);
+      toast.success(response.message)
       const updatedUsers = await AllUsers(page, limit);
       dispatch(setAllUsers(updatedUsers.data));
       setSelectedUser(
-        updatedUsers.data.find((u: User) => u._id === userId) || null
+        updatedUsers.data.find((u: User) => u.id === userId) || null
       );
-      toast.success(response.message);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         const errorMessage = error.response?.data?.message || error.message;
@@ -176,7 +183,7 @@ const AdminUsers = () => {
     e.preventDefault();
     setError({});
 
-    if (!selectedUser?._id) {
+    if (!selectedUser?.id) {
       toast.error("No user selected");
       return;
     }
@@ -190,13 +197,13 @@ const AdminUsers = () => {
           isBlocked: form.isBlocked,
         };
 
-        const res = await editUserDetails(payload, selectedUser?._id);
+        const res = await editUserDetails(payload, selectedUser?.id);
         toast.success(res.message);
 
         const updatedUsers = await AllUsers(page, limit);
         dispatch(setAllUsers(updatedUsers.data));
         setSelectedUser(
-          updatedUsers.data.find((u: User) => u._id === selectedUser._id) ||
+          updatedUsers.data.find((u: User) => u.id === selectedUser.id) ||
             null
         );
         setEditForm(null);
@@ -216,7 +223,7 @@ const AdminUsers = () => {
 
       setIsLoading(true);
       try {
-        const response = await changeProfile(formData, selectedUser?._id);
+        const response = await changeProfile(formData, selectedUser?.id);
         if (response?.profilePhotoUrl) {
           const updatedUser = {
             ...selectedUser,
@@ -394,10 +401,10 @@ const AdminUsers = () => {
             renderRowStart={(user) => (
               <input
                 type="checkbox"
-                checked={selectedUserId === user._id}
+                checked={selectedUserId === user.id}
                 onChange={() => {
-                  const isSelected = selectedUserId === user._id;
-                  setSelectedUserId(isSelected ? null : user._id);
+                  const isSelected = selectedUserId === user.id;
+                  setSelectedUserId(isSelected ? null : user.id);
                   setSelectedUser(isSelected ? null : user);
                 }}
               />
@@ -510,7 +517,7 @@ const AdminUsers = () => {
                 )}
                 <button
                   className="px-3 p-1 border rounded bg-red-600 hover:bg-red-700 text-white flex items-center gap-1"
-                  onClick={() => handleDelete(selectedUser._id)}
+                  onClick={() => handleDelete(selectedUser.id)}
                 >
                   <FaTrashRestoreAlt className="w-4 h-4" />
                 </button>
@@ -532,7 +539,7 @@ const AdminUsers = () => {
               cancelText="Cancel"
               onConfirm={() => {
                 handleBlockOrUnblock(
-                  selectedUser._id,
+                  selectedUser.id,
                   selectedUser.isBlocked ? false : true
                 );
                 setConfirmAction(false);
