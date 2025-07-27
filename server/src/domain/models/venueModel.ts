@@ -17,6 +17,7 @@ const venueSchema = new Schema<IVenue>(
     terms: { type: String, required: true },
     Images: [{ type: String, required: true }],
     status:{ type:String , enum :[ "pending" , "approved" , "rejected"] ,  default: "pending"},
+    rejectedReason: { type: String, default: "" },
     typeOfAsset:{type:String, default:"venue"},
     location: { type: Schema.Types.ObjectId, ref: "Location", required: true },
     host:{type: Schema.Types.ObjectId,ref: "Host",required: true }

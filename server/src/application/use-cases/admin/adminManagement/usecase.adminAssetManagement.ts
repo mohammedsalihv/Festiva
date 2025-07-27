@@ -29,8 +29,9 @@ export class AdminAssetManagementUseCase
   async assetReject(
     id: string,
     typeOfAsset: string,
-    assetStatus: string
+    assetStatus: string,
+    reason:string
   ): Promise<{ _id: string; hostId: string } | null> {
-    return await this.repository.assetReject(id, typeOfAsset, assetStatus);
+    return await this.repository.assetReject(id, typeOfAsset, assetStatus , reason);
   }
 }

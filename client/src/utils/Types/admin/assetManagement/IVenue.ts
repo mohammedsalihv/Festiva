@@ -17,6 +17,7 @@ export interface IVenue {
   Images: string[];
   status?: string;
   typeOfAsset?: string;
+  rejectedReason?:string;
   location: assetLocationInfo;
   host: assetHostInfo;
    timstamp?:string;

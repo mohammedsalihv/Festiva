@@ -15,6 +15,7 @@ export interface IVenue {
     terms: string;
     Images?: string[];
     status?:string;
+    rejectedReason?: { type: String, default: "" },
     typeOfAsset?:string;
     location: Types.ObjectId;
     host: Types.ObjectId;

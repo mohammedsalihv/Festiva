@@ -16,6 +16,7 @@ export interface ICaters {
   about: string;
   Images: string[];
   status?: string;
+  rejectedReason?:string;
   typeOfAsset?: string;
   location: assetLocationInfo;
   host: assetHostInfo;

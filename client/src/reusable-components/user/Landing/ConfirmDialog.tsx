@@ -11,6 +11,7 @@ interface confirmDailogProps {
   cancelText?: string;
   onConfirm: () => void;
   onCancel: () => void;
+  children?: React.ReactNode;
 }
 
 const ConfirmDialog: React.FC<confirmDailogProps> = ({
@@ -21,6 +22,7 @@ const ConfirmDialog: React.FC<confirmDailogProps> = ({
   cancelText = "Cancel",
   onConfirm,
   onCancel,
+  children,
 }) => {
   return (
     <Dailog.Root open={isOpen} onOpenChange={(open) => !open && onCancel()}>
@@ -52,6 +54,8 @@ const ConfirmDialog: React.FC<confirmDailogProps> = ({
                   <Dailog.Description className="text-gray-600 mt-2">
                     {description}
                   </Dailog.Description>
+
+                  {children && <div className="mt-4">{children}</div>}
 
                   <div className="mt-4 flex justify-end gap-4">
                     <button

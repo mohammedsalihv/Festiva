@@ -130,13 +130,12 @@ export class AdminAssetsController {
 
   async rejectAsset(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { assetStatus, type } = req.query;
+      const { assetStatus, type , reason } = req.query;
       const id = req.params.assetId;
-
-      if (!type || !assetStatus) {
+      if (!type || !assetStatus || !reason) {
         res.status(statusCodes.forbidden).json({
           success: false,
-          message: "Asset type and status are required.",
+          message: "Asset type or status or reason are required.",
         });
         return;
       }
@@ -144,8 +143,9 @@ export class AdminAssetsController {
       const result = await this.adminAssetManagementUseCase.assetReject(
         id,
         String(type),
-        String(assetStatus)
-      );
+        String(assetStatus),
+        String(reason)
+      )
 
       if (result && result.hostId) {
         await this.notificationUseCase.createNotification({

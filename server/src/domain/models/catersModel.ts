@@ -21,6 +21,7 @@ const catersSchema = new Schema<ICaters>(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
+    rejectedReason: { type: String, default: "" },
     typeOfAsset: { type: String, default: "caters" },
     location: { type: Schema.Types.ObjectId, ref: "Location", required: true },
     host: { type: Schema.Types.ObjectId, ref: "Host", required: true },

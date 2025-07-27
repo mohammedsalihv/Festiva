@@ -25,7 +25,7 @@ interface MoreDrawerProps {
 const links = [
   { name: "Dashboard", icon: LayoutDashboard, path: "/host/dashboard" },
   { name: "Asset Status", icon: FileText, path: "/host/asset/status" },
-  { name: "Assets", icon: FolderKanban, path: "/host/assets" },
+  { name: "My Assets", icon: FolderKanban, path: "/host/assets" },
   { name: "Bookings", icon: Calendar, path: "/host/bookings" },
   { name: "Revenues", icon: DollarSign, path: "/host/revenues" },
   { name: "Team", icon: Users, path: "/host/team" },

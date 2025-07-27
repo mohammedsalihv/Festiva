@@ -21,6 +21,7 @@ import userVenueReducer from "@/redux/Slice/user/userVenueSlice";
 import userRentcarReducer from "@/redux/Slice/user/userRentCarSlice";
 
 import assetSearchReducer from "@/redux/Slice/user/assetSearchSlice";
+import myAssetsReducer from "@/redux/Slice/host/common/myAssetsSlice";
 import bookingReducer from "@/redux/Slice/user/bookingSlice";
 
 const rootReducer = combineReducers({
@@ -30,8 +31,8 @@ const rootReducer = combineReducers({
   images: imageReducer,
   venue: venueReducer,
   rentcar: rentcarReducer,
-  caters:catersReducer,
-  studio:studioReducer,
+  caters: catersReducer,
+  studio: studioReducer,
   location: locationReducer,
   serviceType: serviceTypeReducer,
   admin: adminReduer,
@@ -40,8 +41,9 @@ const rootReducer = combineReducers({
   asset: assetManagementReducer,
   userVenue: userVenueReducer,
   userRentcar: userRentcarReducer,
-  assetSearch:assetSearchReducer,
-  booking:bookingReducer
+  assetSearch: assetSearchReducer,
+  booking: bookingReducer,
+  myAssets: myAssetsReducer,
 });
 
 const persistConfig = {

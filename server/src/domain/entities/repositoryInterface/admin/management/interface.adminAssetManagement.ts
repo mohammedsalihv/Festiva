@@ -11,6 +11,7 @@ export interface IAdminAssetManagementRepository {
   assetReject(
     id: string,
     typeOfAsset: string,
-    assetStatus: string
+    assetStatus: string,
+    reason:string
   ): Promise<{ _id: string; hostId: string } | null>;
 }

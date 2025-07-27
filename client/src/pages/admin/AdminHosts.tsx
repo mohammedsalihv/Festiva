@@ -153,7 +153,7 @@ const AdminHosts = () => {
       dispatch(setAllHosts(updatedRes.data));
 
       setSelectedHost(
-        updatedRes.data.find((h: Host) => h._id === hostId) || null
+        updatedRes.data.find((h: Host) => h.id === hostId) || null
       );
 
       toast.success(response.message);
@@ -173,7 +173,7 @@ const AdminHosts = () => {
   const handleEditForm = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!selectedHost?._id) {
+    if (!selectedHost?.id) {
       toast.error("No host selected");
       return;
     }
@@ -195,13 +195,13 @@ const AdminHosts = () => {
           rejectedRequests: form.rejectedRequests,
         };
 
-        const res = await editHostDetails(payload, selectedHost._id);
+        const res = await editHostDetails(payload, selectedHost.id);
         toast.success(res.message);
 
         const updatedRes = await getAllHosts(page, limit);
         dispatch(setAllHosts(updatedRes.data));
         setSelectedHost(
-          updatedRes.data.find((h: Host) => h._id === selectedHost._id) || null
+          updatedRes.data.find((h: Host) => h.id === selectedHost.id) || null
         );
         setEditForm(null);
       } catch (err: unknown) {
@@ -235,7 +235,7 @@ const AdminHosts = () => {
 
       setIsLoading(true);
       try {
-        const response = await changeProfile(formData, selectedHost._id);
+        const response = await changeProfile(formData, selectedHost.id);
         if (response?.profilePhotoUrl) {
           const updatedHost = {
             ...selectedHost,
@@ -481,7 +481,7 @@ const AdminHosts = () => {
                   </button>
                   <button
                     className="border p-2 rounded text-sm bg-red-600 hover:bg-red-700 text-white flex items-center justify-center"
-                    onClick={() => handleDelete(selectedHost._id)}
+                    onClick={() => handleDelete(selectedHost.id)}
                   >
                     <FaTrashRestoreAlt className="w-4 h-4" />
                   </button>
@@ -588,7 +588,7 @@ const AdminHosts = () => {
                 cancelText="Cancel"
                 onConfirm={() => {
                   handleBlockOrUnblock(
-                    selectedHost._id,
+                    selectedHost.id,
                     selectedHost.isBlocked ? false : true
                   );
                   setConfirmAction(false);

@@ -28,12 +28,16 @@ const HostLogin = ({ onClose, showSignup }: Props) => {
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     if (errors[e.target.name as keyof FormState]) {
       setErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
     }
   };
+
+  
   const mutation = useMutation({
     mutationFn: hostLogin,
     onSuccess: (data) => {

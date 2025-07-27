@@ -7,8 +7,7 @@ import { getAllAssetRequests } from "@/api/host/hostAccountService";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { AssetRequest } from "@/utils/Types/host/pages/assetRequests";
-import { IoChevronBack } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+
 
 dayjs.extend(relativeTime);
 
@@ -65,12 +64,12 @@ export const AssetStatus: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
   const fetchRequests = async (page = 1) => {
     try {
       setLoading(true);
       const { data, totalPages } = await getAllAssetRequests(page, 7);
+      console.log(data)
       setRequests(data);
       setTotalPages(totalPages);
     } catch (error) {
@@ -95,13 +94,6 @@ export const AssetStatus: React.FC = () => {
 
   return (
     <div className="px-4 py-3 sm:px-6 md:px-20 font-poppins">
-      <div
-        onClick={() => navigate(-1)}
-        className="hidden md:flex items-center px-4 md:px-0 py-2 mb-4"
-      >
-       <IoChevronBack className="h-5 w-5 text-main_host hover:text-red-600 cursor-pointer"/>
-       <p className="text-main_host hover:text-red-600 cursor-pointer">Back</p>
-      </div>
       <h2 className="text-base sm:text-xl font-semibold mb-4">My Requests</h2>
 
       <div className="flex border-b border-gray-200 mb-10">

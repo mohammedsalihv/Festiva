@@ -8,8 +8,8 @@ export const ADMIN_API = {
       `/assets/details/${assetId}?type=${type}`,
     approveAsset: (assetId: string, type: string) =>
       `/assets/approve/${assetId}?assetStatus=approved&type=${type}`,
-    rejectAsset: (assetId: string, type: string) =>
-      `/assets/reject/${assetId}?assetStatus=rejected&type=${type}`,
+    rejectAsset: (assetId: string, type: string , reason:string) =>
+      `/assets/reject/${assetId}?assetStatus=rejected&type=${type}&reason=${reason}`,
   },
   hostManagement: {
     getAllHosts: "/hosts",

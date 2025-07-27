@@ -36,10 +36,11 @@ export const assetRequestApprove = async (
 
 export const assetRequestReject = async (
   assetId: string,
-  typeOfAsset: string
+  typeOfAsset: string,
+  reason:string
 ) => {
   const response = await axiosInstance.put<assetStatusResponse>(
-    ADMIN_API.assetManagement.rejectAsset(assetId, typeOfAsset)
+    ADMIN_API.assetManagement.rejectAsset(assetId, typeOfAsset,reason)
   );
   return response.data;
 };

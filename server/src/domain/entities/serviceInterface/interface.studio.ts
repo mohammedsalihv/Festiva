@@ -19,6 +19,7 @@ export interface IStudio {
   about: string;
   Images: string[];
   status?: string;
+  rejectedReason?:string;
   typeOfAsset?: string;
   location?: Types.ObjectId;
   host?: Types.ObjectId;

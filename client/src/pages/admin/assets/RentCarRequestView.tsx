@@ -50,6 +50,7 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
     userDocument,
     Images,
     status,
+    rejectedReason,
     typeOfAsset,
     host,
   } = data;
@@ -59,6 +60,8 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
     null
   );
   const [showActions, setShowActions] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
+  const [reasonError, setReasonError] = useState(false);
 
   const navigate = useNavigate();
 
@@ -68,12 +71,15 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
     navigate("/admin/assets");
   };
 
-  const hanldeReject = async (id: string, assetType: string) => {
-    await assetRequestReject(id, assetType);
+  const handleReject = async (
+    id: string,
+    assetType: string,
+    reason: string
+  ) => {
+    await assetRequestReject(id, assetType, reason);
     toast.success("Asset rejected successfully");
     navigate("/admin/assets");
   };
-
   return (
     <div className="text-xs md:text-sm">
       <div className="p-4 md:p-8 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 font-prompt bg-main_white rounded-md w-full h-full">
@@ -347,30 +353,42 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
                 </Button>
               </div>
             ) : (
-              <div className="w-full flex justify-between items-center gap-2">
-                <div
-                  className={`flex-1 text-xs px-4 py-2 rounded text-white font-semibold text-center ${
-                    status === "approved"
-                      ? "bg-blue-500"
-                      : status === "rejected"
-                      ? "bg-red-500"
-                      : "bg-gray-400"
-                  }`}
-                >
-                  {status
-                    ? status.charAt(0).toUpperCase() + status.slice(1)
-                    : ""}
-                </div>
-
-                <div className="flex-shrink-0">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowActions(true)}
-                    className="flex items-center justify-center gap-2 text-sm bg-black text-white hover:bg-slate-800"
+              <div className="w-full">
+                <div className="flex justify-between items-center gap-2">
+                  <div
+                    className={`flex-1 text-xs px-4 py-2 rounded text-white font-semibold text-center ${
+                      status === "approved"
+                        ? "bg-blue-500"
+                        : status === "rejected"
+                        ? "bg-red-500"
+                        : "bg-gray-400"
+                    }`}
                   >
-                    Re-call <HiOutlineRefresh className="w-4 h-4" />
-                  </Button>
+                    {status
+                      ? status.charAt(0).toUpperCase() + status.slice(1)
+                      : ""}
+                  </div>
+
+                  <div className="flex-shrink-0">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowActions(true)}
+                      className="flex items-center justify-center gap-2 text-sm bg-black text-white hover:bg-slate-800"
+                    >
+                      Re-call <HiOutlineRefresh className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
+                {status === "rejected" && rejectedReason?.trim() && (
+                  <p className="mt-2">
+                    <span className="text-sm font-semibold text-gray-500 mb-2">
+                      Reason:{" "}
+                    </span>
+                    <span className="text-xs text-red-500">
+                      {rejectedReason}
+                    </span>
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -384,7 +402,7 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
             description={
               actionType === "approve"
                 ? "Are you sure you want to approve this asset?"
-                : "Are you sure you want to reject this asset?"
+                : "Are you sure you want to reject this asset? Please provide a reason."
             }
             confirmText={
               actionType === "approve" ? "Yes, Approve" : "Yes, Reject"
@@ -392,22 +410,49 @@ const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
             cancelText="Cancel"
             onConfirm={async () => {
               if (!typeOfAsset) {
-                toast.success("asset type required");
+                toast.error("Asset type is required");
                 return;
               }
+
               if (actionType === "approve") {
                 await hanldeAccept(_id, typeOfAsset);
               } else if (actionType === "reject") {
-                await hanldeReject(_id, typeOfAsset);
+                if (!rejectReason.trim()) {
+                  toast.error("Please provide a rejection reason");
+                  setReasonError(true);
+                  return;
+                }
+                await handleReject(_id, typeOfAsset, rejectReason);
               }
+
               setConfirmAction(false);
               setActionType(null);
+              setRejectReason("");
             }}
             onCancel={() => {
               setConfirmAction(false);
               setActionType(null);
+              setRejectReason("");
             }}
-          />
+          >
+            {actionType === "reject" && (
+              <textarea
+                value={rejectReason}
+                onChange={(e) => {
+                  setRejectReason(e.target.value);
+                  if (e.target.value.trim()) {
+                    setReasonError(false);
+                  }
+                }}
+                placeholder="Enter reason for rejection"
+                className={`w-full mt-4 border rounded-md p-2 text-sm ${
+                  reasonError ? "border-red-500" : "border-gray-300"
+                }`}
+                rows={4}
+              />
+            )}
+          </ConfirmDialog>
+
           <CustomToastContainer />
         </div>
       </div>

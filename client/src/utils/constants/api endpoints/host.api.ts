@@ -8,6 +8,7 @@ export const HOST_API = {
   hostAccount: {
     notifications: "/notifications",
     markAllReadNotifications: "/notifications/mark-all-read",
+    myAssets:'/myassets',
     requets: "/requests",
   },
   venueService: {

@@ -27,6 +27,7 @@ const studioSchema = new Schema<IStudio>(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
+    rejectedReason: { type: String, default: "" },
     typeOfAsset: { type: String, default: "studio" },
     location: { type: Schema.Types.ObjectId, ref: "Location", required: true },
     host: { type: Schema.Types.ObjectId, ref: "Host", required: true },

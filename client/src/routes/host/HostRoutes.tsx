@@ -18,6 +18,7 @@ import LocationForm from "@/forms/host/serviceForms/Common/LocationForm";
 import ErrorAlert from "@/components/ErrorAlert";
 
 import { AssetStatus } from "@/pages/host/landing/AssetStatus";
+import MyAssets from "@/pages/host/landing/MyAssets";
 
 const HostRoutes: React.FC = () => {
   return (
@@ -29,6 +30,10 @@ const HostRoutes: React.FC = () => {
       <Route
         path={HOST_ROUTES.hostAccount.assetStatus}
         element={<AssetStatus />}
+      />
+      <Route
+        path={HOST_ROUTES.hostAccount.myAssets}
+        element={<MyAssets />}
       />
       <Route
         path={HOST_ROUTES.hostAccount.hostProfile}

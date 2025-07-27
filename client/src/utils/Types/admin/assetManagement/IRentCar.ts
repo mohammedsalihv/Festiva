@@ -23,6 +23,7 @@ export interface IRentCar {
   userDocument: string;
   Images?: string[];
   status?: string;
+  rejectedReason?:string;
   typeOfAsset?: string;
   location: assetLocationInfo;
   host: assetHostInfo;
