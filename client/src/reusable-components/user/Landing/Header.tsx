@@ -26,7 +26,8 @@ const Header = () => {
   const [confirmLogout, setConfirmLogout] = useState(false);
   const location = useLocation();
   const isHomePage = location.pathname === "/user/home";
-  const showTransparent = isHomePage && !isScrolled;
+  const landingPage = location.pathname === "/";
+  const showTransparent = isHomePage && !isScrolled || landingPage;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -86,7 +87,7 @@ const Header = () => {
             <div className="hidden lg:block" onClick={() => setMainOpen(true)}>
               <RiMenu4Fill
                 className={`${
-                  showTransparent ? "text-gray-400" : "text-black"
+                  landingPage ? "text-gray-300" : showTransparent ? "text-gray-400" : "text-black"
                 } text-4xl cursor-pointer`}
               />
             </div>
@@ -156,7 +157,7 @@ const Header = () => {
             ) : (
               <button
                 onClick={() => navigate("/login")}
-                className="hidden lg:block text-sm text-gray-700 border border-gray-300 rounded px-5 py-1.5 hover:bg-gray-100"
+                className={`hidden lg:block text-sm text-white hover:text-black border border-gray-300 rounded px-5 py-1.5 hover:bg-gray-100`}
               >
                 Login
               </button>

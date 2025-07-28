@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 const LogoText = () => {
   const [scrolled, setIsScrolled] = useState(false);
   const isHomePage = location.pathname === "/user/home";
+  const landingPage = location.pathname === "/";
   const showTransparent = isHomePage && !scrolled;
   const navigate = useNavigate();
 
@@ -22,7 +23,11 @@ const LogoText = () => {
     >
       <span
         className={`${
-          showTransparent ? "text-gray-400" : "text-black"
+          landingPage
+            ? "text-gray-300"
+            : showTransparent
+            ? "text-gray-400"
+            : "text-black"
         } font-orbitron text-2xl sm:text-3xl`}
       >
         Festiva.

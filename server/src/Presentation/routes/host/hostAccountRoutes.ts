@@ -5,7 +5,7 @@ import {
   isHost,
 } from "../../../utils/common/middlewares/auth";
 import { hostNotificationController } from "../../../infrastructure/DI/host/account dependency Injection/hostNotification.DI";
-import { hostAssetRequestController } from "../../../infrastructure/DI/host/account dependency Injection/hostAssetRequest.DI";
+import { hostAssetController } from "../../../infrastructure/DI/host/account dependency Injection/hostAsset.DI";
 
 const hostAccountRoutes = express.Router();
 
@@ -26,12 +26,17 @@ hostAccountRoutes.patch(
 );
 
 hostAccountRoutes.get(
+  HOST_ROUTES.HostAccount.myAssets,
+  authenticateToken,
+  isHost,
+  hostAssetController.allAssets.bind(hostAssetController)
+);
+
+hostAccountRoutes.get(
   HOST_ROUTES.HostAccount.requests,
   authenticateToken,
   isHost,
-  hostAssetRequestController.getAllRequests.bind(hostAssetRequestController)
+  hostAssetController.getAllRequests.bind(hostAssetController)
 );
-
-
 
 export default hostAccountRoutes;

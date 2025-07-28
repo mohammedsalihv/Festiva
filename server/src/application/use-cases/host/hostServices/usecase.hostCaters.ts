@@ -3,6 +3,7 @@ import { IHostCatersUseCase } from "../../../../domain/usecaseInterface/host/ser
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { ICaters } from "../../../../domain/entities/serviceInterface/interface.caters";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class HostCatersUseCase implements IHostCatersUseCase {
   constructor(private hostCatersRepository: IHostCatersRepository) {}
@@ -14,5 +15,20 @@ export class HostCatersUseCase implements IHostCatersUseCase {
       throw new ErrorHandler("caters team not added", statusCodes.serverError);
     }
     return addedCaters;
+  }
+
+  
+  async catersDetails(catersId: string): Promise<ICaters> {
+    if (!catersId) {
+      throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
+    }
+
+    const caters = await this.hostCatersRepository.findCatersById(catersId);
+
+    if (!caters) {
+      throw new CustomError("Caters not found", statusCodes.notfound);
+    }
+
+    return caters;
   }
 }

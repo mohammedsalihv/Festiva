@@ -21,18 +21,11 @@ const Home = () => {
     <div className="relative">
       <Header />
       <section className="relative w-full min-h-screen bg-black text-white overflow-hidden flex flex-col justify-center items-center px-4 py-20 sm:py-28">
-        {/* Top-to-bottom gradient background */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f001f] via-[#1a002f] to-black z-0" />
-
-        {/* Bottom-to-top matching gradient */}
-
-        {/* Glow & Pulse Effects */}
         <div className="absolute bottom-[-40%] left-[-20%] w-[200%] h-[200%] bg-[radial-gradient(ellipse_at_center,_#e879f9_0%,_transparent_70%)] opacity-20" />
         <div className="absolute right-0 top-[45%] w-72 h-72 bg-[#ff4de1] rounded-full blur-3xl opacity-40 z-0" />
         <div className="absolute top-0 right-0 w-3 h-3 bg-white rounded-full blur-sm opacity-70 animate-pulse" />
         <div className="absolute bottom-0 left-0 w-3 h-3 bg-white rounded-full blur-sm opacity-70 animate-pulse" />
-
-        {/* Main Content */}
         <div className="relative z-10 max-w-6xl w-full text-center">
           <p className="text-xs sm:text-sm text-white/70 mb-4 font-pacifico">
             🧠 Smart summaries from every meeting

@@ -11,13 +11,10 @@ export class AdminVenueUseCase implements IAdminVenueUseCase {
     if (!venueId) {
       throw new CustomError("Venue ID is required", statusCodes.unAuthorized);
     }
-
     const venue = await this.adminVenuerepository.venueDetails(venueId);
-
     if (!venue) {
       throw new CustomError("Venue not found", statusCodes.notfound);
     }
-
     return venue;
   }
 }

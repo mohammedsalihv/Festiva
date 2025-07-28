@@ -29,7 +29,6 @@ const HostLogin = ({ onClose, showSignup }: Props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     if (errors[e.target.name as keyof FormState]) {
@@ -37,7 +36,6 @@ const HostLogin = ({ onClose, showSignup }: Props) => {
     }
   };
 
-  
   const mutation = useMutation({
     mutationFn: hostLogin,
     onSuccess: (data) => {
@@ -45,9 +43,11 @@ const HostLogin = ({ onClose, showSignup }: Props) => {
         id: data.host.id,
         name: data.host.name,
         email: data.host.email,
+        phone: data.host.phone,
         role: data.host.role,
         accessToken: data.host.accessToken,
         refreshToken: data.host.refreshToken,
+        profilePic: data.host.profilePic,
       };
 
       setTimeout(() => toast.success("Login Successful!"), 500);

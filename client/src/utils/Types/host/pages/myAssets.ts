@@ -1,8 +1,8 @@
 export interface myAssetsCard {
-  id: string;
-  name: string;
-  assetType: string;
-  amount: string;
+  assetName: string;
+  assetType: "studio" | "venue" | "rentcar" | "caters";
+  assetId: string;
+  assetImage: string;
   listedDate: Date;
-  image: string;
+  status: "approved" | "rejected" | "pending";
 }

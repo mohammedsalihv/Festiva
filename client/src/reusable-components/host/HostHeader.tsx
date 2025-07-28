@@ -146,7 +146,7 @@ const HostHeader: React.FC = () => {
             <img
               src={host?.profilePic || Images.default_profile}
               alt="avatar"
-              className="h-11 w-11 object-cover cursor-pointer"
+              className="h-11 w-11 object-cover cursor-pointer border p-1 rounded-full"
             />
             <IoMdArrowDropdown />
           </div>

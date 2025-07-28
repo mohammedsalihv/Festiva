@@ -14,13 +14,11 @@ export class AdminCatersUseCase implements IAdminCatersUseCase {
         statusCodes.unAuthorized
       );
     }
-
     const caters = await this.adminCatersRepository.catersDetails(catersId);
 
     if (!caters) {
       throw new CustomError("Caters not found", statusCodes.notfound);
     }
-
     return caters;
   }
 }

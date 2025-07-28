@@ -1,4 +1,7 @@
-import { assetDetailsHostInfo , assetDetailsLocationInfo } from "./commonDetails";
+import {
+  assetDetailsHostInfo,
+  assetDetailsLocationInfo,
+} from "./commonDetails";
 
 export interface IVenueBase {
   _id: string;
@@ -11,24 +14,23 @@ export interface IVenueBase {
   [key: string]: unknown;
 }
 
-
 export interface IVenue {
-    _id?:string
-    venueName?: string;
-    rent?: number;
-    capacity?: number;
-    shift?: string;
-    squareFeet?: number;
-    timeSlots?: string[];
-    availableDates?: string[];
-    about?: string;
-    features: string[];
-    parkingFeatures: string[];
-    description?: string;
-    terms: string;
-    Images?: string[];
-    status?:string;
-    typeOfAsset?:string;
-    location: assetDetailsLocationInfo;
-    host: assetDetailsHostInfo;
+  _id?: string;
+  venueName?: string;
+  rent?: number;
+  capacity?: number;
+  shift?: string;
+  squareFeet?: number;
+  timeSlots?: string[];
+  availableDates?: string[];
+  about?: string;
+  features: string[];
+  parkingFeatures: string[];
+  description?: string;
+  terms: string;
+  Images?: string[];
+  status?: string;
+  typeOfAsset?: string;
+  location: assetDetailsLocationInfo;
+  host: assetDetailsHostInfo;
 }

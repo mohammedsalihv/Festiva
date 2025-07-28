@@ -12,4 +12,12 @@ export class HostCatersRepository implements IHostCatersRepository {
       throw new Error(`Error saving new Caters: ${error}`);
     }
   }
+
+  findCatersById(catersId: string): Promise<ICaters | null> {
+    return CatersModel.findById(catersId)
+      .populate({ path: "host", select: "-password" })
+      .populate("location")
+      .lean<ICaters>()
+      .exec();
+  }
 }

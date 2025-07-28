@@ -19,6 +19,7 @@ export const hostLogin = async (data: HostLoginData) => {
     HOST_API.Authentication.hostLogin,
     data
   );
+  console.log(response.data)
   return response.data;
 };
 

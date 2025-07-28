@@ -1,4 +1,4 @@
-import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/account usecase interfaces/interface.hostNotificationUseCase";
+import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/account-usecase-interfaces/interface.hostNotificationUseCase";
 import { IHostNotificationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostNotificationRepositoy";
 import { CreateAssetNotificationDTO } from "../../../../types/DTO/common/notification";
 

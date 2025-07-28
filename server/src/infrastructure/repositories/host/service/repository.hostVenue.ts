@@ -12,4 +12,11 @@ export class HostVenueRepository implements IHostVenueRepository {
       throw new Error(`Error saving venue: ${error}`);
     }
   }
+  async findVenueById(venueId: string): Promise<IVenue | null> {
+    return VenueModel.findById(venueId)
+      .populate({ path: "host", select: "-password" })
+      .populate("location")
+      .lean<IVenue>()
+      .exec();
+  }
 }

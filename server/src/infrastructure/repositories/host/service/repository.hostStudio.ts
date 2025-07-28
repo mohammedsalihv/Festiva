@@ -12,4 +12,11 @@ export class HostStudioRepository implements IHostStudioRepository {
       throw new Error(`Error saving new Studio: ${error}`);
     }
   }
+  studioDetails(studioId: string): Promise<IStudio | null> {
+    return StudioModel.findById(studioId)
+      .populate({ path: "host", select: "-password" })
+      .populate("location")
+      .lean<IStudio>()
+      .exec();
+  }
 }

@@ -9,6 +9,7 @@ export const HOST_ROUTES = {
     hostDashboard: "dashboard",
     assetStatus: "/asset/status",
     myAssets:"assets",
+    assetDetails:"/assets/details",
     hostProfile:"/profile"
   },
   hostPages: {

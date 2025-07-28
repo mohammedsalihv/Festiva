@@ -14,6 +14,7 @@ import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAss
 import { assetFilesValidate } from "../../../../utils/host/assetFilesValidate";
 import { Request, Response } from "express";
 import { geocodeAddress } from "../../../../utils/common/geocoding/geocodeAddress";
+import CustomError from "../../../../utils/common/errors/CustomError";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -127,6 +128,36 @@ export class HostCatersController implements IHostCatersController {
         res
           .status(statusCodes.serverError)
           .json({ message: "Failed to add new caters", error });
+      }
+    }
+  }
+  async catersFullDetails(req: Request, res: Response): Promise<void> {
+    try {
+      const catersId = req.params.assetId;
+      if (!catersId) {
+        res.status(statusCodes.unAuthorized).json({
+          success: false,
+          message: "Caters ID required",
+        });
+        return;
+      }
+      const caters = await this.hostCatersUseCase.catersDetails(catersId);
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Caters details fetched successfully",
+        data: caters,
+      });
+    } catch (error) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected server error",
+        });
       }
     }
   }

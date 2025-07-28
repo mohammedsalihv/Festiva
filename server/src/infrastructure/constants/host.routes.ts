@@ -9,6 +9,7 @@ export const HOST_ROUTES = {
   HostAccount: {
     notifications: "/notifications",
     notificationsMarkAllRead: "/notifications/mark-all-read",
+    myAssets:'/myassets',
     requests: "/requests",
   },
   VenueService: {

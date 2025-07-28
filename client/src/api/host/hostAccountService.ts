@@ -22,6 +22,11 @@ export const myAssets = async (page:number, limit:number) => {
   return response.data;
 };
 
+export const assetDetails = async (assetId:string) => {
+  const response = await axiosInstance.get(HOST_API.hostAccount.assetFullDetails , assetId)
+  return response.data;
+};
+
 
 export const getAllAssetRequests = async (page = 1, limit = 10) => {
   const response = await axiosInstance.get(HOST_API.hostAccount.requets, {

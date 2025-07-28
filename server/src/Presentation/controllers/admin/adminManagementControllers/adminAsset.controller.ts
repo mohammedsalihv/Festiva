@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import { AdminAssetManagementUseCase } from "../../../../application/use-cases/admin/adminManagement/usecase.adminAssetManagement";
-import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/account usecase interfaces/interface.hostNotificationUseCase";
-import { AdminRentCarController } from "../adminServiceControllers/AdminRentCar.controller";
+import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/account-usecase-interfaces/interface.hostNotificationUseCase";
+import { AdminRentCarController } from "../adminServiceControllers/adminRentCar.controller";
 import { AdminStudioController } from "../adminServiceControllers/adminStudio.controller";
 import { AdminCatersController } from "../adminServiceControllers/adminCaters.controller";
-import { AdminVenueController } from "../adminServiceControllers/AdminVenue.controller";
+import { AdminVenueController } from "../adminServiceControllers/adminVenue.controller";
 import logger from "../../../../utils/common/messages/logger";
 import {
   statusCodes,
@@ -130,7 +130,7 @@ export class AdminAssetsController {
 
   async rejectAsset(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { assetStatus, type , reason } = req.query;
+      const { assetStatus, type, reason } = req.query;
       const id = req.params.assetId;
       if (!type || !assetStatus || !reason) {
         res.status(statusCodes.forbidden).json({
@@ -145,7 +145,7 @@ export class AdminAssetsController {
         String(type),
         String(assetStatus),
         String(reason)
-      )
+      );
 
       if (result && result.hostId) {
         await this.notificationUseCase.createNotification({
@@ -155,7 +155,6 @@ export class AdminAssetsController {
           assetType: String(type) as any,
           status: "rejected",
           message: `Your ${type} has been rejected.`,
-
         });
       }
 

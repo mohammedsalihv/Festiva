@@ -3,6 +3,7 @@ import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IVenue } from "../../../../domain/entities/serviceInterface/interface.venue";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 import { IHostVenueUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.venueUseCase";
+import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class HostVenueUseCase implements IHostVenueUseCase {
   constructor(private hostVenueRepository: IHostVenueRepository) {}
@@ -12,6 +13,20 @@ export class HostVenueUseCase implements IHostVenueUseCase {
 
     if (!addedVenue) {
       throw new ErrorHandler("Venue not added", statusCodes.serverError);
+    }
+
+    return venue;
+  }
+
+  async venueDetails(venueId: string): Promise<IVenue> {
+    if (!venueId) {
+      throw new CustomError("Venue ID is required", statusCodes.unAuthorized);
+    }
+
+    const venue = await this.hostVenueRepository.findVenueById(venueId);
+
+    if (!venue) {
+      throw new CustomError("Venue not found", statusCodes.notfound);
     }
 
     return venue;

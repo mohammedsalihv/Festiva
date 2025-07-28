@@ -13,6 +13,7 @@ import {
 import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
 import { assetFilesValidate } from "../../../../utils/host/assetFilesValidate";
 import logger from "../../../../utils/common/messages/logger";
+import CustomError from "../../../../utils/common/errors/CustomError";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -48,7 +49,10 @@ export class HostVenueController implements IHostVenueController {
       );
 
       if (!newLocation || !newLocation._id) {
-        throw new ErrorHandler("Failed to create location", statusCodes.serverError);
+        throw new ErrorHandler(
+          "Failed to create location",
+          statusCodes.serverError
+        );
       }
 
       const timestamp = Date.now();
@@ -93,7 +97,7 @@ export class HostVenueController implements IHostVenueController {
         description,
         terms,
         Images: imageUrls,
-        location:  new Types.ObjectId(newLocation._id),
+        location: new Types.ObjectId(newLocation._id),
         host: new Types.ObjectId(hostId),
       };
 
@@ -109,6 +113,37 @@ export class HostVenueController implements IHostVenueController {
         res.status(statusCodes.serverError).json({
           message: "Failed to add new venue",
           error: error.message || error,
+        });
+      }
+    }
+  }
+
+  async venueFullDetails(req: Request, res: Response): Promise<void> {
+    try {
+      const venueId = req.params.assetId;
+      if (!venueId) {
+        res.status(statusCodes.unAuthorized).json({
+          success: false,
+          message: "venue ID required",
+        });
+        return;
+      }
+      const venue = await this.hostVenueUseCase.venueDetails(venueId);
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Venue details fetched successfully",
+        data: venue,
+      });
+    } catch (error:any) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected server error",
         });
       }
     }

@@ -14,6 +14,7 @@ import {
 import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
 import { assetFilesValidate } from "../../../../utils/host/assetFilesValidate";
 import { geocodeAddress } from "../../../../utils/common/geocoding/geocodeAddress";
+import CustomError from "../../../../utils/common/errors/CustomError";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -127,6 +128,37 @@ export class HostStudioController implements IHostStudioController {
         res
           .status(statusCodes.serverError)
           .json({ message: "Failed to add new studio", error });
+      }
+    }
+  }
+
+  async studioFullDetails(req: Request, res: Response): Promise<void> {
+    try {
+      const studioId = req.params.assetId;
+      if (!studioId) {
+        res.status(statusCodes.unAuthorized).json({
+          success: false,
+          message: "Studio ID required",
+        });
+        return;
+      }
+      const studio = await this.hostStudioUseCase.studioDetails(studioId);
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "studio details fetched successfully",
+        data: studio,
+      });
+    } catch (error) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected server error",
+        });
       }
     }
   }

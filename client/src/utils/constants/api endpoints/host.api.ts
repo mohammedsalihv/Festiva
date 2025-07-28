@@ -9,6 +9,7 @@ export const HOST_API = {
     notifications: "/notifications",
     markAllReadNotifications: "/notifications/mark-all-read",
     myAssets:'/myassets',
+    assetFullDetails:"/assets/:id",
     requets: "/requests",
   },
   venueService: {

@@ -14,6 +14,7 @@ import {
 import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
 import { assetFilesValidate } from "../../../../utils/host/assetFilesValidate";
 import { geocodeAddress } from "../../../../utils/common/geocoding/geocodeAddress";
+import CustomError from "../../../../utils/common/errors/CustomError";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -142,6 +143,37 @@ export class HostRentCarController implements IHostRentCarController {
         res
           .status(statusCodes.serverError)
           .json({ message: "Failed to add new rent car", error });
+      }
+    }
+  }
+
+  async carFullDetails(req: Request, res: Response): Promise<void> {
+    try {
+      const carId = req.params.assetId;
+      if (!carId) {
+        res.status(statusCodes.unAuthorized).json({
+          success: false,
+          message: "car ID required",
+        });
+        return;
+      }
+      const car = await this.hostRentCarUseCase.rentCarDetails(carId);
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "car details fetched successfully",
+        data: car,
+      });
+    } catch (error) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected server error",
+        });
       }
     }
   }

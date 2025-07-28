@@ -12,4 +12,11 @@ export class HostRentCarRepository implements IHostRentCarRepository {
       throw new Error(`Error saving new car: ${error}`);
     }
   }
+  async findCarById(rentcarId: string): Promise<IRentCar | null> {
+    return await RentCarModel.findById(rentcarId)
+      .populate({ path: "host", select: "-password" })
+      .populate("location")
+      .lean<IRentCar>()
+      .exec();
+  }
 }

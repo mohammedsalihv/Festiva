@@ -3,6 +3,7 @@ import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IRentCar } from "../../../../domain/entities/serviceInterface/interface.rentCar";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 import { IHostRentCarUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.rentCarUseCase";
+import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class HostRentCarUseCase implements IHostRentCarUseCase {
   constructor(private hostRentCarRepository: IHostRentCarRepository) {}
@@ -14,5 +15,19 @@ export class HostRentCarUseCase implements IHostRentCarUseCase {
       throw new ErrorHandler("Rent car not added", statusCodes.serverError);
     }
     return rentCar;
+  }
+
+  async rentCarDetails(rentcarId: string): Promise<IRentCar> {
+    if (!rentcarId) {
+      throw new CustomError(
+        "Rent car ID is required",
+        statusCodes.unAuthorized
+      );
+    }
+    const car = await this.hostRentCarRepository.findCarById(rentcarId);
+    if (!car) {
+      throw new CustomError("Car not found", statusCodes.notfound);
+    }
+    return car;
   }
 }
