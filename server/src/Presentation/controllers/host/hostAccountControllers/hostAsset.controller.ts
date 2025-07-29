@@ -43,10 +43,20 @@ export class HostAssetController implements IHostAssetController {
   async findAssetDetails(req: Request, res: Response): Promise<void> {
     try {
       const typeOfAsset = req.query.type?.toString().toLowerCase();
+      const assetId = req.params.assetId;
+
       if (!typeOfAsset) {
         res.status(statusCodes.forbidden).json({
           success: false,
           message: "Asset type is required",
+        });
+        return;
+      }
+
+      if (!assetId) {
+        res.status(statusCodes.unAuthorized).json({
+          success: false,
+          message: "Asset ID is required",
         });
         return;
       }
@@ -59,16 +69,17 @@ export class HostAssetController implements IHostAssetController {
           await this.hostRentCarController.carFullDetails(req, res);
           break;
         case "studio":
-          await this.hostCatersController.catersFullDetails(req, res);
+          await this.hostStudioController.studioFullDetails(req, res);
           break;
         case "caters":
-          await this.hostStudioController.studioFullDetails(req, res);
+          await this.hostCatersController.catersFullDetails(req, res);
           break;
         default:
           res.status(statusCodes.forbidden).json({
             success: false,
             message: `Unknown type of asset '${typeOfAsset}'`,
           });
+          return;
       }
     } catch (error) {
       res.status(statusCodes.serverError).json({

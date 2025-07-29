@@ -32,6 +32,14 @@ hostAccountRoutes.get(
   hostAssetController.allAssets.bind(hostAssetController)
 );
 
+
+hostAccountRoutes.get(
+  HOST_ROUTES.HostAccount.assetDetails,
+  authenticateToken,
+  isHost,
+  hostAssetController.findAssetDetails.bind(hostAssetController)
+);
+
 hostAccountRoutes.get(
   HOST_ROUTES.HostAccount.requests,
   authenticateToken,

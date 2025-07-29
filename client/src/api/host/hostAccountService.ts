@@ -6,15 +6,14 @@ export const allNotification = async () => {
   return response.data;
 };
 
-
-export const markAllNotificationsAsRead  = async () => {
-  const response = await axiosInstance.patch(HOST_API.hostAccount.markAllReadNotifications);
+export const markAllNotificationsAsRead = async () => {
+  const response = await axiosInstance.patch(
+    HOST_API.hostAccount.markAllReadNotifications
+  );
   return response.data;
 };
 
-
-
-export const myAssets = async (page:number, limit:number) => {
+export const myAssets = async (page: number, limit: number) => {
   const response = await axiosInstance.get(HOST_API.hostAccount.myAssets, {
     params: { page, limit },
   });
@@ -22,11 +21,15 @@ export const myAssets = async (page:number, limit:number) => {
   return response.data;
 };
 
-export const assetDetails = async (assetId:string) => {
-  const response = await axiosInstance.get(HOST_API.hostAccount.assetFullDetails , assetId)
+export const assetDetails = async (assetId: string, assetType: string) => {
+  const response = await axiosInstance.get(
+    HOST_API.hostAccount.assetFullDetails(assetId),
+    {
+      params: { type: assetType },
+    }
+  );
   return response.data;
 };
-
 
 export const getAllAssetRequests = async (page = 1, limit = 10) => {
   const response = await axiosInstance.get(HOST_API.hostAccount.requets, {
