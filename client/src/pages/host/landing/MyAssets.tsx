@@ -7,11 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMyAssets } from "@/redux/Slice/host/common/myAssetsSlice";
 import { RootState } from "@/redux/store";
 import Pagination from "@/components/Pagination";
+import { useNavigate } from "react-router-dom";
 
 export default function MyAssets() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState<string>("All");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const assets = useSelector((state: RootState) => state.myAssets.assets);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -53,7 +55,9 @@ export default function MyAssets() {
     fetchMyAssets(page, pageLimit);
   };
 
-  console.log(assets);
+  const handleAssetDetails = async (assetId: string, assetType: string) => {
+    navigate(`/host/asset-details/${assetType}/${assetId}`);
+  };
 
   return (
     <div className="px-3 py-8 md:px-10 md:py-8 font-poppins">
@@ -95,8 +99,11 @@ export default function MyAssets() {
           {filteredAssets.length > 0 ? (
             filteredAssets.map((asset) => (
               <div
+                onClick={() =>
+                  handleAssetDetails(asset.assetId, asset.assetType)
+                }
                 key={asset.assetId}
-                className="bg-white shadow hover:shadow-xl transition rounded-lg border w-full max-w-sm mx-auto"
+                className="bg-white shadow hover:shadow-xl transition rounded-lg border w-full max-w-sm mx-auto cursor-pointer"
               >
                 <img
                   src={asset.assetImage}

@@ -3,6 +3,8 @@ import { Button } from "@/components/Button";
 import { useEffect, useState } from "react";
 import { MdOutlineLocationOn } from "react-icons/md";
 import { MdOutlineRefresh } from "react-icons/md";
+import { useParams } from "react-router-dom";
+import { assetDetails } from "@/api/host/hostAccountService";
 
 const cn = (...classes: (string | boolean | undefined)[]): string =>
   classes.filter(Boolean).join(" ");
@@ -248,10 +250,23 @@ export const AssetDetails = ({
   initialAsset = mockVenue,
 }: AssetDetailsProps) => {
   const [selectedAsset, setSelectedAsset] = useState<Asset>(initialAsset);
+  const { type, id } = useParams();
 
   useEffect(() => {
-    
-  },[])
+    console.log('asset use effect')
+    const fetchDetails = async () => {
+      if (id && type) {
+        const response = await assetDetails(id, type);
+        console.log("Assets", response);
+      }
+    };
+
+    fetchDetails();
+  }, [id, type]);
+
+  useEffect(() => {
+    console.log('Welcome to oooty')
+  }, []);
 
   if (!selectedAsset) {
     return (

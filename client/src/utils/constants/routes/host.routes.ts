@@ -8,9 +8,8 @@ export const HOST_ROUTES = {
   hostAccount: {
     hostDashboard: "dashboard",
     assetStatus: "/asset/status",
-    myAssets:"assets",
-    assetDetails:"/assets/details",
-    hostProfile:"/profile"
+    myAssets: "assets",
+    hostProfile: "/profile",
   },
   hostPages: {
     kindOfServicePage: "kind-of-service",
@@ -38,7 +37,7 @@ export const HOST_ROUTES = {
 
   redirectRoutes: {
     toDashboard: "/host/dashbaord",
-    toLanding:"/host/landing"
+    toLanding: "/host/landing",
   },
   notfound: "*",
   error: "/error",
