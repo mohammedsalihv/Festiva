@@ -1,6 +1,9 @@
 import { ICaters } from "../../../serviceInterface/interface.caters";
 
 export interface IHostCatersRepository {
-  addCaters(caters: ICaters): Promise<ICaters>;
-  findCatersById(rentcarId: string): Promise<ICaters | null>;
+  addCaters(catersId: ICaters): Promise<ICaters>;
+  findCatersById(catersId: string): Promise<ICaters | null>;
+  reApply(catersId: string): Promise<boolean>;
+  unavailableRequest(catersId: string): Promise<boolean>;
+  deleteCaters(catersId: string): Promise<boolean>;
 }

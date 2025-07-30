@@ -134,7 +134,7 @@ export class HostVenueController implements IHostVenueController {
         message: "Venue details fetched successfully",
         data: venue,
       });
-    } catch (error:any) {
+    } catch (error: any) {
       if (error instanceof CustomError) {
         res.status(error.statusCode).json({
           success: false,
@@ -144,6 +144,46 @@ export class HostVenueController implements IHostVenueController {
         res.status(statusCodes.serverError).json({
           success: false,
           message: "Unexpected server error",
+        });
+      }
+    }
+  }
+  async requestReApproval(req: Request, res: Response): Promise<void> {
+    try {
+      const venueId = req.params.assetId;
+
+      if (!venueId) {
+        res.status(statusCodes.badRequest).json({
+          success: false,
+          message: "Venue ID is required",
+        });
+        return;
+      }
+
+      const success = await this.hostVenueUseCase.reApplyVenue(venueId);
+
+      if (!success) {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Failed to re-apply venue",
+        });
+        return;
+      }
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Venue re-apply request submitted successfully",
+      });
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected error during venue re-apply",
         });
       }
     }

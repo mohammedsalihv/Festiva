@@ -1,5 +1,5 @@
 import { IRentCar } from "../../../../domain/entities/serviceInterface/interface.rentCar";
-import { IHostRentCarRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostRentCarRepository";
+import { IHostRentCarRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRentCarRepository";
 import { RentCarModel } from "../../../../domain/models/rentCarModel";
 
 export class HostRentCarRepository implements IHostRentCarRepository {
@@ -18,5 +18,20 @@ export class HostRentCarRepository implements IHostRentCarRepository {
       .populate("location")
       .lean<IRentCar>()
       .exec();
+  }
+
+  async reApply(rentcarId: string): Promise<boolean> {
+    const result = await RentCarModel.updateOne(
+      { _id: rentcarId },
+      {
+        $set: {
+          isReapplied: true,
+          rejectedReason: "",
+          status: "pending",
+        },
+      }
+    );
+
+    return result.modifiedCount > 0;
   }
 }

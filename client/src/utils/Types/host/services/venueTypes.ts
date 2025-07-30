@@ -1,3 +1,31 @@
+import { assetDetailsLocationInfo } from "../../user/commonDetails";
+import { assetDetailsHostInfo } from "../../user/commonDetails";
+
+
+export interface IVenue {
+  _id?: string;
+  venueName?: string;
+  rent?: number;
+  capacity?: number;
+  shift?: string;
+  squareFeet?: number;
+  timeSlots?: string[];
+  availableDates?: string[];
+  about?: string;
+  features: string[];
+  parkingFeatures: string[];
+  description?: string;
+  terms: string;
+  Images: string[];
+  status?: string;
+  createdAt:string;
+  isReapplied:boolean;
+  typeOfAsset: string;
+  location: assetDetailsLocationInfo;
+  host: assetDetailsHostInfo;
+}
+
+
 export interface addVenueData {
   venueName?: string;
   rent?: string;

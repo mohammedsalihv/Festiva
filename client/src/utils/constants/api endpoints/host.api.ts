@@ -10,6 +10,9 @@ export const HOST_API = {
     markAllReadNotifications: "/notifications/mark-all-read",
     myAssets: "/myassets",
     assetFullDetails: (assetId: string) => `/assets/details/${assetId}`,
+    assetReApplying: (assetId: string) => `/assets/re-apply/${assetId}`,
+    assetUnavailable: (assetId: string) => `/assets/unavailable/${assetId}`,
+    assetDelete: (assetId: string) => `/assets/delete/${assetId}`,
     requets: "/requests",
   },
   venueService: {

@@ -56,7 +56,7 @@ export default function MyAssets() {
   };
 
   const handleAssetDetails = async (assetId: string, assetType: string) => {
-    navigate(`/host/asset-details/${assetType}/${assetId}`);
+    navigate(`/host/assets/details/${assetType}/${assetId}`);
   };
 
   return (

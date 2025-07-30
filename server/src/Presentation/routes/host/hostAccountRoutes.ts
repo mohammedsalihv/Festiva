@@ -32,7 +32,6 @@ hostAccountRoutes.get(
   hostAssetController.allAssets.bind(hostAssetController)
 );
 
-
 hostAccountRoutes.get(
   HOST_ROUTES.HostAccount.assetDetails,
   authenticateToken,
@@ -45,6 +44,13 @@ hostAccountRoutes.get(
   authenticateToken,
   isHost,
   hostAssetController.getAllRequests.bind(hostAssetController)
+);
+
+hostAccountRoutes.patch(
+  HOST_ROUTES.HostAccount.assetReApply,
+  authenticateToken,
+  isHost,
+  hostAssetController.reSubmit.bind(hostAssetController)
 );
 
 export default hostAccountRoutes;

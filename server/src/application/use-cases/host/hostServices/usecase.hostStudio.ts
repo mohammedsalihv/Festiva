@@ -30,4 +30,15 @@ export class HostStudioUseCase implements IHostStudioUseCase {
 
     return studio;
   }
+
+  async reApplyStudio(studioId: string): Promise<boolean> {
+    if (!studioId) {
+      throw new CustomError("Studio ID is required", statusCodes.unAuthorized);
+    }
+    const updated = await this.hostStudioRepository.reApply(studioId);
+    if (!updated) {
+      throw new CustomError("Studio re-apply failed", statusCodes.serverError);
+    }
+    return true;
+  }
 }

@@ -29,6 +29,8 @@ const rentCarSchema = new Schema<IRentCar>(
       default: "pending",
     },
     rejectedReason: { type: String, default: "" },
+    isReapplied:{type:Boolean , default:false},
+    isAvailable:{type:Boolean , default:true},
     typeOfAsset: { type: String, default: "rentcar" },
     location: { type: Schema.Types.ObjectId, ref: "Location", required: true },
     host: { type: Schema.Types.ObjectId, ref: "Host", required: true },

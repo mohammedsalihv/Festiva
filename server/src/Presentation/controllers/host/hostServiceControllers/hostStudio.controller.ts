@@ -162,4 +162,44 @@ export class HostStudioController implements IHostStudioController {
       }
     }
   }
+  async requestReApproval(req: Request, res: Response): Promise<void> {
+    try {
+      const studioId = req.params.assetId;
+
+      if (!studioId) {
+        res.status(statusCodes.badRequest).json({
+          success: false,
+          message: "Studio ID is required",
+        });
+        return;
+      }
+
+      const success = await this.hostStudioUseCase.reApplyStudio(studioId);
+
+      if (!success) {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Studio re-apply failed",
+        });
+        return;
+      }
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Studio re-apply request submitted successfully",
+      });
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected server error",
+        });
+      }
+    }
+  }
 }

@@ -11,6 +11,9 @@ export const HOST_ROUTES = {
     notificationsMarkAllRead: "/notifications/mark-all-read",
     myAssets:'/myassets',
     assetDetails: "/assets/details/:assetId",
+    assetReApply:"/assets/re-apply/:assetId",
+    assetUnavailable:"/assets/unavailable/:assetId",
+    assetDelete:"/assets/delete/:assetId",
     requests: "/requests",
   },
   VenueService: {

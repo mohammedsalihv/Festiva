@@ -19,4 +19,40 @@ export class HostVenueRepository implements IHostVenueRepository {
       .lean<IVenue>()
       .exec();
   }
+  async reApply(venueId: string): Promise<boolean> {
+    const result = await VenueModel.updateOne(
+      { _id: venueId },
+      {
+        $set: {
+          isReapplied: true,
+          rejectedReason: "",
+          status: "pending",
+        },
+      }
+    );
+
+    return result.modifiedCount > 0;
+  }
+
+  async unavailableRequest(venueId: string): Promise<boolean> {
+    const result = await VenueModel.updateOne(
+      { _id: venueId },
+      {
+        $set: {
+          isAvailable: false,
+          status: "unavailable",
+        },
+      }
+    );
+
+    return result.modifiedCount > 0;
+  }
+  async deleteVenue(venueId: string): Promise<boolean> {
+    const deleted = await VenueModel.findByIdAndDelete(venueId);
+    if (!deleted) {
+      console.warn("Venue not found:", venueId);
+      return false;
+    }
+    return true;
+  }
 }

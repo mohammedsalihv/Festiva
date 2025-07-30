@@ -23,6 +23,8 @@ export interface IRentCar {
   Images?: string[];
   status?: string;
   rejectedReason?:string;
+  isReapplied?:boolean;
+  isAvailable?: boolean;
   typeOfAsset?: string;
   location: Types.ObjectId;
   host: Types.ObjectId;

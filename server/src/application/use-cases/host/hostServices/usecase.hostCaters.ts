@@ -17,7 +17,6 @@ export class HostCatersUseCase implements IHostCatersUseCase {
     return addedCaters;
   }
 
-  
   async catersDetails(catersId: string): Promise<ICaters> {
     if (!catersId) {
       throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
@@ -30,5 +29,15 @@ export class HostCatersUseCase implements IHostCatersUseCase {
     }
 
     return caters;
+  }
+  async reApplyCaters(catersId: string): Promise<boolean> {
+    if (!catersId) {
+      throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
+    }
+    const updated = await this.hostCatersRepository.reApply(catersId);
+    if (!updated) {
+      throw new CustomError("caters re-apply failed", statusCodes.serverError);
+    }
+    return true;
   }
 }

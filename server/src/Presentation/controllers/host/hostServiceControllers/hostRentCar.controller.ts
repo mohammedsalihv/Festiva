@@ -149,21 +149,61 @@ export class HostRentCarController implements IHostRentCarController {
 
   async carFullDetails(req: Request, res: Response): Promise<void> {
     try {
-      const carId = req.params.assetId;
-      if (!carId) {
+      const rentcarId = req.params.assetId;
+      if (!rentcarId) {
         res.status(statusCodes.unAuthorized).json({
           success: false,
           message: "car ID required",
         });
         return;
       }
-      const car = await this.hostRentCarUseCase.rentCarDetails(carId);
+      const car = await this.hostRentCarUseCase.rentCarDetails(rentcarId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "car details fetched successfully",
         data: car,
       });
     } catch (error) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected server error",
+        });
+      }
+    }
+  }
+  async requestReApproval(req: Request, res: Response): Promise<void> {
+    try {
+      const rentcarId = req.params.assetId;
+
+      if (!rentcarId) {
+        res.status(statusCodes.badRequest).json({
+          success: false,
+          message: "Car ID is required",
+        });
+        return;
+      }
+
+      const success = await this.hostRentCarUseCase.reApplyRentcar(rentcarId);
+
+      if (!success) {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Car re-apply request failed",
+        });
+        return;
+      }
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Car re-apply request submitted successfully",
+      });
+    } catch (error: any) {
       if (error instanceof CustomError) {
         res.status(error.statusCode).json({
           success: false,

@@ -10,11 +10,9 @@ export class HostVenueUseCase implements IHostVenueUseCase {
 
   async addVenue(venue: IVenue): Promise<IVenue> {
     const addedVenue = await this.hostVenueRepository.addVenue(venue);
-
     if (!addedVenue) {
       throw new ErrorHandler("Venue not added", statusCodes.serverError);
     }
-
     return venue;
   }
 
@@ -22,13 +20,21 @@ export class HostVenueUseCase implements IHostVenueUseCase {
     if (!venueId) {
       throw new CustomError("Venue ID is required", statusCodes.unAuthorized);
     }
-
     const venue = await this.hostVenueRepository.findVenueById(venueId);
-
     if (!venue) {
       throw new CustomError("Venue not found", statusCodes.notfound);
     }
-
     return venue;
+  }
+
+  async reApplyVenue(venueId: string): Promise<boolean> {
+    if (!venueId) {
+      throw new CustomError("Venue ID is required", statusCodes.unAuthorized);
+    }
+    const updated = await this.hostVenueRepository.reApply(venueId);
+    if (!updated) {
+      throw new CustomError("Venue re-apply failed", statusCodes.serverError);
+    }
+    return true;
   }
 }

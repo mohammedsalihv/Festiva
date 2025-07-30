@@ -20,4 +20,19 @@ export class HostCatersRepository implements IHostCatersRepository {
       .lean<ICaters>()
       .exec();
   }
+
+  async reApply(catersId: string): Promise<boolean> {
+    const result = await CatersModel.updateOne(
+      { _id: catersId },
+      {
+        $set: {
+          isReapplied: true,
+          rejectedReason: "",
+          status: "pending",
+        },
+      }
+    );
+
+    return result.modifiedCount > 0;
+  }
 }

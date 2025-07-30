@@ -131,6 +131,7 @@ export class HostCatersController implements IHostCatersController {
       }
     }
   }
+  
   async catersFullDetails(req: Request, res: Response): Promise<void> {
     try {
       const catersId = req.params.assetId;
@@ -148,6 +149,47 @@ export class HostCatersController implements IHostCatersController {
         data: caters,
       });
     } catch (error) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected server error",
+        });
+      }
+    }
+  }
+
+  async requestReApproval(req: Request, res: Response): Promise<void> {
+    try {
+      const catersId = req.params.assetId;
+
+      if (!catersId) {
+        res.status(statusCodes.badRequest).json({
+          success: false,
+          message: "Caters ID is required",
+        });
+        return;
+      }
+
+      const success = await this.hostCatersUseCase.reApplyCaters(catersId);
+
+      if (!success) {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Re-apply request failed",
+        });
+        return;
+      }
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Caters re-apply request submitted successfully",
+      });
+    } catch (error: any) {
       if (error instanceof CustomError) {
         res.status(error.statusCode).json({
           success: false,

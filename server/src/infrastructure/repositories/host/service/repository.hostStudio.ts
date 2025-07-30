@@ -19,4 +19,18 @@ export class HostStudioRepository implements IHostStudioRepository {
       .lean<IStudio>()
       .exec();
   }
+  async reApply(studioId: string): Promise<boolean> {
+    const result = await StudioModel.updateOne(
+      { _id: studioId },
+      {
+        $set: {
+          isReapplied: true,
+          rejectedReason: "",
+          status: "pending",
+        },
+      }
+    );
+
+    return result.modifiedCount > 0;
+  }
 }

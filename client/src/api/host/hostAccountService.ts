@@ -21,7 +21,7 @@ export const myAssets = async (page: number, limit: number) => {
   return response.data;
 };
 
-export const assetDetails = async (assetId: string, assetType: string) => {
+export const fetchAssetDetails = async (assetId: string, assetType: string) => {
   const response = await axiosInstance.get(
     HOST_API.hostAccount.assetFullDetails(assetId),
     {
@@ -38,3 +38,37 @@ export const getAllAssetRequests = async (page = 1, limit = 10) => {
 
   return response.data;
 };
+
+export const assetReApply = async (assetId: string, assetType: string) => {
+  const response = await axiosInstance.patch(
+    HOST_API.hostAccount.assetReApplying(assetId),
+    {},
+    {
+      params: { type: assetType },
+    }
+  );
+  return response.data;
+};
+
+
+export const assetUnavailable = async (assetId: string, assetType: string) => {
+  const response = await axiosInstance.patch(
+    HOST_API.hostAccount.assetUnavailable(assetId),
+    {},
+    {
+      params: { type: assetType },
+    }
+  );
+  return response.data;
+};
+
+export const assetDelete = async (assetId: string, assetType: string) => {
+  const response = await axiosInstance.delete(
+    HOST_API.hostAccount.assetDelete(assetId),
+    {
+      params: { type: assetType },
+    }
+  );
+  return response.data;
+};
+

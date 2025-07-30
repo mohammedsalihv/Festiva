@@ -1,26 +1,27 @@
 import { Types } from "mongoose";
 
 export interface IVenue {
-    venueName?: string;
-    rent?: string;
-    capacity?: string;
-    shift?: string;
-    squareFeet?: string;
-    timeSlots?: string[];
-    availableDates?: string[];
-    about?: string;
-    features: string[];
-    parkingFeatures: string[];
-    description?: string;
-    terms: string;
-    Images?: string[];
-    status?:string;
-    rejectedReason?: { type: String, default: "" },
-    typeOfAsset?:string;
-    location: Types.ObjectId;
-    host: Types.ObjectId;
+  venueName?: string;
+  rent?: string;
+  capacity?: string;
+  shift?: string;
+  squareFeet?: string;
+  timeSlots?: string[];
+  availableDates?: string[];
+  about?: string;
+  features: string[];
+  parkingFeatures: string[];
+  description?: string;
+  terms: string;
+  Images?: string[];
+  status?: string;
+  rejectedReason?: { type: String; default: "" };
+  isReapplied?: boolean;
+  isAvailable?: boolean;
+  typeOfAsset?: string;
+  location: Types.ObjectId;
+  host: Types.ObjectId;
 }
-
 
 export interface IVenueBase {
   _id: string;
@@ -37,7 +38,6 @@ export interface IVenueBase {
   Images?: string[];
   [key: string]: any;
 }
-
 
 export const mapVenueToBase = (venue: any): IVenueBase => ({
   _id: venue._id.toString(),

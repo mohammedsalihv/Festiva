@@ -33,7 +33,7 @@ const HostRoutes: React.FC = () => {
         element={<AssetStatus />}
       />
       <Route path={HOST_ROUTES.hostAccount.myAssets} element={<MyAssets />} />
-      <Route path="/host/asset/details/:type/:id" element={<AssetDetails />} />
+      <Route path="/assets/details/:type/:id" element={<AssetDetails />} />
 
       <Route
         path={HOST_ROUTES.hostAccount.hostProfile}

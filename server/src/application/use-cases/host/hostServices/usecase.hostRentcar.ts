@@ -1,4 +1,4 @@
-import { IHostRentCarRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostRentCarRepository";
+import { IHostRentCarRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRentCarRepository";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IRentCar } from "../../../../domain/entities/serviceInterface/interface.rentCar";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
@@ -10,7 +10,6 @@ export class HostRentCarUseCase implements IHostRentCarUseCase {
 
   async addRentCar(rentCar: IRentCar): Promise<IRentCar> {
     const addedRentCar = await this.hostRentCarRepository.addRentCar(rentCar);
-
     if (!addedRentCar) {
       throw new ErrorHandler("Rent car not added", statusCodes.serverError);
     }
@@ -29,5 +28,22 @@ export class HostRentCarUseCase implements IHostRentCarUseCase {
       throw new CustomError("Car not found", statusCodes.notfound);
     }
     return car;
+  }
+  
+  async reApplyRentcar(rentcarId: string): Promise<boolean> {
+    if (!rentcarId) {
+      throw new CustomError(
+        "Rent car ID is required",
+        statusCodes.unAuthorized
+      );
+    }
+    const updated = await this.hostRentCarRepository.reApply(rentcarId);
+    if (!updated) {
+      throw new CustomError(
+        "Rent car re-apply failed",
+        statusCodes.serverError
+      );
+    }
+    return true;
   }
 }

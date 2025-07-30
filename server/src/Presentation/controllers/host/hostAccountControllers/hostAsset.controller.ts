@@ -109,4 +109,54 @@ export class HostAssetController implements IHostAssetController {
         .json({ message: "Failed to fetch asset requests" });
     }
   }
+
+  async reSubmit(req: Request, res: Response): Promise<void> {
+    try {
+      const typeOfAsset = req.query.type?.toString().toLowerCase();
+      const assetId = req.params.assetId;
+
+      if (!typeOfAsset) {
+        res.status(statusCodes.forbidden).json({
+          success: false,
+          message: "Asset type is required",
+        });
+        return;
+      }
+
+      if (!assetId) {
+        res.status(statusCodes.unAuthorized).json({
+          success: false,
+          message: "Asset ID is required",
+        });
+        return;
+      }
+
+      switch (typeOfAsset) {
+        case "venue":
+          await this.hostVenueController.requestReApproval(req, res);
+          break;
+        case "rentcar":
+          await this.hostRentCarController.requestReApproval(req, res);
+          break;
+        case "studio":
+          await this.hostStudioController.requestReApproval(req, res);
+          break;
+        case "caters":
+          await this.hostCatersController.requestReApproval(req, res);
+          break;
+        default:
+          res.status(statusCodes.forbidden).json({
+            success: false,
+            message: `Unknown type of asset '${typeOfAsset}'`,
+          });
+          return;
+      }
+    } catch (error) {
+      res.status(statusCodes.serverError).json({
+        success: false,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
+      });
+    }
+  }
 }

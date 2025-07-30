@@ -1,3 +1,30 @@
+import { assetDetailsLocationInfo } from "../../user/commonDetails";
+import { assetDetailsHostInfo } from "../../user/commonDetails";
+
+export interface ICaters {
+  _id: string;
+  catersName?: string;
+  manpower: string;
+  charge: string;
+  totalAmount: string;
+  timeSlots?: string[];
+  availableDates?: string[];
+  description?: string;
+  features?: string[];
+  serviceTypes?: string[];
+  terms?: string;
+  conditions?: string;
+  about: string;
+  Images: string[];
+  status?: string;
+  createdAt:string;
+  isReapplied:boolean;
+  typeOfAsset: string;
+  location: assetDetailsLocationInfo;
+  host: assetDetailsHostInfo;
+}
+
+
 export interface catersFormErrorState {
   catersName?: string;
   manpower?: string;
