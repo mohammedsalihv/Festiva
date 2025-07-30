@@ -131,7 +131,7 @@ export class HostCatersController implements IHostCatersController {
       }
     }
   }
-  
+
   async catersFullDetails(req: Request, res: Response): Promise<void> {
     try {
       const catersId = req.params.assetId;
@@ -199,6 +199,88 @@ export class HostCatersController implements IHostCatersController {
         res.status(statusCodes.serverError).json({
           success: false,
           message: "Unexpected server error",
+        });
+      }
+    }
+  }
+
+  async Unavailable(req: Request, res: Response): Promise<void> {
+    try {
+      const catersId = req.params.assetId;
+
+      if (!catersId) {
+        res.status(statusCodes.badRequest).json({
+          success: false,
+          message: "caters ID is required",
+        });
+        return;
+      }
+
+      const success = await this.hostCatersUseCase.unavailableCaters(catersId);
+
+      if (!success) {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Failed to changing the caters status to un-avaialble",
+        });
+        return;
+      }
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "caters status changed successfully",
+      });
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected error during caters status updating",
+        });
+      }
+    }
+  }
+
+  async deleteRequest(req: Request, res: Response): Promise<void> {
+    try {
+      const catersId = req.params.assetId;
+
+      if (!catersId) {
+        res.status(statusCodes.badRequest).json({
+          success: false,
+          message: "caters ID is required",
+        });
+        return;
+      }
+
+      const success = await this.hostCatersUseCase.removeCaters(catersId);
+
+      if (!success) {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Error while deleting the caters",
+        });
+        return;
+      }
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "caters deleted successfully",
+      });
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected error during caters deleting",
         });
       }
     }

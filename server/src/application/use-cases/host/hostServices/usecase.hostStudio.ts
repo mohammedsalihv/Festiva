@@ -10,7 +10,6 @@ export class HostStudioUseCase implements IHostStudioUseCase {
 
   async addStudio(studio: IStudio): Promise<IStudio> {
     const addedStudio = await this.hostStudioRepository.addStudio(studio);
-
     if (!addedStudio) {
       throw new ErrorHandler("Studio not added", statusCodes.serverError);
     }
@@ -21,13 +20,10 @@ export class HostStudioUseCase implements IHostStudioUseCase {
     if (!studioId) {
       throw new CustomError("Studio ID is required", statusCodes.unAuthorized);
     }
-
     const studio = await this.hostStudioRepository.studioDetails(studioId);
-
     if (!studio) {
       throw new CustomError("Studio not found", statusCodes.notfound);
     }
-
     return studio;
   }
 
@@ -41,4 +37,22 @@ export class HostStudioUseCase implements IHostStudioUseCase {
     }
     return true;
   }
+
+  async unavailableStudio(studioId: string): Promise<boolean> {if (!studioId) {
+      throw new CustomError("Studio ID is required", statusCodes.unAuthorized);
+    }
+    const updated = await this.hostStudioRepository.unavailableRequest(studioId);
+    if (!updated) {
+      throw new CustomError("Studio un-available request failed", statusCodes.serverError);
+    }
+    return true;}
+
+  async removeStudio(studioId: string): Promise<boolean> {if (!studioId) {
+      throw new CustomError("Studio ID is required", statusCodes.unAuthorized);
+    }
+    const updated = await this.hostStudioRepository.deleteStudio(studioId);
+    if (!updated) {
+      throw new CustomError("Studio deleting failed", statusCodes.serverError);
+    }
+    return true;}
 }

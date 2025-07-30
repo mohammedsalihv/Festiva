@@ -159,4 +159,104 @@ export class HostAssetController implements IHostAssetController {
       });
     }
   }
+
+  async unavailableAsset(req: Request, res: Response): Promise<void> {
+    try {
+      const typeOfAsset = req.query.type?.toString().toLowerCase();
+      const assetId = req.params.assetId;
+
+      if (!typeOfAsset) {
+        res.status(statusCodes.forbidden).json({
+          success: false,
+          message: "Asset type is required",
+        });
+        return;
+      }
+
+      if (!assetId) {
+        res.status(statusCodes.unAuthorized).json({
+          success: false,
+          message: "Asset ID is required",
+        });
+        return;
+      }
+
+      switch (typeOfAsset) {
+        case "venue":
+          await this.hostVenueController.Unavailable(req, res);
+          break;
+        case "rentcar":
+          await this.hostRentCarController.Unavailable(req, res);
+          break;
+        case "studio":
+          await this.hostStudioController.Unavailable(req, res);
+          break;
+        case "caters":
+          await this.hostCatersController.Unavailable(req, res);
+          break;
+        default:
+          res.status(statusCodes.forbidden).json({
+            success: false,
+            message: `Unknown type of asset '${typeOfAsset}'`,
+          });
+          return;
+      }
+    } catch (error) {
+      res.status(statusCodes.serverError).json({
+        success: false,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
+      });
+    }
+  }
+
+  async deleteAsset(req: Request, res: Response): Promise<void> {
+    try {
+      const typeOfAsset = req.query.type?.toString().toLowerCase();
+      const assetId = req.params.assetId;
+
+      if (!typeOfAsset) {
+        res.status(statusCodes.forbidden).json({
+          success: false,
+          message: "Asset type is required",
+        });
+        return;
+      }
+
+      if (!assetId) {
+        res.status(statusCodes.unAuthorized).json({
+          success: false,
+          message: "Asset ID is required",
+        });
+        return;
+      }
+
+      switch (typeOfAsset) {
+        case "venue":
+          await this.hostVenueController.deleteRequest(req, res);
+          break;
+        case "rentcar":
+          await this.hostRentCarController.deleteRequest(req, res);
+          break;
+        case "studio":
+          await this.hostStudioController.deleteRequest(req, res);
+          break;
+        case "caters":
+          await this.hostCatersController.deleteRequest(req, res);
+          break;
+        default:
+          res.status(statusCodes.forbidden).json({
+            success: false,
+            message: `Unknown type of asset '${typeOfAsset}'`,
+          });
+          return;
+      }
+    } catch (error) {
+      res.status(statusCodes.serverError).json({
+        success: false,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
+      });
+    }
+  }
 }

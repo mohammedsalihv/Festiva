@@ -53,4 +53,18 @@ hostAccountRoutes.patch(
   hostAssetController.reSubmit.bind(hostAssetController)
 );
 
+hostAccountRoutes.patch(
+  HOST_ROUTES.HostAccount.assetUnavailable,
+  authenticateToken,
+  isHost,
+  hostAssetController.unavailableAsset.bind(hostAssetController)
+);
+
+hostAccountRoutes.patch(
+  HOST_ROUTES.HostAccount.assetDelete,
+  authenticateToken,
+  isHost,
+  hostAssetController.deleteAsset.bind(hostAssetController)
+);
+
 export default hostAccountRoutes;

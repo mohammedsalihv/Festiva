@@ -37,4 +37,29 @@ export class HostVenueUseCase implements IHostVenueUseCase {
     }
     return true;
   }
+
+  async unavailableVenue(venueId: string): Promise<boolean> {
+    if (!venueId) {
+      throw new CustomError("Venue ID is required", statusCodes.unAuthorized);
+    }
+    const updated = await this.hostVenueRepository.unavailableRequest(venueId);
+    if (!updated) {
+      throw new CustomError(
+        "Venue un-available request failed",
+        statusCodes.serverError
+      );
+    }
+    return true;
+  }
+
+  async removeVenue(venueId: string): Promise<boolean> {
+    if (!venueId) {
+      throw new CustomError("Venue ID is required", statusCodes.unAuthorized);
+    }
+    const updated = await this.hostVenueRepository.deleteVenue(venueId);
+    if (!updated) {
+      throw new CustomError("Venue deleting failed", statusCodes.serverError);
+    }
+    return true;
+  }
 }

@@ -202,4 +202,86 @@ export class HostStudioController implements IHostStudioController {
       }
     }
   }
+
+  async Unavailable(req: Request, res: Response): Promise<void> {
+    try {
+      const studioId = req.params.assetId;
+
+      if (!studioId) {
+        res.status(statusCodes.badRequest).json({
+          success: false,
+          message: "studio ID is required",
+        });
+        return;
+      }
+
+      const success = await this.hostStudioUseCase.unavailableStudio(studioId);
+
+      if (!success) {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Failed to changing the studio status to un-avaialble",
+        });
+        return;
+      }
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "studio status changed successfully",
+      });
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected error during studio status updating",
+        });
+      }
+    }
+  }
+
+  async deleteRequest(req: Request, res: Response): Promise<void> {
+    try {
+      const studioId = req.params.assetId;
+
+      if (!studioId) {
+        res.status(statusCodes.badRequest).json({
+          success: false,
+          message: "studio ID is required",
+        });
+        return;
+      }
+
+      const success = await this.hostStudioUseCase.removeStudio(studioId);
+
+      if (!success) {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Error while deleting the studio",
+        });
+        return;
+      }
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "studio deleted successfully",
+      });
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected error during studio deleting",
+        });
+      }
+    }
+  }
 }

@@ -46,4 +46,38 @@ export class HostRentCarUseCase implements IHostRentCarUseCase {
     }
     return true;
   }
+
+  async unavailableRentcar(rentcarId: string): Promise<boolean> {
+      if (!rentcarId) {
+      throw new CustomError(
+        "Rent car ID is required",
+        statusCodes.unAuthorized
+      );
+    }
+    const updated = await this.hostRentCarRepository.unavailableRequest(rentcarId);
+    if (!updated) {
+      throw new CustomError(
+        "Rent car un-available failed",
+        statusCodes.serverError
+      );
+    }
+    return true;
+  }
+
+  async removeRentcar(rentcarId: string): Promise<boolean> {
+      if (!rentcarId) {
+      throw new CustomError(
+        "Rent car ID is required",
+        statusCodes.unAuthorized
+      );
+    }
+    const updated = await this.hostRentCarRepository.deleteRentcar(rentcarId);
+    if (!updated) {
+      throw new CustomError(
+        "Rent car deleting failed",
+        statusCodes.serverError
+      );
+    }
+    return true;
+  }
 }

@@ -148,6 +148,7 @@ export class HostVenueController implements IHostVenueController {
       }
     }
   }
+
   async requestReApproval(req: Request, res: Response): Promise<void> {
     try {
       const venueId = req.params.assetId;
@@ -184,6 +185,88 @@ export class HostVenueController implements IHostVenueController {
         res.status(statusCodes.serverError).json({
           success: false,
           message: "Unexpected error during venue re-apply",
+        });
+      }
+    }
+  }
+
+  async Unavailable(req: Request, res: Response): Promise<void> {
+    try {
+      const venueId = req.params.assetId;
+
+      if (!venueId) {
+        res.status(statusCodes.badRequest).json({
+          success: false,
+          message: "Venue ID is required",
+        });
+        return;
+      }
+
+      const success = await this.hostVenueUseCase.unavailableVenue(venueId);
+
+      if (!success) {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Failed to changing the venue status to un-avaialble",
+        });
+        return;
+      }
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Venue status changed successfully",
+      });
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected error during venue re-apply",
+        });
+      }
+    }
+  }
+
+  async deleteRequest(req: Request, res: Response): Promise<void> {
+    try {
+      const venueId = req.params.assetId;
+
+      if (!venueId) {
+        res.status(statusCodes.badRequest).json({
+          success: false,
+          message: "Venue ID is required",
+        });
+        return;
+      }
+
+      const success = await this.hostVenueUseCase.removeVenue(venueId);
+
+      if (!success) {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Error while deleting the venue",
+        });
+        return;
+      }
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Venue deleted successfully",
+      });
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected error during venue status updating",
         });
       }
     }

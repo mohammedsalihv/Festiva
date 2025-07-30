@@ -217,4 +217,88 @@ export class HostRentCarController implements IHostRentCarController {
       }
     }
   }
+
+  async Unavailable(req: Request, res: Response): Promise<void> {
+    try {
+      const rentcarId = req.params.assetId;
+
+      if (!rentcarId) {
+        res.status(statusCodes.badRequest).json({
+          success: false,
+          message: "rent car ID is required",
+        });
+        return;
+      }
+
+      const success = await this.hostRentCarUseCase.unavailableRentcar(
+        rentcarId
+      );
+
+      if (!success) {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Failed to changing the rent car status to un-avaialble",
+        });
+        return;
+      }
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "rent car status changed successfully",
+      });
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected error during rent car status updating",
+        });
+      }
+    }
+  }
+
+  async deleteRequest(req: Request, res: Response): Promise<void> {
+    try {
+      const rentcarId = req.params.assetId;
+
+      if (!rentcarId) {
+        res.status(statusCodes.badRequest).json({
+          success: false,
+          message: "rent car ID is required",
+        });
+        return;
+      }
+
+      const success = await this.hostRentCarUseCase.removeRentcar(rentcarId);
+
+      if (!success) {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Error while deleting the rent car",
+        });
+        return;
+      }
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "rent car deleted successfully",
+      });
+    } catch (error: any) {
+      if (error instanceof CustomError) {
+        res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        res.status(statusCodes.serverError).json({
+          success: false,
+          message: "Unexpected error during rent car deleting",
+        });
+      }
+    }
+  }
 }

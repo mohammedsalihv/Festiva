@@ -10,7 +10,6 @@ export class HostCatersUseCase implements IHostCatersUseCase {
 
   async addCaters(caters: ICaters): Promise<ICaters> {
     const addedCaters = await this.hostCatersRepository.addCaters(caters);
-
     if (!addedCaters) {
       throw new ErrorHandler("caters team not added", statusCodes.serverError);
     }
@@ -21,15 +20,13 @@ export class HostCatersUseCase implements IHostCatersUseCase {
     if (!catersId) {
       throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
     }
-
     const caters = await this.hostCatersRepository.findCatersById(catersId);
-
     if (!caters) {
       throw new CustomError("Caters not found", statusCodes.notfound);
     }
-
     return caters;
   }
+
   async reApplyCaters(catersId: string): Promise<boolean> {
     if (!catersId) {
       throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
@@ -37,6 +34,33 @@ export class HostCatersUseCase implements IHostCatersUseCase {
     const updated = await this.hostCatersRepository.reApply(catersId);
     if (!updated) {
       throw new CustomError("caters re-apply failed", statusCodes.serverError);
+    }
+    return true;
+  }
+
+  async unavailableCaters(catersId: string): Promise<boolean> {
+    if (!catersId) {
+      throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
+    }
+    const updated = await this.hostCatersRepository.unavailableRequest(
+      catersId
+    );
+    if (!updated) {
+      throw new CustomError(
+        "caters un-available failed",
+        statusCodes.serverError
+      );
+    }
+    return true;
+  }
+
+  async removeCaters(catersId: string): Promise<boolean> {
+    if (!catersId) {
+      throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
+    }
+    const updated = await this.hostCatersRepository.deleteCaters(catersId);
+    if (!updated) {
+      throw new CustomError("caters deleting failed", statusCodes.serverError);
     }
     return true;
   }

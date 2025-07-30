@@ -35,4 +35,27 @@ export class HostCatersRepository implements IHostCatersRepository {
 
     return result.modifiedCount > 0;
   }
+
+  async unavailableRequest(catersId: string): Promise<boolean> {
+    const result = await CatersModel.updateOne(
+      { _id: catersId },
+      {
+        $set: {
+          isAvailable: false,
+          status: "unavailable",
+        },
+      }
+    );
+
+    return result.modifiedCount > 0;
+  }
+
+  async deleteCaters(catersId: string): Promise<boolean> {
+    const deleted = await CatersModel.findByIdAndDelete(catersId);
+    if (!deleted) {
+      console.warn("Venue not found:", catersId);
+      return false;
+    }
+    return true;
+  }
 }
