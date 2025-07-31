@@ -3,7 +3,6 @@ import { IHostRentCarRepository } from "../../../../domain/entities/repositoryIn
 import { RentCarModel } from "../../../../domain/models/rentCarModel";
 
 export class HostRentCarRepository implements IHostRentCarRepository {
-  
   async addRentCar(rentCar: IRentCar): Promise<IRentCar> {
     try {
       const newRentCar = new RentCarModel(rentCar);
@@ -33,21 +32,22 @@ export class HostRentCarRepository implements IHostRentCarRepository {
         },
       }
     );
-
     return result.modifiedCount > 0;
   }
 
-  async unavailableRequest(rentcarId: string): Promise<boolean> {
+  async updateAvailability(
+    rentcarId: string,
+    isAvailable: boolean
+  ): Promise<boolean> {
     const result = await RentCarModel.updateOne(
       { _id: rentcarId },
       {
         $set: {
-          isAvailable: false,
-          status: "unavailable",
+          isAvailable,
+          status: isAvailable ? "available" : "unavailable",
         },
       }
     );
-
     return result.modifiedCount > 0;
   }
 

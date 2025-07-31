@@ -3,7 +3,6 @@ import { StudioModel } from "../../../../domain/models/studioModel";
 import { IHostStudioRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostStudioRepository";
 
 export class HostStudioRepository implements IHostStudioRepository {
-
   async addStudio(studio: IStudio): Promise<IStudio> {
     try {
       const newStudio = new StudioModel(studio);
@@ -21,7 +20,7 @@ export class HostStudioRepository implements IHostStudioRepository {
       .lean<IStudio>()
       .exec();
   }
-  
+
   async reApply(studioId: string): Promise<boolean> {
     const result = await StudioModel.updateOne(
       { _id: studioId },
@@ -36,13 +35,16 @@ export class HostStudioRepository implements IHostStudioRepository {
     return result.modifiedCount > 0;
   }
 
-  async unavailableRequest(studioId: string): Promise<boolean> {
+  async updateAvailability(
+    studioId: string,
+    isAvailable: boolean
+  ): Promise<boolean> {
     const result = await StudioModel.updateOne(
       { _id: studioId },
       {
         $set: {
-          isAvailable: false,
-          status: "unavailable",
+          isAvailable,
+          status: isAvailable ? "available" : "unavailable",
         },
       }
     );

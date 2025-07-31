@@ -204,9 +204,10 @@ export class HostCatersController implements IHostCatersController {
     }
   }
 
-  async Unavailable(req: Request, res: Response): Promise<void> {
+  async availability(req: Request, res: Response): Promise<void> {
     try {
       const catersId = req.params.assetId;
+      const { isAvailable } = req.body;
 
       if (!catersId) {
         res.status(statusCodes.badRequest).json({
@@ -216,19 +217,23 @@ export class HostCatersController implements IHostCatersController {
         return;
       }
 
-      const success = await this.hostCatersUseCase.unavailableCaters(catersId);
+      const success = await this.hostCatersUseCase.updateCatersAvailability(catersId,isAvailable);
 
       if (!success) {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Failed to changing the caters status to un-avaialble",
+           message: `Failed to change caters availability to ${
+            isAvailable ? "available" : "unavailable"
+          }`,
         });
         return;
       }
 
       res.status(statusCodes.Success).json({
         success: true,
-        message: "caters status changed successfully",
+         message: `Caters marked as ${
+          isAvailable ? "available" : "unavailable"
+        } successfully`,
       });
     } catch (error: any) {
       if (error instanceof CustomError) {

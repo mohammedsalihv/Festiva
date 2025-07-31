@@ -160,7 +160,7 @@ export class HostAssetController implements IHostAssetController {
     }
   }
 
-  async unavailableAsset(req: Request, res: Response): Promise<void> {
+  async assetAvailability(req: Request, res: Response): Promise<void> {
     try {
       const typeOfAsset = req.query.type?.toString().toLowerCase();
       const assetId = req.params.assetId;
@@ -183,16 +183,16 @@ export class HostAssetController implements IHostAssetController {
 
       switch (typeOfAsset) {
         case "venue":
-          await this.hostVenueController.Unavailable(req, res);
+          await this.hostVenueController.availability(req, res);
           break;
         case "rentcar":
-          await this.hostRentCarController.Unavailable(req, res);
+          await this.hostRentCarController.availability(req, res);
           break;
         case "studio":
-          await this.hostStudioController.Unavailable(req, res);
+          await this.hostStudioController.availability(req, res);
           break;
         case "caters":
-          await this.hostCatersController.Unavailable(req, res);
+          await this.hostCatersController.availability(req, res);
           break;
         default:
           res.status(statusCodes.forbidden).json({

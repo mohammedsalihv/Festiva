@@ -16,7 +16,7 @@ const venueSchema = new Schema<IVenue>(
     description: { type: String},
     terms: { type: String, required: true },
     Images: [{ type: String, required: true }],
-    status:{ type:String , enum :[ "pending" , "approved" , "rejected" , "unavailable"] ,  default: "pending"},
+    status:{ type:String , enum :[ "pending" , "approved" , "rejected" , "unavailable" , "available"] ,  default: "pending"},
     rejectedReason: { type: String, default: "" },
     isReapplied:{type:Boolean , default:false},
     isAvailable:{type:Boolean , default:true},

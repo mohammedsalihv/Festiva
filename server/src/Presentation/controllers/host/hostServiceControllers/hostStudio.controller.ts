@@ -203,9 +203,10 @@ export class HostStudioController implements IHostStudioController {
     }
   }
 
-  async Unavailable(req: Request, res: Response): Promise<void> {
+  async availability(req: Request, res: Response): Promise<void> {
     try {
       const studioId = req.params.assetId;
+      const { isAvailable } = req.body;
 
       if (!studioId) {
         res.status(statusCodes.badRequest).json({
@@ -215,7 +216,7 @@ export class HostStudioController implements IHostStudioController {
         return;
       }
 
-      const success = await this.hostStudioUseCase.unavailableStudio(studioId);
+      const success = await this.hostStudioUseCase.updateStudioAvailability(studioId,isAvailable);
 
       if (!success) {
         res.status(statusCodes.serverError).json({
@@ -227,7 +228,9 @@ export class HostStudioController implements IHostStudioController {
 
       res.status(statusCodes.Success).json({
         success: true,
-        message: "studio status changed successfully",
+         message: `Studio marked as ${
+          isAvailable ? "available" : "unavailable"
+        } successfully`,
       });
     } catch (error: any) {
       if (error instanceof CustomError) {

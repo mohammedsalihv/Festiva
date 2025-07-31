@@ -57,7 +57,7 @@ hostAccountRoutes.patch(
   HOST_ROUTES.HostAccount.assetUnavailable,
   authenticateToken,
   isHost,
-  hostAssetController.unavailableAsset.bind(hostAssetController)
+  hostAssetController.assetAvailability.bind(hostAssetController)
 );
 
 hostAccountRoutes.patch(

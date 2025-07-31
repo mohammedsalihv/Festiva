@@ -3,7 +3,6 @@ import { IHostVenueRepository } from "../../../../domain/entities/repositoryInte
 import { VenueModel } from "../../../../domain/models/venueModel";
 
 export class HostVenueRepository implements IHostVenueRepository {
-  
   async addVenue(venue: IVenue): Promise<IVenue> {
     try {
       const newVenue = new VenueModel(venue);
@@ -37,13 +36,16 @@ export class HostVenueRepository implements IHostVenueRepository {
     return result.modifiedCount > 0;
   }
 
-  async unavailableRequest(venueId: string): Promise<boolean> {
+  async updateAvailability(
+    venueId: string,
+    isAvailable: boolean
+  ): Promise<boolean> {
     const result = await VenueModel.updateOne(
       { _id: venueId },
       {
         $set: {
-          isAvailable: false,
-          status: "unavailable",
+          isAvailable,
+          status: isAvailable ? "available" : "unavailable",
         },
       }
     );

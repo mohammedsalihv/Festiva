@@ -47,22 +47,22 @@ export class HostRentCarUseCase implements IHostRentCarUseCase {
     return true;
   }
 
-  async unavailableRentcar(rentcarId: string): Promise<boolean> {
-      if (!rentcarId) {
-      throw new CustomError(
-        "Rent car ID is required",
-        statusCodes.unAuthorized
-      );
-    }
-    const updated = await this.hostRentCarRepository.unavailableRequest(rentcarId);
-    if (!updated) {
-      throw new CustomError(
-        "Rent car un-available failed",
-        statusCodes.serverError
-      );
-    }
-    return true;
+  async updateRentcarAvailability(rentcarId: string, isAvailable: boolean): Promise<boolean> {
+  if (!rentcarId) {
+    throw new CustomError("Rentcar ID is required", statusCodes.unAuthorized);
   }
+
+  const updated = await this.hostRentCarRepository.updateAvailability(rentcarId, isAvailable);
+
+  if (!updated) {
+    throw new CustomError(
+      `Rentcar ${isAvailable ? "available" : "unavailable"} request failed`,
+      statusCodes.serverError
+    );
+  }
+
+  return true;
+}
 
   async removeRentcar(rentcarId: string): Promise<boolean> {
       if (!rentcarId) {

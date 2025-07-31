@@ -38,19 +38,26 @@ export class HostCatersUseCase implements IHostCatersUseCase {
     return true;
   }
 
-  async unavailableCaters(catersId: string): Promise<boolean> {
+  async updateCatersAvailability(
+    catersId: string,
+    isAvailable: boolean
+  ): Promise<boolean> {
     if (!catersId) {
       throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
     }
-    const updated = await this.hostCatersRepository.unavailableRequest(
-      catersId
+
+    const updated = await this.hostCatersRepository.updateAvailability(
+      catersId,
+      isAvailable
     );
+
     if (!updated) {
       throw new CustomError(
-        "caters un-available failed",
+        `Caters ${isAvailable ? "available" : "unavailable"} request failed`,
         statusCodes.serverError
       );
     }
+
     return true;
   }
 

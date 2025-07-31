@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { setHostDetails } from "@/redux/Slice/host/common/hostSlice";
 import { IoClose } from "react-icons/io5";
-import { FcGoogle } from "react-icons/fc";
+//import { FcGoogle } from "react-icons/fc";
 import { Input } from "@/components/Input";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/Button";
@@ -94,12 +94,12 @@ const HostLogin = ({ onClose, showSignup }: Props) => {
           </p>
         </div>
 
-        <div className="space-y-3 mb-4">
+        {/* <div className="space-y-3 mb-4">
           <Button className="flex items-center w-full border border-gray-300 rounded-none py-5 justify-center hover:bg-gray-50">
             <FcGoogle className="text-lg mr-2" />
             <span className="font-poppins">Log in with Google</span>
           </Button>
-        </div>
+        </div> */}
 
         <div className="flex items-center my-4">
           <div className="flex-grow border-t border-gray-300" />

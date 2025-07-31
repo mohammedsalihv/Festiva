@@ -218,9 +218,10 @@ export class HostRentCarController implements IHostRentCarController {
     }
   }
 
-  async Unavailable(req: Request, res: Response): Promise<void> {
+  async availability(req: Request, res: Response): Promise<void> {
     try {
       const rentcarId = req.params.assetId;
+      const { isAvailable } = req.body;
 
       if (!rentcarId) {
         res.status(statusCodes.badRequest).json({
@@ -230,21 +231,26 @@ export class HostRentCarController implements IHostRentCarController {
         return;
       }
 
-      const success = await this.hostRentCarUseCase.unavailableRentcar(
-        rentcarId
+      const success = await this.hostRentCarUseCase.updateRentcarAvailability(
+        rentcarId,
+        isAvailable
       );
 
       if (!success) {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Failed to changing the rent car status to un-avaialble",
+          message: `Failed to change Rent car availability to ${
+            isAvailable ? "available" : "unavailable"
+          }`,
         });
         return;
       }
 
       res.status(statusCodes.Success).json({
         success: true,
-        message: "rent car status changed successfully",
+        message: `Rent car marked as ${
+          isAvailable ? "available" : "unavailable"
+        } successfully`,
       });
     } catch (error: any) {
       if (error instanceof CustomError) {

@@ -190,9 +190,10 @@ export class HostVenueController implements IHostVenueController {
     }
   }
 
-  async Unavailable(req: Request, res: Response): Promise<void> {
+  async availability(req: Request, res: Response): Promise<void> {
     try {
       const venueId = req.params.assetId;
+      const { isAvailable } = req.body;
 
       if (!venueId) {
         res.status(statusCodes.badRequest).json({
@@ -202,19 +203,34 @@ export class HostVenueController implements IHostVenueController {
         return;
       }
 
-      const success = await this.hostVenueUseCase.unavailableVenue(venueId);
+      if (typeof isAvailable !== "boolean") {
+        res.status(statusCodes.badRequest).json({
+          success: false,
+          message: "`isAvailable` boolean is required",
+        });
+        return;
+      }
+
+      const success = await this.hostVenueUseCase.updateVenueAvailability(
+        venueId,
+        isAvailable
+      );
 
       if (!success) {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Failed to changing the venue status to un-avaialble",
+          message: `Failed to change venue availability to ${
+            isAvailable ? "available" : "unavailable"
+          }`,
         });
         return;
       }
 
       res.status(statusCodes.Success).json({
         success: true,
-        message: "Venue status changed successfully",
+        message: `Venue marked as ${
+          isAvailable ? "available" : "unavailable"
+        } successfully`,
       });
     } catch (error: any) {
       if (error instanceof CustomError) {
@@ -225,7 +241,7 @@ export class HostVenueController implements IHostVenueController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected error during venue re-apply",
+          message: "Unexpected error during venue availability update",
         });
       }
     }

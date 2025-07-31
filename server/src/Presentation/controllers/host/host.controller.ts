@@ -18,9 +18,7 @@ export class HostController implements IHostController {
         });
         return;
       }
-
       const result = await this.hostUseCase.validateEmail(email);
-
       res.status(result.status).json({
         success: result.success,
         message: result.message,

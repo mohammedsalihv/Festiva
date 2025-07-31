@@ -38,21 +38,37 @@ export class HostStudioUseCase implements IHostStudioUseCase {
     return true;
   }
 
-  async unavailableStudio(studioId: string): Promise<boolean> {if (!studioId) {
+  async updateStudioAvailability(
+    studioId: string,
+    isAvailable: boolean
+  ): Promise<boolean> {
+    if (!studioId) {
       throw new CustomError("Studio ID is required", statusCodes.unAuthorized);
     }
-    const updated = await this.hostStudioRepository.unavailableRequest(studioId);
-    if (!updated) {
-      throw new CustomError("Studio un-available request failed", statusCodes.serverError);
-    }
-    return true;}
 
-  async removeStudio(studioId: string): Promise<boolean> {if (!studioId) {
+    const updated = await this.hostStudioRepository.updateAvailability(
+      studioId,
+      isAvailable
+    );
+
+    if (!updated) {
+      throw new CustomError(
+        `Studio ${isAvailable ? "available" : "unavailable"} request failed`,
+        statusCodes.serverError
+      );
+    }
+
+    return true;
+  }
+
+  async removeStudio(studioId: string): Promise<boolean> {
+    if (!studioId) {
       throw new CustomError("Studio ID is required", statusCodes.unAuthorized);
     }
     const updated = await this.hostStudioRepository.deleteStudio(studioId);
     if (!updated) {
       throw new CustomError("Studio deleting failed", statusCodes.serverError);
     }
-    return true;}
+    return true;
+  }
 }

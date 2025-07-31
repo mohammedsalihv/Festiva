@@ -6,6 +6,6 @@ export interface IHostAssetController {
   findAssetDetails(req: authenticationRequest, res: Response): Promise<void>;
   getAllRequests(req: authenticationRequest, res: Response): Promise<void>;
   reSubmit(req: authenticationRequest, res: Response): Promise<void>;
-  unavailableAsset(req: authenticationRequest, res: Response): Promise<void>;
+  assetAvailability(req: authenticationRequest, res: Response): Promise<void>;
   deleteAsset(req: authenticationRequest, res: Response): Promise<void>;
 }

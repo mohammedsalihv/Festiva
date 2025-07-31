@@ -13,7 +13,7 @@ import { AxiosError } from "axios";
 import { GrFormClose } from "react-icons/gr";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
-import { FcGoogle } from "react-icons/fc";
+//import { FcGoogle } from "react-icons/fc";
 import Otp from "@/components/Otp";
 
 interface ErrorState {
@@ -175,10 +175,10 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
         {!showOtp ? (
           <>
             <div className="space-y-3 mb-4">
-              <Button className="flex gap-2 items-center w-full border border-gray-300 rounded-none py-5 justify-center hover:bg-gray-100 ">
+              {/* <Button className="flex gap-2 items-center w-full border border-gray-300 rounded-none py-5 justify-center hover:bg-gray-100 ">
                 <FcGoogle size={20} />
                 <span className="font-poppins">Sign up with Google</span>
-              </Button>
+              </Button> */}
             </div>
 
             <div className="flex items-center justify-between gap-4">

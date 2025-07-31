@@ -51,9 +51,13 @@ export const assetReApply = async (assetId: string, assetType: string) => {
 };
 
 
-export const assetUnavailable = async (assetId: string, assetType: string) => {
+export const updateAssetAvailability = async (
+  assetId: string,
+  assetType: string,
+  status: "available" | "unavailable"
+) => {
   const response = await axiosInstance.patch(
-    HOST_API.hostAccount.assetUnavailable(assetId),
+    HOST_API.hostAccount.updateAvailability(assetId, status),
     {},
     {
       params: { type: assetType },
@@ -61,6 +65,7 @@ export const assetUnavailable = async (assetId: string, assetType: string) => {
   );
   return response.data;
 };
+
 
 export const assetDelete = async (assetId: string, assetType: string) => {
   const response = await axiosInstance.delete(

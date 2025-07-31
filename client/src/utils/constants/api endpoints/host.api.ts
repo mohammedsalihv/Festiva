@@ -11,7 +11,7 @@ export const HOST_API = {
     myAssets: "/myassets",
     assetFullDetails: (assetId: string) => `/assets/details/${assetId}`,
     assetReApplying: (assetId: string) => `/assets/re-apply/${assetId}`,
-    assetUnavailable: (assetId: string) => `/assets/unavailable/${assetId}`,
+    updateAvailability: (assetId: string, status: string) => `/assets/${status}/${assetId}`,
     assetDelete: (assetId: string) => `/assets/delete/${assetId}`,
     requets: "/requests",
   },

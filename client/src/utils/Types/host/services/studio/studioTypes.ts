@@ -23,6 +23,7 @@ export interface IStudio {
   status?: string;
   createdAt:string;
   isReapplied:boolean;
+  isAvailable:boolean;
   typeOfAsset: string;
   location?: assetDetailsLocationInfo;
   host?: assetDetailsHostInfo;

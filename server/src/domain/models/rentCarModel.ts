@@ -25,7 +25,7 @@ const rentCarSchema = new Schema<IRentCar>(
     Images: [{ type: String, required: true }],
     status: {
       type: String,
-      enum: ["pending", "approved", "rejected"],
+      enum: ["pending", "approved", "rejected" , "unavailable" , "available"],
       default: "pending",
     },
     rejectedReason: { type: String, default: "" },

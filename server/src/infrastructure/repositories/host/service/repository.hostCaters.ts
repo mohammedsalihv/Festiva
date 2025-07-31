@@ -36,17 +36,19 @@ export class HostCatersRepository implements IHostCatersRepository {
     return result.modifiedCount > 0;
   }
 
-  async unavailableRequest(catersId: string): Promise<boolean> {
+  async updateAvailability(
+    catersId: string,
+    isAvailable: boolean
+  ): Promise<boolean> {
     const result = await CatersModel.updateOne(
       { _id: catersId },
       {
         $set: {
-          isAvailable: false,
-          status: "unavailable",
+          isAvailable,
+          status: isAvailable ? "available" : "unavailable",
         },
       }
     );
-
     return result.modifiedCount > 0;
   }
 

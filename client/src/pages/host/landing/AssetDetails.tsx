@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import {
   assetDelete,
   assetReApply,
-  assetUnavailable,
+  updateAssetAvailability,
   fetchAssetDetails,
 } from "@/api/host/hostAccountService";
 import { IVenue } from "@/utils/Types/host/services/venueTypes";
@@ -26,7 +26,7 @@ export const AssetDetails = () => {
     null
   );
   const [confirmType, setConfirmType] = useState<
-    "reapply" | "delete" | "unavailable" | null
+    "reapply" | "delete" | "unavailable" | "available" | null
   >(null);
   const navigate = useNavigate();
 
@@ -189,15 +189,19 @@ export const AssetDetails = () => {
     }
   };
 
-  const handleUnavailable = async (assetId: string, assetType: string) => {
+  const handleAvailabilityChange = async (
+    assetId: string,
+    assetType: string,
+    actionType: "available" | "unavailable"
+  ) => {
     setIsSubmitting(true);
     try {
-      await assetUnavailable(assetId, assetType);
+      await updateAssetAvailability(assetId, assetType, actionType)
       await fetchDetails();
-      toast.success("Asset unavailable requested");
+      toast.success(`Asset marked as ${actionType}`);
     } catch (error) {
-      console.error("Failed to asset unavailable", error);
-      toast.error("Failed to asset unavailable");
+      console.error(`Failed to mark asset as ${actionType}`, error);
+      toast.error(`Failed to update availability`);
     } finally {
       setIsSubmitting(false);
     }
@@ -622,14 +626,17 @@ export const AssetDetails = () => {
                 if (asset._id && assetType) {
                   setSelectedAssetId(asset._id);
                   setSelectedAssetType(assetType);
-                  setConfirmType("unavailable");
+                  setConfirmType(
+                    asset.isAvailable ? "unavailable" : "available"
+                  );
                   setConfirmAction(true);
                 }
               }}
               className="py-3 text-sm md:text-base mt-4 md:py-6 w-full md:w-auto bg-blue-600 text-white font-poppins hover:bg-blue-500"
             >
-              Un-Avaialable
+              {asset.isAvailable ? "Un-Available" : "Available"}
             </Button>
+
             {asset.status === "rejected" &&
               (asset.isReapplied ? (
                 <Button className="py-3 text-sm md:text-base mt-4 md:py-6 w-full md:w-auto bg-gray-200 text-black font-poppins pointer-events-none">
@@ -662,6 +669,8 @@ export const AssetDetails = () => {
                   ? "Confirm Delete"
                   : confirmType === "unavailable"
                   ? "Mark as Unavailable?"
+                  : confirmType === "available"
+                  ? "Mark as available?"
                   : "Confirm Re-Apply"
               }
               description={
@@ -669,6 +678,8 @@ export const AssetDetails = () => {
                   ? "Are you sure you want to delete this asset? This action cannot be undone."
                   : confirmType === "unavailable"
                   ? "Are you sure you want to mark this asset as unavailable?"
+                  : confirmType === "available"
+                  ? "Are you sure you want to mark this asset as available?"
                   : "Are you sure you want to re-apply for this asset?"
               }
               confirmText={
@@ -676,6 +687,8 @@ export const AssetDetails = () => {
                   ? "Yes, Delete"
                   : confirmType === "unavailable"
                   ? "Yes, Mark Unavailable"
+                  : confirmType === "available"
+                  ? "Yes, Mark available"
                   : "Yes, Re-Apply"
               }
               cancelText="Cancel"
@@ -687,7 +700,9 @@ export const AssetDetails = () => {
                 } else if (confirmType === "delete") {
                   handleDelete(selectedAssetId, selectedAssetType);
                 } else if (confirmType === "unavailable") {
-                  handleUnavailable(selectedAssetId, selectedAssetType);
+                  handleAvailabilityChange(selectedAssetId, selectedAssetType, confirmType);
+                } else if (confirmType === "available") {
+                  handleAvailabilityChange(selectedAssetId, selectedAssetType, confirmType);
                 }
 
                 setConfirmAction(false);
