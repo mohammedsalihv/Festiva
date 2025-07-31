@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { setHostDetails } from "@/redux/Slice/host/common/hostSlice";
 import { IoClose } from "react-icons/io5";
-//import { FcGoogle } from "react-icons/fc";
+import { FcGoogle } from "react-icons/fc";
 import { Input } from "@/components/Input";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/Button";

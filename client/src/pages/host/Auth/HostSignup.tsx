@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { hostSignup, validateEmail } from "@/api/host/hostAuthService";
+import { signInWithPopup } from "firebase/auth";
+import { auth , googleProvider } from "@/config/base/auth/firebase";
 import { useMutation } from "@tanstack/react-query";
 import {
   validateHostRegisterForm,
@@ -13,7 +15,7 @@ import { AxiosError } from "axios";
 import { GrFormClose } from "react-icons/gr";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
-//import { FcGoogle } from "react-icons/fc";
+import { FcGoogle } from "react-icons/fc";
 import Otp from "@/components/Otp";
 
 interface ErrorState {
@@ -143,11 +145,30 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
     registerMutation(formData);
   };
 
+
+  const handleGoogleSignup = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+
+    const name = user.displayName || "";
+    const email = user.email || "";
+    const phone = user.phoneNumber || "";
+    const location = ""; 
+    registerMutation({ name, email, phone, password: "google-auth", location });
+
+  } catch (error) {
+    toast.error("Google Sign-In failed. Please try again.");
+    console.error(error);
+  }
+};
+
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex justify-center items-center px-4 font-poppins">
-      <div className="relative w-full max-w-xl bg-white shadow-xl p-6 sm:p-8 text-black space-y-5">
+    <div className="fixed inset-0 z-50 bg-black/50 flex justify-center items-center px-6 font-poppins">
+      <div className="relative w-full max-w-xl bg-white shadow-xl p-4 sm:p-8 text-black space-y-5">
         <GrFormClose
           className="absolute top-3 right-3 text-black hover:text-red-500 cursor-pointer text-xl"
           onClick={() => {
@@ -175,10 +196,12 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
         {!showOtp ? (
           <>
             <div className="space-y-3 mb-4">
-              {/* <Button className="flex gap-2 items-center w-full border border-gray-300 rounded-none py-5 justify-center hover:bg-gray-100 ">
+               <Button 
+               onClick={handleGoogleSignup}
+               className="flex gap-2 items-center w-full border border-gray-300 rounded-none py-5 md:py-7 justify-center hover:bg-gray-100 ">
                 <FcGoogle size={20} />
                 <span className="font-poppins">Sign up with Google</span>
-              </Button> */}
+              </Button>
             </div>
 
             <div className="flex items-center justify-between gap-4">

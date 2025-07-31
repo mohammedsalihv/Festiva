@@ -45,4 +45,5 @@ coverage/
 
 
 # firebase auth
-firebase/serviceAccountKey.json
+server/src/config/firebase/serviceAccountKey.json
+
