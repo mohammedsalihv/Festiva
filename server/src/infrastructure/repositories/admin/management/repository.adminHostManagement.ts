@@ -1,4 +1,4 @@
-import { IHost } from "../../../../domain/entities/modelInterface/interface.host";
+import { IHost } from "../../../../domain/entities/modelInterface/host/interface.host";
 import { IAdminHostManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminHostManagement";
 import { HostModel } from "../../../../domain/models/hostModel";
 import { pickDefinedFields } from "../../../../utils/user/pickDefinedFields";

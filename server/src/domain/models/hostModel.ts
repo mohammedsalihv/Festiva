@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { IHost } from "../entities/modelInterface/interface.host";
+import { IHost } from "../entities/modelInterface/host/interface.host";
 
 const HostSchema = new Schema<IHost>({
   name: { type: String, required: true },

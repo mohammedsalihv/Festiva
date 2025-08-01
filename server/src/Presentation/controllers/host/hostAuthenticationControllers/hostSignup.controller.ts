@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { IHostSignupController } from "../../../../domain/controlInterface/host/authentication controller interface/interaface.hostSignupController";
 import { registerHostDTO } from "../../../../types/DTO/host/dto.host";
 import { HostSignupUseCase } from "../../../../application/use-cases/host/hostAuthentication/usecase.hostSignup";
 import logger from "../../../../utils/common/messages/logger";
@@ -7,10 +8,10 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 
-export class HostSignupController {
-  constructor(private HostSignup: HostSignupUseCase) {}
+export class HostSignupController implements IHostSignupController {
+  constructor(private hostSignupUsecase: HostSignupUseCase) {}
 
-  async hostSignup(req: Request, res: Response): Promise<void> {
+  async signupNewHost(req: Request, res: Response): Promise<void> {
     try {
       const { name, email, phone, password, location } = req.body;
 
@@ -28,9 +29,8 @@ export class HostSignupController {
         location,
       };
 
-      const { host, accessToken, refreshToken } = await this.HostSignup.execute(
-        hostData
-      );
+      const { host, accessToken, refreshToken } =
+        await this.hostSignupUsecase.hostSignup(hostData);
 
       res.status(statusCodes.Success).json({
         success: true,

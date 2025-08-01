@@ -31,6 +31,14 @@ export const hostSignup = async (data: HostRegisterData) => {
   return response.data;
 };
 
+export const hostGoogleSignup = async (data: HostRegisterData) => {
+  const response = await axiosInstance.post(
+    HOST_API.Authentication.hostGoogleSignup,
+    data
+  );
+  return response.data;
+};
+
 export const validateEmail = async (email: string) => {
   const response = await axiosInstance.post(
     HOST_API.Authentication.validateEmail(),

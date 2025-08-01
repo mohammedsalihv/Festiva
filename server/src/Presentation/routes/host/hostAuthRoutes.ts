@@ -3,6 +3,7 @@ import { HOST_ROUTES } from "../../../infrastructure/constants/host.routes";
 import {
   hostSignupController,
   hostLoginController,
+  hostGoogleSignupController,
   refreshTokenController,
 } from "../../../infrastructure/DI/host/auth dependency Injection/hostAuth.DI";
 import logger from "../../../utils/common/messages/logger";
@@ -13,11 +14,22 @@ const hostAuthRoutes = express.Router();
 
 hostAuthRoutes.post(HOST_ROUTES.Authentiation.hostSignup, async (req, res) => {
   try {
-    await hostSignupController.hostSignup(req, res);
+    await hostSignupController.signupNewHost(req, res);
   } catch (error) {
     logger.info(error);
   }
 });
+
+hostAuthRoutes.post(
+  HOST_ROUTES.Authentiation.hostGoogleSignup,
+  async (req, res) => {
+    try {
+      await hostGoogleSignupController.googleSignup(req, res);
+    } catch (error) {
+      logger.info(error);
+    }
+  }
+);
 
 hostAuthRoutes.post(HOST_ROUTES.Authentiation.hostLogin, async (req, res) => {
   try {
@@ -43,12 +55,15 @@ hostAuthRoutes.post(
   refreshTokenController.refreshAccessToken.bind(refreshTokenController)
 );
 
-hostAuthRoutes.delete(HOST_ROUTES.Authentiation.hostLogout, async (req, res) => {
-  try {
-    await hostLogoutController.hostLogout(req, res);
-  } catch (error) {
-    logger.info(error);
+hostAuthRoutes.delete(
+  HOST_ROUTES.Authentiation.hostLogout,
+  async (req, res) => {
+    try {
+      await hostLogoutController.hostLogout(req, res);
+    } catch (error) {
+      logger.info(error);
+    }
   }
-});
+);
 
 export default hostAuthRoutes;

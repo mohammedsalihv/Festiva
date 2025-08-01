@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { hostSignup, validateEmail } from "@/api/host/hostAuthService";
+import {
+  hostSignup,
+  validateEmail,
+  hostGoogleSignup,
+} from "@/api/host/hostAuthService";
 import { signInWithPopup } from "firebase/auth";
-import { auth , googleProvider } from "@/config/base/auth/firebase";
+import { auth, googleProvider } from "@/config/base/auth/firebase";
 import { useMutation } from "@tanstack/react-query";
 import {
   validateHostRegisterForm,
@@ -58,7 +62,7 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
     mutationFn: hostSignup,
     onSuccess: () => {
       toast.success("Registration successful!");
-      navigate("/host/dashboard");
+      navigate("/host/landing");
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       toast.error(
@@ -145,24 +149,29 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
     registerMutation(formData);
   };
 
-
   const handleGoogleSignup = async () => {
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user;
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
 
-    const name = user.displayName || "";
-    const email = user.email || "";
-    const phone = user.phoneNumber || "";
-    const location = ""; 
-    registerMutation({ name, email, phone, password: "google-auth", location });
-
-  } catch (error) {
-    toast.error("Google Sign-In failed. Please try again.");
-    console.error(error);
-  }
-};
-
+      const name = user.displayName || "";
+      const email = user.email || "";
+      const phone = user.phoneNumber || "";
+      const location = "";
+      await hostGoogleSignup({
+        name,
+        email,
+        phone,
+        password: "google-auth",
+        location,
+      });
+      toast.success("Registration successful!");
+      navigate("/host/dashboard");
+    } catch (error) {
+      toast.error("Google Sign-In failed. Please try again.");
+      console.error(error);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -178,7 +187,9 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
         />
 
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-6 mt-6 text-center sm:text-left">
-          <h2 className="text-xl font-bold text-gray-800 font-poppins">Join as Host</h2>
+          <h2 className="text-xl font-bold text-gray-800 font-poppins">
+            Join as Host
+          </h2>
           <p className="text-sm text-gray-600 font-poppins">
             Already have an account?{" "}
             <span
@@ -196,9 +207,10 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
         {!showOtp ? (
           <>
             <div className="space-y-3 mb-4">
-               <Button 
-               onClick={handleGoogleSignup}
-               className="flex gap-2 items-center w-full border border-gray-300 rounded-none py-5 md:py-7 justify-center hover:bg-gray-100 ">
+              <Button
+                onClick={handleGoogleSignup}
+                className="flex gap-2 items-center w-full border border-gray-300 rounded-none py-5 md:py-7 justify-center hover:bg-gray-100 "
+              >
                 <FcGoogle size={20} />
                 <span className="font-poppins">Sign up with Google</span>
               </Button>

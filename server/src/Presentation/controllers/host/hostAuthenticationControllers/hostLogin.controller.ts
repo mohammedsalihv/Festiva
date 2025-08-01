@@ -1,15 +1,16 @@
 import { Request, Response } from "express";
+import { IHostLoginController } from "../../../../domain/controlInterface/host/authentication controller interface/interface.hostLoginController";
 import { HostLoginUseCase } from "../../../../application/use-cases/host/hostAuthentication/usecase.hostLogin";
 import logger from "../../../../utils/common/messages/logger";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
-export class HostLoginController {
-  constructor(private HostLogin: HostLoginUseCase) {}
+export class HostLoginController implements IHostLoginController{
+  constructor(private hostLoginUsecase: HostLoginUseCase) {}
 
-  async hostLogin(req: Request, res: Response) {
+  async hostLogin(req: Request, res: Response){
     try {
       const { email, password } = req.body;
-      const { accessToken, refreshToken, host } = await this.HostLogin.execute(
+      const { accessToken, refreshToken, host } = await this.hostLoginUsecase.execute(
         email,
         password
       );

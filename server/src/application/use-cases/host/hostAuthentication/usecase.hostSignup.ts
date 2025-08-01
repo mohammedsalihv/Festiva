@@ -1,23 +1,24 @@
 import { hash } from "../../../../utils/common/auth/passwordHash";
+import { IHostSignupUseCase } from "../../../../domain/usecaseInterface/host/authentication usecase interfaces/interface.hostSignupUseCase";
 import {
   registerHostDTO,
   HostDetailsDTO,
 } from "../../../../types/DTO/host/dto.host";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
-import { IHost } from "../../../../domain/entities/modelInterface/interface.host";
+import { IHost } from "../../../../domain/entities/modelInterface/host/interface.host";
 import { TokenService } from "../../../tokenService/service.token";
 import { IHostSignupRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostSignupRepository";
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
-export class HostSignupUseCase {
+export class HostSignupUseCase implements IHostSignupUseCase {
   constructor(
     private hostSignupRepository: IHostSignupRepository,
     private hostRepository: IHostRepository,
     private tokenService: TokenService
   ) {}
 
-  async execute(hostData: registerHostDTO): Promise<HostDetailsDTO> {
+  async hostSignup(hostData: registerHostDTO): Promise<HostDetailsDTO> {
     const { email, password } = hostData;
     const existingHost = await this.hostRepository.findByEmail(email);
     if (existingHost)
