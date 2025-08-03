@@ -1,5 +1,5 @@
-export interface IHost {
-  _id?: string;
+export interface IHostModel {
+  id?: string;
   name: string;
   email: string;
   phone: string;
@@ -15,5 +15,6 @@ export interface IHost {
   totalRequests?: number;
   acceptedRequests?: number;
   rejectedRequests?: number;
+  signupMethod: string,
   timestamp?: Date;
 }

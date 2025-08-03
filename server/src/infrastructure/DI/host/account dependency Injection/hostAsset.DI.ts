@@ -1,6 +1,6 @@
 import { HostAssetController } from "../../../../Presentation/controllers/host/hostAccountControllers/hostAsset.controller";
-import { HostAssetRepository } from "../../../repositories/host/account/repository.hostAssets";
-import { HostAssetUseCase } from "../../../../application/use-cases/host/host account/usecase.hostAsset";
+import { HostAssetRepository } from "../../../repositories/host/hostAccountRepositories/repository.hostAssets";
+import { HostAssetUseCase } from "../../../../application/usecases/host/hostAccountUsecases/usecase.hostAsset";
 import { hostVenueController } from "../services dependency Injection/hostVenue.DI";
 import { hostRentCarController } from "../services dependency Injection/hostRentCar.DI";
 import { hostCatersController } from "../services dependency Injection/hostCaters.DI";

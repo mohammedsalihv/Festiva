@@ -1,9 +1,9 @@
-import { AdminAssetManagementUseCase } from "../../../../application/use-cases/admin/adminManagement/usecase.adminAssetManagement";
-import { AdminAssetManagementRepository } from "../../../repositories/admin/management/repository.adminAssetManagement";
+import { AdminAssetManagementUseCase } from "../../../../application/usecases/admin/adminManagementUsecases/usecase.adminAssetManagement";
+import { AdminAssetManagementRepository } from "../../../repositories/admin/adminManagementRepositories/repository.adminAssetManagement";
 import { AdminAssetsController } from "../../../../Presentation/controllers/admin/adminManagementControllers/adminAsset.controller";
-import { HostNotificationUseCase } from "../../../../application/use-cases/host/host account/usecase.hostNotification";
+import { HostNotificationUseCase } from "../../../../application/usecases/host/hostAccountUsecases/usecase.hostNotification";
 import { NotificationRepository } from "../../../repositories/base/account/repository.notification";
-import { HostNotificationRepository } from "../../../repositories/host/account/repository.hostNotification";
+import { HostNotificationRepository } from "../../../repositories/host/hostAccountRepositories/repository.hostNotification";
 import { adminVenueController } from "../services/adminVenue.DI";
 import { adminRentCarController } from "../services/adminRentCar.DI";
 import { adminStudioController } from "../services/adminStudio.DI";

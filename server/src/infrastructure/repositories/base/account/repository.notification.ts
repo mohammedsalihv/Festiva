@@ -1,4 +1,4 @@
-import { NotificationModel } from "../../../../domain/models/notificationModel";
+import { NotificationModel } from "../../../../domain/models/host/hostFeaturesModels/notificationModel";
 import { INotificationRepository } from "../../../../domain/entities/repositoryInterface/base/interface.notificationRepository";
 import { CreateAssetNotificationDTO } from "../../../../types/DTO/common/notification";
 

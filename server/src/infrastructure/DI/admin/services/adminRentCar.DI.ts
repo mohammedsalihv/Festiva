@@ -1,5 +1,5 @@
-import { AdminRentCarRepository } from "../../../repositories/admin/services/repository.adminRentCar";
-import { AdminRentCarUseCase } from "../../../../application/use-cases/admin/adminServices/usecase.adminRentCar";
+import { AdminRentCarRepository } from "../../../repositories/admin/adminServiceRepositories/repository.adminRentCar";
+import { AdminRentCarUseCase } from "../../../../application/usecases/admin/adminServicesUsecases/usecase.adminRentCar";
 import { AdminRentCarController } from "../../../../Presentation/controllers/admin/adminServiceControllers/adminRentCar.controller";
 
 const adminRentCarRepository = new AdminRentCarRepository();

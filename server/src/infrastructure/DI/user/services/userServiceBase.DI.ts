@@ -1,4 +1,4 @@
-import { UserServiceBaseController } from "../../../../Presentation/controllers/user/userServicesControllers/userServiceBase.controller";
+import { UserServiceBaseController } from "../../../../adapters/controllers/user/userServicesControllers/userServiceBase.controller";
 import { userVenueController } from "./userVenue.DI";
 import { userRentCarController } from "./userRentCar.DI";
 import { userCatersController } from "./userCaters.DI";

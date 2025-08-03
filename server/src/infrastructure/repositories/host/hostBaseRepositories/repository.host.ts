@@ -1,0 +1,9 @@
+import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
+import { IHostModel } from "../../../../domain/entities/modelInterface/host/interface.host";
+import { HostModel } from "../../../../domain/models/host/hostAuthenticationModels/hostModel";
+
+export class HostRepository implements IHostRepository {
+  async findByEmail(email: string): Promise<IHostModel | null> {
+    return HostModel.findOne({ email });
+  }
+}

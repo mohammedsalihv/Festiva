@@ -1,6 +1,6 @@
 import { HostNotificationController } from "../../../../Presentation/controllers/host/hostAccountControllers/hostNotification.controller";
-import { HostNotificationRepository } from "../../../repositories/host/account/repository.hostNotification";
-import { HostNotificationUseCase } from "../../../../application/use-cases/host/host account/usecase.hostNotification";
+import { HostNotificationRepository } from "../../../repositories/host/hostAccountRepositories/repository.hostNotification";
+import { HostNotificationUseCase } from "../../../../application/usecases/host/hostAccountUsecases/usecase.hostNotification";
 
 const hostNotificationRepository = new HostNotificationRepository();
 const hostNotificationUseCase = new HostNotificationUseCase(

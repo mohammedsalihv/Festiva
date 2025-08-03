@@ -1,7 +1,7 @@
 import {
   IStudioBase,
   IStudio,
-} from "../../../serviceInterface/interface.studio";
+} from "../../../serviceInterface/host/interface.studio";
 
 export interface IUserStudioRepository {
   findAllStudios(): Promise<IStudioBase[]>;

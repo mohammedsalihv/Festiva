@@ -1,6 +1,6 @@
-import { UserCatersController } from "../../../../Presentation/controllers/user/userServicesControllers/userCaters.controller";
-import { UserCatersRepository } from "../../../repositories/user/services/repository.userCaters";
-import { UserCatersUseCase } from "../../../../application/use-cases/user/services/usecase.userCaters";
+import { UserCatersController } from "../../../../adapters/controllers/user/userServicesControllers/userCaters.controller";
+import { UserCatersRepository } from "../../../repositories/user/userPagesRepositories/repository.userCaters";
+import { UserCatersUseCase } from "../../../../application/usecases/user/usetServiceUsecases/usecase.userCaters";
 
 const userCatersRepository = new UserCatersRepository();
 const userCatersUseCase = new UserCatersUseCase(userCatersRepository);

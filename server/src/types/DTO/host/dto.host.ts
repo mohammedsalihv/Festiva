@@ -1,3 +1,22 @@
+export interface googleLoginHostDTO {
+  name: string;
+  email: string;
+  phone?: string;
+  location?: string;
+  role?: string;
+  profilePic?: string;
+  isBlocked?: boolean;
+  isVerfied?: boolean;
+  isSubscriber?: boolean;
+  isActive?: boolean;
+  listedAssets?: number;
+  totalRequests?: number;
+  acceptedRequests?: number;
+  rejectedRequests?: number;
+}
+
+
+
 export interface registerHostDTO {
   name: string;
   email: string;
@@ -10,6 +29,7 @@ export interface registerHostDTO {
   isVerfied?: boolean;
   isSubscriber?: boolean;
   isActive?: boolean;
+  signupMethod?:string;
   listedAssets?: number;
   totalRequests?: number;
   acceptedRequests?: number;
@@ -28,6 +48,7 @@ export interface responseHostDTO {
   isVerified?: boolean;
   isSubscriber?: boolean;
   isActive?: boolean;
+  signupMethod?:string;
   listedAssets?: number;
   totalRequests?: number;
   acceptedRequests?: number;

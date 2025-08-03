@@ -1,4 +1,4 @@
-import { IRentCar } from "../../../entities/serviceInterface/interface.rentCar";
+import { IRentCar } from "../../../entities/serviceInterface/host/interface.rentCar";
 
 export interface IHostRentCarUseCase {
   addRentCar(rentCar: IRentCar): Promise<IRentCar>;

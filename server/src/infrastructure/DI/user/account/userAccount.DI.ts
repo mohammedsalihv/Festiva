@@ -1,7 +1,7 @@
-import { UserProfileController } from "../../../../Presentation/controllers/user/page controllers/userProfile.controller";
-import { UserProfileUseCase } from "../../../../application/use-cases/user/profile/usecase.userProfile";
-import { UserProfileRepository } from "../../../repositories/user/pages/repository.userProfile";
-import { UserRepository } from "../../../repositories/user/pages/repository.user";
+import { UserProfileController } from "../../../../adapters/controllers/user/userPagesControllers/userProfile.controller";
+import { UserProfileUseCase } from "../../../../application/usecases/user/userProfileUsecase/usecase.userProfile";
+import { UserProfileRepository } from "../../../repositories/user/userProfileRepositories/repository.userProfile";
+import { UserRepository } from "../../../repositories/user/userBaseRepositories/repository.user";
 
 const userProfileRepository = new UserProfileRepository();
 const userRepository = new UserRepository();

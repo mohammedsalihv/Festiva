@@ -1,4 +1,4 @@
-export interface IAssetBase {
+export interface IAssetBaseUseCase {
   _id: string;
   name: string;
   type: "venue" | "car" | "studio" | "cater";

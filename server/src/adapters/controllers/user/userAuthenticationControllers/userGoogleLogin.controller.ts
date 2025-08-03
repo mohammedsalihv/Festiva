@@ -1,0 +1,46 @@
+import { Request, Response } from "express";
+import { IUserGoogleLoginController } from "../../../../domain/controlInterface/user/userAuthenticationControllerInterfaces/interface.userGoogleLoginController";
+import { IUserGoogleLoginUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userGoogleLoginUsecase";
+import { toUserGoogleLoginResponseDTO } from "../../../../types/DTO/user/dto.hostGoogleLogin";
+import { IUserGoogleLoginValidator } from "../../../../domain/validatorInterface/user/interface.userGoogleLoginValidator";
+import {
+  statusCodes,
+  statusMessages,
+} from "../../../../utils/common/messages/constantResponses";
+import logger from "../../../../utils/common/messages/logger";
+
+export class UserGoogleLoginController implements IUserGoogleLoginController {
+  constructor(
+    private userGoogleLoginUseCase: IUserGoogleLoginUseCase,
+    private validator: IUserGoogleLoginValidator
+  ) {}
+
+  async userLogin(req: Request, res: Response): Promise<void> {
+    try {
+      const { email, name, sub: googleId } = req.body;
+
+      this.validator.validate({ email, firstname: name });
+
+      const { user, accessToken, refreshToken } =
+        await this.userGoogleLoginUseCase.execute(name, googleId, email);
+
+      const userResponse = toUserGoogleLoginResponseDTO(
+        user,
+        accessToken,
+        refreshToken
+      );
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: statusMessages.userLoginSuccess,
+        ...userResponse,
+      });
+    } catch (error: any) {
+      logger.error("User Google Login Error:", error.message);
+      res.status(statusCodes.serverError).json({
+        success: false,
+        message: error.message || statusMessages.serverError,
+      });
+    }
+  }
+}

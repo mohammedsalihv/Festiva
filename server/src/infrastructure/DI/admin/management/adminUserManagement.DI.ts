@@ -1,6 +1,6 @@
 import { AdminUsersController } from "../../../../Presentation/controllers/admin/adminManagementControllers/adminUser.controller";
-import { AdminUserManagementUseCase } from "../../../../application/use-cases/admin/adminManagement/usecase.adminUserManagement";
-import { AdminUserManagementRepository } from "../../../repositories/admin/management/repository.adminUserManagement";
+import { AdminUserManagementUseCase } from "../../../../application/usecases/admin/adminManagementUsecases/usecase.adminUserManagement";
+import { AdminUserManagementRepository } from "../../../repositories/admin/adminManagementRepositories/repository.adminUserManagement";
 
 const adminUserManagementRepository = new AdminUserManagementRepository();
 const adminUserManagementUseCase = new AdminUserManagementUseCase(

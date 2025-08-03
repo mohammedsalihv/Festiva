@@ -5,11 +5,10 @@ export interface responseUserDTO {
   email: string;
   phone?: string;
   profilePic?: string;
-  role: string;
-  googleId?: string;
-  isActive: boolean;
+  role?: string;
+  isActive?: boolean;
   timestamp?: Date;
-  isBlocked: boolean;
+  isBlocked?: boolean;
 }
 
 export interface responseAllUsersDTO {
@@ -32,7 +31,7 @@ export interface resetPasswordDTO {
   newPassword: string;
 }
 
-export interface UserDetailsDTO {
+export interface userDetailsDTO {
   user: {
     id: string;
     firstname: string;

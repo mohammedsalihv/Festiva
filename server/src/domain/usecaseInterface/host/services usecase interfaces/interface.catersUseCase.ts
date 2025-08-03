@@ -1,4 +1,4 @@
-import { ICaters } from "../../../entities/serviceInterface/interface.caters";
+import { ICaters } from "../../../entities/serviceInterface/host/interface.caters";
 
 export interface IHostCatersUseCase {
   addCaters(caters: ICaters): Promise<ICaters>;

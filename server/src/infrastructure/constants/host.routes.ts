@@ -3,6 +3,7 @@ export const HOST_ROUTES = {
     hostSignup: "/signup",
     hostGoogleSignup: "/google/signup",
     hostLogin: "/login",
+    hostGoogleLogin: "/google/login",
     hostEmailValidation:"/validateEmail",
     Refresh_Token: "/refresh",
     hostLogout: "/logout",

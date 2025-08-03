@@ -1,7 +1,7 @@
 import {
   ICatersBase,
   ICaters,
-} from "../../../serviceInterface/interface.caters";
+} from "../../../serviceInterface/host/interface.caters";
 
 export interface IUserCatersRepository {
   findAllCaters(): Promise<ICatersBase[]>;

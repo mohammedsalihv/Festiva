@@ -1,31 +1,36 @@
 import { TokenService } from "../../../../application/tokenService/service.token";
 
+import { UserLoginValidator } from "../../../../utils/validations/user/userLoginValidator";
+import { UserGoogleLoginValidator } from "../../../../utils/validations/user/userGoogleLoginValidator";
+
 // controllers
 
-import { UserController } from "../../../../Presentation/controllers/user/userAuthenticationControllers/user.controller";
-import { UserSignupController } from "../../../../Presentation/controllers/user/userAuthenticationControllers/userSignup.controller";
-import { RefreshTokenController } from "../../../../Presentation/controllers/user/userAuthenticationControllers/userRefreshToken.controller";
-import { UserLoginController } from "../../../../Presentation/controllers/user/userAuthenticationControllers/userLogin.controller";
-import { UserGoogleLoginController } from "../../../../Presentation/controllers/user/userAuthenticationControllers/userGoogle.controller";
-import { UserLogoutController } from "../../../../Presentation/controllers/user/userAuthenticationControllers/userLogout.controller";
+import { UserController } from "../../../../adapters/controllers/user/userBaseControllers/user.controller";
+import { UserSignupController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userSignup.controller";
+import { RefreshTokenController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userRefreshToken.controller";
+import { UserLoginController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userLogin.controller";
+import { UserGoogleLoginController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userGoogleLogin.controller";
+import { UserLogoutController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userLogout.controller";
 
 //use-cases
 
-import { UserSignupUseCase } from "../../../../application/use-cases/user/authentication/usecase.userSignup";
-import { UserLoginUseCase } from "../../../../application/use-cases/user/authentication/usecase.userLogin";
-import { UserGoogleLoginUseCase } from "../../../../application/use-cases/user/authentication/usecase.userGoogleLogin";
-import { UserPasswordResetUseCase } from "../../../../application/use-cases/user/authentication/usecase.passwordReset";
-import { UserLogoutUseCase } from "../../../../application/use-cases/user/authentication/usecase.userLogout";
+import { UserSignupUseCase } from "../../../../application/usecases/user/userAuthenticationUsecases/usecase.userSignup";
+import { UserLoginUseCase } from "../../../../application/usecases/user/userAuthenticationUsecases/usecase.userLogin";
+import { UserGoogleLoginUseCase } from "../../../../application/usecases/user/userAuthenticationUsecases/usecase.userGoogleLogin";
+import { UserPasswordResetUseCase } from "../../../../application/usecases/user/userAuthenticationUsecases/usecase.passwordReset";
+import { UserLogoutUseCase } from "../../../../application/usecases/user/userAuthenticationUsecases/usecase.userLogout";
 
 //repositories
 
-import { UserSignupRepository } from "../../../repositories/user/auth/repository.userSignup";
-import { UserLoginRepository } from "../../../repositories/user/auth/repository.userLogin";
-import { UserGoogleAuthRepository } from "../../../repositories/user/auth/repository.userGoogle";
-import { UserRepository } from "../../../repositories/user/pages/repository.user";
-import { UserLogoutRepository } from "../../../repositories/user/auth/repository.userLogout";
+import { UserSignupRepository } from "../../../repositories/user/userAuthenitcationRepositories/repository.userSignup";
+import { UserLoginRepository } from "../../../repositories/user/userAuthenitcationRepositories/repository.userLogin";
+import { UserGoogleAuthRepository } from "../../../repositories/user/userAuthenitcationRepositories/repository.userGoogle";
+import { UserRepository } from "../../../repositories/user/userBaseRepositories/repository.user";
+import { UserLogoutRepository } from "../../../repositories/user/userAuthenitcationRepositories/repository.userLogout";
 
 const tokenService = new TokenService();
+const hostLoginValidator = new UserLoginValidator();
+const userGoogleLoginValidator = new UserGoogleLoginValidator();
 
 // Instantiating Repositories
 
@@ -40,11 +45,14 @@ const userSignupUseCase = new UserSignupUseCase(
   userRegisterRepository,
   tokenService
 );
+
 const userLoginUseCase = new UserLoginUseCase(
   userLoginRepository,
   userRepository,
-  tokenService
+  tokenService,
+  hostLoginValidator
 );
+
 const userGoogleLoginUseCase = new UserGoogleLoginUseCase(
   userGoogleAuthRepository,
   tokenService
@@ -57,7 +65,8 @@ const userSignupController = new UserSignupController(userSignupUseCase);
 const userLoginController = new UserLoginController(userLoginUseCase);
 const refreshTokenController = new RefreshTokenController(tokenService);
 const userGoogleLoginController = new UserGoogleLoginController(
-  userGoogleLoginUseCase
+  userGoogleLoginUseCase,
+  userGoogleLoginValidator
 );
 const userController = new UserController(userResetPasswordUseCase);
 const userLogoutController = new UserLogoutController(userLogoutUseCase);

@@ -1,4 +1,4 @@
-import { IVenueBase, IVenue } from "../../../serviceInterface/interface.venue";
+import { IVenueBase, IVenue } from "../../../serviceInterface/host/interface.venue";
 
 export interface IUserVenueRepository {
   findAllVenues(): Promise<IVenueBase[]>;

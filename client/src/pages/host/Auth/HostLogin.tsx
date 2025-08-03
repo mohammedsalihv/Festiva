@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { hostLogin } from "@/api/host/hostAuthService";
+import { hostLogin , hostGoogleLogin} from "@/api/host/hostAuthService";
 import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -14,6 +14,8 @@ import {
   validateHostLoginForm,
   FormState,
 } from "@/utils/validations/host/auth/hostLoginValidation";
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "@/config/base/auth/firebase";
 
 interface Props {
   onClose: () => void;
@@ -73,6 +75,45 @@ const HostLogin = ({ onClose, showSignup }: Props) => {
     mutation.mutate(formData);
   };
 
+  const handleGoogleLogin = async () => {
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        const user = result.user;
+  
+        const name = user.displayName || "";
+        const email = user.email || "";
+        const phone = user.phoneNumber || "";
+        const location = "";
+        const photo = user.photoURL || "";
+  
+        const response = await hostGoogleLogin({
+          name,
+          email,
+          phone,
+          location,
+          profilePic: photo,
+        });
+  
+        const { host, accessToken, refreshToken } = response;
+  
+        const hostData = {
+          id: host.id,
+          name: host.name,
+          email: host.email,
+          phone: host.phone,
+          profilePic: host.profilePic,
+          role: host.role,
+          accessToken,
+          refreshToken,
+        };
+        dispatch(setHostDetails(hostData));
+        navigate("/host/dashboard");
+      } catch (error) {
+        toast.error("Google Sign-In failed. Please try again.");
+        console.error(error);
+      }
+    };
+
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 px-2 font-poppins">
       <div className="relative w-full sm:max-w-md max-h-[90vh] bg-white shadow-xl overflow-y-auto p-4 sm:p-6 pt-8">
@@ -94,12 +135,14 @@ const HostLogin = ({ onClose, showSignup }: Props) => {
           </p>
         </div>
 
-        {/* <div className="space-y-3 mb-4">
-          <Button className="flex items-center w-full border border-gray-300 rounded-none py-5 justify-center hover:bg-gray-50">
+        <div className="space-y-3 mb-4">
+          <Button 
+          onClick={handleGoogleLogin}
+          className="flex items-center w-full border border-gray-300 rounded-none py-5 justify-center hover:bg-gray-50">
             <FcGoogle className="text-lg mr-2" />
-            <span className="font-poppins">Log in with Google</span>
+            <span className="font-poppins">Continue with Google</span>
           </Button>
-        </div> */}
+        </div>
 
         <div className="flex items-center my-4">
           <div className="flex-grow border-t border-gray-300" />

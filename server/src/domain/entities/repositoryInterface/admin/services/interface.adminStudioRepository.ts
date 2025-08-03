@@ -1,4 +1,4 @@
-import { IStudio } from "../../../serviceInterface/interface.studio";
+import { IStudio } from "../../../serviceInterface/host/interface.studio";
 
 export interface IAdminStudioRepository {
   studioDetails(studioId: string): Promise<IStudio | null>;

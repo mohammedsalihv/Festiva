@@ -21,6 +21,8 @@ import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { FcGoogle } from "react-icons/fc";
 import Otp from "@/components/Otp";
+import { useDispatch } from "react-redux";
+import { setHostDetails } from "@/redux/Slice/host/common/hostSlice";
 
 interface ErrorState {
   name?: string;
@@ -50,6 +52,7 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
   const [showOtp, setShowOtp] = useState(false);
   const [otpError, setOtpError] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -158,21 +161,36 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
       const email = user.email || "";
       const phone = user.phoneNumber || "";
       const location = "";
-      await hostGoogleSignup({
+      const photo = user.photoURL || "";
+
+      const response = await hostGoogleSignup({
         name,
         email,
         phone,
-        password: "google-auth",
         location,
+        profilePic: photo,
+        signupMethod: "google",
       });
-      toast.success("Registration successful!");
+
+      const { host, accessToken, refreshToken } = response;
+
+      const hostData = {
+        id: host.id,
+        name: host.name,
+        email: host.email,
+        phone: host.phone,
+        profilePic: host.profilePic,
+        role: host.role,
+        accessToken,
+        refreshToken,
+      };
+      dispatch(setHostDetails(hostData));
       navigate("/host/dashboard");
     } catch (error) {
       toast.error("Google Sign-In failed. Please try again.");
       console.error(error);
     }
   };
-
   if (!isOpen) return null;
 
   return (
@@ -212,7 +230,7 @@ const HostSignup = ({ onClose, showLogin }: Props) => {
                 className="flex gap-2 items-center w-full border border-gray-300 rounded-none py-5 md:py-7 justify-center hover:bg-gray-100 "
               >
                 <FcGoogle size={20} />
-                <span className="font-poppins">Sign up with Google</span>
+                <span className="font-poppins">Continue with Google</span>
               </Button>
             </div>
 

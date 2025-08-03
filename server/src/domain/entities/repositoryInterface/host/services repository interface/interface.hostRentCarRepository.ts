@@ -1,4 +1,4 @@
-import { IRentCar } from "../../../serviceInterface/interface.rentCar";
+import { IRentCar } from "../../../serviceInterface/host/interface.rentCar";
 
 export interface IHostRentCarRepository {
   addRentCar(rentCar: IRentCar): Promise<IRentCar>;

@@ -1,7 +1,7 @@
 import {
   IRentCarBase,
   IRentCar,
-} from "../../../serviceInterface/interface.rentCar";
+} from "../../../serviceInterface/host/interface.rentCar";
 
 export interface IUserRentCarRepository {
   findAllRentCars(): Promise<IRentCarBase[]>;

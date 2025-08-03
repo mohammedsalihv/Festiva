@@ -21,6 +21,9 @@ export enum statusMessages {
     invalidCredential = "Invalid credentials",
     invalidMail = 'Invalid email',
     uniqueIDMissing = 'unique ID is missing',
+    invalidSignupMethod= "Invalid signup method",
+    emailRequired="Email is required.",
+    invalidNameFormat="Invalid name format.",
 
 
     noAccessToken = 'access token required',
@@ -33,7 +36,15 @@ export enum statusMessages {
 
 
     serverError = 'Internal server error',
-    badRequest = 'Bad Request'
+    badRequest = 'Bad Request',
+
+
+
+    userLoginSuccess="User logged in successfully",
+    loginError="Login Error:",
+
+    userSignupSuccess="User signup successfully",
+    userLogoutSuccess="User loggout in successfully"
 
 }
 

@@ -1,6 +1,6 @@
-import { AdminStudioRepository } from "../../../repositories/admin/services/repository.adminStudio";
+import { AdminStudioRepository } from "../../../repositories/admin/adminServiceRepositories/repository.adminStudio";
 import { AdminStudioController } from "../../../../Presentation/controllers/admin/adminServiceControllers/adminStudio.controller";
-import { AdminStudioUseCase } from "../../../../application/use-cases/admin/adminServices/usecase.adminStudio";
+import { AdminStudioUseCase } from "../../../../application/usecases/admin/adminServicesUsecases/usecase.adminStudio";
 
 const adminStudioRepository = new AdminStudioRepository();
 const adminStudioUseCase = new AdminStudioUseCase(adminStudioRepository);

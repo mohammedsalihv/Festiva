@@ -1,13 +1,8 @@
 import axiosInstance from "@/config/host/hostAxiosInstence";
 import { HOST_API } from "@/utils/constants/api endpoints/host.api";
-
-export interface HostRegisterData {
-  name: string;
-  email: string;
-  password: string;
-  phone: string;
-  location: string;
-}
+import { hostUsualSignupData } from "@/utils/Types/host/authentication/hostUsualSignup";
+import { hostgoogleSignupData } from "@/utils/Types/host/authentication/hostGoogleSignup";
+import { hostGoogleLoginData } from "@/utils/Types/host/authentication/hostGoogleLogin";
 
 export interface HostLoginData {
   email: string;
@@ -19,11 +14,18 @@ export const hostLogin = async (data: HostLoginData) => {
     HOST_API.Authentication.hostLogin,
     data
   );
-  console.log(response.data)
   return response.data;
 };
 
-export const hostSignup = async (data: HostRegisterData) => {
+export const hostGoogleLogin = async (data: hostGoogleLoginData) => {
+  const response = await axiosInstance.post(
+    HOST_API.Authentication.hostGoogleLogin,
+    data
+  );
+  return response.data;
+};
+
+export const hostSignup = async (data: hostUsualSignupData) => {
   const response = await axiosInstance.post(
     HOST_API.Authentication.hostSignup,
     data
@@ -31,7 +33,7 @@ export const hostSignup = async (data: HostRegisterData) => {
   return response.data;
 };
 
-export const hostGoogleSignup = async (data: HostRegisterData) => {
+export const hostGoogleSignup = async (data: hostgoogleSignupData) => {
   const response = await axiosInstance.post(
     HOST_API.Authentication.hostGoogleSignup,
     data
