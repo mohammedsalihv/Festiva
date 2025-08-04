@@ -8,6 +8,7 @@ import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
+import { IUserModel } from "../../../../domain/entities/modelInterface/user/interface.user";
 
 export class UserLoginController implements IUserLoginController {
   constructor(private userLoginUseCase: IUserLoginUseCase) {}
@@ -21,7 +22,7 @@ export class UserLoginController implements IUserLoginController {
       res.status(statusCodes.Success).json({
         success: true,
         message: statusMessages.userLoginSuccess,
-        user: userLoginSanitizer.toResponse(user),
+        user: userLoginSanitizer.toUserLoginResponse(user as IUserModel),
         accessToken,
         refreshToken,
       });

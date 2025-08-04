@@ -23,18 +23,7 @@ export class AdminUserManagementRepository
     ]);
     const totalPages = Math.ceil(totalItems / limit);
 
-    const data: responseUserDTO[] = rawUsers.map((user) => ({
-      id: user._id.toString(),
-      firstname: user.firstname,
-      lastname: user.lastname,
-      email: user.email,
-      phone: user.phone,
-      profilePic: user.profilePic,
-      role: user.role,
-      isActive: user.isActive,
-      timestamp: user.timestamp,
-      isBlocked: user.isBlocked,
-    }));
+    const data: responseUserDTO[] = rawUsers.map(toResponseUserDTO);
 
     return {
       data,

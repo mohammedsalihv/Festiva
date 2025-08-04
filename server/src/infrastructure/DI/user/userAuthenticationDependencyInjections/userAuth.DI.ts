@@ -24,7 +24,7 @@ import { UserLogoutUseCase } from "../../../../application/usecases/user/userAut
 
 import { UserSignupRepository } from "../../../repositories/user/userAuthenitcationRepositories/repository.userSignup";
 import { UserLoginRepository } from "../../../repositories/user/userAuthenitcationRepositories/repository.userLogin";
-import { UserGoogleAuthRepository } from "../../../repositories/user/userAuthenitcationRepositories/repository.userGoogle";
+import { UserGoogleLoginRepository } from "../../../repositories/user/userAuthenitcationRepositories/repository.userGoogleLogin";
 import { UserRepository } from "../../../repositories/user/userBaseRepositories/repository.user";
 import { UserLogoutRepository } from "../../../repositories/user/userAuthenitcationRepositories/repository.userLogout";
 
@@ -37,7 +37,7 @@ const userGoogleLoginValidator = new UserGoogleLoginValidator();
 const userRegisterRepository = new UserSignupRepository();
 const userLoginRepository = new UserLoginRepository();
 const userRepository = new UserRepository();
-const userGoogleAuthRepository = new UserGoogleAuthRepository();
+const userGoogleLoginRepository = new UserGoogleLoginRepository();
 const userLogoutRepository = new UserLogoutRepository();
 
 // Instantiate use cases
@@ -54,8 +54,9 @@ const userLoginUseCase = new UserLoginUseCase(
 );
 
 const userGoogleLoginUseCase = new UserGoogleLoginUseCase(
-  userGoogleAuthRepository,
-  tokenService
+  userGoogleLoginRepository,
+  tokenService,
+  userGoogleLoginValidator
 );
 const userResetPasswordUseCase = new UserPasswordResetUseCase(userRepository);
 const userLogoutUseCase = new UserLogoutUseCase(userLogoutRepository);

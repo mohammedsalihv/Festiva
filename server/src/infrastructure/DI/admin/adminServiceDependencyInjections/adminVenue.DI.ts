@@ -1,4 +1,4 @@
-import { AdminVenueController } from "../../../../Presentation/controllers/admin/adminServiceControllers/adminVenue.controller";
+import { AdminVenueController } from "../../../../adapters/controllers/admin/adminServiceControllers/AdminVenue.controller";
 import { AdminVenueRepository } from "../../../repositories/admin/adminServiceRepositories/repository.adminVenue";
 import { AdminVenueUseCase } from "../../../../application/usecases/admin/adminServicesUsecases/usecase.adminVenue";
 

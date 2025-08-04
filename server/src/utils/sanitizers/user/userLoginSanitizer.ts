@@ -2,7 +2,7 @@ import { IUserModel } from "../../../domain/entities/modelInterface/user/interfa
 import { userLoginResponseDTO } from "../../../types/DTO/user/dto.userLogin";
 
 export class userLoginSanitizer {
-  static toResponse(user: IUserModel): userLoginResponseDTO {
+  static toUserLoginResponse(user: IUserModel): userLoginResponseDTO {
     return {
       id: user.id,
       firstname: user.firstname,

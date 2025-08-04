@@ -1,13 +1,13 @@
 import express, { Request, Response } from "express";
 import { USER_ROUTES } from "../../../infrastructure/constants/user.routes";
 import logger from "../../../utils/common/messages/logger";
-import { userProfileController } from "../../../infrastructure/DI/user/account/userAccount.DI";
+import { userProfileController } from "../../../infrastructure/DI/user/userAccountDependencyInjections/userAccount.DI";
 import { singleImageUpload } from "../../../utils/common/middlewares/multer";
 import { authenticateToken } from "../../../utils/common/middlewares/auth";
-import { userVenueController } from "../../../infrastructure/DI/user/services/userVenue.DI";
-import { userRentCarController } from "../../../infrastructure/DI/user/services/userRentCar.DI";
-import { userStudioController } from "../../../infrastructure/DI/user/services/userStudio.DI";
-import { userCatersController } from "../../../infrastructure/DI/user/services/userCaters.DI";
+import { userVenueController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userVenue.DI";
+import { userRentCarController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userRentCar.DI";
+import { userStudioController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userStudio.DI";
+import { userCatersController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userCaters.DI";
 
 export interface MulterRequest extends Request {
   file: Express.Multer.File;

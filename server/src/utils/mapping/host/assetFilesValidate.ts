@@ -1,5 +1,5 @@
-import CustomError from "../common/errors/CustomError";
-import { statusCodes } from "../common/messages/constantResponses";
+import CustomError from "../../common/errors/CustomError";
+import { statusCodes } from "../../common/messages/constantResponses";
 
 export const assetFilesValidate = async ({
   files,

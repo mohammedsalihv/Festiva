@@ -15,3 +15,10 @@ export interface googleSignupHostDTO {
   acceptedRequests?: number;
   rejectedRequests?: number;
 }
+
+export interface userGoogleSignupDTO {
+  firstname: string;
+  email: string;
+  profilePic: string;
+  signupMethod: string;
+}

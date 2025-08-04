@@ -7,9 +7,9 @@ import {
   refreshTokenController,
   userGoogleLoginController,
   userLogoutController,
-} from "../../../infrastructure/DI/user/authentication/userAuth.DI";
-import { otpController } from "../../../infrastructure/DI/base/authentication/otp.DI";
-import { userProfileController } from "../../../infrastructure/DI/user/account/userAccount.DI";
+} from "../../../infrastructure/DI/user/userAuthenticationDependencyInjections/userAuth.DI";
+import { otpController } from "../../../infrastructure/DI/base/baseAuthenticationDependencyInjections/otp.DI";
+import { userProfileController } from "../../../infrastructure/DI/user/userAccountDependencyInjections/userAccount.DI";
 import logger from "../../../utils/common/messages/logger";
 import { authenticateToken } from "../../../utils/common/middlewares/auth";
 

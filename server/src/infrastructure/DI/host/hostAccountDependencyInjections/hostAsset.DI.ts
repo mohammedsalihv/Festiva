@@ -1,10 +1,10 @@
-import { HostAssetController } from "../../../../Presentation/controllers/host/hostAccountControllers/hostAsset.controller";
+import { HostAssetController } from "../../../../adapters/controllers/host/hostAccountControllers/hostAsset.controller";
 import { HostAssetRepository } from "../../../repositories/host/hostAccountRepositories/repository.hostAssets";
 import { HostAssetUseCase } from "../../../../application/usecases/host/hostAccountUsecases/usecase.hostAsset";
-import { hostVenueController } from "../services dependency Injection/hostVenue.DI";
-import { hostRentCarController } from "../services dependency Injection/hostRentCar.DI";
-import { hostCatersController } from "../services dependency Injection/hostCaters.DI";
-import { hostStudioController } from "../services dependency Injection/hostStudio.DI";
+import { hostVenueController } from "../hostServiceDependencyInjections/hostVenue.DI";
+import { hostRentCarController } from "../hostServiceDependencyInjections/hostRentCar.DI";
+import { hostCatersController } from "../hostServiceDependencyInjections/hostCaters.DI";
+import { hostStudioController } from "../hostServiceDependencyInjections/hostStudio.DI";
 
 const hostAssetRepository = new HostAssetRepository();
 const hostAssetUseCase = new HostAssetUseCase(hostAssetRepository);

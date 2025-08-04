@@ -1,4 +1,4 @@
-import { AdminHostsController } from "../../../../Presentation/controllers/admin/adminManagementControllers/adminHost.controller";
+import { AdminHostsController } from "../../../../adapters/controllers/admin/adminManagementControllers/adminHost.controller";
 import { AdminHostManagementUseCase } from "../../../../application/usecases/admin/adminManagementUsecases/usecase.adminHostManagement";
 import { AdminHostManagementRepostory } from "../../../repositories/admin/adminManagementRepositories/repository.adminHostManagement";
 const adminHostManagementRepostory = new AdminHostManagementRepostory();

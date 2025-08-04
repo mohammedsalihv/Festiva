@@ -17,12 +17,20 @@ export class UserGoogleLoginController implements IUserGoogleLoginController {
 
   async userLogin(req: Request, res: Response): Promise<void> {
     try {
-      const { email, name, sub: googleId } = req.body;
+      const { email, name, profilePic } = req.body;
 
-      this.validator.validate({ email, firstname: name });
+      this.validator.validate({
+        email,
+        firstname: name,
+        profilePic: profilePic,
+      });
 
       const { user, accessToken, refreshToken } =
-        await this.userGoogleLoginUseCase.execute(name, googleId, email);
+        await this.userGoogleLoginUseCase.execute({
+          firstname: name,
+          email,
+          profilePic,
+        });
 
       const userResponse = toUserGoogleLoginResponseDTO(
         user,

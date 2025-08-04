@@ -5,13 +5,13 @@ import {
   hostLoginController,
   hostGoogleSignupController,
   refreshTokenController,
-} from "../../../infrastructure/DI/host/auth dependency Injection/hostAuth.DI";
+} from "../../../infrastructure/DI/host/hostAuthenticationDependencyInjections/hostAuth.DI";
 import logger from "../../../utils/common/messages/logger";
-import { hostController } from "../../../infrastructure/DI/host/host.DI";
+import { hostController } from "../../../infrastructure/DI/host/hostBaseDependencyInjections/host.DI";
 import {
   hostLogoutController,
   hostGoogleLoginController,
-} from "../../../infrastructure/DI/host/auth dependency Injection/hostAuth.DI";
+} from "../../../infrastructure/DI/host/hostAuthenticationDependencyInjections/hostAuth.DI";
 
 const hostAuthRoutes = express.Router();
 

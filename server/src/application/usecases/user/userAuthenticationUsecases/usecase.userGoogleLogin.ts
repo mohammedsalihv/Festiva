@@ -1,32 +1,40 @@
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { IUserGoogleRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userGoogleRepository";
+import { IUserGoogleLoginRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userGoogleLoginRepository";
+import { IUserGoogleLoginUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userGoogleLoginUsecase";
+import { IUserGoogleLoginValidator } from "../../../../domain/validatorInterface/user/interface.userGoogleLoginValidator";
 import { TokenService } from "../../../tokenService/service.token";
-import { userDetailsDTO } from "../../../../types/DTO/user/dto.user";
+import { toUserGoogleLoginUsecaseDTO } from "../../../../utils/mapping/user/userGoogleLoginMapper";
+import { userGoogleLoginFactory } from "../../../../domain/factories/user/userGoogleLogin.factory";
+import { userGoogleLoginResponseDTO } from "../../../../types/DTO/user/dto.hostGoogleLogin";
+import { googleLoginUserDTO } from "../../../../types/DTO/user/dto.hostGoogleLogin";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import CustomError from "../../../../utils/common/errors/CustomError";
+import { IUserModel } from "../../../../domain/entities/modelInterface/user/interface.user";
 
-export class UserGoogleLoginUseCase {
+export class UserGoogleLoginUseCase implements IUserGoogleLoginUseCase {
   constructor(
-    private userRepository: IUserGoogleRepository,
-    private tokenService: TokenService
+    private userGoogleLoginRepository: IUserGoogleLoginRepository,
+    private tokenService: TokenService,
+    private validator: IUserGoogleLoginValidator
   ) {}
 
-  async execute(
-    firstname: string,
-    googleId: string,
-    email: string
-  ): Promise<userDetailsDTO> {
-    let user = await this.userRepository.findByEmail(email);
+  async execute(data: googleLoginUserDTO): Promise<userGoogleLoginResponseDTO> {
+    this.validator.validate(data);
+
+    const { email, firstname } = data;
+
+    let user: IUserModel | null =
+      await this.userGoogleLoginRepository.findByEmail(email);
 
     if (user) {
-      if (!user.googleId) {
-        user = await this.userRepository.updateUser(user.id!, {
-          googleId,
+      if (!user.email) {
+        user = await this.userGoogleLoginRepository.updateUser(user.id!, {
+          firstname,
           isActive: true,
         });
 
         if (!user) {
           throw new CustomError(
-            "Failed to update user with Google ID",
+            "Failed to update user with Google",
             statusCodes.serverError
           );
         }
@@ -35,20 +43,10 @@ export class UserGoogleLoginUseCase {
       if (!user.isActive) {
         throw new CustomError("User is not active", statusCodes.forbidden);
       }
+    } else {
+      const newUser = userGoogleLoginFactory.createNewUser(data);
+      user = await this.userGoogleLoginRepository.createUser(newUser);
     }
-
-    user = await this.userRepository.createUser({
-      email,
-      firstname,
-      lastname: "",
-      profilePic: "",
-      phone: "",
-      googleId,
-      isActive: true,
-      isBlocked: false,
-      timestamp: new Date(),
-      role: "user",
-    });
 
     const accessToken = this.tokenService.generateAccessToken({
       id: user.id!,
@@ -60,23 +58,10 @@ export class UserGoogleLoginUseCase {
       role: user.role,
     });
 
-    const userResponse = {
-      id: user.id!,
-      firstname: user.firstname ?? "",
-      lastname: user.lastname ?? "",
-      phone: user.phone || "",
-      email: user.email ?? "",
-      profilePic: user.profilePic || "",
-      role: user.role || "user",
-      isActive: user.isActive ?? true,
-      isBlocked: user.isBlocked ?? false,
-      timestamp: user.timestamp,
-    };
-
     return {
       accessToken,
       refreshToken,
-      user: userResponse,
+      user: toUserGoogleLoginUsecaseDTO(user),
     };
   }
 }

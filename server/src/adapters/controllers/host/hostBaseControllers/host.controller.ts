@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { IHostController } from "../../../domain/controlInterface/host/interface.hostController";
-import { IHostUseCase } from "../../../domain/usecaseInterface/host/baseUsecaseInterfaces/interface.hostUseCase";
-import { statusCodes, statusMessages } from "../../../utils/common/messages/constantResponses";
-import CustomError from "../../../utils/common/errors/CustomError";
+import { IHostController } from "../../../../domain/controlInterface/host/interface.hostController";
+import { IHostUseCase } from "../../../../domain/usecaseInterface/host/baseUsecaseInterfaces/interface.hostUseCase";
+import { statusCodes , statusMessages } from "../../../../utils/common/messages/constantResponses";
+import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class HostController implements IHostController {
   constructor(private hostUseCase: IHostUseCase) {}

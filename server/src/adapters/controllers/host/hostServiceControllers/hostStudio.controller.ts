@@ -12,7 +12,7 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
-import { assetFilesValidate } from "../../../../utils/host/assetFilesValidate";
+import { assetFilesValidate } from "../../../../utils/mapping/host/assetFilesValidate";
 import { geocodeAddress } from "../../../../utils/common/geocoding/geocodeAddress";
 import CustomError from "../../../../utils/common/errors/CustomError";
 

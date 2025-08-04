@@ -1,4 +1,4 @@
-import { HostStudioController } from "../../../../Presentation/controllers/host/hostServiceControllers/hostStudio.controller";
+import { HostStudioController } from "../../../../adapters/controllers/host/hostServiceControllers/hostStudio.controller";
 import { HostStudioRepository } from "../../../repositories/host/hostServiceRepositories/repository.hostStudio";
 import { HostStudioUseCase } from "../../../../application/usecases/host/hostServicesUsecases/usecase.hostStudio";
 import { HostAssetLocationRepository } from "../../../repositories/host/hostServiceRepositories/repository.hostAssetLocation";

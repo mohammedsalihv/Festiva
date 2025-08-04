@@ -13,7 +13,7 @@ export class userSignupMapper {
       profilePic: user.profilePic ?? "",
       isBlocked: user.isBlocked ?? false,
       isActive: user.isActive ?? true,
-      timestamp: user.timestamp,
+      timestamp: user.timestamp ? new Date(user.timestamp) : undefined,
     };
   }
 }

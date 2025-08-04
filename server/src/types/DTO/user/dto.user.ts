@@ -33,13 +33,13 @@ export interface resetPasswordDTO {
 
 export interface userDetailsDTO {
   user: {
-    id: string;
-    firstname: string;
-    lastname: string;
-    phone: string;
-    email: string;
+    id?: string;
+    firstname?: string;
+    lastname?: string;
+    phone?: string;
+    email?: string;
     profilePic?: string;
-    role: string;
+    role?: string;
     isBlocked?: boolean;
     isActive?: boolean;
     timestamp?: Date;

@@ -1,4 +1,4 @@
-import { HostNotificationController } from "../../../../Presentation/controllers/host/hostAccountControllers/hostNotification.controller";
+import { HostNotificationController } from "../../../../adapters/controllers/host/hostAccountControllers/hostNotification.controller";
 import { HostNotificationRepository } from "../../../repositories/host/hostAccountRepositories/repository.hostNotification";
 import { HostNotificationUseCase } from "../../../../application/usecases/host/hostAccountUsecases/usecase.hostNotification";
 

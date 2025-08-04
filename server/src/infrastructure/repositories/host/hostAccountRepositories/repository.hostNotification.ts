@@ -1,6 +1,6 @@
 import { IHostNotificationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostNotificationRepositoy";
 import { NotificationModel } from "../../../../domain/models/host/hostFeaturesModels/notificationModel";
-import { UserModal } from "../../../../domain/models/user/userAuthenticationModels/userModel";
+import { UserModel } from "../../../../domain/models/user/userAuthenticationModels/userModel";
 import { RentCarModel } from "../../../../domain/models/host/hostServiceModels/rentCarModel";
 import { StudioModel } from "../../../../domain/models/host/hostServiceModels/studioModel";
 import { VenueModel } from "../../../../domain/models/host/hostServiceModels/venueModel";
@@ -15,7 +15,7 @@ export class HostNotificationRepository implements IHostNotificationRepository {
 
     const enriched = await Promise.all(
       notifications.map(async (notif) => {
-        const creator = await UserModal.findById(notif.createrId)
+        const creator = await UserModel.findById(notif.createrId)
           .select("firstname lastname email profilePic")
           .lean();
 

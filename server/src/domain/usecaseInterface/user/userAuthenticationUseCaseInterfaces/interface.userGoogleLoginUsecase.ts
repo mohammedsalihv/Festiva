@@ -1,9 +1,5 @@
-import { userDetailsDTO } from "../../../../types/DTO/user/dto.user";
+import {userGoogleLoginResponseDTO , googleLoginUserDTO } from "../../../../types/DTO/user/dto.hostGoogleLogin";
 
 export interface IUserGoogleLoginUseCase {
-  execute(
-    firstname: string,
-    googleId: string,
-    email: string
-  ): Promise<userDetailsDTO>;
+  execute(data: googleLoginUserDTO): Promise<userGoogleLoginResponseDTO>;
 }

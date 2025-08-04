@@ -1,4 +1,4 @@
-import { AdminUsersController } from "../../../../Presentation/controllers/admin/adminManagementControllers/adminUser.controller";
+import { AdminUsersController } from "../../../../adapters/controllers/admin/adminManagementControllers/adminUser.controller";
 import { AdminUserManagementUseCase } from "../../../../application/usecases/admin/adminManagementUsecases/usecase.adminUserManagement";
 import { AdminUserManagementRepository } from "../../../repositories/admin/adminManagementRepositories/repository.adminUserManagement";
 

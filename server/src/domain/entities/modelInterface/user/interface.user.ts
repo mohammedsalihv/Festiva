@@ -9,5 +9,5 @@ export interface IUserModel {
   role: string;
   isActive?: boolean;
   isBlocked?: boolean;
-  timestamp?: Date;
+  timestamp?: string | Date;
 }

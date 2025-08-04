@@ -11,7 +11,7 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
-import { assetFilesValidate } from "../../../../utils/host/assetFilesValidate";
+import { assetFilesValidate } from "../../../../utils/mapping/host/assetFilesValidate";
 import logger from "../../../../utils/common/messages/logger";
 import CustomError from "../../../../utils/common/errors/CustomError";
 

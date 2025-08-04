@@ -1,4 +1,4 @@
-import { HostRentCarController } from "../../../../Presentation/controllers/host/hostServiceControllers/hostRentCar.controller";
+import { HostRentCarController } from "../../../../adapters/controllers/host/hostServiceControllers/hostRentCar.controller";
 import { HostRentCarUseCase } from "../../../../application/usecases/host/hostServicesUsecases/usecase.hostRentcar";
 import { HostRentCarRepository } from "../../../repositories/host/hostServiceRepositories/repository.hostRentCar";
 import { HostAssetLocationRepository } from "../../../repositories/host/hostServiceRepositories/repository.hostAssetLocation";

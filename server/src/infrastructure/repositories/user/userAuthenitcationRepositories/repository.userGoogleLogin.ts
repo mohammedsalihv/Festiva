@@ -1,10 +1,10 @@
 import { IUserModel } from "../../../../domain/entities/modelInterface/user/interface.user";
-import { IUserGoogleRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userGoogleRepository";
+import { IUserGoogleLoginRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userGoogleLoginRepository";
 import { UserModel } from "../../../../domain/models/user/userAuthenticationModels/userModel";
-import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
 
-export class UserGoogleAuthRepository implements IUserGoogleRepository {
-  async findByEmail(email: string): Promise<responseUserDTO | null> {
+
+export class UserGoogleLoginRepository implements IUserGoogleLoginRepository {
+  async findByEmail(email: string): Promise<IUserModel | null> {
     return await UserModel.findOne({ email });
   }
 
@@ -16,7 +16,7 @@ export class UserGoogleAuthRepository implements IUserGoogleRepository {
   async updateUser(
     id: string,
     updates: Partial<IUserModel>
-  ): Promise<responseUserDTO | null> {
+  ): Promise<IUserModel | null> {
     return await UserModel.findByIdAndUpdate(id, updates, { new: true });
   }
 }

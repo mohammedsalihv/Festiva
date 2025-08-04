@@ -1,13 +1,13 @@
 import { AdminAssetManagementUseCase } from "../../../../application/usecases/admin/adminManagementUsecases/usecase.adminAssetManagement";
 import { AdminAssetManagementRepository } from "../../../repositories/admin/adminManagementRepositories/repository.adminAssetManagement";
-import { AdminAssetsController } from "../../../../Presentation/controllers/admin/adminManagementControllers/adminAsset.controller";
+import { AdminAssetsController } from "../../../../adapters/controllers/admin/adminManagementControllers/adminAsset.controller";
 import { HostNotificationUseCase } from "../../../../application/usecases/host/hostAccountUsecases/usecase.hostNotification";
 import { NotificationRepository } from "../../../repositories/base/account/repository.notification";
 import { HostNotificationRepository } from "../../../repositories/host/hostAccountRepositories/repository.hostNotification";
-import { adminVenueController } from "../services/adminVenue.DI";
-import { adminRentCarController } from "../services/adminRentCar.DI";
-import { adminStudioController } from "../services/adminStudio.DI";
-import { adminCatersController } from "../services/adminCaters.DI";
+import { adminVenueController } from "../adminServiceDependencyInjections/adminVenue.DI";
+import { adminRentCarController } from "../adminServiceDependencyInjections/adminRentCar.DI";
+import { adminStudioController } from "../adminServiceDependencyInjections/adminStudio.DI";
+import { adminCatersController } from "../adminServiceDependencyInjections/adminCaters.DI";
 
 const adminAssetManagementRepository = new AdminAssetManagementRepository();
 const adminAssetManagementUseCase = new AdminAssetManagementUseCase(

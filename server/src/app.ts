@@ -11,7 +11,7 @@ import userServiceRoute from "./adapters/routes/user/userServiceRoutes";
 import hostAuthRoutes from "./adapters/routes/host/hostAuthRoutes";
 import hostAccountRoutes from "./adapters/routes/host/hostAccountRoutes";
 import hostRoutes from "./adapters/routes/host/hostRoutes";
-import adminAuthRoutes from "./adapters/routes/admin/adminauthRoutes";
+import adminAuthRoutes from "./adapters/routes/admin/adminAuthRoutes";
 import adminRoutes from "./adapters/routes/admin/adminRoutes";
 dotenv.config();
 

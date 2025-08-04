@@ -1,4 +1,4 @@
-import { HostCatersController } from "../../../../Presentation/controllers/host/hostServiceControllers/hostCaters.controller";
+import { HostCatersController } from "../../../../adapters/controllers/host/hostServiceControllers/hostCaters.controller";
 import { HostCatersUseCase } from "../../../../application/usecases/host/hostServicesUsecases/usecase.hostCaters";
 import { HostCatersRepository } from "../../../repositories/host/hostServiceRepositories/repository.hostCaters";
 import { HostAssetLocationRepository } from "../../../repositories/host/hostServiceRepositories/repository.hostAssetLocation";

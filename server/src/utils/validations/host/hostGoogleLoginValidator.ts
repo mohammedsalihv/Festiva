@@ -1,5 +1,5 @@
 import { IHostGoogleLoginValidator } from "../../../domain/validatorInterface/host/interface.hostGoogleLoginValidator";
-import { googleLoginHostDTO } from "../../../types/DTO/user/dto.hostGoogleLogin";
+import { googleLoginHostDTO } from "../../../types/DTO/host/dto.host";
 import CustomError from "../../common/errors/CustomError";
 import {
   statusCodes,

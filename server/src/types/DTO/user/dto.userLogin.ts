@@ -7,6 +7,6 @@ export interface userLoginResponseDTO {
   profilePic?: string;
   role?: string;
   isActive?: boolean;
-  timestamp?: Date;
+  timestamp?: string | Date;
   isBlocked?: boolean;
 }

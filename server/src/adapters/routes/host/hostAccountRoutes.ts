@@ -4,8 +4,8 @@ import {
   authenticateToken,
   isHost,
 } from "../../../utils/common/middlewares/auth";
-import { hostNotificationController } from "../../../infrastructure/DI/host/account dependency Injection/hostNotification.DI";
-import { hostAssetController } from "../../../infrastructure/DI/host/account dependency Injection/hostAsset.DI";
+import { hostNotificationController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostNotification.DI";
+import { hostAssetController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostAsset.DI";
 
 const hostAccountRoutes = express.Router();
 

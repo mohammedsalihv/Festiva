@@ -1,5 +1,5 @@
 import app from "./app";
-import connectDB from "./infrastructure/Database/db";
+import connectDB from "./infrastructure/database/db";
 import dotenv from 'dotenv';
 import logger from "./utils/common/messages/logger";
 logger
