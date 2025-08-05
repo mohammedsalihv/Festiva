@@ -1,7 +1,7 @@
 import { IHostCatersController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostCatersController";
 import { HostCatersUseCase } from "../../../../application/usecases/host/hostServicesUsecases/usecase.hostCaters";
 import { ICaters } from "../../../../domain/entities/serviceInterface/host/interface.caters";
-import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetLocationRepostory";
+import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";
@@ -15,6 +15,7 @@ import { assetFilesValidate } from "../../../../utils/mapping/host/assetFilesVal
 import { Request, Response } from "express";
 import { geocodeAddress } from "../../../../utils/common/geocoding/geocodeAddress";
 import CustomError from "../../../../utils/common/errors/CustomError";
+import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -25,7 +26,7 @@ export interface MulterRequest extends Request {
 export class HostCatersController implements IHostCatersController {
   constructor(
     private hostCatersUseCase: HostCatersUseCase,
-    private hostAssetlocationRepository: IHostAssetLocationRepository
+    private locationRepository: ILocationRepository
   ) {}
 
   async addCatersService(req: MulterRequest, res: Response): Promise<void> {
@@ -54,29 +55,33 @@ export class HostCatersController implements IHostCatersController {
           coordinates: [lng, lat],
         };
 
-        const newLocation = await this.hostAssetlocationRepository.addLocation(
+        const newLocation = await this.locationRepository.addLocation(
           newCaters.location
         );
 
         if (!newLocation || !newLocation._id) {
-          throw new ErrorHandler(
+          throw new CustomError(
             "Failed to create location",
             statusCodes.serverError
           );
         }
 
         const timestamp = Date.now();
-        const imageUrls = (
-          await Promise.all(
-            files.map((file, i) =>
-              uploadAssetImages({
-                assetType: typeOfAsset,
-                buffer: file.buffer,
-                filename: `${typeOfAsset}_${timestamp}_${i}`,
-              })
-            )
+        const uploadedImages = await Promise.all(
+          files.map((file, i) =>
+            uploadAssetImages({
+              assetType: typeOfAsset,
+              buffer: file.buffer,
+              filename: `${typeOfAsset}_${timestamp}_${i}`,
+            })
           )
-        ).map((img) => img.url);
+        );
+
+        const imagePublicIds = uploadedImages.map((img) => img.public_id);
+
+        const signedImageUrls = imagePublicIds.map((public_id) =>
+          getSignedImageUrl(public_id)
+        );
 
         const {
           catersName,
@@ -106,7 +111,7 @@ export class HostCatersController implements IHostCatersController {
           terms,
           conditions,
           about,
-          Images: imageUrls,
+          Images: signedImageUrls,
           location: new Types.ObjectId(newLocation._id),
           host: new Types.ObjectId(hostId),
         };
@@ -217,12 +222,15 @@ export class HostCatersController implements IHostCatersController {
         return;
       }
 
-      const success = await this.hostCatersUseCase.updateCatersAvailability(catersId,isAvailable);
+      const success = await this.hostCatersUseCase.updateCatersAvailability(
+        catersId,
+        isAvailable
+      );
 
       if (!success) {
         res.status(statusCodes.serverError).json({
           success: false,
-           message: `Failed to change caters availability to ${
+          message: `Failed to change caters availability to ${
             isAvailable ? "available" : "unavailable"
           }`,
         });
@@ -231,7 +239,7 @@ export class HostCatersController implements IHostCatersController {
 
       res.status(statusCodes.Success).json({
         success: true,
-         message: `Caters marked as ${
+        message: `Caters marked as ${
           isAvailable ? "available" : "unavailable"
         } successfully`,
       });

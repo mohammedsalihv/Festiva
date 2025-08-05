@@ -8,6 +8,7 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import { uploadProfileImage } from "../../../../utils/common/cloudinary/uploadProfileImage";
+import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -131,14 +132,20 @@ export class AdminUsersController implements IAdminUserManagementController {
 
       const updatedUser = await this.adminUserManagementUseCase.changeProfile(
         userId,
-        image.url
+        image.public_id
       );
+
+      const signedUrl = getSignedImageUrl(image.public_id, {
+        width: 200,
+        height: 200,
+        crop: "fill",
+      });
 
       res.status(statusCodes.Success).json({
         success: true,
         message: "Profile image changed!",
         data: {
-          profilePhotoUrl: updatedUser.profilePic,
+          profilePhotoUrl: signedUrl,
           ...updatedUser,
         },
       });

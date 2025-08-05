@@ -7,6 +7,7 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import CustomError from "../../../../utils/common/errors/CustomError";
+import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 export class UserVenueController implements IUserVenueController {
   constructor(private userVenueUseCase: IUserVenueUseCase) {}
@@ -23,10 +24,17 @@ export class UserVenueController implements IUserVenueController {
         return;
       }
 
+      const signedVenues = venues.map((venue) => ({
+        ...(venue.toObject?.() ?? venue),
+        Images: (venue.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 600)
+        ),
+      }));
+
       res.status(statusCodes.Success).json({
         success: true,
         message: "Venues fetched successfully",
-        data: venues,
+        data: signedVenues,
       });
     } catch (error) {
       logger.error("Error fetching venues:", error);
@@ -58,11 +66,17 @@ export class UserVenueController implements IUserVenueController {
       }
 
       const venue = await this.userVenueUseCase.venueDetails(venueId);
+      const signedVenue = {
+        ...venue,
+        Images: (venue.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      };
 
       res.status(statusCodes.Success).json({
         success: true,
         message: "Venue details fetched successfully",
-        data: venue,
+        data: signedVenue,
       });
     } catch (error) {
       if (error instanceof CustomError) {
@@ -78,6 +92,7 @@ export class UserVenueController implements IUserVenueController {
       }
     }
   }
+
   async filterVenues(req: Request, res: Response): Promise<void> {
     try {
       const filters = req.query;
@@ -117,9 +132,10 @@ export class UserVenueController implements IUserVenueController {
         ...result,
       });
     } catch (error) {
-       res.status(statusCodes.serverError).json({
+      res.status(statusCodes.serverError).json({
         success: false,
-        message: error instanceof Error ? error.message : statusMessages.serverError,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
       });
     }
   }

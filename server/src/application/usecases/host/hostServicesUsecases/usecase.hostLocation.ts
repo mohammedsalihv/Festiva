@@ -1,4 +1,4 @@
-import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetLocationRepostory";
+import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
 import { addLocationDTO } from "../../../../types/DTO/host/dto.location";
 import { ILocation } from "../../../../domain/entities/serviceInterface/host/interface.location";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";

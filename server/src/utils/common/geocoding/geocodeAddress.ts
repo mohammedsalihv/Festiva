@@ -1,18 +1,19 @@
 import axios from "axios";
 
 export async function geocodeAddress(address: string): Promise<{ lat: number; lng: number }> {
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+  const apiKey = process.env.MAPBOX_API_KEY;
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${apiKey}`;
 
   const response = await axios.get(url);
-  const result = response.data.results[0];
+  console.log("+++++", response.data);
 
-  if (!result || !result.geometry) {
+  const result = response.data.features?.[0];
+
+  if (!result || !result.geometry || !result.geometry.coordinates) {
     throw new Error("No geolocation found for the address.");
   }
 
-  return {
-    lat: result.geometry.location.lat,
-    lng: result.geometry.location.lng
-  };
+  const [lng, lat] = result.geometry.coordinates;
+
+  return { lat, lng };
 }

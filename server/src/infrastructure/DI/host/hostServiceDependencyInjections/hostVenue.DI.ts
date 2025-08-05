@@ -1,15 +1,17 @@
 import { HostVenueRepository } from "../../../repositories/host/hostServiceRepositories/repository.hostVenue";
 import { HostVenueUseCase } from "../../../../application/usecases/host/hostServicesUsecases/usecase.hostVenue";
 import { HostVenueController } from "../../../../adapters/controllers/host/hostServiceControllers/hostVenue.controller";
-import { HostAssetLocationRepository } from "../../../repositories/host/hostServiceRepositories/repository.hostAssetLocation";
+import { LocationRepository } from "../../../repositories/host/hostServiceRepositories/repository.location";
+import { LocationUseCase } from "../../../../application/usecases/host/hostBaseUsecases/usecase.location";
 
 const hostVenueRepository = new HostVenueRepository();
-const hostAssetLocationRepository = new HostAssetLocationRepository();
+const locationRepository = new LocationRepository();
+const locationUseCase = new LocationUseCase(locationRepository);
 const hostVenueUseCase = new HostVenueUseCase(hostVenueRepository);
 
 const hostVenueController = new HostVenueController(
   hostVenueUseCase,
-  hostAssetLocationRepository
+  locationUseCase
 );
 
 export { hostVenueController };

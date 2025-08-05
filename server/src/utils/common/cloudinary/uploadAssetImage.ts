@@ -8,7 +8,11 @@ export const uploadAssetImages = ({
   assetType: "venue" | "studio" | "rentcar" | "caters";
   buffer: Buffer;
   filename?: string;
-}): Promise<{ url: string; public_id: string }> => {
+}): Promise<{ public_id: string }> => {
   const folderPath = `Festiva/assets_images/${assetType}`;
-  return cloudinaryUploader({ folderPath, buffer, filename });
+  return cloudinaryUploader({
+    folderPath,
+    buffer,
+    filename: filename || `default_name_${Date.now()}`,
+  });
 };

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { IStudio } from "../../../../domain/entities/serviceInterface/host/interface.studio";
 import { HostStudioUseCase } from "../../../../application/usecases/host/hostServicesUsecases/usecase.hostStudio";
 import { IHostStudioController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostStudioController";
-import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetLocationRepostory";
+import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";
@@ -15,6 +15,7 @@ import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAss
 import { assetFilesValidate } from "../../../../utils/mapping/host/assetFilesValidate";
 import { geocodeAddress } from "../../../../utils/common/geocoding/geocodeAddress";
 import CustomError from "../../../../utils/common/errors/CustomError";
+import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -25,7 +26,7 @@ export interface MulterRequest extends Request {
 export class HostStudioController implements IHostStudioController {
   constructor(
     private hostStudioUseCase: HostStudioUseCase,
-    private hostAssetlocationRepository: IHostAssetLocationRepository
+    private locationRepository: ILocationRepository
   ) {}
 
   async addStudioService(req: MulterRequest, res: Response): Promise<void> {
@@ -63,7 +64,7 @@ export class HostStudioController implements IHostStudioController {
           coordinates: [lng, lat],
         };
 
-        const newLocation = await this.hostAssetlocationRepository.addLocation(
+        const newLocation = await this.locationRepository.addLocation(
           newStudio.location
         );
 
@@ -75,17 +76,22 @@ export class HostStudioController implements IHostStudioController {
         }
 
         const timestamp = Date.now();
-        const imageUrls = (
-          await Promise.all(
-            files.map((file, i) =>
-              uploadAssetImages({
-                assetType: typeOfAsset,
-                buffer: file.buffer,
-                filename: `${typeOfAsset}_${timestamp}_${i}`,
-              })
-            )
-          )
-        ).map((img) => img.url);
+          const uploadedImages = await Promise.all(
+               files.map((file, i) =>
+                 uploadAssetImages({
+                   assetType: typeOfAsset,
+                   buffer: file.buffer,
+                   filename: `${typeOfAsset}_${timestamp}_${i}`,
+                 })
+               )
+             );
+       
+             const imagePublicIds = uploadedImages.map((img) => img.public_id);
+       
+             const signedImageUrls = imagePublicIds.map((public_id) =>
+               getSignedImageUrl(public_id)
+             );
+       
 
         const {
           studioName,
@@ -106,7 +112,7 @@ export class HostStudioController implements IHostStudioController {
           terms,
           description,
           about,
-          Images: imageUrls,
+          Images: signedImageUrls,
           location: new Types.ObjectId(newLocation._id),
           host: new Types.ObjectId(hostId),
         };

@@ -74,36 +74,37 @@ const LocationForm = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    const { isValid, errors: validationErrors } =
-      validateLocationForm(locationForm);
-    if (!isValid) {
-      setErrors(validationErrors);
-      toast.error("Please correct the errors in the form.");
-      setTimeout(() => {
-        setErrors({});
-      }, 5000);
-      setLoading(false);
-      return;
-    }
+ const handleSubmit = async () => {
+  setLoading(true);
 
-    try {
-      dispatch(setLocationDetails(locationForm));
-      await handleFinalSubmit({
-        serviceType,
-        serviceForm,
-        locationForm,
-        fileImages,
-        navigate,
-        dispatch,
-      });
-    } catch (error: unknown) {
-      setLoading(false);
-      toast.error("Something went wrong");
-      console.error(error);
-    }
-  };
+  const { isValid, errors: validationErrors } = validateLocationForm(locationForm);
+
+  if (!isValid) {
+    setErrors(validationErrors);
+    toast.error("Please correct the errors in the form.");
+    setTimeout(() => setErrors({}), 5000);
+    setLoading(false);
+    return;
+  }
+
+  try {
+    dispatch(setLocationDetails(locationForm));
+    await handleFinalSubmit({
+      serviceType,
+      serviceForm,
+      locationForm,
+      fileImages,
+      navigate,
+      dispatch,
+    });
+  } catch (error: unknown) {
+    toast.error("Something went wrong");
+    console.error(error);
+  } finally {
+    setLoading(false); 
+  }
+};
+
 
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-2 sm:mt-16 py-10 font-poppins">

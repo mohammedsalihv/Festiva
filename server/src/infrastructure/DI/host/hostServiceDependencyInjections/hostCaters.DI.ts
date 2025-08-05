@@ -1,14 +1,14 @@
 import { HostCatersController } from "../../../../adapters/controllers/host/hostServiceControllers/hostCaters.controller";
 import { HostCatersUseCase } from "../../../../application/usecases/host/hostServicesUsecases/usecase.hostCaters";
 import { HostCatersRepository } from "../../../repositories/host/hostServiceRepositories/repository.hostCaters";
-import { HostAssetLocationRepository } from "../../../repositories/host/hostServiceRepositories/repository.hostAssetLocation";
+import { LocationRepository } from "../../../repositories/host/hostServiceRepositories/repository.location";
 
 const hostCatersRepository = new HostCatersRepository();
-const hostAssetLocationRepository = new HostAssetLocationRepository();
+const locationRepository = new LocationRepository();
 const hostCatersUseCase = new HostCatersUseCase(hostCatersRepository);
 const hostCatersController = new HostCatersController(
   hostCatersUseCase,
-  hostAssetLocationRepository
+  locationRepository
 );
 
 export { hostCatersController };

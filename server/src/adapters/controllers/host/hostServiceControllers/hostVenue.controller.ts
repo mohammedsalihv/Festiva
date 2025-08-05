@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { IVenue } from "../../../../domain/entities/serviceInterface/host/interface.venue";
+import { ILocationUseCase } from "../../../../domain/usecaseInterface/host/baseUsecaseInterfaces/interface.locationUsecase";
 import { IHostVenueController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostVenueController";
 import { HostVenueUseCase } from "../../../../application/usecases/host/hostServicesUsecases/usecase.hostVenue";
-import { IHostAssetLocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetLocationRepostory";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";
@@ -14,6 +14,7 @@ import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAss
 import { assetFilesValidate } from "../../../../utils/mapping/host/assetFilesValidate";
 import logger from "../../../../utils/common/messages/logger";
 import CustomError from "../../../../utils/common/errors/CustomError";
+import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -24,7 +25,7 @@ export interface MulterRequest extends Request {
 export class HostVenueController implements IHostVenueController {
   constructor(
     private hostVenueUseCase: HostVenueUseCase,
-    private hostAssetlocationRepository: IHostAssetLocationRepository
+    private locationUsecase: ILocationUseCase
   ) {}
 
   async addVenueService(req: MulterRequest, res: Response): Promise<void> {
@@ -44,7 +45,7 @@ export class HostVenueController implements IHostVenueController {
 
       await assetFilesValidate({ files, typeOfAsset });
 
-      const newLocation = await this.hostAssetlocationRepository.addLocation(
+      const newLocation = await this.locationUsecase.execute(
         newVenue.location
       );
 
@@ -56,17 +57,21 @@ export class HostVenueController implements IHostVenueController {
       }
 
       const timestamp = Date.now();
-      const imageUrls = (
-        await Promise.all(
-          files.map((file, i) =>
-            uploadAssetImages({
-              assetType: typeOfAsset,
-              buffer: file.buffer,
-              filename: `${typeOfAsset}_${timestamp}_${i}`,
-            })
-          )
+      const uploadedImages = await Promise.all(
+        files.map((file, i) =>
+          uploadAssetImages({
+            assetType: typeOfAsset,
+            buffer: file.buffer,
+            filename: `${typeOfAsset}_${timestamp}_${i}`,
+          })
         )
-      ).map((img) => img.url);
+      );
+
+      const imagePublicIds = uploadedImages.map((img) => img.public_id);
+
+      const signedImageUrls = imagePublicIds.map((public_id) =>
+        getSignedImageUrl(public_id)
+      );
 
       const {
         venueName,
@@ -96,7 +101,7 @@ export class HostVenueController implements IHostVenueController {
         parkingFeatures,
         description,
         terms,
-        Images: imageUrls,
+        Images: imagePublicIds,
         location: new Types.ObjectId(newLocation._id),
         host: new Types.ObjectId(hostId),
       };
