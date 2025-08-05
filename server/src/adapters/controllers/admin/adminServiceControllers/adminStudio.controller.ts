@@ -3,6 +3,7 @@ import { IAdminStudioController } from "../../../../domain/controlInterface/admi
 import { AdminStudioUseCase } from "../../../../application/usecases/admin/adminServicesUsecases/usecase.adminStudio";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 export class AdminStudioController implements IAdminStudioController {
   constructor(private adminStudioUseCase: AdminStudioUseCase) {}
@@ -18,10 +19,16 @@ export class AdminStudioController implements IAdminStudioController {
         return;
       }
       const studio = await this.adminStudioUseCase.studioDetails(studioId);
+      const signedStudio = {
+        ...studio,
+        Images: (studio.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      };
       res.status(statusCodes.Success).json({
         success: true,
         message: "studio details fetched successfully",
-        data: studio,
+        data: signedStudio,
       });
     } catch (error) {
       if (error instanceof CustomError) {

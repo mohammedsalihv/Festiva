@@ -68,11 +68,6 @@ export class HostVenueController implements IHostVenueController {
       );
 
       const imagePublicIds = uploadedImages.map((img) => img.public_id);
-
-      const signedImageUrls = imagePublicIds.map((public_id) =>
-        getSignedImageUrl(public_id)
-      );
-
       const {
         venueName,
         rent,
@@ -134,10 +129,18 @@ export class HostVenueController implements IHostVenueController {
         return;
       }
       const venue = await this.hostVenueUseCase.venueDetails(venueId);
+
+        const signedVenue = {
+        ...venue,
+        Images: (venue.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      };
+
       res.status(statusCodes.Success).json({
         success: true,
         message: "Venue details fetched successfully",
-        data: venue,
+        data: signedVenue,
       });
     } catch (error: any) {
       if (error instanceof CustomError) {
@@ -157,7 +160,6 @@ export class HostVenueController implements IHostVenueController {
   async requestReApproval(req: Request, res: Response): Promise<void> {
     try {
       const venueId = req.params.assetId;
-
       if (!venueId) {
         res.status(statusCodes.badRequest).json({
           success: false,
@@ -165,9 +167,7 @@ export class HostVenueController implements IHostVenueController {
         });
         return;
       }
-
       const success = await this.hostVenueUseCase.reApplyVenue(venueId);
-
       if (!success) {
         res.status(statusCodes.serverError).json({
           success: false,

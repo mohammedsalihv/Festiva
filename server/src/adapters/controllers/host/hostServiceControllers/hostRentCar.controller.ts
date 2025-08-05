@@ -45,15 +45,6 @@ export class HostRentCarController implements IHostRentCarController {
 
       try {
         await assetFilesValidate({ files, typeOfAsset: typeOfAsset });
-        const fullAddress = `${newRentCar.location.houseNo}, ${newRentCar.location.street}, ${newRentCar.location.district}, ${newRentCar.location.state}, ${newRentCar.location.country}, ${newRentCar.location.zip}`;
-
-        const { lat, lng } = await geocodeAddress(fullAddress);
-
-        newRentCar.location.coordinates = {
-          type: "Point",
-          coordinates: [lng, lat],
-        };
-
         const newLocation = await this.locationRepository.addLocation(
           newRentCar.location
         );
@@ -77,10 +68,6 @@ export class HostRentCarController implements IHostRentCarController {
         );
 
         const imagePublicIds = uploadedImages.map((img) => img.public_id);
-
-        const signedImageUrls = imagePublicIds.map((public_id) =>
-          getSignedImageUrl(public_id)
-        );
 
         const {
           businessName,
@@ -124,7 +111,7 @@ export class HostRentCarController implements IHostRentCarController {
           description,
           guidelines,
           userDocument,
-          Images: signedImageUrls,
+          Images: imagePublicIds,
           location: new Types.ObjectId(newLocation._id),
           host: new Types.ObjectId(hostId),
         };
@@ -163,10 +150,18 @@ export class HostRentCarController implements IHostRentCarController {
         return;
       }
       const car = await this.hostRentCarUseCase.rentCarDetails(rentcarId);
+
+      const signedRentCar = {
+        ...car,
+        Images: (car.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      };
+
       res.status(statusCodes.Success).json({
         success: true,
         message: "car details fetched successfully",
-        data: car,
+        data: signedRentCar,
       });
     } catch (error) {
       if (error instanceof CustomError) {

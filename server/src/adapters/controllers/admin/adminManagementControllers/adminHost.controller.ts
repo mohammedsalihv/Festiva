@@ -24,15 +24,24 @@ export class AdminHostsController implements IAdminHostManagementController {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
 
-      const users = await this.AdminHostManagementUseCase.findAllHosts(
+      const hosts = await this.AdminHostManagementUseCase.findAllHosts(
         page,
         limit
       );
 
+      const signedHosts = hosts.data.map((host) => ({
+        ...host,
+        profilePic: host.profilePic
+          ? getSignedImageUrl(host.profilePic, undefined, 300)
+          : null,
+      }));
+
       res.status(statusCodes.Success).json({
-        message: "Hosts list fetched successfully",
         success: true,
-        ...users,
+        message: "Hosts list fetched successfully",
+        data: signedHosts,
+        totalPages: hosts.totalPages,
+        currentPage: hosts.currentPage,
       });
     } catch (error) {
       res.status(statusCodes.serverError).json({
@@ -107,72 +116,64 @@ export class AdminHostsController implements IAdminHostManagementController {
     }
   }
 
- async changeProfile(req: MulterRequest, res: Response): Promise<void> {
-  try {
-    const hostId = req.params.hostId;
-    const file = req.file;
+  async changeProfile(req: MulterRequest, res: Response): Promise<void> {
+    try {
+      const hostId = req.params.hostId;
+      const file = req.file;
 
-    if (!file) {
-      res.status(statusCodes.forbidden).json({
+      if (!file) {
+        res.status(statusCodes.forbidden).json({
+          success: false,
+          message: "No image file uploaded.",
+        });
+        return;
+      }
+
+      if (!hostId) {
+        res.status(statusCodes.unAuthorized).json({
+          success: false,
+          message: "Unauthorized. No host ID found in request.",
+        });
+        return;
+      }
+
+      const image = await uploadProfileImage({
+        id: hostId,
+        buffer: file.buffer,
+      });
+
+      const updatedHost = await this.AdminHostManagementUseCase.changeProfile(
+        hostId,
+        image.public_id
+      );
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Profile image changed!",
+        data: {
+          profilePhotoUrl: image.public_id,
+          ...updatedHost,
+        },
+      });
+      return;
+    } catch (error: any) {
+      logger.error("Profile change Error:", error);
+
+      if (error.message === "Host not found") {
+        res.status(statusCodes.notfound).json({
+          success: false,
+          message: "Host not found",
+        });
+        return;
+      }
+
+      res.status(statusCodes.serverError).json({
         success: false,
-        message: "No image file uploaded.",
+        message: error.message || statusMessages.serverError,
       });
       return;
     }
-
-    if (!hostId) {
-      res.status(statusCodes.unAuthorized).json({
-        success: false,
-        message: "Unauthorized. No host ID found in request.",
-      });
-      return;
-    }
-
-    // ✅ Upload and get only the public_id
-    const image = await uploadProfileImage({
-      id: hostId,
-      buffer: file.buffer,
-    });
-
-    // ✅ Save only public_id in DB
-    const updatedHost = await this.AdminHostManagementUseCase.changeProfile(
-      hostId,
-      image.public_id
-    );
-    const signedUrl = getSignedImageUrl(image.public_id, {
-      width: 200,
-      height: 200,
-      crop: "fill",
-    });
-
-    res.status(statusCodes.Success).json({
-      success: true,
-      message: "Profile image changed!",
-      data: {
-        profilePhotoUrl: signedUrl,
-        ...updatedHost,
-      },
-    });
-    return;
-  } catch (error: any) {
-    logger.error("Profile change Error:", error);
-
-    if (error.message === "Host not found") {
-      res.status(statusCodes.notfound).json({
-        success: false,
-        message: "Host not found",
-      });
-      return;
-    }
-
-    res.status(statusCodes.serverError).json({
-      success: false,
-      message: error.message || statusMessages.serverError,
-    });
-    return;
   }
-}
-
 
   async deleteHost(req: AuthRequest, res: Response): Promise<void> {
     const hostId = req.params.hostId;

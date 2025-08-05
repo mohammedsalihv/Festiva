@@ -13,13 +13,26 @@ export const markAllNotificationsAsRead = async () => {
   return response.data;
 };
 
-export const myAssets = async (page: number, limit: number) => {
+export const myAssets = async (
+  page: number,
+  limit: number,
+  search?: string,
+  status?: string,
+  assetType?: string
+) => {
   const response = await axiosInstance.get(HOST_API.hostAccount.myAssets, {
-    params: { page, limit },
+    params: {
+      page,
+      limit,
+      ...(search ? { search } : {}),
+      ...(status ? { status } : {}),
+      ...(assetType ? { assetType } : {}),
+    },
   });
 
   return response.data;
 };
+
 
 export const fetchAssetDetails = async (assetId: string, assetType: string) => {
   const response = await axiosInstance.get(

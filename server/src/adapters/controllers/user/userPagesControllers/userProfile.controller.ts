@@ -19,55 +19,56 @@ export class UserProfileController {
   constructor(private userProfileUseCase: UserProfileUseCase) {}
 
   async setProfilePic(req: MulterRequest, res: Response) {
-  try {
-    const userId = req.auth?.id;
-    const file = req.file;
+    try {
+      const userId = req.auth?.id;
+      const file = req.file;
 
-    if (!file) {
-      return res.status(statusCodes.forbidden).json({
+      if (!file) {
+        return res.status(statusCodes.forbidden).json({
+          success: false,
+          message: "No image file uploaded.",
+        });
+      }
+
+      if (!userId) {
+        return res.status(statusCodes.unAuthorized).json({
+          success: false,
+          message: "Unauthorized. No user ID found in request.",
+        });
+      }
+      const image = await uploadProfileImage({
+        id: userId,
+        buffer: file.buffer,
+      });
+
+      const updatedUser = await this.userProfileUseCase.execute(
+        userId,
+        image.public_id
+      );
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        message: "Profile image changed!",
+        data: {
+          profilePhotoUrl: image.public_id,
+          ...updatedUser,
+        },
+      });
+    } catch (error: any) {
+      logger.error("Profile change Error:", error);
+
+      if (error.message === "User not found") {
+        return res.status(statusCodes.notfound).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+      res.status(statusCodes.serverError).json({
         success: false,
-        message: "No image file uploaded.",
+        message: error.message,
       });
     }
-
-    if (!userId) {
-      return res.status(statusCodes.unAuthorized).json({
-        success: false,
-        message: "Unauthorized. No user ID found in request.",
-      });
-    }
-    const image = await uploadProfileImage({
-      id: userId,
-      buffer: file.buffer,
-    });
-
-    const updatedUser = await this.userProfileUseCase.execute(userId, image.public_id);
-
-    const signedUrl = getSignedImageUrl(image.public_id, { width: 200, height: 200, crop: "fill" });
-
-    res.status(statusCodes.Success).json({
-      success: true,
-      message: "Profile image changed!",
-      data: {
-        profilePhotoUrl: signedUrl,  
-        ...updatedUser,
-      },
-    });
-  } catch (error: any) {
-    logger.error("Profile change Error:", error);
-
-    if (error.message === "User not found") {
-      return res.status(statusCodes.notfound).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-    res.status(statusCodes.serverError).json({
-      success: false,
-      message: error.message,
-    });
   }
-}
 
   async profileEdit(req: AuthRequest, res: Response): Promise<void> {
     const userId = req.auth?.id;

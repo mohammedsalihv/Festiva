@@ -3,6 +3,7 @@ import { IAdminVenueController } from "../../../../domain/controlInterface/admin
 import { AdminVenueUseCase } from "../../../../application/usecases/admin/adminServicesUsecases/usecase.adminVenue";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 export class AdminVenueController implements IAdminVenueController {
   constructor(private adminVenueUseCase: AdminVenueUseCase) {}
@@ -18,10 +19,17 @@ export class AdminVenueController implements IAdminVenueController {
         return;
       }
       const venue = await this.adminVenueUseCase.execute(venueId);
+      const signedVenue = {
+        ...venue,
+        Images: (venue.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      };
+
       res.status(statusCodes.Success).json({
         success: true,
         message: "Venue details fetched successfully",
-        data: venue,
+        data: signedVenue,
       });
     } catch (error) {
       if (error instanceof CustomError) {

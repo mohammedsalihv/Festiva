@@ -37,24 +37,12 @@ export class HostCatersController implements IHostCatersController {
         statusCodes.unAuthorized
       );
     }
-
     try {
       const newCaters = req.body;
       const files = req.files?.["Images"] || [];
       const typeOfAsset = "caters";
-
       try {
         await assetFilesValidate({ files, typeOfAsset });
-
-        const fullAddress = `${newCaters.location.houseNo}, ${newCaters.location.street}, ${newCaters.location.district}, ${newCaters.location.state}, ${newCaters.location.country}, ${newCaters.location.zip}`;
-
-        const { lat, lng } = await geocodeAddress(fullAddress);
-
-        newCaters.location.coordinates = {
-          type: "Point",
-          coordinates: [lng, lat],
-        };
-
         const newLocation = await this.locationRepository.addLocation(
           newCaters.location
         );
@@ -76,13 +64,7 @@ export class HostCatersController implements IHostCatersController {
             })
           )
         );
-
         const imagePublicIds = uploadedImages.map((img) => img.public_id);
-
-        const signedImageUrls = imagePublicIds.map((public_id) =>
-          getSignedImageUrl(public_id)
-        );
-
         const {
           catersName,
           manpower,
@@ -111,7 +93,7 @@ export class HostCatersController implements IHostCatersController {
           terms,
           conditions,
           about,
-          Images: signedImageUrls,
+          Images: imagePublicIds,
           location: new Types.ObjectId(newLocation._id),
           host: new Types.ObjectId(hostId),
         };
@@ -148,10 +130,17 @@ export class HostCatersController implements IHostCatersController {
         return;
       }
       const caters = await this.hostCatersUseCase.catersDetails(catersId);
+
+      const signedCaters = {
+        ...caters,
+        Images: (caters.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      };
       res.status(statusCodes.Success).json({
         success: true,
         message: "Caters details fetched successfully",
-        data: caters,
+        data: signedCaters,
       });
     } catch (error) {
       if (error instanceof CustomError) {

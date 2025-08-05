@@ -7,6 +7,7 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import CustomError from "../../../../utils/common/errors/CustomError";
+import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 export class UserRentCarController implements IUserRentCarController {
   constructor(private userRentCarUseCase: IUserRentCarUseCase) {}
@@ -19,14 +20,19 @@ export class UserRentCarController implements IUserRentCarController {
         res.status(statusCodes.Success).json({
           success: true,
           message: "cars list empty",
-          data: cars,
         });
         return;
       }
+      const signedRentCars = cars.map((car) => ({
+        ...(car.toObject?.() ?? car),
+        Images: (car.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 600)
+        ),
+      }));
       res.status(statusCodes.Success).json({
         success: true,
         message: "cars fetched successfully",
-        data: cars,
+        data: signedRentCars,
       });
     } catch (error) {
       logger.error("Error fetching cars:", error);
@@ -57,10 +63,16 @@ export class UserRentCarController implements IUserRentCarController {
         return;
       }
       const car = await this.userRentCarUseCase.rentCarDetails(carId);
+      const signedRentCar = {
+        ...car,
+        Images: (car.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      };
       res.status(statusCodes.Success).json({
         success: true,
         message: "car details fetched successfully",
-        data: car,
+        data: signedRentCar,
       });
     } catch (error) {
       if (error instanceof CustomError) {
@@ -86,11 +98,19 @@ export class UserRentCarController implements IUserRentCarController {
         page,
         limit
       );
+      const signedRentCars = result.data.map((studio) => ({
+        ...studio,
+        Images: (studio.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      }));
 
       res.status(statusCodes.Success).json({
         success: true,
-        message: "Filtered rent cars fetched successfully",
-        ...result,
+        message: "RentCars fetched successfully",
+        data: signedRentCars,
+        totalPages: result.totalPages,
+        currentPage: result.currentPage,
       });
     } catch (error) {
       logger.error("Error filtering rent cars:", error);
@@ -114,15 +134,25 @@ export class UserRentCarController implements IUserRentCarController {
         limit
       );
 
+      const signedRentCars = result.data.map((studio) => ({
+        ...studio,
+        Images: (studio.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      }));
+
       res.status(statusCodes.Success).json({
         success: true,
-        message: "Sorted cars fetched successfully",
-        ...result, 
+        message: "RentCars fetched successfully",
+        data: signedRentCars,
+        totalPages: result.totalPages,
+        currentPage: result.currentPage,
       });
     } catch (error) {
       res.status(statusCodes.serverError).json({
         success: false,
-        message: error instanceof Error ? error.message : statusMessages.serverError,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
       });
     }
   }

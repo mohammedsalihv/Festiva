@@ -42,7 +42,6 @@ export class HostVenueUseCase implements IHostVenueUseCase {
   if (!venueId) {
     throw new CustomError("Venue ID is required", statusCodes.unAuthorized);
   }
-
   const updated = await this.hostVenueRepository.updateAvailability(venueId, isAvailable);
 
   if (!updated) {
@@ -51,7 +50,6 @@ export class HostVenueUseCase implements IHostVenueUseCase {
       statusCodes.serverError
     );
   }
-
   return true;
 }
 

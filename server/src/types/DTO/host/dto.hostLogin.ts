@@ -1,3 +1,4 @@
+import { getSignedImageUrl } from "../../../utils/common/cloudinary/getSignedImageUrl";
 
 export const toHostLoginResponseDTO = (
   host: any,
@@ -8,12 +9,13 @@ export const toHostLoginResponseDTO = (
   name: host.name,
   email: host.email,
   phone: host.phone,
-  profilePic: host.profilePic,
+  profilePic: host.profilePic
+    ? getSignedImageUrl(host.profilePic, undefined, 300)
+    : undefined,
   role: "host",
   accessToken,
   refreshToken,
 });
-
 
 export interface hostLoginDTO {
   email: string;

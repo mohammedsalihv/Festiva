@@ -3,6 +3,7 @@ import { IAdminCatersController } from "../../../../domain/controlInterface/admi
 import { AdminCatersUseCase } from "../../../../application/usecases/admin/adminServicesUsecases/usecase.adminCaters";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 export class AdminCatersController implements IAdminCatersController {
   constructor(private adminCatersUseCase: AdminCatersUseCase) {}
@@ -18,10 +19,16 @@ export class AdminCatersController implements IAdminCatersController {
         return;
       }
       const caters = await this.adminCatersUseCase.catersDetails(catersId);
+      const signedCaters = {
+        ...caters,
+        Images: (caters.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      };
       res.status(statusCodes.Success).json({
         success: true,
         message: "Caters details fetched successfully",
-        data: caters,
+        data: signedCaters,
       });
     } catch (error) {
       if (error instanceof CustomError) {

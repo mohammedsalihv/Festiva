@@ -26,10 +26,19 @@ export class AdminUsersController implements IAdminUserManagementController {
         page,
         limit
       );
+      const signedUsers = users.data.map((user) => ({
+        ...user,
+        profilePic: user.profilePic
+          ? getSignedImageUrl(user.profilePic, undefined, 300)
+          : null,
+      }));
+
       res.status(statusCodes.Success).json({
-        message: "Users list fetched successfully",
         success: true,
-        data: users,
+        message: "Users list fetched successfully",
+        data: signedUsers,
+        totalPages: users.totalPages,
+        currentPage: users.currentPage,
       });
     } catch (error) {
       logger.error(String(error), "Error fetching user list");
@@ -135,17 +144,11 @@ export class AdminUsersController implements IAdminUserManagementController {
         image.public_id
       );
 
-      const signedUrl = getSignedImageUrl(image.public_id, {
-        width: 200,
-        height: 200,
-        crop: "fill",
-      });
-
       res.status(statusCodes.Success).json({
         success: true,
         message: "Profile image changed!",
         data: {
-          profilePhotoUrl: signedUrl,
+          profilePhotoUrl: image.public_id,
           ...updatedUser,
         },
       });

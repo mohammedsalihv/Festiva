@@ -104,10 +104,19 @@ export class UserVenueController implements IUserVenueController {
         limit
       );
 
+      const signedVenues = result.data.map((venue) => ({
+        ...venue,
+        Images: (venue.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      }));
+
       res.status(statusCodes.Success).json({
         success: true,
         message: "Filtered venues fetched successfully",
-        ...result,
+        data: signedVenues,
+        totalPages: result.totalPages,
+        currentPage: result.currentPage,
       });
     } catch (error) {
       logger.error("Error filtering venues:", error);
@@ -126,10 +135,19 @@ export class UserVenueController implements IUserVenueController {
       const limit = parseInt(sorts.limit as string) || 10;
       const result = await this.userVenueUseCase.sortVenues(sorts, page, limit);
 
+      const signedVenues = result.data.map((venue) => ({
+        ...venue,
+        Images: (venue.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      }));
+
       res.status(statusCodes.Success).json({
         success: true,
-        message: "Sorted venues fetched successfully",
-        ...result,
+        message: "Sorts venues fetched successfully",
+        data: signedVenues,
+        totalPages: result.totalPages,
+        currentPage: result.currentPage,
       });
     } catch (error) {
       res.status(statusCodes.serverError).json({

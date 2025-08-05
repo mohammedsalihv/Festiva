@@ -7,6 +7,7 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import CustomError from "../../../../utils/common/errors/CustomError";
+import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 export class UserCatersController implements IUserCatersController {
   constructor(private userCatersUseCase: IUserCatersUseCase) {}
@@ -19,14 +20,19 @@ export class UserCatersController implements IUserCatersController {
         res.status(statusCodes.Success).json({
           success: true,
           message: "caters list empty",
-          data: caters,
         });
         return;
       }
+      const signedCaters = caters.map((cater) => ({
+        ...(cater.toObject?.() ?? cater),
+        Images: (cater.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 600)
+        ),
+      }));
       res.status(statusCodes.Success).json({
         success: true,
         message: "caters fetched successfully",
-        data: caters,
+        data: signedCaters,
       });
     } catch (error) {
       logger.error("Error fetching caters:", error);
@@ -41,7 +47,6 @@ export class UserCatersController implements IUserCatersController {
   async getCatersDetails(req: Request, res: Response): Promise<void> {
     try {
       const Id = req.query.assetId;
-
       const catersId: string | undefined =
         typeof Id === "string"
           ? Id
@@ -57,10 +62,16 @@ export class UserCatersController implements IUserCatersController {
         return;
       }
       const caters = await this.userCatersUseCase.catersDetails(catersId);
+      const signedCaters = {
+        ...caters,
+        Images: (caters.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      };
       res.status(statusCodes.Success).json({
         success: true,
         message: "Caters details fetched successfully",
-        data: caters,
+        data: signedCaters,
       });
     } catch (error) {
       if (error instanceof CustomError) {
@@ -88,10 +99,19 @@ export class UserCatersController implements IUserCatersController {
         limit
       );
 
+      const signedCaters = result.data.map((caters) => ({
+        ...caters,
+        Images: (caters.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      }));
+
       res.status(statusCodes.Success).json({
         success: true,
-        message: "Filtered caters fetched successfully",
-        ...result,
+        message: "Caters fetched successfully",
+        data: signedCaters,
+        totalPages: result.totalPages,
+        currentPage: result.currentPage,
       });
     } catch (error) {
       logger.error("Error filtering caters:", error);
@@ -114,15 +134,25 @@ export class UserCatersController implements IUserCatersController {
         limit
       );
 
+      const signedCaters = result.data.map((caters) => ({
+        ...caters,
+        Images: (caters.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      }));
+
       res.status(statusCodes.Success).json({
         success: true,
-        message: "Sorted caters fetched successfully",
-        ...result, 
+        message: "Caters fetched successfully",
+        data: signedCaters,
+        totalPages: result.totalPages,
+        currentPage: result.currentPage,
       });
     } catch (error) {
       res.status(statusCodes.serverError).json({
         success: false,
-        message: error instanceof Error ? error.message : statusMessages.serverError,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
       });
     }
   }

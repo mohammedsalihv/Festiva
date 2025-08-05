@@ -54,16 +54,6 @@ export class HostStudioController implements IHostStudioController {
 
       try {
         await assetFilesValidate({ files, typeOfAsset });
-
-        const fullAddress = `${newStudio.location.houseNo}, ${newStudio.location.street}, ${newStudio.location.district}, ${newStudio.location.state}, ${newStudio.location.country}, ${newStudio.location.zip}`;
-
-        const { lat, lng } = await geocodeAddress(fullAddress);
-
-        newStudio.location.coordinates = {
-          type: "Point",
-          coordinates: [lng, lat],
-        };
-
         const newLocation = await this.locationRepository.addLocation(
           newStudio.location
         );
@@ -76,22 +66,17 @@ export class HostStudioController implements IHostStudioController {
         }
 
         const timestamp = Date.now();
-          const uploadedImages = await Promise.all(
-               files.map((file, i) =>
-                 uploadAssetImages({
-                   assetType: typeOfAsset,
-                   buffer: file.buffer,
-                   filename: `${typeOfAsset}_${timestamp}_${i}`,
-                 })
-               )
-             );
-       
-             const imagePublicIds = uploadedImages.map((img) => img.public_id);
-       
-             const signedImageUrls = imagePublicIds.map((public_id) =>
-               getSignedImageUrl(public_id)
-             );
-       
+        const uploadedImages = await Promise.all(
+          files.map((file, i) =>
+            uploadAssetImages({
+              assetType: typeOfAsset,
+              buffer: file.buffer,
+              filename: `${typeOfAsset}_${timestamp}_${i}`,
+            })
+          )
+        );
+
+        const imagePublicIds = uploadedImages.map((img) => img.public_id);
 
         const {
           studioName,
@@ -112,7 +97,7 @@ export class HostStudioController implements IHostStudioController {
           terms,
           description,
           about,
-          Images: signedImageUrls,
+          Images: imagePublicIds,
           location: new Types.ObjectId(newLocation._id),
           host: new Types.ObjectId(hostId),
         };
@@ -149,10 +134,17 @@ export class HostStudioController implements IHostStudioController {
         return;
       }
       const studio = await this.hostStudioUseCase.studioDetails(studioId);
+
+      const signedStudio = {
+        ...studio,
+        Images: (studio.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      };
       res.status(statusCodes.Success).json({
         success: true,
         message: "studio details fetched successfully",
-        data: studio,
+        data: signedStudio,
       });
     } catch (error) {
       if (error instanceof CustomError) {
@@ -222,7 +214,10 @@ export class HostStudioController implements IHostStudioController {
         return;
       }
 
-      const success = await this.hostStudioUseCase.updateStudioAvailability(studioId,isAvailable);
+      const success = await this.hostStudioUseCase.updateStudioAvailability(
+        studioId,
+        isAvailable
+      );
 
       if (!success) {
         res.status(statusCodes.serverError).json({
@@ -234,7 +229,7 @@ export class HostStudioController implements IHostStudioController {
 
       res.status(statusCodes.Success).json({
         success: true,
-         message: `Studio marked as ${
+        message: `Studio marked as ${
           isAvailable ? "available" : "unavailable"
         } successfully`,
       });

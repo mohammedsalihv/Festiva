@@ -3,6 +3,7 @@ import { AdminRentCarUseCase } from "../../../../application/usecases/admin/admi
 import { IAdminRentCarController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminRentCarController";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 export class AdminRentCarController implements IAdminRentCarController {
   constructor(private adminRentCarUseCase: AdminRentCarUseCase) {}
@@ -18,10 +19,16 @@ export class AdminRentCarController implements IAdminRentCarController {
         return;
       }
       const car = await this.adminRentCarUseCase.rentCarDetails(carId);
+      const signedRentCar = {
+        ...car,
+        Images: (car.Images ?? []).map((public_id: string) =>
+          getSignedImageUrl(public_id, undefined, 800)
+        ),
+      };
       res.status(statusCodes.Success).json({
         success: true,
         message: "car details fetched successfully",
-        data: car,
+        data: signedRentCar,
       });
     } catch (error) {
       if (error instanceof CustomError) {

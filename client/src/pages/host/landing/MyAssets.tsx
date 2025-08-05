@@ -8,6 +8,8 @@ import { setMyAssets } from "@/redux/Slice/host/common/myAssetsSlice";
 import { RootState } from "@/redux/store";
 import Pagination from "@/components/Pagination";
 import { useNavigate } from "react-router-dom";
+import { FaSort } from "react-icons/fa6";
+import Loader from "@/components/Loader";
 
 export default function MyAssets() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,13 +19,33 @@ export default function MyAssets() {
   const assets = useSelector((state: RootState) => state.myAssets.assets);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
   const pageLimit = 8;
 
-  const fetchMyAssets = async (pageNumber: number, pageLimit: number) => {
-    const response = await myAssets(pageNumber, pageLimit);
-    dispatch(setMyAssets(response.data));
-    setCurrentPage(pageNumber);
-    setTotalPages(response.totalPages);
+  const fetchMyAssets = async (
+    pageNumber: number,
+    pageLimit: number,
+    search = "",
+    status?: string,
+    assetType?: string
+  ) => {
+    setLoading(true);
+    try {
+      const response = await myAssets(
+        pageNumber,
+        pageLimit,
+        search,
+        status,
+        assetType
+      );
+      dispatch(setMyAssets(response.data));
+      setCurrentPage(pageNumber);
+      setTotalPages(response.totalPages);
+    } catch (error) {
+      console.error("Failed to fetch assets:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -34,25 +56,30 @@ export default function MyAssets() {
     setCurrentPage(1);
   }, [activeTab]);
 
-  const filteredAssets = assets.filter((asset) => {
-    const matchesSearch = asset.assetName
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      let status, type;
 
-    const matchesTab =
-      activeTab === "All"
-        ? true
-        : activeTab === "Available"
-        ? asset.status === "approved"
-        : activeTab === "Not Available"
-        ? asset.status !== "approved"
-        : asset.assetType === activeTab;
+      if (activeTab === "Available") status = "approved";
+      else if (activeTab === "Not Available") status = "pending";
+      else if (["venue", "studio", "rentcar", "caters"].includes(activeTab))
+        type = activeTab;
 
-    return matchesSearch && matchesTab;
-  });
+      fetchMyAssets(1, pageLimit, searchTerm, status, type);
+    }, 300);
+
+    return () => clearTimeout(delay);
+  }, [searchTerm, activeTab]);
 
   const handlePageChange = (page: number) => {
-    fetchMyAssets(page, pageLimit);
+    let status, type;
+
+    if (activeTab === "Available") status = "approved";
+    else if (activeTab === "Not Available") status = "pending";
+    else if (["venue", "studio", "rentcar", "caters"].includes(activeTab))
+      type = activeTab;
+
+    fetchMyAssets(page, pageLimit, searchTerm, status, type);
   };
 
   const handleAssetDetails = async (assetId: string, assetType: string) => {
@@ -83,6 +110,9 @@ export default function MyAssets() {
             </Button>
           ))}
         </div>
+        <div>
+          <FaSort />
+        </div>
         <div className="relative w-full max-w-sm">
           <FaSearch className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
           <Input
@@ -94,54 +124,61 @@ export default function MyAssets() {
           />
         </div>
       </div>
+
       <div className="container mx-auto px-4">
-        <div className="grid justify-center sm:justify-start grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6">
-          {filteredAssets.length > 0 ? (
-            filteredAssets.map((asset) => (
-              <div
-                onClick={() =>
-                  handleAssetDetails(asset.assetId, asset.assetType)
-                }
-                key={asset.assetId}
-                className="bg-white shadow hover:shadow-xl transition rounded-lg border w-full max-w-sm mx-auto cursor-pointer"
-              >
-                <img
-                  src={asset.assetImage}
-                  alt={asset.assetName}
-                  className="h-52 sm:h-56 md:h-60 object-cover w-full rounded-t-lg"
-                />
-                <div className="p-3">
-                  <h3 className="font-semibold text-base md:text-md">
-                    {asset.assetName}
-                  </h3>
-                  <p className="text-xs md:text-sm text-gray-500">
-                    {asset.assetType}
-                  </p>
-                  <div className="flex justify-between items-center mt-2">
-                    <span
-                      className={`text-sm ${
-                        asset.status === "approved"
-                          ? "text-green-500"
-                          : asset.status === "rejected"
-                          ? "text-red-500"
-                          : "text-yellow-500"
-                      }`}
-                    >
-                      {asset.status}
-                    </span>
-                    <span className="text-black text-sm md:text-base">
-                      {new Date(asset.listedDate).toLocaleDateString()}
-                    </span>
+        {loading ? ( // ✅ Show loader while fetching
+          <div className="flex justify-center items-center py-16">
+            <Loader />
+          </div>
+        ) : (
+          <div className="grid justify-center sm:justify-start grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6">
+            {assets.length > 0 ? (
+              assets.map((asset) => (
+                <div
+                  onClick={() =>
+                    handleAssetDetails(asset.assetId, asset.assetType)
+                  }
+                  key={asset.assetId}
+                  className="bg-white shadow hover:shadow-xl transition rounded-lg border w-full max-w-sm mx-auto cursor-pointer"
+                >
+                  <img
+                    src={asset.assetImage}
+                    alt={asset.assetName}
+                    className="h-52 sm:h-56 md:h-60 object-cover w-full rounded-t-lg"
+                  />
+                  <div className="p-3">
+                    <h3 className="font-semibold text-base md:text-md">
+                      {asset.assetName}
+                    </h3>
+                    <p className="text-xs md:text-sm text-gray-500">
+                      {asset.assetType}
+                    </p>
+                    <div className="flex justify-between items-center mt-2">
+                      <span
+                        className={`text-sm ${
+                          asset.status === "approved"
+                            ? "text-green-500"
+                            : asset.status === "rejected"
+                            ? "text-red-500"
+                            : "text-yellow-500"
+                        }`}
+                      >
+                        {asset.status}
+                      </span>
+                      <span className="text-black text-sm md:text-base">
+                        {new Date(asset.listedDate).toLocaleDateString()}
+                      </span>
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-10 text-gray-500 text-sm sm:text-base">
+                No assets found.
               </div>
-            ))
-          ) : (
-            <div className="col-span-full text-center py-10 text-gray-500 text-sm sm:text-base">
-              No assets found.
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="mt-6">
