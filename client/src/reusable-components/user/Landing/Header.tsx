@@ -1,5 +1,4 @@
 import { NavbarMenu } from "@/utils/Navbar/user/navLinks";
-import { RiMenu4Fill } from "react-icons/ri";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import { IoIosClose } from "react-icons/io";
 import { MdOutlineBookmarks, MdMenu } from "react-icons/md";
@@ -16,6 +15,7 @@ import { userLogout } from "@/api/user/auth/userAuthService";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { CgMenuRight } from "react-icons/cg";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -27,7 +27,7 @@ const Header = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/user/home";
   const landingPage = location.pathname === "/";
-  const showTransparent = isHomePage && !isScrolled || landingPage;
+  const showTransparent = (isHomePage && !isScrolled) || landingPage;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -79,19 +79,11 @@ const Header = () => {
           showTransparent ? "" : "bg-white"
         } font-JosephicSans`}
       >
-        <div className="container mx-auto flex justify-between items-center px-3 md:px-0 py-4">
+       <div className="w-full mx-auto flex justify-between items-center gap-6 px-2 py-4 max-h-16 overflow-hidden md:px-7">
           <div className="flex-shrink-0">
             <LogoText />
           </div>
           <div className="flex items-center gap-3">
-            <div className="hidden lg:block" onClick={() => setMainOpen(true)}>
-              <RiMenu4Fill
-                className={`${
-                  landingPage ? "text-gray-300" : showTransparent ? "text-gray-400" : "text-black"
-                } text-4xl cursor-pointer`}
-              />
-            </div>
-
             {isAuthenticated ? (
               <div className="relative hidden lg:block" ref={dropDownRef}>
                 <img
@@ -171,6 +163,18 @@ const Header = () => {
                 />
               </div>
             )}
+
+            <div className="hidden lg:block" onClick={() => setMainOpen(true)}>
+              <CgMenuRight
+                className={`${
+                  landingPage
+                    ? "text-gray-300"
+                    : showTransparent
+                    ? "text-gray-400"
+                    : "text-black"
+                } text-4xl cursor-pointer`}
+              />
+            </div>
           </div>
         </div>
         <CustomToastContainer />

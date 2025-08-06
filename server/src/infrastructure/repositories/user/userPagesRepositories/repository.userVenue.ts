@@ -89,13 +89,18 @@ export class UserVenueRepository implements IUserVenueRepository {
       }
     }
 
-    console.log(typeof filters.price);
     const price = Number(filters.price);
     if (!isNaN(price)) {
       andConditions.push({
         $expr: {
           $lte: [{ $toDouble: "$rent" }, price],
         },
+      });
+    }
+
+    if (filters.keyword) {
+      andConditions.push({
+        venueName: { $regex: filters.keyword, $options: "i" },
       });
     }
 

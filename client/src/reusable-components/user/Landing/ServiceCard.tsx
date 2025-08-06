@@ -106,35 +106,34 @@ export default function ServicesCard() {
   }, [dispatch, filters]);
 
   useEffect(() => {
-  if (debouncedGeocoderResult) {
-    const { text, geometry } = debouncedGeocoderResult;
-    const newLat = geometry.coordinates[1];
-    const newLng = geometry.coordinates[0];
+    if (debouncedGeocoderResult) {
+      const { text, geometry } = debouncedGeocoderResult;
+      const newLat = geometry.coordinates[1];
+      const newLng = geometry.coordinates[0];
 
-    // Optional: Only update if location changed
-    if (
-      filters.lat !== newLat ||
-      filters.lng !== newLng ||
-      filters.radius !== 10
-    ) {
-      setSelectedLocation({
-        label: text,
-        lat: newLat,
-        lng: newLng,
-      });
-
-      dispatch(
-        setFilters({
-          ...filters,
+      // Optional: Only update if location changed
+      if (
+        filters.lat !== newLat ||
+        filters.lng !== newLng ||
+        filters.radius !== 10
+      ) {
+        setSelectedLocation({
+          label: text,
           lat: newLat,
           lng: newLng,
-          radius: 10,
-        })
-      );
-    }
-  }
-}, [debouncedGeocoderResult, dispatch]);
+        });
 
+        dispatch(
+          setFilters({
+            ...filters,
+            lat: newLat,
+            lng: newLng,
+            radius: 10,
+          })
+        );
+      }
+    }
+  }, [debouncedGeocoderResult, dispatch]);
 
   // Initialize map when selectedLocation changes
   useEffect(() => {
@@ -188,10 +187,18 @@ export default function ServicesCard() {
   ) => {
     setLoading(true);
     try {
-      // Only include location filters if selectedLocation is explicitly set
-      const params = selectedLocation
-        ? { ...filters, ...sorts, page, limit: pageSize }
-        : { ...sorts, page, limit: pageSize };
+      const params: Record<string, any> = {
+        ...filters,
+        ...sorts,
+        page,
+        limit: pageSize,
+      };
+
+      // Include keyword if any
+      if (searchTerm.trim()) {
+        params.keyword = searchTerm.trim();
+      }
+
       const response =
         Object.keys(sorts).length > 0
           ? await sortAssets(type, params)
@@ -209,16 +216,16 @@ export default function ServicesCard() {
     }
   };
 
-  // Fetch assets when selectedTab, filters, or sorts change
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
   useEffect(() => {
     if (selectedTab) {
-      // Strip out location filters unless selectedLocation is set
       const fetchParams = selectedLocation
         ? filters
         : { ...filters, lat: undefined, lng: undefined, radius: undefined };
+
       fetchAssets(selectedTab, fetchParams, sorts, 1);
     }
-  }, [selectedTab, filters, sorts, selectedLocation]);
+  }, [selectedTab, filters, sorts, selectedLocation, debouncedSearchTerm]);
 
   const KewFilter = Object.keys(filters).filter(
     (key) => !["lat", "lng", "radius"].includes(key)
@@ -261,11 +268,11 @@ export default function ServicesCard() {
   }
 
   return (
-    <div className="max-w-full sm:px-6 md:px-4 mx-auto px-2 py-4 sm:py-6 font-JosephicSans mt-14">
+    <div className="max-w-full sm:px-6 md:px-4 mx-auto px-2 py-3 sm:py-6 font-JosephicSans mt-10">
       <div className="w-full flex flex-col gap-3 mb-4 sm:gap-4 border-b py-3">
         <div className="flex flex-col gap-3 lg:hidden">
           <div className="flex gap-2">
-            <div className="flex-1 min-w-[150px] relative">
+            <div className="flex-1 min-w-[150px] relative border-b text-black">
               <MdLocationPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm z-10" />
               <div
                 ref={geocoderContainerRef}
@@ -274,7 +281,7 @@ export default function ServicesCard() {
             </div>
             <Button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="flex items-center px-3 py-2 bg-main_color text-white text-xs rounded-2xl"
+              className="flex items-center px-3 py-2 shadow-none hover:bg-deepPurple rounded-md bg-main_gradient text-white text-xs"
             >
               <FaFilter className="mr-1 text-xs" />
             </Button>
@@ -293,9 +300,9 @@ export default function ServicesCard() {
             </div>
             <Button
               onClick={() => setIsSortOpen(!isSortOpen)}
-              className="flex items-center px-3 py-2 bg-main_color text-white text-xs rounded-2xl"
+              className="flex items-center px-3 py-2 shadow-none hover:bg-deepPurple rounded-md bg-main_gradient text-white text-xs"
             >
-              <FaSortAmountDownAlt className="mr-1 text-xs" />
+              <FaSortAmountDownAlt className="mr-1 text-xs " />
             </Button>
           </div>
         </div>
@@ -377,7 +384,9 @@ export default function ServicesCard() {
           <div ref={mapContainerRef} className="w-full h-[400px] rounded-md " />
         </div>
       )}
-      {(KewFilter.length > 0 || Object.keys(sorts).length > 0 || selectedLocation) && (
+      {(KewFilter.length > 0 ||
+        Object.keys(sorts).length > 0 ||
+        selectedLocation) && (
         <div className="flex flex-wrap items-center gap-2 mt-2 text-xs sm:text-sm mb-2">
           {/* Render location filter tag */}
           {selectedLocation && (
@@ -486,18 +495,18 @@ export default function ServicesCard() {
               })
               .map((asset) => (
                 <div
-                  key={asset._id}
+                  key={asset?._id}
                   className="bg-white overflow-hidden shadow-2xl hover:shadow-lg transition-shadow cursor-pointer"
                   onClick={() =>
                     navigate(
-                      `/user/services/${normalizedType}/details/${asset._id}`
+                      `/user/services/${normalizedType}/details/${asset?._id}`
                     )
                   }
                 >
                   <div className="relative h-52 sm:h-60 w-full group">
                     <img
                       src={
-                        Array.isArray(asset.Images)
+                        Array.isArray(asset?.Images)
                           ? asset.Images[0]
                           : Images.imageNA
                       }
@@ -521,10 +530,10 @@ export default function ServicesCard() {
                     </div>
                   </div>
                   <div className="p-2 sm:p-3 space-y-1">
-                    <h3 className="text-sm font-semibold text-gray-800 line-clamp-2">
-                      {asset.name}
+                    <h3 className="text-base font-bold text-gray-800 line-clamp-2">
+                      {asset.name.toUpperCase()}
                     </h3>
-                    <div className="flex items-center gap-1 text-xs font-semibold text-gray-900">
+                    <div className="flex items-center gap-1 text-xs text-gray-700">
                       {"packagesCount" in asset ? (
                         <span>{`${
                           asset.packagesCount ?? asset.amount

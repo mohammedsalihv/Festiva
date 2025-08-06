@@ -8,12 +8,19 @@ export interface IHostAssetUseCase {
     hostId: string,
     page: number,
     limit: number,
-    type?: "studio" | "venue" | "rentcar" | "caters"
+    type?: "studio" | "venue" | "rentcar" | "caters",
+    search?: string,
+    status?: string | string[],
+    sortBy?: "newest" | "oldest"
   ): Promise<{ data: myAssetsDTO[]; totalPages: number }>;
 
   getAllRequests(
     hostId: string,
     page: number,
-    limit: number
+    limit: number,
+    search?: string,
+    status?: string,
+    sortBy?: "reqDate" | "actionDate" | "status",
+    order?: "asc" | "desc"
   ): Promise<{ data: AssetRequestDTO[]; totalPages: number }>;
 }

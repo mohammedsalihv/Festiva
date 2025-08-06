@@ -12,7 +12,6 @@ export class UserRentCarRepository implements IUserRentCarRepository {
     const cars = await RentCarModel.find({ status: "approved" })
       .populate("location", "city state country")
       .lean();
-
     return cars.map(mapRentCarToBase);
   }
 
@@ -44,24 +43,23 @@ export class UserRentCarRepository implements IUserRentCarRepository {
 
     const match: Record<string, any> = {};
 
-
-    if(filters.lat && filters.lng) {
+    if (filters.lat && filters.lng) {
       const radiusInMeters = (filters.radius || 50) * 1000;
 
       const nearbyLocations = await LocationModel.find({
-        coordinates:{
-          $near:{
-            $geometry:{
-              type:"Point",
-              coordinates:[filters.lng , filters.lat]
+        coordinates: {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: [filters.lng, filters.lat],
             },
-            $maxDistance:radiusInMeters
-          }
-        }
-      }).select("_id")
+            $maxDistance: radiusInMeters,
+          },
+        },
+      }).select("_id");
 
       const nearbyLocationIds = nearbyLocations.map((loc) => loc._id);
-      match["location"] = {$in:nearbyLocationIds};
+      match["location"] = { $in: nearbyLocationIds };
     }
 
     if (filters.make?.length) {
@@ -106,6 +104,13 @@ export class UserRentCarRepository implements IUserRentCarRepository {
       match.$expr = {
         $lte: [{ $toDouble: "$rent" }, filters.price],
       };
+    }
+
+    if (filters.keyword) {
+      match["$or"] = [
+        { carName: { $regex: filters.keyword, $options: "i" } },
+        { businessName: { $regex: filters.keyword, $options: "i" } },
+      ];
     }
 
     pipeline.push({ $match: match });

@@ -25,12 +25,21 @@ export class HostAssetController implements IHostAssetController {
       const hostId = req.auth!.id;
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
+      const type = req.query.assetType as any;
+      const search = req.query.search as string;
+      const status = req.query.status as string | string[];
+      const sortBy = req.query.sortBy as "newest" | "oldest";
 
       const { data, totalPages } = await this.hostAssetUseCase.getAllAssets(
         hostId,
         page,
-        limit
+        limit,
+        type,
+        search,
+        status,
+        sortBy
       );
+
       res.status(statusCodes.Success).json({ data, totalPages });
     } catch (error) {
       console.error("Error fetching all assets:", error);
@@ -96,11 +105,27 @@ export class HostAssetController implements IHostAssetController {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
 
+      const search = (req.query.search as string) || "";
+      const status = (req.query.status as string) || "";
+      const sortByRaw = req.query.sortBy as string;
+      const order = (req.query.order as "asc" | "desc") || "desc";
+
+      // ✅ Narrow sortBy to allowed types only
+      const validSortFields = ["reqDate", "actionDate", "status"] as const;
+      const sortBy = validSortFields.includes(sortByRaw as any)
+        ? (sortByRaw as (typeof validSortFields)[number])
+        : undefined;
+
       const { data, totalPages } = await this.hostAssetUseCase.getAllRequests(
         hostId,
         page,
-        limit
+        limit,
+        search,
+        status,
+        sortBy,
+        order
       );
+
       res.status(statusCodes.Success).json({ data, totalPages });
     } catch (error) {
       console.error("Error fetching asset requests:", error);

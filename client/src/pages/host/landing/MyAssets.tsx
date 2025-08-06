@@ -14,6 +14,10 @@ import Loader from "@/components/Loader";
 export default function MyAssets() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState<string>("All");
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [sortBy, setSortBy] = useState<"newest" | "oldest" | undefined>(
+    undefined
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const assets = useSelector((state: RootState) => state.myAssets.assets);
@@ -26,8 +30,9 @@ export default function MyAssets() {
     pageNumber: number,
     pageLimit: number,
     search = "",
-    status?: string,
-    assetType?: string
+    status?: string | string[],
+    assetType?: string,
+    sortOption?: "newest" | "oldest"
   ) => {
     setLoading(true);
     try {
@@ -36,7 +41,8 @@ export default function MyAssets() {
         pageLimit,
         search,
         status,
-        assetType
+        assetType,
+        sortOption
       );
       dispatch(setMyAssets(response.data));
       setCurrentPage(pageNumber);
@@ -57,21 +63,40 @@ export default function MyAssets() {
   }, [activeTab]);
 
   useEffect(() => {
-    const delay = setTimeout(() => {
-      let status, type;
+  const delay = setTimeout(() => {
+    let status: string | string[] | undefined;
+    let type: string | undefined;
 
-      if (activeTab === "Available") status = "approved";
-      else if (activeTab === "Not Available") status = "pending";
-      else if (["venue", "studio", "rentcar", "caters"].includes(activeTab))
-        type = activeTab;
+    if (activeTab === "Available") {
+      status = "approved";
+    } else if (activeTab === "Not Available") {
+      status = ["pending", "rejected"];
+    } else if (["venue", "studio", "rentcar", "caters"].includes(activeTab)) {
+      type = activeTab;
+    }
 
-      fetchMyAssets(1, pageLimit, searchTerm, status, type);
-    }, 300);
+    fetchMyAssets(1, pageLimit, searchTerm, status, type);
+  }, 300);
 
-    return () => clearTimeout(delay);
-  }, [searchTerm, activeTab]);
+  return () => clearTimeout(delay);
+}, [searchTerm, activeTab]);
+
 
   const handlePageChange = (page: number) => {
+    let status, type;
+    if (activeTab === "Available") status = "approved";
+    else if (activeTab === "Not Available") status = "pending";
+    else if (["venue", "studio", "rentcar", "caters"].includes(activeTab))
+      type = activeTab;
+
+    fetchMyAssets(page, pageLimit, searchTerm, status, type, sortBy);
+  };
+
+  const handleAssetDetails = async (assetId: string, assetType: string) => {
+    navigate(`/host/assets/details/${assetType}/${assetId}`);
+  };
+
+  const triggerSort = (selectedSort: "newest" | "oldest") => {
     let status, type;
 
     if (activeTab === "Available") status = "approved";
@@ -79,49 +104,89 @@ export default function MyAssets() {
     else if (["venue", "studio", "rentcar", "caters"].includes(activeTab))
       type = activeTab;
 
-    fetchMyAssets(page, pageLimit, searchTerm, status, type);
+    fetchMyAssets(1, pageLimit, searchTerm, status, type, selectedSort);
   };
 
-  const handleAssetDetails = async (assetId: string, assetType: string) => {
-    navigate(`/host/assets/details/${assetType}/${assetId}`);
-  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".sort-dropdown")) {
+        setShowSortDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="px-3 py-8 md:px-10 md:py-8 font-poppins">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap- border-b p-2">
-        <div className="flex gap-2 overflow-x-auto scrollbar-none mb-2">
-          {[
-            { label: "All", value: "All" },
-            { label: "Venues", value: "venue" },
-            { label: "Rent Cars", value: "rentcar" },
-            { label: "Caters", value: "caters" },
-            { label: "Studios", value: "studio" },
-            { label: "Available", value: "Available" },
-            { label: "Not Available", value: "Not Available" },
-          ].map((tab) => (
-            <Button
-              key={tab.value}
-              onClick={() => setActiveTab(tab.value)}
-              className={`p-3 text-xs sm:text-base md:text-base rounded font-poppins ${
-                activeTab === tab.value ? "bg-black text-white" : "bg-gray-100"
-              }`}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-4 border-b py-2 px-1">
+        <div className="-mx-2 px-2 overflow-x-auto scrollbar-none">
+          <div className="flex gap-2 whitespace-nowrap">
+            {[
+              { label: "All", value: "All" },
+              { label: "Venues", value: "venue" },
+              { label: "Rent Cars", value: "rentcar" },
+              { label: "Caters", value: "caters" },
+              { label: "Studios", value: "studio" },
+              { label: "Available", value: "Available" },
+              { label: "Not Available", value: "Not Available" },
+            ].map((tab) => (
+              <Button
+                key={tab.value}
+                onClick={() => setActiveTab(tab.value)}
+                className={`p-2 text-xs sm:text-sm md:text-base rounded font-poppins ${
+                  activeTab === tab.value
+                    ? "bg-black text-white"
+                    : "bg-gray-100"
+                }`}
+              >
+                {tab.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center gap-3 w-full sm:w-auto mt-2 sm:mt-0">
+          <div className="relative w-full max-w-sm">
+            <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+            <Input
+              type="text"
+              placeholder="Search Product"
+              className="pr-9 pl-8 py-1 rounded border text-sm w-full"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="relative sort-dropdown">
+            {/* Sort Icon */}
+            <div
+              className="text-xl cursor-pointer"
+              onClick={() => setShowSortDropdown((prev) => !prev)}
             >
-              {tab.label}
-            </Button>
-          ))}
-        </div>
-        <div>
-          <FaSort />
-        </div>
-        <div className="relative w-full max-w-sm">
-          <FaSearch className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-          <Input
-            type="text"
-            placeholder="Search Product"
-            className="pr-9 pl-8 py-1 rounded border text-sm w-full"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+              <FaSort />
+            </div>
+
+            {/* Dropdown */}
+            {showSortDropdown && (
+              <div className="absolute right-0 mt-2 bg-white border shadow-md rounded z-50 w-36 sm:w-40 text-sm">
+                {["newest", "oldest"].map((option) => (
+                  <div
+                    key={option}
+                    className={`px-4 py-2 hover:bg-gray-100 cursor-pointer ${
+                      sortBy === option ? "font-semibold bg-gray-50" : ""
+                    }`}
+                    onClick={() => {
+                      setSortBy(option as "newest" | "oldest");
+                      setShowSortDropdown(false);
+                      triggerSort(option as "newest" | "oldest");
+                    }}
+                  >
+                    {option === "newest" ? "Newest" : "Oldest"}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

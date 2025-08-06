@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import Table from "@/components/Table";
 import Pagination from "@/components/Pagination";
@@ -7,7 +7,9 @@ import { getAllAssetRequests } from "@/api/host/hostAccountService";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { AssetRequest } from "@/utils/Types/host/pages/assetRequests";
-
+import { FaSearch, FaSort } from "react-icons/fa";
+import { Input } from "@/components/Input";
+import { FiFilter } from "react-icons/fi";
 
 dayjs.extend(relativeTime);
 
@@ -64,12 +66,27 @@ export const AssetStatus: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [showSort, setShowSort] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
+
+  const sortRef = useRef(null);
+  const filterRef = useRef(null);
 
   const fetchRequests = async (page = 1) => {
     try {
       setLoading(true);
-      const { data, totalPages } = await getAllAssetRequests(page, 7);
-      console.log(data)
+      const status = activeTab !== "All requests" ? activeTab : "";
+      const { data, totalPages } = await getAllAssetRequests(
+        page,
+        7,
+        search,
+        status,
+        sortBy,
+        sortOrder
+      );
       setRequests(data);
       setTotalPages(totalPages);
     } catch (error) {
@@ -80,12 +97,29 @@ export const AssetStatus: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchRequests(currentPage);
-  }, [currentPage]);
-
-  useEffect(() => {
     setCurrentPage(1);
   }, [activeTab]);
+
+  useEffect(() => {
+    fetchRequests(currentPage);
+  }, [currentPage, activeTab, search, sortBy, sortOrder]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
+        setShowSort(false);
+      }
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(event.target as Node)
+      ) {
+        setShowFilter(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const filteredData =
     activeTab === "All requests"
@@ -95,27 +129,99 @@ export const AssetStatus: React.FC = () => {
   return (
     <div className="px-4 py-3 sm:px-6 md:px-20 font-poppins">
       <h2 className="text-base sm:text-xl font-semibold mb-4">My Requests</h2>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-gray-200 mb-10">
+        {/* Tabs (always on top in small screens) */}
+        <div className="flex gap-4 overflow-x-auto scrollbar-hide md:overflow-visible">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={clsx(
+                "px-4 py-2 text-xs sm:text-sm md:text-base whitespace-nowrap",
+                activeTab === tab
+                  ? "border-b-2 border-black text-black"
+                  : "text-gray-500 hover:text-black"
+              )}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
 
-      <div className="flex border-b border-gray-200 mb-10">
-        {tabs.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={clsx(
-              "px-4 py-2 text-xs sm:text-base md:text-base",
-              activeTab === tab
-                ? "border-b-2 border-black text-black"
-                : "text-gray-500 hover:text-black"
+        <div className="flex flex-wrap md:flex-nowrap items-center gap-2 md:gap-4 w-full md:w-auto mb-1">
+          {/* Search */}
+          <div className="relative grow md:grow-0 md:w-60 min-w-[180px]">
+            <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+            <Input
+              type="text"
+              placeholder="Search Product"
+              className="pr-9 pl-8 py-1 rounded border text-sm w-full"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+          </div>
+
+          {/* Sort */}
+          <div className="relative">
+            <div
+              className="text-xl cursor-pointer"
+              onClick={() => setShowSort((prev) => !prev)}
+            >
+              <FaSort />
+            </div>
+            {showSort && (
+              <div className="absolute right-0 mt-2 z-10 bg-white border shadow rounded-md p-3 w-48 text-sm space-y-2">
+                <select
+                  className="w-full border px-2 py-1 rounded"
+                  value={sortBy}
+                  onChange={(e) => {
+                    setSortBy(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                >
+                  <option value="">Sort By</option>
+                  <option value="reqDate">Request Date</option>
+                  <option value="actionDate">Action Date</option>
+                  <option value="status">Status</option>
+                </select>
+
+                <select
+                  className="w-full border px-2 py-1 rounded"
+                  value={sortOrder}
+                  onChange={(e) => {
+                    setSortOrder(e.target.value as "asc" | "desc");
+                    setCurrentPage(1);
+                  }}
+                >
+                  <option value="asc">Ascending</option>
+                  <option value="desc">Descending</option>
+                </select>
+              </div>
             )}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+          </div>
 
+          {/* Filter */}
+          <div className="relative">
+            <div
+              className="text-xl cursor-pointer"
+              onClick={() => setShowFilter((prev) => !prev)}
+            >
+              <FiFilter />
+            </div>
+            {showFilter && (
+              <div className="absolute right-0 mt-2 z-10 bg-white border shadow rounded-md p-3 w-48 text-sm">
+                <div className="text-gray-500 italic">No filters yet</div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
       <div className="overflow-x-auto rounded">
         {loading ? (
-          <div className="text-center text-gray-500 py-10 text-sm">
+          <div className="text-center text-gray-500 py-5 text-sm">
             Loading...
           </div>
         ) : filteredData.length > 0 ? (
@@ -127,7 +233,6 @@ export const AssetStatus: React.FC = () => {
           </div>
         )}
       </div>
-
       <div className="mt-6">
         <Pagination
           currentPage={currentPage}

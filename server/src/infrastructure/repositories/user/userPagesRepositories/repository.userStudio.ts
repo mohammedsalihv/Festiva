@@ -34,7 +34,6 @@ export class UserStudioRepository implements IUserStudioRepository {
     if (filters.lat && filters.lng) {
       const radiusInMeters = (filters.radius || 50) * 1000; // default 50km
 
-      // Step 1: Find matching location IDs within radius
       const nearbyLocations = await LocationModel.find({
         coordinates: {
           $near: {
@@ -87,6 +86,10 @@ export class UserStudioRepository implements IUserStudioRepository {
           },
         },
       };
+    }
+
+    if (filters.keyword) {
+      query["studioName"] = { $regex: filters.keyword, $options: "i" };
     }
 
     const total = await StudioModel.countDocuments(query);

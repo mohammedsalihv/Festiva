@@ -17,8 +17,9 @@ export const myAssets = async (
   page: number,
   limit: number,
   search?: string,
-  status?: string,
-  assetType?: string
+  status?: string | string[],
+  assetType?: string,
+  sortBy?: "newest" | "oldest"
 ) => {
   const response = await axiosInstance.get(HOST_API.hostAccount.myAssets, {
     params: {
@@ -27,12 +28,12 @@ export const myAssets = async (
       ...(search ? { search } : {}),
       ...(status ? { status } : {}),
       ...(assetType ? { assetType } : {}),
+      ...(sortBy ? { sortBy } : {}),
     },
   });
 
   return response.data;
 };
-
 
 export const fetchAssetDetails = async (assetId: string, assetType: string) => {
   const response = await axiosInstance.get(
@@ -44,9 +45,23 @@ export const fetchAssetDetails = async (assetId: string, assetType: string) => {
   return response.data;
 };
 
-export const getAllAssetRequests = async (page = 1, limit = 10) => {
+export const getAllAssetRequests = async (
+  page = 1,
+  limit = 10,
+  search = "",
+  status = "",
+  sortBy = "",
+  order = ""
+) => {
   const response = await axiosInstance.get(HOST_API.hostAccount.requets, {
-    params: { page, limit },
+    params: {
+      page,
+      limit,
+      search,
+      status,
+      sortBy,
+      order,
+    },
   });
 
   return response.data;
@@ -63,7 +78,6 @@ export const assetReApply = async (assetId: string, assetType: string) => {
   return response.data;
 };
 
-
 export const updateAssetAvailability = async (
   assetId: string,
   assetType: string,
@@ -79,7 +93,6 @@ export const updateAssetAvailability = async (
   return response.data;
 };
 
-
 export const assetDelete = async (assetId: string, assetType: string) => {
   const response = await axiosInstance.delete(
     HOST_API.hostAccount.assetDelete(assetId),
@@ -89,4 +102,3 @@ export const assetDelete = async (assetId: string, assetType: string) => {
   );
   return response.data;
 };
-
