@@ -20,6 +20,7 @@ export interface IVenue {
   status?: string;
   createdAt:string;
   isReapplied:boolean;
+  rejectedReason:string;
   isAvailable:boolean;
   typeOfAsset: string;
   location: assetDetailsLocationInfo;

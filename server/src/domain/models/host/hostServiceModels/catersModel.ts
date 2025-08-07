@@ -18,7 +18,7 @@ const catersSchema = new Schema<ICaters>(
     Images: [{ type: String, required: true }],
     status: {
       type: String,
-      enum: ["pending", "approved", "rejected" , "unavailable" , "available"],
+      enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
     rejectedReason: { type: String, default: "" },

@@ -13,6 +13,7 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
+import { getIO } from "../../../../config/socket";
 
 interface AuthRequest extends Request {
   auth?: JwtPayload & { id: string; role?: string };
@@ -121,6 +122,14 @@ export class AdminAssetsController implements IAdminAssetManagementController {
           status: "approved",
           message: `Your ${type} has been approved.`,
         });
+        const io = getIO();
+        io.to(`host-${result.hostId}`).emit("new-notification", {
+          assetId: result._id,
+          assetType: type,
+          status: "approved",
+          message: `Your ${type} has been approved.`,
+          createdAt: new Date(),
+        });
       }
 
       res
@@ -163,6 +172,14 @@ export class AdminAssetsController implements IAdminAssetManagementController {
           assetType: String(type) as any,
           status: "rejected",
           message: `Your ${type} has been rejected.`,
+        });
+        const io = getIO();
+        io.to(`host-${result.hostId}`).emit("new-notification", {
+          assetId: result._id,
+          assetType: type,
+          status: "rejected",
+          message: `Your ${type} has been rejected.`,
+          createdAt: new Date(),
         });
       }
 

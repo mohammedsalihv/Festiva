@@ -45,7 +45,6 @@ export class HostVenueRepository implements IHostVenueRepository {
       {
         $set: {
           isAvailable,
-          status: isAvailable ? "available" : "unavailable",
         },
       }
     );

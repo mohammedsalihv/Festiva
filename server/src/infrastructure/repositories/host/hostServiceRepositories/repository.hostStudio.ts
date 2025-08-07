@@ -44,7 +44,6 @@ export class HostStudioRepository implements IHostStudioRepository {
       {
         $set: {
           isAvailable,
-          status: isAvailable ? "available" : "unavailable",
         },
       }
     );

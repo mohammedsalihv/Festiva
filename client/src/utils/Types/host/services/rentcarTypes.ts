@@ -25,6 +25,7 @@ export interface IRentCar {
   Images: string[];
   status?: string;
   isReapplied:boolean;
+  rejectedReason:string;
   isAvailable:boolean;
   createdAt:string;
   typeOfAsset: string;

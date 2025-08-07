@@ -201,8 +201,9 @@ export class HostCatersController implements IHostCatersController {
   async availability(req: Request, res: Response): Promise<void> {
     try {
       const catersId = req.params.assetId;
-      const { isAvailable } = req.body;
+      const isAvailable = req.body.isAvailable;
 
+      console.log("99999999999", isAvailable);
       if (!catersId) {
         res.status(statusCodes.badRequest).json({
           success: false,

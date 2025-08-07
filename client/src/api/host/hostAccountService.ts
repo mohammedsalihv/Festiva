@@ -51,7 +51,8 @@ export const getAllAssetRequests = async (
   search = "",
   status = "",
   sortBy = "",
-  order = ""
+  order = "",
+  serviceType = ""
 ) => {
   const response = await axiosInstance.get(HOST_API.hostAccount.requets, {
     params: {
@@ -61,6 +62,7 @@ export const getAllAssetRequests = async (
       status,
       sortBy,
       order,
+      serviceType,
     },
   });
 
@@ -81,11 +83,11 @@ export const assetReApply = async (assetId: string, assetType: string) => {
 export const updateAssetAvailability = async (
   assetId: string,
   assetType: string,
-  status: "available" | "unavailable"
+  isAvailable: boolean
 ) => {
   const response = await axiosInstance.patch(
-    HOST_API.hostAccount.updateAvailability(assetId, status),
-    {},
+    HOST_API.hostAccount.updateAvailability(assetId),
+    { isAvailable },
     {
       params: { type: assetType },
     }

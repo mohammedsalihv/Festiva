@@ -14,7 +14,7 @@ export const HOST_ROUTES = {
     myAssets:'/myassets',
     assetDetails: "/assets/details/:assetId",
     assetReApply:"/assets/re-apply/:assetId",
-    assetUnavailable:"/assets/:status/:assetId",
+   assetAvailability: "/assets/:assetId",
     assetDelete:"/assets/delete/:assetId",
     requests: "/requests",
   },

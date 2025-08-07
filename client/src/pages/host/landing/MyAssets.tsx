@@ -191,7 +191,7 @@ export default function MyAssets() {
       </div>
 
       <div className="container mx-auto px-4">
-        {loading ? ( // ✅ Show loader while fetching
+        {loading ? (
           <div className="flex justify-center items-center py-16">
             <Loader />
           </div>

@@ -71,7 +71,7 @@ export class AdminAssetManagementRepository
     const model = this.getModelByType(typeOfAsset);
     const result = await model.findByIdAndUpdate(
       id,
-      { status: assetStatus , rejectedReason: "" },
+      { status: assetStatus , rejectedReason: "" , isReapplied:false },
       { new: true, projection: { _id: 1, host: 1 } }
     );
     if (!result) return null;
@@ -91,7 +91,7 @@ export class AdminAssetManagementRepository
     const model = this.getModelByType(typeOfAsset);
     const result = await model.findByIdAndUpdate(
       id,
-      { status: assetStatus, rejectedReason: reason },
+      { status: assetStatus, rejectedReason: reason , isReapplied:false },
       { new: true, projection: { _id: 1, host: 1 } }
     );
     if (!result) return null;

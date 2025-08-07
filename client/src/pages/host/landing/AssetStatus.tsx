@@ -71,6 +71,7 @@ export const AssetStatus: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [showSort, setShowSort] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
+  const [serviceType, setServiceType] = useState("");
 
   const sortRef = useRef(null);
   const filterRef = useRef(null);
@@ -85,7 +86,8 @@ export const AssetStatus: React.FC = () => {
         search,
         status,
         sortBy,
-        sortOrder
+        sortOrder,
+        serviceType
       );
       setRequests(data);
       setTotalPages(totalPages);
@@ -100,9 +102,10 @@ export const AssetStatus: React.FC = () => {
     setCurrentPage(1);
   }, [activeTab]);
 
-  useEffect(() => {
-    fetchRequests(currentPage);
-  }, [currentPage, activeTab, search, sortBy, sortOrder]);
+useEffect(() => {
+  fetchRequests(currentPage);
+}, [currentPage, activeTab, search, sortBy, sortOrder, serviceType]);
+
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -130,7 +133,6 @@ export const AssetStatus: React.FC = () => {
     <div className="px-4 py-3 sm:px-6 md:px-20 font-poppins">
       <h2 className="text-base sm:text-xl font-semibold mb-4">My Requests</h2>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-gray-200 mb-10">
-        {/* Tabs (always on top in small screens) */}
         <div className="flex gap-4 overflow-x-auto scrollbar-hide md:overflow-visible">
           {tabs.map((tab) => (
             <button
@@ -163,8 +165,6 @@ export const AssetStatus: React.FC = () => {
               }}
             />
           </div>
-
-          {/* Sort */}
           <div className="relative">
             <div
               className="text-xl cursor-pointer"
@@ -202,8 +202,6 @@ export const AssetStatus: React.FC = () => {
               </div>
             )}
           </div>
-
-          {/* Filter */}
           <div className="relative">
             <div
               className="text-xl cursor-pointer"
@@ -212,8 +210,27 @@ export const AssetStatus: React.FC = () => {
               <FiFilter />
             </div>
             {showFilter && (
-              <div className="absolute right-0 mt-2 z-10 bg-white border shadow rounded-md p-3 w-48 text-sm">
-                <div className="text-gray-500 italic">No filters yet</div>
+              <div className="absolute right-0 mt-2 z-10 bg-white border shadow rounded-md p-3 w-48 text-sm space-y-2">
+                {/* Filter by service type */}
+                <div>
+                  <label className="block text-xs mb-1 font-medium text-gray-600">
+                    Service Type
+                  </label>
+                  <select
+                    className="w-full border px-2 py-1 rounded"
+                    value={serviceType}
+                    onChange={(e) => {
+                      setServiceType(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                  >
+                    <option value="">All</option>
+                    <option value="venue">Venue</option>
+                    <option value="studio">Studio</option>
+                    <option value="rentcar">Rent Car</option>
+                    <option value="caters">Caters</option>
+                  </select>
+                </div>
               </div>
             )}
           </div>

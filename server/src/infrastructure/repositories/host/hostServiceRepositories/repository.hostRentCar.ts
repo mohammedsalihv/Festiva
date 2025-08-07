@@ -42,11 +42,10 @@ export class HostRentCarRepository implements IHostRentCarRepository {
     const result = await RentCarModel.updateOne(
       { _id: rentcarId },
       {
-        $set: {
-          isAvailable,
-          status: isAvailable ? "available" : "unavailable",
-        },
-      }
+      $set: {
+        isAvailable,
+      },
+    }
     );
     return result.modifiedCount > 0;
   }

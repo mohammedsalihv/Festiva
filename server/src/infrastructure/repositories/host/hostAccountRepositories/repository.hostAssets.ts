@@ -103,65 +103,75 @@ export class HostAssetRepository implements IHostAssetRepository {
   }
 
   async getAllRequests(
-  hostId: string,
-  page: number,
-  limit: number,
-  search = "",
-  status = "",
-  sortBy = "",
-  order: "asc" | "desc" = "desc"
-): Promise<{ data: AssetRequestDTO[]; totalPages: number }> {
-  const [rentCars, studios, venues, caters] = await Promise.all([
-    RentCarModel.find({ host: hostId }).lean(),
-    StudioModel.find({ host: hostId }).lean(),
-    VenueModel.find({ host: hostId }).lean(),
-    CatersModel.find({ host: hostId }).lean(),
-  ]);
+    hostId: string,
+    page: number,
+    limit: number,
+    search = "",
+    status = "",
+    sortBy = "",
+    order: "asc" | "desc" = "desc",
+    assetType = ""
+  ): Promise<{ data: AssetRequestDTO[]; totalPages: number }> {
+    const [rentCars, studios, venues, caters] = await Promise.all([
+      RentCarModel.find({ host: hostId }).lean(),
+      StudioModel.find({ host: hostId }).lean(),
+      VenueModel.find({ host: hostId }).lean(),
+      CatersModel.find({ host: hostId }).lean(),
+    ]);
 
-  const allResults: AssetRequestDTO[] = [
-    ...mapAssetsToRequestDTOs("rentcar", rentCars),
-    ...mapAssetsToRequestDTOs("studio", studios),
-    ...mapAssetsToRequestDTOs("venue", venues),
-    ...mapAssetsToRequestDTOs("caters", caters),
-  ];
+    let allResults: AssetRequestDTO[] = [];
 
-  // 🔍 Search by name (case-insensitive)
-  let filtered = allResults;
-  if (search.trim()) {
-    const searchRegex = new RegExp(search, "i");
-    filtered = filtered.filter((item) => searchRegex.test(item.name));
+    if (!assetType || assetType === "") {
+      allResults = [
+        ...mapAssetsToRequestDTOs("rentcar", rentCars),
+        ...mapAssetsToRequestDTOs("studio", studios),
+        ...mapAssetsToRequestDTOs("venue", venues),
+        ...mapAssetsToRequestDTOs("caters", caters),
+      ];
+    } else {
+      const map: Record<string, AssetRequestDTO[]> = {
+        rentcar: mapAssetsToRequestDTOs("rentcar", rentCars),
+        studio: mapAssetsToRequestDTOs("studio", studios),
+        venue: mapAssetsToRequestDTOs("venue", venues),
+        caters: mapAssetsToRequestDTOs("caters", caters),
+      };
+
+      allResults = map[assetType] || []; 
+    }
+
+    let filtered = allResults;
+    if (search.trim()) {
+      const searchRegex = new RegExp(search, "i");
+      filtered = filtered.filter((item) => searchRegex.test(item.name));
+    }
+
+    if (status) {
+      filtered = filtered.filter((item) => item.status === status);
+    }
+
+    if (sortBy) {
+      filtered.sort((a, b) => {
+        const aValue = a[sortBy as keyof typeof a];
+        const bValue = b[sortBy as keyof typeof b];
+
+        if (aValue && bValue) {
+          const result =
+            new Date(aValue).getTime() - new Date(bValue).getTime();
+          return order === "asc" ? result : -result;
+        }
+        return 0;
+      });
+    } else {
+      filtered.sort(
+        (a, b) => new Date(b.reqDate).getTime() - new Date(a.reqDate).getTime()
+      );
+    }
+
+    const totalItems = filtered.length;
+    const totalPages = Math.ceil(totalItems / limit);
+    const startIndex = (page - 1) * limit;
+    const paginated = filtered.slice(startIndex, startIndex + limit);
+
+    return { data: paginated, totalPages };
   }
-
-  // 🧪 Filter by status
-  if (status) {
-    filtered = filtered.filter((item) => item.status === status);
-  }
-
-  // 🔃 Sort logic
-  if (sortBy) {
-    filtered.sort((a, b) => {
-      const aValue = a[sortBy as keyof typeof a];
-      const bValue = b[sortBy as keyof typeof b];
-
-      if (aValue && bValue) {
-        const result =
-          new Date(aValue).getTime() - new Date(bValue).getTime();
-        return order === "asc" ? result : -result;
-      }
-      return 0;
-    });
-  } else {
-    filtered.sort(
-      (a, b) => new Date(b.reqDate).getTime() - new Date(a.reqDate).getTime()
-    );
-  }
-
-  const totalItems = filtered.length;
-  const totalPages = Math.ceil(totalItems / limit);
-  const startIndex = (page - 1) * limit;
-  const paginated = filtered.slice(startIndex, startIndex + limit);
-
-  return { data: paginated, totalPages };
-}
-
 }

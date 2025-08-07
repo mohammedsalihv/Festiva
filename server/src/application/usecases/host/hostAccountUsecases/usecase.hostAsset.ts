@@ -31,7 +31,8 @@ export class HostAssetUseCase implements IHostAssetUseCase {
     search = "",
     status = "",
     sortBy = "",
-    order: "asc" | "desc" = "desc"
+    order: "asc" | "desc" = "desc",
+    assetType: string
   ) {
     const validSortFields = ["reqDate", "actionDate", "status"] as const;
     const typedSortBy = validSortFields.includes(sortBy as any)
@@ -45,7 +46,8 @@ export class HostAssetUseCase implements IHostAssetUseCase {
       search,
       status,
       typedSortBy,
-      order
+      order,
+      assetType
     );
   }
 }

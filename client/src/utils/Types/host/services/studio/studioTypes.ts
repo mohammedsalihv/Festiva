@@ -24,6 +24,7 @@ export interface IStudio {
   createdAt:string;
   isReapplied:boolean;
   isAvailable:boolean;
+  rejectedReason:string;
   typeOfAsset: string;
   location?: assetDetailsLocationInfo;
   host?: assetDetailsHostInfo;

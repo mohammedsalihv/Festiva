@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import { Checkbox } from "./Checkbox";
 import { Button } from "./Button";
@@ -33,6 +33,7 @@ interface filterProps {
   filterOpen: (value: boolean) => void;
   filterRef: RefObject<HTMLDivElement | null>;
   onApplyFilter: (filters: filterParams) => void;
+  existingFilters: Record<string, any>; 
 }
 
 const ServiceCardFilter: React.FC<filterProps> = ({
@@ -40,6 +41,7 @@ const ServiceCardFilter: React.FC<filterProps> = ({
   filterOpen,
   filterRef,
   onApplyFilter,
+  existingFilters,
 }) => {
   const [localFilters, setLocalFilters] = useState<Record<string, any>>({});
   const [price, setPrice] = useState(5000);
@@ -53,6 +55,7 @@ const ServiceCardFilter: React.FC<filterProps> = ({
   const [modelStart, setModelStart] = useState("");
   const [modelEnd, setModelEnd] = useState("");
   const [packageSearch, setPackageSearch] = useState("");
+  const [priceTouched, setPriceTouched] = useState(false);
 
   const handleCheckboxChange = (key: string, value: string) => {
     setLocalFilters((prev) => {
@@ -101,15 +104,31 @@ const ServiceCardFilter: React.FC<filterProps> = ({
       cleanedFilters.packageSearch = packageSearch.trim();
     }
 
-    if(price){
+    if (priceTouched) {
       cleanedFilters.price = price;
-
     }
-
-    console.log("Final filters sent:", cleanedFilters);
     onApplyFilter(cleanedFilters);
     filterOpen(false);
   };
+
+ useEffect(() => {
+  if (Object.keys(existingFilters).length === 0) {
+    setLocalFilters({});
+    setSelectedTimeSlot(null);
+    setSelectedTranmission(null);
+    setSelectedFuel(null);
+    setSelectedSeat(null);
+    setSelectedShift(null);
+    setModelStart("");
+    setModelEnd("");
+    setPackageSearch("");
+    setPrice(5000);
+    setPriceTouched(false);
+  } else {
+    setLocalFilters(existingFilters || {});
+  }
+}, [existingFilters]);
+
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 flex items-center justify-center">
@@ -492,7 +511,10 @@ const ServiceCardFilter: React.FC<filterProps> = ({
               max={100000}
               step={1000}
               value={price}
-              onChange={(e) => setPrice(Number(e.target.value))}
+              onChange={(e) => {
+                setPrice(Number(e.target.value));
+                setPriceTouched(true);
+              }}
               className="w-full accent-main_color"
             />
             <p className="text-xs sm:text-sm text-black text-center mt-1">

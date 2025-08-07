@@ -13,13 +13,12 @@ const NotificationPanel: React.FC<notificationProps> = ({
   setNotifications,
 }) => {
   const navigate = useNavigate();
+  console.log(notifications)
 
   const handleMarkAllAsRead = async () => {
     try {
       await markAllNotificationsAsRead();
-      setNotifications((prev) =>
-        prev.map((notif) => ({ ...notif, isRead: true }))
-      );
+      setNotifications([]);
     } catch (err) {
       console.error("Failed to mark all as read:", err);
     }

@@ -28,6 +28,7 @@ import { hostLogout } from "@/api/host/hostAuthService";
 import { AxiosError } from "axios";
 import { HOST_ROUTES } from "@/utils/constants/routes/host.routes";
 import { RootState } from "@/redux/store";
+import socket from "@/config/base/services/socket";
 
 const HostHeader: React.FC = () => {
   const host = useSelector((state: RootState) => state.host.hostInfo);
@@ -68,6 +69,18 @@ const HostHeader: React.FC = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (!host?.id) return;
+    socket.emit("join-host-room", host.id);
+    socket.on("new-notification", (newNotification: INotification) => {
+      setFetchedNotifications((prev) => [newNotification, ...prev]);
+    });
+
+    return () => {
+      socket.off("new-notification");
+    };
+  }, [host?.id]);
 
   return (
     <header className=" bg-white px-4 py-4 sm:px-8 md:px-10 sticky top-0 z-50">
@@ -117,12 +130,11 @@ const HostHeader: React.FC = () => {
                 className="relative w-11 h-11 flex items-center justify-center"
               >
                 <IoNotificationsOutline className="h-6 w-6 text-black hover:text-white cursor-pointer" />
-
-                {fetchedNotifications.some((n) => !n.isRead) && (
+                {fetchedNotifications.length > 0 && (
                   <span className="absolute top-1 right-1 bg-red-600 text-white text-[10px] font-semibold px-1.5 py-[2px] rounded-full">
-                    {fetchedNotifications.filter((n) => !n.isRead).length > 99
+                    {fetchedNotifications.length > 99
                       ? "99+"
-                      : fetchedNotifications.filter((n) => !n.isRead).length}
+                      : fetchedNotifications.length}
                   </span>
                 )}
               </div>

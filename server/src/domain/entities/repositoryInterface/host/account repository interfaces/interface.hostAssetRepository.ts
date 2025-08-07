@@ -21,6 +21,7 @@ export interface IHostAssetRepository {
     search?: string,
     status?: string,
     sortBy?: "reqDate" | "actionDate" | "status",
-    order?: "asc" | "desc"
+    order?: "asc" | "desc",
+    assetType?: string
   ): Promise<{ data: AssetRequestDTO[]; totalPages: number }>;
 }

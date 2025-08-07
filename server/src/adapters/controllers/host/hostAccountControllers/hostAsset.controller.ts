@@ -109,8 +109,8 @@ export class HostAssetController implements IHostAssetController {
       const status = (req.query.status as string) || "";
       const sortByRaw = req.query.sortBy as string;
       const order = (req.query.order as "asc" | "desc") || "desc";
+      const assetType = req.query.serviceType as string;
 
-      // ✅ Narrow sortBy to allowed types only
       const validSortFields = ["reqDate", "actionDate", "status"] as const;
       const sortBy = validSortFields.includes(sortByRaw as any)
         ? (sortByRaw as (typeof validSortFields)[number])
@@ -123,7 +123,8 @@ export class HostAssetController implements IHostAssetController {
         search,
         status,
         sortBy,
-        order
+        order,
+        assetType
       );
 
       res.status(statusCodes.Success).json({ data, totalPages });

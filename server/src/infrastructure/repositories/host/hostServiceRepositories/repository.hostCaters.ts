@@ -40,12 +40,13 @@ export class HostCatersRepository implements IHostCatersRepository {
     catersId: string,
     isAvailable: boolean
   ): Promise<boolean> {
+
+   
     const result = await CatersModel.updateOne(
       { _id: catersId },
       {
         $set: {
-          isAvailable,
-          status: isAvailable ? "available" : "unavailable",
+          isAvailable : isAvailable,
         },
       }
     );

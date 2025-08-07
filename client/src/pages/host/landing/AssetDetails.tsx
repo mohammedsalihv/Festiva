@@ -37,7 +37,6 @@ export const AssetDetails = () => {
       if (id && type) {
         const response = await fetchAssetDetails(id, type);
         setAsset(response.data);
-        console.log(response.data);
       }
     } catch (error) {
       console.error("Failed to fetch asset details", error);
@@ -192,16 +191,18 @@ export const AssetDetails = () => {
   const handleAvailabilityChange = async (
     assetId: string,
     assetType: string,
-    actionType: "available" | "unavailable"
+    isAvailable: boolean
   ) => {
     setIsSubmitting(true);
     try {
-      await updateAssetAvailability(assetId, assetType, actionType)
+      await updateAssetAvailability(assetId, assetType, isAvailable);
       await fetchDetails();
-      toast.success(`Asset marked as ${actionType}`);
+      toast.success(
+        `Asset marked as ${isAvailable ? "available" : "unavailable"}`
+      );
     } catch (error) {
-      console.error(`Failed to mark asset as ${actionType}`, error);
-      toast.error(`Failed to update availability`);
+      console.error(`Failed to update availability`, error);
+      toast.error("Failed to update availability");
     } finally {
       setIsSubmitting(false);
     }
@@ -267,11 +268,11 @@ export const AssetDetails = () => {
             </div>
 
             <div className="flex flex-col items-end">
-              <span className="text-xs sm:text-sm md:text-base md:px-3 py-1 rounded-full text-blue-500">
+              <span className="text-xs sm:text-sm md:text-sm md:px-3 py-1 rounded-full text-blue-500">
                 {listedDate}
               </span>
               <span
-                className={`text-xs sm:text-sm md:text-base px-2 md:px-4 md:py-2 py-1 rounded-full ${
+                className={`text-xs sm:text-sm md:text-sm px-2 md:px-4 md:py-2 py-1 rounded-full ${
                   asset.status === "approved"
                     ? "bg-green-100 text-green-700 border border-green-300"
                     : asset.status === "rejected"
@@ -636,31 +637,29 @@ export const AssetDetails = () => {
             >
               {asset.isAvailable ? "Un-Available" : "Available"}
             </Button>
-
-            {asset.status === "rejected" &&
-              (asset.isReapplied ? (
-                <Button className="py-3 text-sm md:text-base mt-4 md:py-6 w-full md:w-auto bg-gray-200 text-black font-poppins pointer-events-none">
-                  Requested
-                </Button>
-              ) : (
-                <Button
-                  onClick={() => {
-                    if (asset._id && assetType) {
-                      setSelectedAssetId(asset._id);
-                      setSelectedAssetType(assetType);
-                      setConfirmType("reapply");
-                      setConfirmAction(true);
-                    }
-                  }}
-                  className={`mt-4 text-sm md:text-base md:py-6 w-full md:w-auto flex items-center gap-1 justify-center bg-black hover:bg-slate-800 text-white font-poppins ${
-                    isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                  disabled={isSubmitting}
-                >
-                  <MdOutlineRefresh className="w-5 h-5" />
-                  Re-Apply
-                </Button>
-              ))}
+            {asset.isReapplied ? (
+              <Button className="py-3 text-sm md:text-base mt-4 md:py-6 w-full md:w-auto bg-gray-200 text-black font-poppins pointer-events-none">
+                Re applied
+              </Button>
+            ) : asset.status === "rejected" ? (
+              <Button
+                onClick={() => {
+                  if (asset._id && assetType) {
+                    setSelectedAssetId(asset._id);
+                    setSelectedAssetType(assetType);
+                    setConfirmType("reapply");
+                    setConfirmAction(true);
+                  }
+                }}
+                className={`mt-4 text-sm md:text-base md:py-6 w-full md:w-auto flex items-center gap-1 justify-center bg-black hover:bg-slate-800 text-white font-poppins ${
+                  isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                disabled={isSubmitting}
+              >
+                <MdOutlineRefresh className="w-5 h-5" />
+                Re-Apply
+              </Button>
+            ) : null}
 
             <ConfirmDialog
               isOpen={confirmAction}
@@ -699,10 +698,15 @@ export const AssetDetails = () => {
                   handleReApply(selectedAssetId, selectedAssetType);
                 } else if (confirmType === "delete") {
                   handleDelete(selectedAssetId, selectedAssetType);
-                } else if (confirmType === "unavailable") {
-                  handleAvailabilityChange(selectedAssetId, selectedAssetType, confirmType);
-                } else if (confirmType === "available") {
-                  handleAvailabilityChange(selectedAssetId, selectedAssetType, confirmType);
+                } else if (
+                  confirmType === "unavailable" ||
+                  confirmType === "available"
+                ) {
+                  handleAvailabilityChange(
+                    selectedAssetId,
+                    selectedAssetType,
+                    confirmType === "available"
+                  );
                 }
 
                 setConfirmAction(false);
@@ -714,6 +718,11 @@ export const AssetDetails = () => {
               }}
             />
           </div>
+          {asset.rejectedReason && (
+            <p className="bg-gray-500 text-white p-1 mb-5 text-xs sm:text-sm md:text-base font-sans rounded-md">
+              Rejected reason : {asset.rejectedReason}
+            </p>
+          )}
         </div>
       </div>
     </div>

@@ -9,7 +9,10 @@ import { CreateAssetNotificationDTO } from "../../../../types/DTO/common/notific
 
 export class HostNotificationRepository implements IHostNotificationRepository {
   async allHostNotifications(receiverId: string): Promise<any[]> {
-    const notifications = await NotificationModel.find({ receiverId })
+    const notifications = await NotificationModel.find({
+      receiverId,
+      isRead: false,
+    })
       .sort({ createdAt: -1 })
       .lean();
 
@@ -42,6 +45,7 @@ export class HostNotificationRepository implements IHostNotificationRepository {
               .lean();
             break;
         }
+
         return {
           ...notif,
           creator: creator || "Unknown",

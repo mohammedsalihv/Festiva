@@ -53,6 +53,7 @@ export default function ServicesCard() {
   const geocoderContainerRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [filterModalKey, setFilterModalKey] = useState(0);
   const [selectedLocation, setSelectedLocation] = useState<{
     label: string;
     lat: number;
@@ -66,9 +67,12 @@ export default function ServicesCard() {
 
   const pageSize = 8;
 
-  // Reset filters on component mount to avoid stale location data
   useEffect(() => {
-    dispatch(setFilters({})); // Clear all filters on mount
+    dispatch(setFilters({}));
+    setSorts({});
+    setSelectedLocation(null);
+    setGeocoderResult(null);
+    setFilterModalKey((prev) => prev + 1);
     if (normalizedType) setSelectedTab(normalizedType);
   }, [normalizedType, dispatch]);
 
@@ -111,7 +115,6 @@ export default function ServicesCard() {
       const newLat = geometry.coordinates[1];
       const newLng = geometry.coordinates[0];
 
-      // Optional: Only update if location changed
       if (
         filters.lat !== newLat ||
         filters.lng !== newLng ||
@@ -135,7 +138,6 @@ export default function ServicesCard() {
     }
   }, [debouncedGeocoderResult, dispatch]);
 
-  // Initialize map when selectedLocation changes
   useEffect(() => {
     if (mapContainerRef.current && selectedLocation) {
       mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
@@ -164,7 +166,6 @@ export default function ServicesCard() {
     }
   }, [selectedLocation, assets]);
 
-  // Handle click outside to close filter/sort modals
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -194,7 +195,6 @@ export default function ServicesCard() {
         limit: pageSize,
       };
 
-      // Include keyword if any
       if (searchTerm.trim()) {
         params.keyword = searchTerm.trim();
       }
@@ -258,6 +258,8 @@ export default function ServicesCard() {
       </button>
     </div>
   );
+
+  
 
   if (error) {
     return (
@@ -412,7 +414,7 @@ export default function ServicesCard() {
               </div>
             </div>
           )}
-          {/* Render other non-location filters */}
+
           {Object.entries(filters)
             .filter(([key]) => !["lat", "lng", "radius"].includes(key))
             .map(([key, value]) => (
@@ -435,7 +437,7 @@ export default function ServicesCard() {
                 </div>
               </div>
             ))}
-          {/* Render sort tags */}
+    
           {Object.entries(sorts).map(([key, value]) => (
             <div
               key={`sort-${key}`}
@@ -458,7 +460,6 @@ export default function ServicesCard() {
               </button>
             </div>
           ))}
-          {/* Only show Clear All button if non-location filters or sorts exist */}
           {(KewFilter.length > 0 || Object.keys(sorts).length > 0) && (
             <button
               onClick={() => {
@@ -466,6 +467,8 @@ export default function ServicesCard() {
                 setSorts({});
                 setSelectedLocation(null);
                 setGeocoderResult(null);
+                fetchAssets(selectedTab, {}, {}, 1);
+                setFilterModalKey((prev) => prev + 1);
               }}
               className="ml-2 text-red-500 hover:text-red-700 hover:underline font-medium"
             >
@@ -567,20 +570,21 @@ export default function ServicesCard() {
           </div>
         </>
       )}
-
-      {/* Filter and Sort Modals */}
-      {isFilterOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
-          <ServiceCardFilter
-            type={selectedTab}
-            filterRef={fetchRef}
-            filterOpen={setIsFilterOpen}
-            onApplyFilter={(appliedFilters) =>
-              dispatch(setFilters(appliedFilters))
-            }
-          />
-        </div>
-      )}
+     {isFilterOpen && (
+  <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
+    <ServiceCardFilter
+      key={filterModalKey}
+      type={selectedTab}
+      filterRef={fetchRef}
+      filterOpen={setIsFilterOpen}
+      onApplyFilter={(appliedFilters) => {
+        dispatch(setFilters(appliedFilters));
+        fetchAssets(selectedTab, appliedFilters, sorts, 1); 
+      }}
+      existingFilters={filters}
+    />
+  </div>
+)}
       {isSortOpen && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
           <ServiceCardSort
