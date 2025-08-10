@@ -6,11 +6,12 @@ import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
+import { IUserPasswordResetUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userPasswordResetUseCase";
 
-export class UserPasswordResetUseCase {
+export class UserPasswordResetUseCase implements IUserPasswordResetUseCase {
   constructor(private userRepository: IUserRepository) {}
 
-  async execute(form: resetPasswordDTO): Promise<Boolean> {
+  async execute(form: resetPasswordDTO): Promise<boolean> {
     if (!form) {
       throw new CustomError("New password is required", statusCodes.forbidden);
     }

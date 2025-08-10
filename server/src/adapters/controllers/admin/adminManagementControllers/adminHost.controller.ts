@@ -9,7 +9,7 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import { uploadProfileImage } from "../../../../utils/common/cloudinary/uploadProfileImage";
-import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
+
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -19,29 +19,20 @@ interface MulterRequest extends Request {
 export class AdminHostsController implements IAdminHostManagementController {
   constructor(private AdminHostManagementUseCase: AdminHostManagementUseCase) {}
 
-  async getAllHosts(req: Request, res: Response): Promise<void> {
+ async getAllHosts(req: Request, res: Response): Promise<void> {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
 
-      const hosts = await this.AdminHostManagementUseCase.findAllHosts(
+      const users = await this.AdminHostManagementUseCase.findAllHosts(
         page,
         limit
       );
 
-      const signedHosts = hosts.data.map((host) => ({
-        ...host,
-        profilePic: host.profilePic
-          ? getSignedImageUrl(host.profilePic, undefined, 300)
-          : null,
-      }));
-
       res.status(statusCodes.Success).json({
-        success: true,
         message: "Hosts list fetched successfully",
-        data: signedHosts,
-        totalPages: hosts.totalPages,
-        currentPage: hosts.currentPage,
+        success: true,
+        ...users,
       });
     } catch (error) {
       res.status(statusCodes.serverError).json({
@@ -51,7 +42,7 @@ export class AdminHostsController implements IAdminHostManagementController {
       logger.error(error);
     }
   }
-
+  
   async blockOrUnblockHost(req: Request, res: Response): Promise<void> {
     const hostId = req.params.hostId;
     const { isBlocked } = req.body;

@@ -14,6 +14,7 @@ export const USER_API = {
     profileDelete: "/auth/profile/delete",
     changeProfile: "/setProfilePhoto",
     profileEdit: "/profileModify",
+    profileImage: (userId: string) => `/profile/image/${userId}`,
   },
   userAssets: {
     getAssetDetails: (assetId: string, assetType: string) =>

@@ -8,6 +8,7 @@ import { userVenueController } from "../../../infrastructure/DI/user/userService
 import { userRentCarController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userRentCar.DI";
 import { userStudioController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userStudio.DI";
 import { userCatersController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userCaters.DI";
+import { userController } from "../../../infrastructure/DI/user/userAuthenticationDependencyInjections/userAuth.DI";
 
 export interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -33,6 +34,14 @@ userRoutes.post(
   authenticateToken,
   userProfileController.profileEdit.bind(userProfileController)
 );
+
+
+userRoutes.get(
+  USER_ROUTES.UserAccount.getProfileImage, 
+  authenticateToken, 
+  userController.profileImage.bind(userController)
+);
+
 
 // venues
 

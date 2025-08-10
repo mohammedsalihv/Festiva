@@ -12,7 +12,6 @@ import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
-import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 import { getIO } from "../../../../config/socket";
 
 interface AuthRequest extends Request {
@@ -35,16 +34,10 @@ export class AdminAssetsController implements IAdminAssetManagementController {
       const assets = await this.adminAssetManagementUseCase.execute(
         typeOfAsset
       );
-      const signedAssets = assets.map((asset) => ({
-        ...(asset.toObject?.() ?? asset),
-        Images: (asset.Images ?? []).map((public_id: string) =>
-          getSignedImageUrl(public_id, undefined, 600)
-        ),
-      }));
       res.status(statusCodes.Success).json({
         success: true,
         message: "Assets fetched successfully",
-        data: signedAssets,
+        data: assets,
       });
     } catch (error) {
       res.status(statusCodes.serverError).json({

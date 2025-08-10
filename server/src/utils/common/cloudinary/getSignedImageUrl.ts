@@ -6,6 +6,7 @@ export const getSignedImageUrl = (
   expiresInSeconds = 600
 ): string => {
   const timestamp = Math.floor(Date.now() / 1000) + expiresInSeconds;
+
   return cloudinary.url(public_id, {
     type: "authenticated",
     sign_url: true,

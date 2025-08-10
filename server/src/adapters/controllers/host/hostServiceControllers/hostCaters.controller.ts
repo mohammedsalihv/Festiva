@@ -13,9 +13,7 @@ import {
 import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
 import { assetFilesValidate } from "../../../../utils/mapping/host/assetFilesValidate";
 import { Request, Response } from "express";
-import { geocodeAddress } from "../../../../utils/common/geocoding/geocodeAddress";
 import CustomError from "../../../../utils/common/errors/CustomError";
-import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -55,16 +53,18 @@ export class HostCatersController implements IHostCatersController {
         }
 
         const timestamp = Date.now();
-        const uploadedImages = await Promise.all(
-          files.map((file, i) =>
-            uploadAssetImages({
-              assetType: typeOfAsset,
-              buffer: file.buffer,
-              filename: `${typeOfAsset}_${timestamp}_${i}`,
-            })
+        const imageUrls = (
+          await Promise.all(
+            files.map((file, i) =>
+              uploadAssetImages({
+                assetType: typeOfAsset,
+                buffer: file.buffer,
+                filename: `${typeOfAsset}_${timestamp}_${i}`,
+              })
+            )
           )
-        );
-        const imagePublicIds = uploadedImages.map((img) => img.public_id);
+        ).map((img) => img.url);
+
         const {
           catersName,
           manpower,
@@ -93,7 +93,7 @@ export class HostCatersController implements IHostCatersController {
           terms,
           conditions,
           about,
-          Images: imagePublicIds,
+          Images: imageUrls,
           location: new Types.ObjectId(newLocation._id),
           host: new Types.ObjectId(hostId),
         };
@@ -130,17 +130,10 @@ export class HostCatersController implements IHostCatersController {
         return;
       }
       const caters = await this.hostCatersUseCase.catersDetails(catersId);
-
-      const signedCaters = {
-        ...caters,
-        Images: (caters.Images ?? []).map((public_id: string) =>
-          getSignedImageUrl(public_id, undefined, 800)
-        ),
-      };
       res.status(statusCodes.Success).json({
         success: true,
         message: "Caters details fetched successfully",
-        data: signedCaters,
+        data: caters,
       });
     } catch (error) {
       if (error instanceof CustomError) {

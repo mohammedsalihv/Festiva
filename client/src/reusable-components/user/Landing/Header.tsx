@@ -11,13 +11,14 @@ import { RootState } from "@/redux/store";
 import { logoutUser } from "@/redux/Slice/user/userSlice";
 import { Images } from "@/assets";
 import ConfirmDialog from "./ConfirmDialog";
-import { userLogout } from "@/api/user/auth/userAuthService";
+import { userLogout, getProfileImage } from "@/api/user/auth/userAuthService";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { CgMenuRight } from "react-icons/cg";
 
 const Header = () => {
+
   const [open, setOpen] = useState(false);
   const [mainOpen, setMainOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false);
@@ -28,13 +29,12 @@ const Header = () => {
   const isHomePage = location.pathname === "/user/home";
   const landingPage = location.pathname === "/";
   const showTransparent = (isHomePage && !isScrolled) || landingPage;
-
+  const [profileImage, setProfileImage] = useState<string>(Images.default_profile);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const isAuthenticated = !!userInfo?.accessToken;
-  const profile = useSelector((state: RootState) => state.user.userInfo);
+
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -49,6 +49,7 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -56,6 +57,28 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      if (!userInfo?.id) return;
+      try {
+        const blob = await getProfileImage(userInfo.id);
+        const objectUrl = URL.createObjectURL(blob);
+        setProfileImage(objectUrl);
+      } catch (error) {
+        console.log(error);
+        setProfileImage(Images.default_profile);
+      }
+    };
+    fetchProfileImage();
+    return () => {
+      if (profileImage?.startsWith("blob:")) {
+        URL.revokeObjectURL(profileImage);
+      }
+    };
+  }, [userInfo]);
+
 
   const handleLogout = async () => {
     try {
@@ -72,6 +95,7 @@ const Header = () => {
     }
   };
 
+
   return (
     <>
       <nav
@@ -79,7 +103,7 @@ const Header = () => {
           showTransparent ? "" : "bg-white"
         } font-JosephicSans`}
       >
-       <div className="w-full mx-auto flex justify-between items-center gap-6 px-2 py-4 max-h-16 overflow-hidden md:px-7">
+        <div className="w-full mx-auto flex justify-between items-center gap-6 px-2 py-4 max-h-16 overflow-hidden md:px-7">
           <div className="flex-shrink-0">
             <LogoText />
           </div>
@@ -91,11 +115,7 @@ const Header = () => {
                     e.preventDefault();
                     setDropDown((prev) => !prev);
                   }}
-                  src={
-                    profile?.profilePic
-                      ? profile.profilePic
-                      : Images.default_profile
-                  }
+                  src={profileImage ? profileImage : Images.default_profile}
                   alt=""
                   className="w-10 h-10 cursor-pointer rounded-full"
                 />

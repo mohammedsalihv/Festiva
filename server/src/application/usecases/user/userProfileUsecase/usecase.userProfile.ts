@@ -1,4 +1,5 @@
 import { responseUserDTO } from "../../../../types/DTO/user/dto.user";
+import { IUserProfileUseCase } from "../../../../domain/usecaseInterface/user/userProfileUsecaseInterfaces/interface.userProfileUseCase";
 import { IUserProfileRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userProfileRepository";
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
 import CustomError from "../../../../utils/common/errors/CustomError";
@@ -13,7 +14,7 @@ import {
 } from "../../../../utils/common/messages/constantResponses";
 import bcrypt from "bcrypt";
 
-export class UserProfileUseCase {
+export class UserProfileUseCase implements IUserProfileUseCase {
   constructor(
     private userProfileRepository: IUserProfileRepository,
     private userRepository: IUserRepository
@@ -34,7 +35,6 @@ export class UserProfileUseCase {
     return response;
   }
 
-  
   async profileEdit(
     userId: string,
     form: profileEditDTO
@@ -42,8 +42,8 @@ export class UserProfileUseCase {
     if (form.email) {
       const existedEmail = await this.userRepository.findByEmail(form.email);
       if (
-        existedEmail?._id?.toString() !== userId.toString() &&
-        existedEmail?._id !== undefined
+        existedEmail?.id?.toString() !== userId.toString() &&
+        existedEmail?.id !== undefined
       ) {
         throw new CustomError(
           statusMessages.accountExisted,

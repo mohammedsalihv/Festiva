@@ -92,3 +92,13 @@ export const userLogout = async () => {
   );
   return response.data;
 };
+
+
+export const getProfileImage = async (userId: string) => {
+  const response = await axiosInstance.get(
+    USER_API.userAccount.profileImage(userId),
+    { responseType: "blob" }
+  );
+  return response.data;
+};
+

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -9,6 +9,7 @@ import { setUserDetails, logoutUser } from "@/redux/Slice/user/userSlice";
 import { changeProfile, profileEdit } from "@/api/user/base/userService";
 import {
   deleteProfile,
+  getProfileImage,
   passwordModify,
   sendOtp,
   userLogout,
@@ -26,6 +27,7 @@ import { changePasswordState } from "@/utils/Types/user/profileTypes";
 import { validateChangePasswordForm } from "@/utils/validations/user/Auth/changePasswordValidation";
 
 const Profile: React.FC = () => {
+
   const profile = useSelector((state: RootState) => state.user.userInfo);
   const [activeTab, setActiveTab] = useState("Profile Information");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -38,6 +40,9 @@ const Profile: React.FC = () => {
   const [showOtp, setShowOtp] = useState(false);
   const [otpError, setOtpError] = useState("");
   const firstInputRef = useRef<HTMLInputElement>(null);
+  const [profileImage, setProfileImage] = useState<string>(
+      Images.default_profile
+    );
   const [editProfileForm, setEditProfileForm] = useState({
     firstname: profile?.firstname || "",
     lastname: profile?.lastname || "",
@@ -52,6 +57,31 @@ const Profile: React.FC = () => {
   const [errors, setErrors] = useState<changePasswordErrorState>({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+ useEffect(() => {
+     const fetchProfileImage = async () => {
+       if (!profile?.id) return;
+ 
+       try {
+         const blob = await getProfileImage(profile.id);
+ 
+         const objectUrl = URL.createObjectURL(blob);
+         setProfileImage(objectUrl);
+       } catch (error) {
+         console.log(error);
+         setProfileImage(Images.default_profile);
+       }
+     };
+ 
+     fetchProfileImage();
+ 
+     return () => {
+       if (profileImage?.startsWith("blob:")) {
+         URL.revokeObjectURL(profileImage);
+       }
+     };
+   }, [profile]);
+  
 
   const handleProfileDelete = async () => {
     await deleteProfile();
@@ -324,8 +354,8 @@ const Profile: React.FC = () => {
                       <img
                         src={
                           previewImage ||
-                          (profile?.profilePic
-                            ? profile.profilePic
+                          (profileImage
+                            ? profileImage
                             : Images.default_profile)
                         }
                         alt="Profile"

@@ -6,6 +6,7 @@ import {
 import { IUserCatersUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userCatersUseCase";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+
 export class UserCatersUseCase implements IUserCatersUseCase {
   constructor(private userCatersRepository: IUserCatersRepository) {}
   async allCaters(): Promise<ICatersBase[]> {

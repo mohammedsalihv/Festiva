@@ -1,32 +1,23 @@
-import { v2 as cloudinary } from "cloudinary";
-
-interface UploadParams {
-  folderPath: string;
-  buffer: Buffer;
-  filename: string;
-}
+import cloudinary from "../../../config/cloudinary";
 
 export const cloudinaryUploader = ({
   folderPath,
   buffer,
   filename,
-}: UploadParams): Promise<{ public_id: string }> => {
+}: {
+  folderPath: string;
+  buffer: Buffer;
+  filename?: string;
+}): Promise<{ url: string; public_id: string }> => {
+  const public_id = filename || `${Date.now()}`;
   return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        resource_type: "image",
-        folder: folderPath,
-        public_id: filename,
-        type: "authenticated",
-        overwrite: true,
-      },
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: folderPath, public_id },
       (error, result) => {
-        if (error) return reject(error);
-        if (!result) return reject(new Error("No result from Cloudinary"));
-        resolve({ public_id: result.public_id });
+        if (error || !result) return reject(error);
+        resolve({ url: result.secure_url, public_id: result.public_id });
       }
     );
-
-    uploadStream.end(buffer);
+    stream.end(buffer);
   });
 };

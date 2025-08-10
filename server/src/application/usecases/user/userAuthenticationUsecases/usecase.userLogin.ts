@@ -21,7 +21,8 @@ export class UserLoginUseCase implements IUserLoginUseCase {
 
     const userValidation = await this.userRepository.findByEmail(email);
     this.validator.validateUserExistence(userValidation);
-    await this.validator.validatePassword(userValidation.password, password);
+
+    await this.validator.validatePassword(userValidation!.password!, password);
 
     const accessToken = this.tokenService.generateAccessToken({
       id: user.id!,

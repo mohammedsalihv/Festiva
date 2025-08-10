@@ -27,6 +27,8 @@ userAuthRoutes.post(
   USER_ROUTES.Authentiation.userSignup,
   userSignupController.signupByUser.bind(userSignupController)
 );
+
+
 userAuthRoutes.post(USER_ROUTES.Authentiation.sendOtp, async (req, res) => {
   try {
     await otpController.otpSending(req, res);
@@ -34,6 +36,8 @@ userAuthRoutes.post(USER_ROUTES.Authentiation.sendOtp, async (req, res) => {
     logger.info(error);
   }
 });
+
+
 userAuthRoutes.post(
   USER_ROUTES.Authentiation.verifyOtp,
   otpController.otpVerification.bind(otpController)
@@ -57,6 +61,7 @@ userAuthRoutes.post(
   USER_ROUTES.Authentiation.passwordReset,
   userController.resetPassword.bind(userController)
 );
+
 
 userAuthRoutes.post(
   USER_ROUTES.Authentiation.passwordChange,

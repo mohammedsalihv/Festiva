@@ -13,9 +13,7 @@ import {
 } from "../../../../utils/common/messages/constantResponses";
 import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
 import { assetFilesValidate } from "../../../../utils/mapping/host/assetFilesValidate";
-import { geocodeAddress } from "../../../../utils/common/geocoding/geocodeAddress";
 import CustomError from "../../../../utils/common/errors/CustomError";
-import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -57,17 +55,17 @@ export class HostRentCarController implements IHostRentCarController {
         }
         const timestamp = Date.now();
 
-        const uploadedImages = await Promise.all(
-          files.map((file, i) =>
-            uploadAssetImages({
-              assetType: typeOfAsset,
-              buffer: file.buffer,
-              filename: `${typeOfAsset}_${timestamp}_${i}`,
-            })
+        const imageUrls = (
+          await Promise.all(
+            files.map((file, i) =>
+              uploadAssetImages({
+                assetType: typeOfAsset,
+                buffer: file.buffer,
+                filename: `${typeOfAsset}_${timestamp}_${i}`,
+              })
+            )
           )
-        );
-
-        const imagePublicIds = uploadedImages.map((img) => img.public_id);
+        ).map((img) => img.url);
 
         const {
           businessName,
@@ -111,7 +109,7 @@ export class HostRentCarController implements IHostRentCarController {
           description,
           guidelines,
           userDocument,
-          Images: imagePublicIds,
+          Images: imageUrls,
           location: new Types.ObjectId(newLocation._id),
           host: new Types.ObjectId(hostId),
         };
@@ -141,27 +139,19 @@ export class HostRentCarController implements IHostRentCarController {
 
   async carFullDetails(req: Request, res: Response): Promise<void> {
     try {
-      const rentcarId = req.params.assetId;
-      if (!rentcarId) {
+      const carId = req.params.assetId;
+      if (!carId) {
         res.status(statusCodes.unAuthorized).json({
           success: false,
           message: "car ID required",
         });
         return;
       }
-      const car = await this.hostRentCarUseCase.rentCarDetails(rentcarId);
-
-      const signedRentCar = {
-        ...car,
-        Images: (car.Images ?? []).map((public_id: string) =>
-          getSignedImageUrl(public_id, undefined, 800)
-        ),
-      };
-
+      const car = await this.hostRentCarUseCase.rentCarDetails(carId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "car details fetched successfully",
-        data: signedRentCar,
+        data: car,
       });
     } catch (error) {
       if (error instanceof CustomError) {

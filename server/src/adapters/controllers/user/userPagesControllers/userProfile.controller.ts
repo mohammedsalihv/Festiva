@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { IUserProfileController } from "../../../../domain/controlInterface/user/userProfileControllerInterfaces/interface.userProfileController";
 import { UserProfileUseCase } from "../../../../application/usecases/user/userProfileUsecase/usecase.userProfile";
 import logger from "../../../../utils/common/messages/logger";
 import { JwtPayload } from "jsonwebtoken";
@@ -8,34 +9,37 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import { uploadProfileImage } from "../../../../utils/common/cloudinary/uploadProfileImage";
-import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
+
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
   auth?: JwtPayload & { id: string; role?: string };
 }
 
-export class UserProfileController {
+export class UserProfileController implements IUserProfileController {
   constructor(private userProfileUseCase: UserProfileUseCase) {}
 
-  async setProfilePic(req: MulterRequest, res: Response) {
+  async setProfilePic(req: MulterRequest, res: Response): Promise<void> {
     try {
       const userId = req.auth?.id;
       const file = req.file;
 
       if (!file) {
-        return res.status(statusCodes.forbidden).json({
+        res.status(statusCodes.forbidden).json({
           success: false,
           message: "No image file uploaded.",
         });
+        return;
       }
 
       if (!userId) {
-        return res.status(statusCodes.unAuthorized).json({
+        res.status(statusCodes.unAuthorized).json({
           success: false,
           message: "Unauthorized. No user ID found in request.",
         });
+        return;
       }
+
       const image = await uploadProfileImage({
         id: userId,
         buffer: file.buffer,
@@ -50,7 +54,7 @@ export class UserProfileController {
         success: true,
         message: "Profile image changed!",
         data: {
-          profilePhotoUrl: image.public_id,
+          profilePhotoPublicId: image.public_id,
           ...updatedUser,
         },
       });
@@ -58,11 +62,13 @@ export class UserProfileController {
       logger.error("Profile change Error:", error);
 
       if (error.message === "User not found") {
-        return res.status(statusCodes.notfound).json({
+        res.status(statusCodes.notfound).json({
           success: false,
           message: "User not found",
         });
+        return;
       }
+
       res.status(statusCodes.serverError).json({
         success: false,
         message: error.message,

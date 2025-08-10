@@ -1,4 +1,4 @@
-import { UserRentCarUseCase } from "../../../../application/usecases/user/usetServiceUsecases/usecase.userRentCar";
+import { UserRentCarUseCase } from "../../../../application/usecases/user/userServiceUsecases/usecase.userRentCar";
 import { UserRentCarController } from "../../../../adapters/controllers/user/userServicesControllers/userRentCar.controller";
 import { UserRentCarRepository } from "../../../repositories/user/userPagesRepositories/repository.userRentCar";
 

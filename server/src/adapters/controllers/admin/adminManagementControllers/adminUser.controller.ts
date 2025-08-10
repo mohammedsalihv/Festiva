@@ -8,7 +8,7 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import { uploadProfileImage } from "../../../../utils/common/cloudinary/uploadProfileImage";
-import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
+
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -18,7 +18,7 @@ interface MulterRequest extends Request {
 export class AdminUsersController implements IAdminUserManagementController {
   constructor(private adminUserManagementUseCase: AdminUserManagementUseCase) {}
 
-  async getAllUsers(req: Request, res: Response): Promise<void> {
+   async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
@@ -26,19 +26,10 @@ export class AdminUsersController implements IAdminUserManagementController {
         page,
         limit
       );
-      const signedUsers = users.data.map((user) => ({
-        ...user,
-        profilePic: user.profilePic
-          ? getSignedImageUrl(user.profilePic, undefined, 300)
-          : null,
-      }));
-
       res.status(statusCodes.Success).json({
-        success: true,
         message: "Users list fetched successfully",
-        data: signedUsers,
-        totalPages: users.totalPages,
-        currentPage: users.currentPage,
+        success: true,
+        data: users,
       });
     } catch (error) {
       logger.error(String(error), "Error fetching user list");

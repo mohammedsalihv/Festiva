@@ -11,7 +11,7 @@ import userServiceRoute from "./adapters/routes/user/userServiceRoutes";
 import hostAuthRoutes from "./adapters/routes/host/hostAuthRoutes";
 import hostAccountRoutes from "./adapters/routes/host/hostAccountRoutes";
 import hostRoutes from "./adapters/routes/host/hostRoutes";
-import adminAuthRoutes from "./adapters/routes/admin/adminAuthRoutes";
+import adminAuthRoutes from "./adapters/routes/admin/adminauthRoutes";
 import adminRoutes from "./adapters/routes/admin/adminRoutes";
 dotenv.config();
 
@@ -44,17 +44,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: "10mb" }));
 
-const uploadsPath = path.join(__dirname, "uploads");
-console.log("Serving uploads from:", uploadsPath);
-app.use(
-  "/uploads",
-  express.static(uploadsPath, {
-    setHeaders: (res) => {
-      res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-      res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
-    },
-  })
-);
 
 app.use("/api/user/auth", userAuthRoutes);
 app.use("/api/user", userRoutes);

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { AuthRequest } from "../../common/authentication/authType";
 
 export interface IUserCatersController {
   getCaters(req: Request, res: Response): Promise<void>;

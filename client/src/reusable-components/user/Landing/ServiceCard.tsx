@@ -26,7 +26,7 @@ import {
 } from "@/utils/Types/user/filterSortTypes";
 import { Input } from "@/components/Input";
 import { useDispatch, useSelector } from "react-redux";
-import { setFilters } from "@/redux/Slice/user/assetSearchSlice";
+import { clearFilters, setFilters } from "@/redux/Slice/user/assetSearchSlice";
 import { RootState } from "@/redux/store";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -36,13 +36,13 @@ import useDebounce from "@/utils/hooks/user/debounce";
 
 export default function ServicesCard() {
   const { type } = useParams();
-  const normalizedType = type?.toLowerCase();
+  const normalizedType = type?.toLowerCase() || "";
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
-  const [selectedTab, setSelectedTab] = useState<string>("");
+  const [selectedTab, setSelectedTab] = useState<string>(normalizedType);
   const [searchTerm, setSearchTerm] = useState("");
   const [sorts, setSorts] = useState<sortParams>({});
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -53,7 +53,6 @@ export default function ServicesCard() {
   const geocoderContainerRef = useRef<HTMLDivElement>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [filterModalKey, setFilterModalKey] = useState(0);
   const [selectedLocation, setSelectedLocation] = useState<{
     label: string;
     lat: number;
@@ -64,21 +63,15 @@ export default function ServicesCard() {
     text: string;
     geometry: { coordinates: [number, number] };
   } | null>(null);
-
   const pageSize = 8;
-
-  useEffect(() => {
-    dispatch(setFilters({}));
-    setSorts({});
-    setSelectedLocation(null);
-    setGeocoderResult(null);
-    setFilterModalKey((prev) => prev + 1);
-    if (normalizedType) setSelectedTab(normalizedType);
-  }, [normalizedType, dispatch]);
-
   const debouncedGeocoderResult = useDebounce(geocoderResult, 500);
 
-  // Set up Mapbox geocoder
+  useEffect(() => {
+    if (normalizedType) {
+      setSelectedTab(normalizedType);
+    }
+  }, [normalizedType]);
+
   useEffect(() => {
     const geocoder = new MapboxGeocoder({
       accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
@@ -237,29 +230,13 @@ export default function ServicesCard() {
       : { ...filters, lat: undefined, lng: undefined, radius: undefined };
     fetchAssets(selectedTab, fetchParams, sorts, page);
   };
-
-  const renderNoResults = () => (
-    <div className="flex flex-col items-center justify-center h-[300px] text-center gap-4">
-      <img src="/no-match-icon.png" alt="No match" className="w-10 h-10" />
-      <h2 className="text-lg font-semibold">No exact matches</h2>
-      <p className="text-sm text-gray-500">
-        Try changing or removing some of your filters.
-      </p>
-      <button
-        onClick={() => {
-          dispatch(setFilters({}));
-          setSorts({});
-          setSelectedLocation(null);
-          setGeocoderResult(null);
-        }}
-        className="text-green-700 border border-green-700 px-4 py-1.5 rounded hover:bg-green-50 transition text-sm font-medium"
-      >
-        Reset all filters
-      </button>
-    </div>
-  );
-
-  
+  // Function to remove a single filter
+  const handleRemoveFilter = (key: string) => {
+    const updatedFilters = { ...filters };
+    delete updatedFilters[key];
+    dispatch(setFilters(updatedFilters));
+    fetchAssets(selectedTab, updatedFilters, sorts, 1);
+  };
 
   if (error) {
     return (
@@ -268,6 +245,11 @@ export default function ServicesCard() {
       </div>
     );
   }
+
+  const handleResetFilters = () => {
+    dispatch(clearFilters());
+    fetchAssets(selectedTab, {}, sorts, 1);
+  };
 
   return (
     <div className="max-w-full sm:px-6 md:px-4 mx-auto px-2 py-3 sm:py-6 font-JosephicSans mt-10">
@@ -390,54 +372,43 @@ export default function ServicesCard() {
         Object.keys(sorts).length > 0 ||
         selectedLocation) && (
         <div className="flex flex-wrap items-center gap-2 mt-2 text-xs sm:text-sm mb-2">
-          {/* Render location filter tag */}
           {selectedLocation && (
             <div
               key="filter-location"
               className="border text-blue-600 p-2 rounded-md flex items-center gap-2"
             >
-              <div className="capitalize flex items-center gap-4">
-                <span className="text-black">
-                  Location: {selectedLocation.label}
-                </span>
-                <button
-                  onClick={() => {
-                    setSelectedLocation(null);
-                    setGeocoderResult(null);
-                    const { lat, lng, radius, ...rest } = filters;
-                    dispatch(setFilters(rest));
-                  }}
-                  className="text-red-500 hover:text-red-700 font-bold"
-                >
-                  <IoIosClose className="w-6 h-6" />
-                </button>
-              </div>
+              <span className="text-black">
+                Location: {selectedLocation.label}
+              </span>
+              <button
+                onClick={() => {
+                  setSelectedLocation(null);
+                  setGeocoderResult(null);
+                  const { lat, lng, radius, ...rest } = filters;
+                  dispatch(setFilters(rest));
+                }}
+                className="text-red-500 hover:text-red-700 font-bold"
+              >
+                <IoIosClose className="w-6 h-6" />
+              </button>
             </div>
           )}
-
-          {Object.entries(filters)
-            .filter(([key]) => !["lat", "lng", "radius"].includes(key))
-            .map(([key, value]) => (
-              <div
-                key={`filter-${key}`}
-                className="border text-blue-600 p-2 rounded-md flex items-center gap-2"
+          {KewFilter.map((key) => (
+            <div
+              key={`filter-${key}`}
+              className="border text-main_color px-3 py-2 rounded-md flex items-center gap-2"
+            >
+              <span className="capitalize">
+                <span className="text-black">{key}</span>: {filters[key]}
+              </span>
+              <button
+                onClick={() => handleRemoveFilter(key)}
+                className="text-red-500 hover:text-red-700 font-bold"
               >
-                <div className="capitalize flex items-center gap-4">
-                  <span className="text-black">{String(value)}</span>
-                  <button
-                    onClick={() => {
-                      const updated = { ...filters };
-                      delete updated[key];
-                      dispatch(setFilters(updated));
-                    }}
-                    className="text-red-500 hover:text-red-700 font-bold"
-                  >
-                    <IoIosClose className="w-6 h-6" />
-                  </button>
-                </div>
-              </div>
-            ))}
-    
+                <IoIosClose className="w-6 h-6" />
+              </button>
+            </div>
+          ))}
           {Object.entries(sorts).map(([key, value]) => (
             <div
               key={`sort-${key}`}
@@ -447,42 +418,52 @@ export default function ServicesCard() {
                 <span className="text-black">{key}</span>: {value}
               </span>
               <button
-                onClick={() =>
-                  setSorts((prev) => {
-                    const updated = { ...prev };
-                    delete updated[key];
-                    return updated;
-                  })
-                }
+                onClick={() => {
+                  const updated = { ...sorts };
+                  delete updated[key];
+                  setSorts(updated);
+                }}
                 className="text-red-500 hover:text-red-700 font-bold"
               >
                 <IoIosClose className="w-6 h-6" />
               </button>
             </div>
           ))}
-          {(KewFilter.length > 0 || Object.keys(sorts).length > 0) && (
-            <button
-              onClick={() => {
-                dispatch(setFilters({}));
-                setSorts({});
-                setSelectedLocation(null);
-                setGeocoderResult(null);
-                fetchAssets(selectedTab, {}, {}, 1);
-                setFilterModalKey((prev) => prev + 1);
-              }}
-              className="ml-2 text-red-500 hover:text-red-700 hover:underline font-medium"
-            >
-              Clear All
-            </button>
-          )}
+
+          <button
+            onClick={() => {
+              setSorts({});
+              dispatch(clearFilters());
+              setSelectedLocation(null);
+              setGeocoderResult(null);
+              fetchAssets(selectedTab, {}, {}, 1);
+            }}
+            className="text-red-600 border px-3 py-2 rounded-md hover:bg-red-50"
+          >
+            Clear All
+          </button>
         </div>
       )}
+      {assets.length === 0 && !loading && (
+        <div className="flex flex-col items-center justify-center py-12 text-gray-600">
+          <FaSearch className="text-5xl mb-4 text-gray-400" />
+          <p className="text-lg font-medium mb-2">No matching results</p>
+          <p className="text-sm mb-6 text-gray-500">
+            Try adjusting your filters or reset to see all available services.
+          </p>
+          <button
+            onClick={handleResetFilters}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          >
+            Reset Filters
+          </button>
+        </div>
+      )}
+
       {loading ? (
         <div className="text-center py-12 mt-32">
           <Loader />
         </div>
-      ) : assets.length === 0 ? (
-        renderNoResults()
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 p-2 md:p-5">
@@ -523,6 +504,7 @@ export default function ServicesCard() {
                         className="absolute top-0 left-0 w-full h-full object-cover rounded-t-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                       />
                     )}
+
                     <div className="absolute top-2 right-2 flex gap-2 z-10">
                       <button className="bg-white/80 rounded-full p-1 hover:bg-white">
                         <FaHeart className="text-gray-600 hover:text-red-500 text-xs" />
@@ -570,21 +552,20 @@ export default function ServicesCard() {
           </div>
         </>
       )}
-     {isFilterOpen && (
-  <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
-    <ServiceCardFilter
-      key={filterModalKey}
-      type={selectedTab}
-      filterRef={fetchRef}
-      filterOpen={setIsFilterOpen}
-      onApplyFilter={(appliedFilters) => {
-        dispatch(setFilters(appliedFilters));
-        fetchAssets(selectedTab, appliedFilters, sorts, 1); 
-      }}
-      existingFilters={filters}
-    />
-  </div>
-)}
+      {isFilterOpen && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
+          <ServiceCardFilter
+            type={selectedTab}
+            filterRef={fetchRef}
+            filterOpen={setIsFilterOpen}
+            onApplyFilter={(appliedFilters) => {
+              dispatch(setFilters(appliedFilters));
+              fetchAssets(selectedTab, appliedFilters, sorts, 1);
+            }}
+            existingFilters={filters}
+          />
+        </div>
+      )}
       {isSortOpen && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
           <ServiceCardSort

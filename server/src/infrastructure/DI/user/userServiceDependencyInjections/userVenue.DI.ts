@@ -1,5 +1,5 @@
 import { UserVenueRepository } from "../../../repositories/user/userPagesRepositories/repository.userVenue";
-import { UserVenueUseCase } from "../../../../application/usecases/user/usetServiceUsecases/usecase.userVenue";
+import { UserVenueUseCase } from "../../../../application/usecases/user/userServiceUsecases/usecase.userVenue";
 import { UserVenueController } from "../../../../adapters/controllers/user/userServicesControllers/userVenue.controller";
 
 const userVenueRepository = new UserVenueRepository();

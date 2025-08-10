@@ -137,56 +137,6 @@ const Login = () => {
     mutation.mutate(loginForm);
   };
 
-  // const googleLoginMutation = useMutation({
-  //   mutationFn: googleLogin,
-  //   onSuccess: (data) => {
-  //     const userData = {
-  //       id: data.user._id,
-  //       firstname: data.user.firstname,
-  //       lastname: data.user.lastname,
-  //       email: data.user.email,
-  //       role: data.user.role,
-  //       phone: data.user.phone,
-  //       profilePic: data.user.profilePic,
-  //       isActive: data.user.isActive,
-  //       isBlocked: data.user.isBlocked,
-  //       timestamp: data.user.timestamp,
-  //       accessToken: data.accessToken,
-  //       refreshToken: data.refreshToken,
-  //     };
-  //     dispatch(setUserDetails(userData));
-  //     toast.success("Google Login successful!");
-  //     navigate("/landing");
-  //   },
-  //   onError: (error: unknown) => {
-  //     if (error instanceof AxiosError) {
-  //       if (error.response && error.response.status === 403) {
-  //         toast.error(error.response.data.message);
-  //       } else {
-  //         toast.error("Google login failed. Please try again.");
-  //       }
-  //     }
-  //   },
-  // });
-
-  // const handleGoogleLogin = (credentialResponse: CredentialResponse) => {
-  //   if (!credentialResponse.credential) {
-  //     toast.error("Google login failed. No credentials received.");
-  //     return;
-  //   }
-
-  //   const decodedToken: DecodedToken = jwtDecode<DecodedToken>(
-  //     credentialResponse.credential
-  //   );
-
-  //   const googleLoginData: GoogleLoginData = {
-  //     name: decodedToken.name,
-  //     email: decodedToken.email,
-  //     sub: decodedToken.sub,
-  //   };
-
-  //   googleLoginMutation.mutate(googleLoginData);
-  // };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">

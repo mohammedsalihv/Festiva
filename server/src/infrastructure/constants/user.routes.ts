@@ -15,6 +15,8 @@ export const USER_ROUTES = {
   UserAccount: {
     setProfilePhoto: "/setProfilePhoto",
     profileEdit: "/profileModify",
+    profilePic: (userId: string) => `/profile/image/${userId}`,
+    getProfileImage: "/profile/image/:userId",
   },
   VenueService: {
     allVenues: "/getVenues",

@@ -9,9 +9,7 @@ export const toHostLoginResponseDTO = (
   name: host.name,
   email: host.email,
   phone: host.phone,
-  profilePic: host.profilePic
-    ? getSignedImageUrl(host.profilePic, undefined, 300)
-    : undefined,
+  profilePic: host.profilePic,
   role: "host",
   accessToken,
   refreshToken,

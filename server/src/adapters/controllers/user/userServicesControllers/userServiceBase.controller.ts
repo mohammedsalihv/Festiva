@@ -65,10 +65,7 @@ export class UserServiceBaseController implements IUserServicesBaseController {
           await this.userVenueController.filterVenues(req, res);
           break;
         case "rentcar":
-          await this.userRentCarController.filterRentCars(
-            req,
-            res
-          );
+          await this.userRentCarController.filterRentCars(req, res);
           break;
         case "studio":
           await this.userStudioController.filterStudios(req, res);
@@ -84,7 +81,8 @@ export class UserServiceBaseController implements IUserServicesBaseController {
     } catch (error) {
       res.status(statusCodes.serverError).json({
         success: false,
-        message: error instanceof Error ? error.message : statusMessages.serverError,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
       });
     }
   }
@@ -92,7 +90,7 @@ export class UserServiceBaseController implements IUserServicesBaseController {
   async sortAssets(req: Request, res: Response): Promise<void> {
     try {
       const typeOfAsset = req.params.type;
-     
+
       switch (typeOfAsset) {
         case "venue":
           await this.userVenueController.sortVenues(req, res);
@@ -114,7 +112,8 @@ export class UserServiceBaseController implements IUserServicesBaseController {
     } catch (error) {
       res.status(statusCodes.serverError).json({
         success: false,
-        message: error instanceof Error ? error.message : statusMessages.serverError,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
       });
     }
   }

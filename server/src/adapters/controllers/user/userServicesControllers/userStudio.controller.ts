@@ -7,34 +7,27 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import CustomError from "../../../../utils/common/errors/CustomError";
-import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
+
 
 export class UserStudioController implements IUserStudioController {
   constructor(private userStudioUseCase: IUserStudioUseCase) {}
 
   async getStudios(req: Request, res: Response): Promise<void> {
     try {
-      const studios = await this.userStudioUseCase.allStudios();
+      const studio = await this.userStudioUseCase.allStudios();
 
-      if (studios.length === 0) {
+      if (studio.length === 0) {
         res.status(statusCodes.Success).json({
           success: true,
           message: "studio list empty",
+          data: studio,
         });
         return;
       }
-
-      const signedStudios = studios.map((studio) => ({
-        ...(studio.toObject?.() ?? studio),
-        Images: (studio.Images ?? []).map((public_id: string) =>
-          getSignedImageUrl(public_id, undefined, 600)
-        ),
-      }));
-
       res.status(statusCodes.Success).json({
         success: true,
         message: "studios fetched successfully",
-        data: signedStudios,
+        data: studio,
       });
     } catch (error) {
       logger.error("Error fetching studio:", error);
@@ -66,16 +59,10 @@ export class UserStudioController implements IUserStudioController {
         return;
       }
       const studio = await this.userStudioUseCase.studioDetails(studioId);
-      const signedStudio = {
-        ...studio,
-        Images: (studio.Images ?? []).map((public_id: string) =>
-          getSignedImageUrl(public_id, undefined, 800)
-        ),
-      };
       res.status(statusCodes.Success).json({
         success: true,
         message: "studio details fetched successfully",
-        data: signedStudio,
+        data: studio,
       });
     } catch (error) {
       if (error instanceof CustomError) {
@@ -102,19 +89,10 @@ export class UserStudioController implements IUserStudioController {
         limit
       );
 
-      const signedStudios = result.data.map((studio) => ({
-        ...studio,
-        Images: (studio.Images ?? []).map((public_id: string) =>
-          getSignedImageUrl(public_id, undefined, 800)
-        ),
-      }));
-
       res.status(statusCodes.Success).json({
         success: true,
-        message: "Studios fetched successfully",
-        data: signedStudios,
-        totalPages: result.totalPages,
-        currentPage: result.currentPage,
+        message: "Filtered studios fetched successfully",
+        ...result,
       });
     } catch (error) {
       logger.error("Error filtering studios:", error);
@@ -136,19 +114,11 @@ export class UserStudioController implements IUserStudioController {
         page,
         limit
       );
-      const signedStudios = result.data.map((studio) => ({
-        ...studio,
-        Images: (studio.Images ?? []).map((public_id: string) =>
-          getSignedImageUrl(public_id, undefined, 800)
-        ),
-      }));
 
       res.status(statusCodes.Success).json({
         success: true,
-        message: "Studios fetched successfully",
-        data: signedStudios,
-        totalPages: result.totalPages,
-        currentPage: result.currentPage,
+        message: "Sorted studios fetched successfully",
+        ...result,
       });
     } catch (error) {
       res.status(statusCodes.serverError).json({

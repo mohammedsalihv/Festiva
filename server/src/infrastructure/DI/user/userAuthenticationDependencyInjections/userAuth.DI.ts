@@ -19,7 +19,7 @@ import { UserLoginUseCase } from "../../../../application/usecases/user/userAuth
 import { UserGoogleLoginUseCase } from "../../../../application/usecases/user/userAuthenticationUsecases/usecase.userGoogleLogin";
 import { UserPasswordResetUseCase } from "../../../../application/usecases/user/userAuthenticationUsecases/usecase.passwordReset";
 import { UserLogoutUseCase } from "../../../../application/usecases/user/userAuthenticationUsecases/usecase.userLogout";
-
+import { UserUseCase } from "../../../../application/usecases/user/userBaseUsecase/usecase.user";
 //repositories
 
 import { UserSignupRepository } from "../../../repositories/user/userAuthenitcationRepositories/repository.userSignup";
@@ -59,6 +59,7 @@ const userGoogleLoginUseCase = new UserGoogleLoginUseCase(
   userGoogleLoginValidator
 );
 const userResetPasswordUseCase = new UserPasswordResetUseCase(userRepository);
+const userUseCase = new UserUseCase(userRepository);
 const userLogoutUseCase = new UserLogoutUseCase(userLogoutRepository);
 
 // Instantiate controllers
@@ -69,7 +70,10 @@ const userGoogleLoginController = new UserGoogleLoginController(
   userGoogleLoginUseCase,
   userGoogleLoginValidator
 );
-const userController = new UserController(userResetPasswordUseCase);
+const userController = new UserController(
+  userResetPasswordUseCase,
+  userUseCase
+);
 const userLogoutController = new UserLogoutController(userLogoutUseCase);
 
 export {

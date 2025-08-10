@@ -1,6 +1,6 @@
 import { IUserModel } from "../../../domain/entities/modelInterface/user/interface.user";
 import { userLoginResponseDTO } from "../../../types/DTO/user/dto.userLogin";
-import { getSignedImageUrl } from "../../common/cloudinary/getSignedImageUrl";
+import { USER_ROUTES } from "../../../infrastructure/constants/user.routes";
 
 export class userLoginSanitizer {
   static toUserLoginResponse(user: IUserModel): userLoginResponseDTO {
@@ -11,9 +11,7 @@ export class userLoginSanitizer {
       phone: user.phone,
       email: user.email,
       role: user.role,
-      profilePic: user.profilePic
-        ? getSignedImageUrl(user.profilePic, undefined, 300)
-        : undefined,
+      profilePic: user.profilePic,
       isBlocked: user.isBlocked,
       isActive: user.isActive,
       timestamp: user.timestamp,

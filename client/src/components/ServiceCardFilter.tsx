@@ -111,7 +111,7 @@ const ServiceCardFilter: React.FC<filterProps> = ({
     filterOpen(false);
   };
 
- useEffect(() => {
+useEffect(() => {
   if (Object.keys(existingFilters).length === 0) {
     setLocalFilters({});
     setSelectedTimeSlot(null);
@@ -125,9 +125,11 @@ const ServiceCardFilter: React.FC<filterProps> = ({
     setPrice(5000);
     setPriceTouched(false);
   } else {
-    setLocalFilters(existingFilters || {});
+    setLocalFilters(existingFilters);
+    // Optional: set other values from existingFilters if needed
   }
 }, [existingFilters]);
+
 
 
   return (

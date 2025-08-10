@@ -14,7 +14,6 @@ import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAss
 import { assetFilesValidate } from "../../../../utils/mapping/host/assetFilesValidate";
 import logger from "../../../../utils/common/messages/logger";
 import CustomError from "../../../../utils/common/errors/CustomError";
-import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -45,9 +44,7 @@ export class HostVenueController implements IHostVenueController {
 
       await assetFilesValidate({ files, typeOfAsset });
 
-      const newLocation = await this.locationUsecase.execute(
-        newVenue.location
-      );
+      const newLocation = await this.locationUsecase.execute(newVenue.location);
 
       if (!newLocation || !newLocation._id) {
         throw new ErrorHandler(
@@ -57,17 +54,18 @@ export class HostVenueController implements IHostVenueController {
       }
 
       const timestamp = Date.now();
-      const uploadedImages = await Promise.all(
-        files.map((file, i) =>
-          uploadAssetImages({
-            assetType: typeOfAsset,
-            buffer: file.buffer,
-            filename: `${typeOfAsset}_${timestamp}_${i}`,
-          })
+      const imageUrls = (
+        await Promise.all(
+          files.map((file, i) =>
+            uploadAssetImages({
+              assetType: typeOfAsset,
+              buffer: file.buffer,
+              filename: `${typeOfAsset}_${timestamp}_${i}`,
+            })
+          )
         )
-      );
+      ).map((img) => img.url);
 
-      const imagePublicIds = uploadedImages.map((img) => img.public_id);
       const {
         venueName,
         rent,
@@ -96,7 +94,7 @@ export class HostVenueController implements IHostVenueController {
         parkingFeatures,
         description,
         terms,
-        Images: imagePublicIds,
+        Images: imageUrls,
         location: new Types.ObjectId(newLocation._id),
         host: new Types.ObjectId(hostId),
       };
@@ -129,18 +127,10 @@ export class HostVenueController implements IHostVenueController {
         return;
       }
       const venue = await this.hostVenueUseCase.venueDetails(venueId);
-
-        const signedVenue = {
-        ...venue,
-        Images: (venue.Images ?? []).map((public_id: string) =>
-          getSignedImageUrl(public_id, undefined, 800)
-        ),
-      };
-
       res.status(statusCodes.Success).json({
         success: true,
         message: "Venue details fetched successfully",
-        data: signedVenue,
+        data: venue,
       });
     } catch (error: any) {
       if (error instanceof CustomError) {

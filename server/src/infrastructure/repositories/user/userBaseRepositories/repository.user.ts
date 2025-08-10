@@ -7,7 +7,7 @@ export class UserRepository implements IUserRepository {
     return UserModel.findOne({ email });
   }
 
-  async checkMail(email: string): Promise<Boolean | null> {
+  async checkMail(email: string): Promise<boolean | null> {
     return UserModel.findOne({ email });
   }
 
@@ -18,7 +18,7 @@ export class UserRepository implements IUserRepository {
   async resetPassword(
     email: string,
     form: resetPasswordDTO
-  ): Promise<Boolean | null> {
+  ): Promise<boolean | null> {
     const result = await UserModel.updateOne(
       { email },
       { $set: { password: form.newPassword } }

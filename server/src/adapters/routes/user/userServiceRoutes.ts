@@ -19,4 +19,5 @@ userServiceRoute.get(
   userServiceBaseController.sortAssets.bind(userServiceBaseController)
 );
 
+
 export default userServiceRoute;

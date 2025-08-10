@@ -5,3 +5,4 @@ export const getCaters = async () => {
   const response = await axiosInstance.get(USER_API.catersService.getCaters);
   return response.data.data;
 };
+
