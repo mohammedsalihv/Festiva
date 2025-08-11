@@ -55,7 +55,7 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
     if (selectedDates) {
       setBookingForm((prev) => ({
         ...prev,
-        date: selectedDates.toISOString(),
+        date: selectedDates.map((d) => d.toISOString()).join(", "),
       }));
     }
   }, [selectedDates]);
@@ -85,47 +85,47 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
   };
 
   const handleBooking = () => {
-  setLoading(true);
+    setLoading(true);
 
-  if (!selectedSlot || selectedDates.length === 0) {
-    toast.error("Please select date(s) and time");
+    if (!selectedSlot || selectedDates.length === 0) {
+      toast.error("Please select date(s) and time");
+      setLoading(false);
+      return;
+    }
+
+    if (!areDatesConsecutive(selectedDates)) {
+      toast.error("Please select consecutive dates only.");
+      setLoading(false);
+      return;
+    }
+
+    const { isValid, errors: validationErrors } = validateBooking({
+      ...bookingForm,
+      date: selectedDates.map((d) => d.toISOString()).join(", "),
+    });
+    if (!isValid) {
+      setErrors(validationErrors as bookingErrorState);
+      toast.error("Please correct the errors in the form.");
+      setLoading(false);
+      return;
+    }
+
+    const bookingPayload: IBookingBase = {
+      userId: user?.id,
+      assetId: data._id,
+      assetType: data.typeOfAsset,
+      selectedDates: selectedDates.map((d) => d.toISOString()),
+      selectedTimeSlot: selectedSlot,
+      attendeesCount: parseInt(bookingForm.attendees) || 0,
+      total: (data.rent || 0) * selectedDates.length,
+      serviceData: data,
+    };
+
+    dispatch(setBooking(bookingPayload));
+    toast.success("Processing...");
     setLoading(false);
-    return;
-  }
-
-  if (!areDatesConsecutive(selectedDates)) {
-    toast.error("Please select consecutive dates only.");
-    setLoading(false);
-    return;
-  }
-
-  const { isValid, errors: validationErrors } = validateBooking({
-    ...bookingForm,
-    date: selectedDates.map((d) => d.toISOString()).join(", "),
-  });
-  if (!isValid) {
-    setErrors(validationErrors as bookingErrorState);
-    toast.error("Please correct the errors in the form.");
-    setLoading(false);
-    return;
-  }
-
-  const bookingPayload: IBookingBase = {
-    userId: user?.id,
-    assetId: data._id,
-    assetType: data.typeOfAsset,
-    selectedDates: selectedDates.map((d) => d.toISOString()),
-    selectedTimeSlot: selectedSlot,
-    attendeesCount: parseInt(bookingForm.attendees) || 0,
-    total: (data.rent || 0) * selectedDates.length,
-    serviceData: data,
+    navigate("/user/payment");
   };
-
-  dispatch(setBooking(bookingPayload));
-  toast.success("Processing...");
-  setLoading(false);
-  navigate("/user/payment");
-};
 
   const areDatesConsecutive = (dates: Date[]) => {
     if (dates.length <= 1) return true;
@@ -338,7 +338,7 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                   className={`border-b-2 ${
                     showCalendar ? "border-deepPurple/80" : "border-gray-300"
                   } px-4 py-4 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition ${
-                    selectedDate
+                    selectedDates
                       ? "border-neonPink text-neonPink"
                       : "border-gray-300"
                   }`}
@@ -349,8 +349,10 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                     className="hidden"
                     onChange={handleChange}
                   />
-                  {selectedDates
-                    ? selectedDates.toLocaleDateString()
+                  {selectedDates.length
+                    ? selectedDates
+                        .map((d) => d.toLocaleDateString())
+                        .join(", ")
                     : "Pick a date"}
                 </div>
                 {errors?.date && (
@@ -419,7 +421,7 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
               onClick={handleBooking}
               className="w-full bg-main_gradient text-white font-semibold py-3 rounded transition"
             >
-              {loading ? <Spinner text={"Booking started..."} /> : "Reserve"}
+              {loading ? <Spinner text="Booking started..." /> : "Reserve"}
             </Button>
 
             <p className="text-xs text-gray-400 text-center">
@@ -494,8 +496,10 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                       className="hidden"
                       onChange={handleChange}
                     />
-                    {selectedDates
-                      ? selectedDates.toISOString()
+                    {selectedDates.length
+                      ? selectedDates
+                          .map((d) => d.toLocaleDateString())
+                          .join(", ")
                       : "Pick a date"}
                   </div>
                   <div
@@ -516,9 +520,37 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                 {showCalendar && (
                   <div className="flex justify-center">
                     <CustomCalendar
-                      availableDates={data.availableDates || []}
+                      availableDates={data.availableDates || []} 
                       multiSelect={true}
-                      onSelect={(dates: Date[]) => setSelectedDates(dates)}
+                      onSelect={(dates: Date[]) => {
+
+                        if (dates.length > 1) {
+                          const sortedDates = [...dates].sort(
+                            (a, b) => a.getTime() - b.getTime()
+                          );
+                          let isConsecutive = true;
+
+                          for (let i = 1; i < sortedDates.length; i++) {
+                            const prev = sortedDates[i - 1];
+                            const curr = sortedDates[i];
+                            const diffDays =
+                              (curr.getTime() - prev.getTime()) /
+                              (1000 * 60 * 60 * 24);
+
+                            if (diffDays !== 1) {
+                              isConsecutive = false;
+                              break;
+                            }
+                          }
+
+                          if (!isConsecutive) {
+                            setSelectedDates([dates[dates.length - 1]]);
+                            return;
+                          }
+                        }
+
+                        setSelectedDates(dates);
+                      }}
                     />
                   </div>
                 )}
@@ -548,8 +580,11 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
               </select>
             </div>
 
-            <Button className="w-full bg-main_gradient text-white font-semibold py-3 rounded transition">
-              {loading ? <Spinner text={"Booking started..."} /> : "Reserve"}
+            <Button
+              onClick={handleBooking}
+              className="w-full bg-main_gradient ..."
+            >
+              {loading ? <Spinner text="Booking started..." /> : "Reserve"}
             </Button>
 
             <p className="text-xs text-gray-400 text-center">

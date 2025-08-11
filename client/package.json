@@ -53,6 +53,7 @@
     "pino-pretty": "^13.0.0",
     "react": "^19.0.0",
     "react-advanced-cropper": "^0.20.1",
+    "react-calendar": "^6.0.0",
     "react-datepicker": "^8.4.0",
     "react-dom": "^19.0.0",
     "react-easy-crop": "^5.4.1",
