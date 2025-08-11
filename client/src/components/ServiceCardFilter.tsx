@@ -33,7 +33,7 @@ interface filterProps {
   filterOpen: (value: boolean) => void;
   filterRef: RefObject<HTMLDivElement | null>;
   onApplyFilter: (filters: filterParams) => void;
-  existingFilters: Record<string, any>; 
+  existingFilters: Record<string, any>;
 }
 
 const ServiceCardFilter: React.FC<filterProps> = ({
@@ -111,26 +111,24 @@ const ServiceCardFilter: React.FC<filterProps> = ({
     filterOpen(false);
   };
 
-useEffect(() => {
-  if (Object.keys(existingFilters).length === 0) {
-    setLocalFilters({});
-    setSelectedTimeSlot(null);
-    setSelectedTranmission(null);
-    setSelectedFuel(null);
-    setSelectedSeat(null);
-    setSelectedShift(null);
-    setModelStart("");
-    setModelEnd("");
-    setPackageSearch("");
-    setPrice(5000);
-    setPriceTouched(false);
-  } else {
-    setLocalFilters(existingFilters);
-    // Optional: set other values from existingFilters if needed
-  }
-}, [existingFilters]);
-
-
+  useEffect(() => {
+    if (Object.keys(existingFilters).length === 0) {
+      setLocalFilters({});
+      setSelectedTimeSlot(null);
+      setSelectedTranmission(null);
+      setSelectedFuel(null);
+      setSelectedSeat(null);
+      setSelectedShift(null);
+      setModelStart("");
+      setModelEnd("");
+      setPackageSearch("");
+      setPrice(5000);
+      setPriceTouched(false);
+    } else {
+      setLocalFilters(existingFilters);
+      // Optional: set other values from existingFilters if needed
+    }
+  }, [existingFilters]);
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 flex items-center justify-center">
@@ -143,14 +141,13 @@ useEffect(() => {
         </h1>
         <button
           onClick={() => filterOpen(false)}
-          className="absolute top-1 sm:top-2 right-1 sm:right-2 text-gray-500 hover:text-gray-700"
+          className="absolute top-1 sm:top-2 right-1 sm:right-2 text-gray-500 hover:text-gray-700 p-3"
           aria-label="Close filters"
         >
           <IoIosClose className="w-8 h-8" />
         </button>
         {type === "venue" && (
           <div className="border">
-            {/* Venue Features */}
             <div className="mb-2 sm:mb-4 p-2 sm:p-4">
               <h4 className="text-sm sm:text-base font-bold text-gray-800 mb-1 sm:mb-2">
                 Venue Features
@@ -159,7 +156,7 @@ useEffect(() => {
                 {venueFeaturesOptions.map((feature, i) => (
                   <label
                     key={i}
-                    className="flex items-center gap-2 text-xs sm:text-sm text-gray-700"
+                    className="flex items-center gap-2 text-sm sm:text-base text-gray-700"
                   >
                     <Checkbox
                       className="accent-blue-500 border border-blue-500"
@@ -175,8 +172,6 @@ useEffect(() => {
                 ))}
               </div>
             </div>
-
-            {/* Parking Features */}
             <div className="mb-2 sm:mb-4 p-2 sm:p-4">
               <h4 className="text-sm sm:text-base font-bold text-gray-800 mb-1 sm:mb-2">
                 Parking Features
@@ -185,7 +180,7 @@ useEffect(() => {
                 {venueParkingOptions.map((feature, i) => (
                   <label
                     key={i}
-                    className="flex items-center gap-2 text-xs sm:text-sm text-gray-700"
+                    className="flex items-center gap-2 text-xs sm:text-base text-gray-700"
                   >
                     <Checkbox
                       className="accent-blue-500 border border-blue-500"
@@ -212,7 +207,7 @@ useEffect(() => {
                     onClick={() =>
                       setSelectedShift(selectedShift === shift ? null : shift)
                     }
-                    className={`px-3 py-2 text-sm rounded-md border text-center transition ${
+                    className={`px-3 py-2 text-sm sm:text-base rounded-md border text-center transition ${
                       selectedShift === shift
                         ? "bg-main_color text-white border-main_color"
                         : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
@@ -236,7 +231,7 @@ useEffect(() => {
                 {carCompanies.map((make, i) => (
                   <label
                     key={i}
-                    className="flex items-center gap-2 text-xs sm:text-sm text-gray-700"
+                    className="flex items-center gap-2 text-xs sm:text-base text-gray-700"
                   >
                     <Checkbox
                       className="accent-blue-500 border border-blue-500"
@@ -284,7 +279,7 @@ useEffect(() => {
                           : transmission
                       )
                     }
-                    className={`px-3 py-2 text-sm rounded-md border text-center transition ${
+                    className={`px-3 py-2 text-sm sm:text-base rounded-md border text-center transition ${
                       selectedTranmission === transmission
                         ? "bg-main_color text-white border-main_color"
                         : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
@@ -306,7 +301,7 @@ useEffect(() => {
                     onClick={() =>
                       setSelectedFuel(selectedFuel === fuel ? null : fuel)
                     }
-                    className={`px-3 py-2 text-sm rounded-md border text-center transition ${
+                    className={`px-3 py-2 text-sm sm:text-base rounded-md border text-center transition ${
                       selectedFuel === fuel
                         ? "bg-main_color text-white border-main_color"
                         : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
@@ -326,7 +321,7 @@ useEffect(() => {
                 {rentCarFeatures.map((feature) => (
                   <label
                     key={feature}
-                    className="flex items-center gap-2 py-1 text-xs sm:text-sm text-gray-700"
+                    className="flex items-center gap-2 py-1 text-sm sm:text-base text-gray-700"
                   >
                     <Checkbox
                       className="accent-blue-500 border border-blue-500"
@@ -372,7 +367,7 @@ useEffect(() => {
                     onClick={() =>
                       setSelectedSeat(selectedSeat === seat ? null : seat)
                     }
-                    className={`px-3 py-2 text-sm rounded-md border text-center transition ${
+                    className={`px-3 py-2 text-sm sm:text-base rounded-md border text-center transition ${
                       selectedSeat === seat
                         ? "bg-main_color text-white border-main_color"
                         : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
@@ -395,7 +390,7 @@ useEffect(() => {
               {catersFeatures.map((item) => (
                 <label
                   key={item}
-                  className="flex items-center gap-2 text-xs sm:text-sm text-gray-700"
+                  className="flex items-center gap-2 text-sm sm:text-base text-gray-700"
                 >
                   <Checkbox
                     className="accent-blue-500 border border-blue-500"
@@ -415,7 +410,7 @@ useEffect(() => {
               {serviceTypesOfVenues.map((item) => (
                 <label
                   key={item}
-                  className="flex items-center gap-2 text-xs sm:text-sm text-gray-700"
+                  className="flex items-center gap-2 text-sm sm:text-base text-gray-700"
                 >
                   <Checkbox
                     className="accent-blue-500 border border-blue-500"
@@ -441,7 +436,7 @@ useEffect(() => {
                 {studioServiceFeaturesOptions.map((feature, i) => (
                   <label
                     key={i}
-                    className="flex items-center gap-2 text-xs sm:text-sm text-gray-700"
+                    className="flex items-center gap-2 text-sm sm:text-base text-gray-700"
                   >
                     <Checkbox
                       className="accent-blue-500 border border-blue-500"
@@ -474,7 +469,7 @@ useEffect(() => {
                   onChange={(e) => setPackageSearch(e.target.value)}
                 />
 
-                <CiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+                <CiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500  w-5 h-5" />
               </div>
             </div>
           </div>
@@ -524,13 +519,10 @@ useEffect(() => {
             </p>
           </div>
         </div>
-        <div className="sticky bottom-0 bg-white border-t px-2 sm:px-4 py-3 flex justify-between items-center z-10">
-          <Button className="text-gray-600 text-xs sm:text-sm hover:text-gray-800 shadow-lg border border-black">
-            Clear all
-          </Button>
+        <div className="sticky bottom-0 bg-white border-t px-2 sm:px-4 py-3 sm:py-5 min-h-14 flex justify-between items-center z-10">
           <Button
             onClick={handleApply}
-            className="bg-main_color text-white text-xs sm:text-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg hover:bg-indigo-500"
+            className="w-full bg-deepPurple text-white text-xs sm:text-sm md:text-base px-3 sm:px-4 py-2 sm:py-3 rounded-sm hover:bg-deepPurple/90"
           >
             Apply
           </Button>

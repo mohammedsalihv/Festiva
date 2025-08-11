@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import ServiceCardFilter from "@/components/ServiceCardFilter";
 import ServiceCardSort from "@/components/ServiceCardSort";
 import Pagination from "@/components/Pagination";
@@ -28,18 +28,17 @@ import { Input } from "@/components/Input";
 import { useDispatch, useSelector } from "react-redux";
 import { clearFilters, setFilters } from "@/redux/Slice/user/assetSearchSlice";
 import { RootState } from "@/redux/store";
-import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import useDebounce from "@/utils/hooks/user/debounce";
+import useMapboxGeocoder from "@/utils/hooks/user/useMapboxGeocoder";
+import useMapboxMap from "@/utils/hooks/user/useMapboxMap";
 
 export default function ServicesCard() {
   const { type } = useParams();
   const normalizedType = type?.toLowerCase() || "";
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [selectedTab, setSelectedTab] = useState<string>(normalizedType);
@@ -58,7 +57,9 @@ export default function ServicesCard() {
     lat: number;
     lng: number;
   } | null>(null);
-  const filters = useSelector((state: RootState) => state.assetSearch.filters);
+  const filters = useSelector((state: RootState) => {
+    return state.assetSearch.filters;
+  });
   const [geocoderResult, setGeocoderResult] = useState<{
     text: string;
     geometry: { coordinates: [number, number] };
@@ -71,36 +72,6 @@ export default function ServicesCard() {
       setSelectedTab(normalizedType);
     }
   }, [normalizedType]);
-
-  useEffect(() => {
-    const geocoder = new MapboxGeocoder({
-      accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
-      types: "place,locality,neighborhood,address",
-      placeholder: "Search location...",
-    });
-
-    if (geocoderContainerRef.current) {
-      geocoderContainerRef.current.appendChild(geocoder.onAdd());
-      geocoder.on("result", (e) => {
-        setGeocoderResult({
-          text: e.result.text,
-          geometry: e.result.geometry,
-        });
-      });
-      geocoder.on("clear", () => {
-        setSelectedLocation(null);
-        setGeocoderResult(null);
-        const { lat, lng, radius, ...rest } = filters;
-        dispatch(setFilters(rest));
-      });
-    }
-
-    return () => {
-      if (geocoderContainerRef.current) {
-        geocoderContainerRef.current.innerHTML = "";
-      }
-    };
-  }, [dispatch, filters]);
 
   useEffect(() => {
     if (debouncedGeocoderResult) {
@@ -129,35 +100,7 @@ export default function ServicesCard() {
         );
       }
     }
-  }, [debouncedGeocoderResult, dispatch]);
-
-  useEffect(() => {
-    if (mapContainerRef.current && selectedLocation) {
-      mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
-      const map = new mapboxgl.Map({
-        container: mapContainerRef.current,
-        style: "mapbox://styles/mapbox/streets-v11",
-        center: [selectedLocation.lng, selectedLocation.lat],
-        zoom: 12,
-      });
-
-      new mapboxgl.Marker({ color: "#FF0000" })
-        .setLngLat([selectedLocation.lng, selectedLocation.lat])
-        .setPopup(new mapboxgl.Popup().setText(selectedLocation.label))
-        .addTo(map);
-
-      assets.forEach((asset) => {
-        if (asset.location?.lng && asset.location?.lat) {
-          new mapboxgl.Marker()
-            .setLngLat([asset.location.lng, asset.location.lat])
-            .setPopup(new mapboxgl.Popup().setText(asset.name || "Service"))
-            .addTo(map);
-        }
-      });
-
-      return () => map.remove();
-    }
-  }, [selectedLocation, assets]);
+  }, [debouncedGeocoderResult, dispatch, filters]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -173,52 +116,65 @@ export default function ServicesCard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const fetchAssets = async (
-    type: string,
-    filters: filterParams,
-    sorts: sortParams,
-    page = 1
-  ) => {
-    setLoading(true);
-    try {
-      const params: Record<string, any> = {
-        ...filters,
-        ...sorts,
-        page,
-        limit: pageSize,
-      };
+  const fetchAssets = useCallback(
+    async (
+      type: string,
+      filters: filterParams,
+      sorts: sortParams,
+      page = 1
+    ) => {
+      setLoading(true);
+      try {
+        const params: Record<string, any> = {
+          ...filters,
+          ...sorts,
+          page,
+          limit: pageSize,
+        };
 
-      if (searchTerm.trim()) {
-        params.keyword = searchTerm.trim();
+        if (searchTerm.trim()) {
+          params.keyword = searchTerm.trim();
+        }
+
+        const response =
+          Object.keys(sorts).length > 0
+            ? await sortAssets(type, params)
+            : await filterAsset(type, params);
+
+        console.log("API response:", response);
+        setAssets(response.data);
+        setTotalPages(response.totalPages);
+        setCurrentPage(page);
+        setError(null);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setError("Something went wrong while fetching assets.");
+      } finally {
+        setLoading(false);
       }
-
-      const response =
-        Object.keys(sorts).length > 0
-          ? await sortAssets(type, params)
-          : await filterAsset(type, params);
-
-      setAssets(response.data);
-      setTotalPages(response.totalPages);
-      setCurrentPage(page);
-      setError(null);
-    } catch (err) {
-      console.error(err);
-      setError("Something went wrong while fetching assets.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [searchTerm, pageSize]
+  );
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
   useEffect(() => {
     if (selectedTab) {
       const fetchParams = selectedLocation
-        ? filters
+        ? { ...filters }
         : { ...filters, lat: undefined, lng: undefined, radius: undefined };
 
-      fetchAssets(selectedTab, fetchParams, sorts, 1);
+      fetchAssets(selectedTab, fetchParams, sorts, currentPage);
     }
-  }, [selectedTab, filters, sorts, selectedLocation, debouncedSearchTerm]);
+  }, [
+    selectedTab,
+    filters,
+    sorts,
+    selectedLocation,
+    debouncedSearchTerm,
+    currentPage,
+    fetchAssets,
+  ]);
 
   const KewFilter = Object.keys(filters).filter(
     (key) => !["lat", "lng", "radius"].includes(key)
@@ -230,13 +186,34 @@ export default function ServicesCard() {
       : { ...filters, lat: undefined, lng: undefined, radius: undefined };
     fetchAssets(selectedTab, fetchParams, sorts, page);
   };
-  // Function to remove a single filter
+
   const handleRemoveFilter = (key: string) => {
     const updatedFilters = { ...filters };
-    delete updatedFilters[key];
-    dispatch(setFilters(updatedFilters));
-    fetchAssets(selectedTab, updatedFilters, sorts, 1);
+    if (["lat", "lng", "radius"].includes(key)) {
+      setSelectedLocation(null);
+      setGeocoderResult(null);
+    }
+    if (key in updatedFilters) {
+      delete updatedFilters[key];
+      dispatch(setFilters(updatedFilters));
+      setCurrentPage(1);
+    } else {
+      console.error(`Key ${key} not found in filters`);
+    }
   };
+
+  useMapboxGeocoder({
+    containerRef: geocoderContainerRef as React.RefObject<HTMLDivElement>,
+    filters,
+    setGeocoderResult,
+    setSelectedLocation,
+  });
+
+  useMapboxMap({
+    mapContainerRef: mapContainerRef as React.RefObject<HTMLDivElement>,
+    selectedLocation,
+    assets,
+  });
 
   if (error) {
     return (
@@ -265,7 +242,7 @@ export default function ServicesCard() {
             </div>
             <Button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="flex items-center px-3 py-2 shadow-none hover:bg-deepPurple rounded-md bg-main_gradient text-white text-xs"
+              className="flex items-center px-3 py-2 shadow-none hover:opacity-90 rounded-md bg-main_gradient text-white text-xs"
             >
               <FaFilter className="mr-1 text-xs" />
             </Button>
@@ -284,7 +261,7 @@ export default function ServicesCard() {
             </div>
             <Button
               onClick={() => setIsSortOpen(!isSortOpen)}
-              className="flex items-center px-3 py-2 shadow-none hover:bg-deepPurple rounded-md bg-main_gradient text-white text-xs"
+              className="flex items-center px-3 py-2 shadow-none hover:opacity-90 rounded-md bg-main_gradient text-white text-xs"
             >
               <FaSortAmountDownAlt className="mr-1 text-xs " />
             </Button>
@@ -317,13 +294,13 @@ export default function ServicesCard() {
             <div className="flex gap-2 ml-4">
               <Button
                 onClick={() => setIsSortOpen(!isSortOpen)}
-                className="flex items-center px-3 py-2 text-white text-sm shadow-none hover:bg-deepPurple rounded-md bg-main_gradient"
+                className="flex items-center px-3 py-2 text-white text-sm shadow-none hover:opacity-90 rounded-md bg-main_gradient"
               >
                 <FaSortAmountDownAlt className="mr-1 text-xs" />
               </Button>
               <Button
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className="flex items-center px-2 py-1 text-white text-sm shadow-none rounded-md bg-main_gradient"
+                className="flex items-center px-2 py-1 text-white text-sm shadow-none rounded-md bg-main_gradient hover:opacity-90"
               >
                 <FaFilter className="mr-1 text-xs" />
               </Button>
@@ -356,7 +333,7 @@ export default function ServicesCard() {
                   selectedTab === option.value ? "opacity-100" : "opacity-75"
                 }`}
               />
-              <span className="text-[10px] sm:text-sm mt-1">
+              <span className="text-[12px] sm:text-sm md:text-base mt-1">
                 {option.label}
               </span>
             </button>
@@ -395,7 +372,7 @@ export default function ServicesCard() {
           )}
           {KewFilter.map((key) => (
             <div
-              key={`filter-${key}`}
+              key={`filter-${key}-${filters[key]}`}
               className="border text-main_color px-3 py-2 rounded-md flex items-center gap-2"
             >
               <span className="capitalize">

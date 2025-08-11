@@ -243,7 +243,8 @@ const Login = () => {
                 <Button
                   onClick={handleLogin}
                   disabled={mutation.isPending}
-                  className="my-3 text-white w-full h-12 text-lg bg-main_gradient disabled:opacity-70 disabled:cursor-not-allowed"
+                 className="my-3 text-white w-full h-12 text-lg bg-main_gradient hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed"
+
                 >
                   {mutation.isPending ? (
                     <span className="flex items-center justify-center gap-2">

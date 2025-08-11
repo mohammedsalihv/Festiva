@@ -24,9 +24,11 @@ const assetSearchSlice = createSlice({
       state.selectedLocation = action.payload;
     },
     setFilters(state, action: PayloadAction<Record<string, any>>) {
-      state.filters = { ...state.filters, ...action.payload };
+      console.log("Setting filters with payload:", action.payload); // Debug payload
+      state.filters = action.payload; // Replace, don’t merge
     },
     clearFilters(state) {
+      console.log("Clearing filters"); // Debug
       state.filters = {};
       state.selectedLocation = null;
     },

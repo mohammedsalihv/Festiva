@@ -11,14 +11,13 @@ import { RootState } from "@/redux/store";
 import { logoutUser } from "@/redux/Slice/user/userSlice";
 import { Images } from "@/assets";
 import ConfirmDialog from "./ConfirmDialog";
-import { userLogout, getProfileImage } from "@/api/user/auth/userAuthService";
+import { userLogout } from "@/api/user/auth/userAuthService";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { CgMenuRight } from "react-icons/cg";
 
 const Header = () => {
-
   const [open, setOpen] = useState(false);
   const [mainOpen, setMainOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false);
@@ -29,12 +28,11 @@ const Header = () => {
   const isHomePage = location.pathname === "/user/home";
   const landingPage = location.pathname === "/";
   const showTransparent = (isHomePage && !isScrolled) || landingPage;
-  const [profileImage, setProfileImage] = useState<string>(Images.default_profile);
+  // const [profileImage, setProfileImage] = useState<string>(Images.default_profile);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
   const isAuthenticated = !!userInfo?.accessToken;
-
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -49,7 +47,6 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -58,27 +55,25 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      if (!userInfo?.id) return;
-      try {
-        const blob = await getProfileImage(userInfo.id);
-        const objectUrl = URL.createObjectURL(blob);
-        setProfileImage(objectUrl);
-      } catch (error) {
-        console.log(error);
-        setProfileImage(Images.default_profile);
-      }
-    };
-    fetchProfileImage();
-    return () => {
-      if (profileImage?.startsWith("blob:")) {
-        URL.revokeObjectURL(profileImage);
-      }
-    };
-  }, [userInfo]);
-
+  // useEffect(() => {
+  //   const fetchProfileImage = async () => {
+  //     if (!userInfo?.id) return;
+  //     try {
+  //       const blob = await getProfileImage(userInfo.id);
+  //       const objectUrl = URL.createObjectURL(blob);
+  //       setProfileImage(objectUrl);
+  //     } catch (error) {
+  //       console.log(error);
+  //       setProfileImage(Images.default_profile);
+  //     }
+  //   };
+  //   fetchProfileImage();
+  //   return () => {
+  //     if (profileImage?.startsWith("blob:")) {
+  //       URL.revokeObjectURL(profileImage);
+  //     }
+  //   };
+  // }, [userInfo]);
 
   const handleLogout = async () => {
     try {
@@ -94,7 +89,6 @@ const Header = () => {
       }
     }
   };
-
 
   return (
     <>
@@ -115,22 +109,26 @@ const Header = () => {
                     e.preventDefault();
                     setDropDown((prev) => !prev);
                   }}
-                  src={profileImage ? profileImage : Images.default_profile}
+                  src={
+                    userInfo?.profilePic
+                      ? userInfo.profilePic
+                      : Images.default_profile
+                  }
                   alt=""
                   className="w-10 h-10 cursor-pointer rounded-full"
                 />
                 {dropDown && (
                   <div className="fixed inset-0 z-50 flex justify-end items-end pointer-events-none">
-                    <div className="w-64 h-full bg-black shadow-lg animate-slide-up-full pointer-events-auto font-JosephicSans">
+                    <div className="w-64 h-full bg-white/10 backdrop-blur-md shadow-lg animate-slide-up-full pointer-events-auto font-JosephicSans">
                       <div className="flex justify-end p-4">
                         <IoIosClose
                           onClick={() => setDropDown(false)}
-                          className="text-white text-2xl cursor-pointer"
+                          className={`${isHomePage ? "text-white" : "text-balck"} hover:text-gray-400 text-4xl cursor-pointer`}
                         />
                       </div>
                       <div className="px-4 py-4 space-y-3">
                         <button
-                          className="flex items-center justify-start gap-2 w-full py-2 px-3 rounded-md text-gray-200 hover:bg-gray-100 hover:text-black text-left"
+                          className={`flex items-center justify-start gap-2 w-full py-2 px-3 rounded-md ${isHomePage ? "text-white hover:bg-white hover:text-black" : "text-black hover:text-white hover:bg-black"} text-left text-lg`}
                           onClick={() => {
                             navigate("/user/profile");
                             setDropDown(false);
@@ -141,7 +139,7 @@ const Header = () => {
                         </button>
 
                         <button
-                          className="flex items-center justify-start gap-2 w-full py-2 px-3 rounded-md text-gray-200 hover:bg-gray-100 hover:text-black text-left"
+                          className={`flex items-center justify-start gap-2 w-full py-2 px-3 rounded-md ${isHomePage ? "text-white hover:bg-white hover:text-black" : "text-black hover:text-white hover:bg-black"} text-left text-lg`}
                           onClick={() => {
                             navigate("/user/bookings");
                             setDropDown(false);
@@ -152,7 +150,7 @@ const Header = () => {
                         </button>
 
                         <button
-                          className="flex items-center justify-start gap-2 w-full py-2 px-3 rounded-md text-gray-200 hover:bg-gray-100 hover:text-black text-left"
+                          className={`flex items-center justify-start gap-2 w-full py-2 px-3 rounded-md ${isHomePage ? "text-white hover:bg-white hover:text-black" : "text-black hover:text-white hover:bg-black"} text-left text-lg`}
                           onClick={() => {
                             setConfirmLogout(true);
                             setDropDown(false);

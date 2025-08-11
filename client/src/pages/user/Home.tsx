@@ -1,5 +1,7 @@
 import { Images } from "@/assets";
 import Header from "@/reusable-components/user/Landing/Header";
+import { Link } from "react-router-dom";
+import { services } from "@/utils/Options/user/serviceOptions";
 
 import "keen-slider/keen-slider.min.css";
 
@@ -38,8 +40,6 @@ const Home = () => {
             Discover and book venues, caterers, rental cars, and studios — all
             in one place. We make planning simple, fast, and stress-free.
           </p>
-
-          {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-16">
             <button className="bg-[#ff4de1] hover:bg-[#ff77e7] text-white font-semibold px-6 py-3 rounded-full transition w-full sm:w-auto">
               Start for free
@@ -48,8 +48,6 @@ const Home = () => {
               Find services
             </button>
           </div>
-
-          {/* Features Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-2 sm:px-6 max-w-5xl mx-auto">
             <div className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
               <h3 className="font-semibold text-lg mb-2">Smarter Listings</h3>
@@ -110,17 +108,28 @@ const Home = () => {
         </div>
         <section className="py-10 px-6 flex flex-col items-center gap-6">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:overflow-x-auto">
-            <CategoryCard title="VENUES" imageUrl={Images.venue} />
-            <CategoryCard title="CAR RENTALS" imageUrl={Images.car} />
-            <CategoryCard
-              title="PHOTOGRAPHERS & VIDEOGRAPHERS"
-              imageUrl={Images.photography}
-            />
-            <CategoryCard title="CATERS" imageUrl={Images.caters} />
+            <Link to={services[0].link}>
+              <CategoryCard title="VENUES" imageUrl={Images.venue} />
+            </Link>
+            <Link to={services[1].link}>
+              <CategoryCard title="CAR RENTALS" imageUrl={Images.car} />
+            </Link>
+            <Link to={services[3].link}>
+              <CategoryCard
+                title="PHOTOGRAPHERS & VIDEOGRAPHERS"
+                imageUrl={Images.photography}
+              />
+            </Link>
+            <Link to={services[2].link}>
+              <CategoryCard title="CATERS" imageUrl={Images.caters} />
+            </Link>
           </div>
-          <button className="flex items-center gap-2 px-6 py-2 border border-white text-white hover:bg-white hover:text-black transition rounded-md mt-4">
-            VIEW MORE <span className="text-xl">→</span>
-          </button>
+
+          <Link to="/user/services">
+            <button className="flex items-center gap-2 px-6 py-2 border border-white text-white hover:bg-white hover:text-black transition rounded-md mt-4">
+              VIEW MORE <span className="text-xl">→</span>
+            </button>
+          </Link>
         </section>
       </section>
       <WhoWeAre />

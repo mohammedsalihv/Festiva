@@ -35,7 +35,7 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTimeSlots, setShowTimeSlots] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [bookingForm, setBookingForm] = useState<bookingState>({
     time: "",
@@ -52,13 +52,13 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (selectedDate) {
+    if (selectedDates) {
       setBookingForm((prev) => ({
         ...prev,
-        date: selectedDate.toISOString(),
+        date: selectedDates.toISOString(),
       }));
     }
-  }, [selectedDate]);
+  }, [selectedDates]);
 
   useEffect(() => {
     if (selectedSlot) {
@@ -85,36 +85,58 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
   };
 
   const handleBooking = () => {
-    setLoading(true);
+  setLoading(true);
 
-    if (!selectedSlot || !selectedDate) {
-      toast.error("Please select date and time");
-      setLoading(false)
-      return;
+  if (!selectedSlot || selectedDates.length === 0) {
+    toast.error("Please select date(s) and time");
+    setLoading(false);
+    return;
+  }
+
+  if (!areDatesConsecutive(selectedDates)) {
+    toast.error("Please select consecutive dates only.");
+    setLoading(false);
+    return;
+  }
+
+  const { isValid, errors: validationErrors } = validateBooking({
+    ...bookingForm,
+    date: selectedDates.map((d) => d.toISOString()).join(", "),
+  });
+  if (!isValid) {
+    setErrors(validationErrors as bookingErrorState);
+    toast.error("Please correct the errors in the form.");
+    setLoading(false);
+    return;
+  }
+
+  const bookingPayload: IBookingBase = {
+    userId: user?.id,
+    assetId: data._id,
+    assetType: data.typeOfAsset,
+    selectedDates: selectedDates.map((d) => d.toISOString()),
+    selectedTimeSlot: selectedSlot,
+    attendeesCount: parseInt(bookingForm.attendees) || 0,
+    total: (data.rent || 0) * selectedDates.length,
+    serviceData: data,
+  };
+
+  dispatch(setBooking(bookingPayload));
+  toast.success("Processing...");
+  setLoading(false);
+  navigate("/user/payment");
+};
+
+  const areDatesConsecutive = (dates: Date[]) => {
+    if (dates.length <= 1) return true;
+    dates.sort((a, b) => a.getTime() - b.getTime());
+    for (let i = 1; i < dates.length; i++) {
+      const prev = new Date(dates[i - 1]);
+      const curr = new Date(dates[i]);
+      const diff = (curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24);
+      if (diff !== 1) return false;
     }
-    const { isValid, errors: validationErrors } = validateBooking(bookingForm);
-    if (!isValid) {
-      setErrors(validationErrors as bookingErrorState);
-      toast.error("Please correct the errors in the form.");
-      setTimeout(() => setErrors({ time: "", date: "", attendees: "" }), 5000);
-      setLoading(false);
-      return;
-    }
-
-    const bookingPayload: IBookingBase = {
-      userId: user?.id,
-      assetId: data._id,
-      assetType: data.typeOfAsset,
-      selectedDate: bookingForm.date,
-      selectedTimeSlot: bookingForm.time,
-      attendeesCount: parseInt(bookingForm.attendees),
-      total: data.rent || "",
-      serviceData: data,
-    };
-
-    dispatch(setBooking(bookingPayload));
-    toast.success("Processing...");
-    setTimeout(() => navigate("/user/payment"), 5000);
+    return true;
   };
 
   return (
@@ -212,16 +234,28 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
           </div>
 
           <div className="border-b py-3">
-            <h2 className="text-base md:text-xl font-semibold mb-1">About the Space</h2>
-            <p className="text-sm sm:text-base md:text-base text-gray-800">{data.about}</p>
+            <h2 className="text-base md:text-xl font-semibold mb-1">
+              About the Space
+            </h2>
+            <p className="text-sm sm:text-base md:text-base text-gray-800">
+              {data.about}
+            </p>
           </div>
 
           <div className="border-b py-3">
             <h3 className="text-base md:text-xl font-semibold mb-2">Details</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 text-base text-gray-800 gap-y-2">
-              <div><span className="text-sm md:text-base font-bold">Capacity</span >: <span className="text-xs md:text-base">{data.capacity}</span> persons</div>
-              <div className="text-xs md:text-base">{data.shift} Shift available</div>
-              <div className="text-xs md:text-base">{data.squareFeet} sq ft</div>
+              <div>
+                <span className="text-sm md:text-base font-bold">Capacity</span>
+                : <span className="text-xs md:text-base">{data.capacity}</span>{" "}
+                persons
+              </div>
+              <div className="text-xs md:text-base">
+                {data.shift} Shift available
+              </div>
+              <div className="text-xs md:text-base">
+                {data.squareFeet} sq ft
+              </div>
             </div>
           </div>
 
@@ -253,12 +287,20 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
             </div>
           </div>
           <div className="py-3 border-b">
-            <h2 className="text-base md:text-xl font-semibold mb-2">Description</h2>
-            <p className="text-sm sm:text-base md:text-base text-gray-800">{data.description}</p>
+            <h2 className="text-base md:text-xl font-semibold mb-2">
+              Description
+            </h2>
+            <p className="text-sm sm:text-base md:text-base text-gray-800">
+              {data.description}
+            </p>
           </div>
           <div className="py-3 border-b">
-            <h2 className="text-base md:text-xl font-semibold mb-2">Terms & Conditions</h2>
-            <p className="text-sm sm:text-base md:text-base text-gray-800">{data.terms}</p>
+            <h2 className="text-base md:text-xl font-semibold mb-2">
+              Terms & Conditions
+            </h2>
+            <p className="text-sm sm:text-base md:text-base text-gray-800">
+              {data.terms}
+            </p>
           </div>
 
           <div className=" pt-6 mt-6 border border-gray-300 p-4 rounded-md bg-gray-100">
@@ -295,7 +337,11 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                   onClick={() => setShowCalendar(!showCalendar)}
                   className={`border-b-2 ${
                     showCalendar ? "border-deepPurple/80" : "border-gray-300"
-                  } px-4 py-4 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition ${selectedDate ? "border-neonPink text-neonPink" : "border-gray-300"}`}
+                  } px-4 py-4 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition ${
+                    selectedDate
+                      ? "border-neonPink text-neonPink"
+                      : "border-gray-300"
+                  }`}
                 >
                   <Input
                     type="text"
@@ -303,7 +349,9 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                     className="hidden"
                     onChange={handleChange}
                   />
-                  {selectedDate ? selectedDate.toLocaleDateString() : "Pick a date"}
+                  {selectedDates
+                    ? selectedDates.toLocaleDateString()
+                    : "Pick a date"}
                 </div>
                 {errors?.date && (
                   <p className="text-red-600 text-xs mt-1">{errors.date}</p>
@@ -312,7 +360,11 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                   onClick={() => setShowTimeSlots(!showTimeSlots)}
                   className={`border-b-2 ${
                     showCalendar ? "border-deepPurple/80" : "border-gray-300"
-                  } px-4 py-4 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition ${selectedSlot ? "border-neonPink text-neonPink" : "border-gray-300"}`}
+                  } px-4 py-4 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition ${
+                    selectedSlot
+                      ? "border-neonPink text-neonPink"
+                      : "border-gray-300"
+                  }`}
                 >
                   <Input
                     type="text"
@@ -323,14 +375,16 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                   {selectedSlot ? selectedSlot : "Pick a time"}
                 </div>
               </div>
-                {errors?.time && (
-                  <p className="text-red-600 text-xs text-end mt-1">{errors.time}</p>
-                )}
+              {errors?.time && (
+                <p className="text-red-600 text-xs text-end mt-1">
+                  {errors.time}
+                </p>
+              )}
               {showCalendar && (
                 <div className="flex justify-center">
                   <CustomCalendar
                     availableDates={data.availableDates || []}
-                    onSelect={(date) => setSelectedDate(date)}
+                    onSelect={(date) => setSelectedDates(date)}
                   />
                 </div>
               )}
@@ -440,7 +494,9 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                       className="hidden"
                       onChange={handleChange}
                     />
-                    {selectedDate ? selectedDate.toISOString() : "Pick a date"}
+                    {selectedDates
+                      ? selectedDates.toISOString()
+                      : "Pick a date"}
                   </div>
                   <div
                     onClick={() => setShowTimeSlots(!showTimeSlots)}
@@ -461,7 +517,8 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                   <div className="flex justify-center">
                     <CustomCalendar
                       availableDates={data.availableDates || []}
-                      onSelect={(date) => setSelectedDate(date)}
+                      multiSelect={true}
+                      onSelect={(dates: Date[]) => setSelectedDates(dates)}
                     />
                   </div>
                 )}

@@ -14,9 +14,6 @@ export const USER_ROUTE = {
     assetType: "/assets/:type",
     assetDetails: "/services/:type/details/:id",
   },
-  venuService: {
-    venueTypesPage: "/venues/types",
-  },
   notfound: "*",
   userRedirectLinks: {
     toUserHome: "/user/home",

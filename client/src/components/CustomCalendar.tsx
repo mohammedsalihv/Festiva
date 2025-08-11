@@ -2,15 +2,17 @@ import React, { useState } from "react";
 
 interface CustomCalendarProps {
   availableDates: string[]; // format: 'YYYY-MM-DD'
-  onSelect: (date: Date) => void;
+  onSelect: (dates: Date[]) => void;
+  allowMultiple?: boolean; // if false → single day mode
 }
 
 const CustomCalendar: React.FC<CustomCalendarProps> = ({
   availableDates,
   onSelect,
+  allowMultiple = false,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
 
   const startOfMonth = new Date(
     currentDate.getFullYear(),
@@ -38,9 +40,40 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
     return availableDates.includes(iso);
   };
 
+  const areDatesConsecutive = (dates: Date[]) => {
+    if (dates.length <= 1) return true;
+    const sorted = [...dates].sort((a, b) => a.getTime() - b.getTime());
+    for (let i = 1; i < sorted.length; i++) {
+      const diff = (sorted[i].getTime() - sorted[i - 1].getTime()) / (1000 * 60 * 60 * 24);
+      if (diff !== 1) return false;
+    }
+    return true;
+  };
+
   const handleSelect = (date: Date) => {
-    setSelectedDate(date);
-    onSelect(date);
+    if (!allowMultiple) {
+      setSelectedDates([date]);
+      onSelect([date]);
+      return;
+    }
+
+    let newSelection: Date[];
+
+    if (selectedDates.some(d => d.getTime() === date.getTime())) {
+      // Remove if already selected
+      newSelection = selectedDates.filter(d => d.getTime() !== date.getTime());
+    } else {
+      newSelection = [...selectedDates, date];
+    }
+
+    if (areDatesConsecutive(newSelection)) {
+      setSelectedDates(newSelection);
+      onSelect(newSelection);
+    } else {
+      // Reset to only the newly clicked date if breaking consecutiveness
+      setSelectedDates([date]);
+      onSelect([date]);
+    }
   };
 
   const handlePrevMonth = () => {
@@ -97,11 +130,12 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
 
           const isAvailable = isDateAvailable(year, month, day);
           const isPast = isPastDate(year, month, day);
-          const isSelected =
-            selectedDate &&
-            selectedDate.getDate() === day &&
-            selectedDate.getMonth() === month &&
-            selectedDate.getFullYear() === year;
+          const isSelected = selectedDates.some(
+            d =>
+              d.getDate() === day &&
+              d.getMonth() === month &&
+              d.getFullYear() === year
+          );
 
           const isClickable = isAvailable && !isPast;
 
@@ -124,11 +158,11 @@ const CustomCalendar: React.FC<CustomCalendarProps> = ({
         })}
       </div>
 
-      {selectedDate && (
+      {selectedDates.length > 0 && (
         <div className="mt-3 text-center text-sm text-gray-600">
           Selected:{" "}
           <span className="font-semibold text-main_color">
-            {selectedDate.toDateString()}
+            {selectedDates.map(d => d.toDateString()).join(", ")}
           </span>
         </div>
       )}

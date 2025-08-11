@@ -5,7 +5,6 @@ import Home from "@/pages/user/Home";
 import MyBookings from "@/pages/user/MyBookings";
 import Profile from "@/pages/user/Profile";
 import MainServices from "@/pages/user/MainServices";
-import Venuetypes from "@/pages/user/service/venue/Venuetypes";
 import PrivateRoute from "@/routes/user/Protect/PrivateRoute";
 import ErrorAlert from "@/components/ErrorAlert";
 import ServicesPage from "@/reusable-components/user/services/ServicesPage";
@@ -45,14 +44,6 @@ const UserRoutes: React.FC = () => {
         element={
           <PrivateRoute>
             <MainServices />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path={USER_ROUTE.venuService.venueTypesPage}
-        element={
-          <PrivateRoute>
-            <Venuetypes />
           </PrivateRoute>
         }
       />

@@ -61,10 +61,9 @@ export class UserCatersRepository implements IUserCatersRepository {
 
     if (filters.catersFeatures?.length) {
       query["features"] = {
-        $in: filters.catersFeatures.map((item: string) => ({
-          $regex: item,
-          $options: "i",
-        })),
+        $in: filters.catersFeatures.map(
+          (item: string) => new RegExp(item, "i")
+        ),
       };
     }
 

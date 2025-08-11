@@ -10,7 +10,6 @@ import {
 } from "../../../../utils/common/messages/constantResponses";
 import { uploadProfileImage } from "../../../../utils/common/cloudinary/uploadProfileImage";
 
-
 interface MulterRequest extends Request {
   file: Express.Multer.File;
   auth?: JwtPayload & { id: string; role?: string };
@@ -47,14 +46,14 @@ export class UserProfileController implements IUserProfileController {
 
       const updatedUser = await this.userProfileUseCase.execute(
         userId,
-        image.public_id
+        image.url
       );
 
       res.status(statusCodes.Success).json({
         success: true,
         message: "Profile image changed!",
         data: {
-          profilePhotoPublicId: image.public_id,
+          profilePhotoUrl: updatedUser.profilePic,
           ...updatedUser,
         },
       });
@@ -68,7 +67,6 @@ export class UserProfileController implements IUserProfileController {
         });
         return;
       }
-
       res.status(statusCodes.serverError).json({
         success: false,
         message: error.message,
@@ -190,7 +188,6 @@ export class UserProfileController implements IUserProfileController {
 
     try {
       const isDeleted = await this.userProfileUseCase.deleteProfile(userId);
-
       if (!isDeleted) {
         res.status(statusCodes.notfound).json({
           success: false,
