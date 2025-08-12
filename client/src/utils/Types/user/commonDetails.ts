@@ -32,13 +32,12 @@ export interface assetDetailsLocationInfo {
   };
 }
 
-
 export interface IBookingBase {
   userId?: string;
   assetId?: string;
   assetType: AssetType;
-  selectedDate: string;
-  selectedTimeSlot: string;
+  selectedDates: string | string[];
+  selectedTimeSlot: string | null;
   attendeesCount?: number;
   packageName?: string;
   total: number | string;

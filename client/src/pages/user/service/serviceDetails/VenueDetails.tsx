@@ -6,7 +6,6 @@ import { VscDebugBreakpointData } from "react-icons/vsc";
 import { BsCurrencyRupee } from "react-icons/bs";
 import { CiLocationOn } from "react-icons/ci";
 import { IoClose } from "react-icons/io5";
-import CustomCalendar from "@/components/CustomCalendar";
 import TimeSlotPicker from "@/components/TimeSlotPicker";
 import { toast } from "react-toastify";
 import { Button } from "@/components/Button";
@@ -22,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "@/components/Spinner";
 import { IBookingBase } from "@/utils/Types/user/commonDetails";
 import { RootState } from "@/redux/store";
+import Calendar from "@/components/Calendar";
 
 interface VenueDetailsProps {
   data: IVenue & { typeOfAsset: "venue" };
@@ -84,11 +84,32 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
     }
   };
 
+  const highlightError = (field: keyof bookingErrorState) => {
+    setErrors((prev) => ({ ...prev, [field]: "Required" }));
+    setTimeout(() => {
+      setErrors((prev) => ({ ...prev, [field]: "" })); 
+    }, 3000);
+  };
+
   const handleBooking = () => {
     setLoading(true);
+    let hasError = false;
 
-    if (!selectedSlot || selectedDates.length === 0) {
-      toast.error("Please select date(s) and time");
+    if (!selectedDates.length) {
+      highlightError("date");
+      hasError = true;
+    }
+    if (!selectedSlot) {
+      highlightError("time");
+      hasError = true;
+    }
+    if (!bookingForm.attendees) {
+      highlightError("attendees");
+      hasError = true;
+    }
+
+    if (hasError) {
+      toast.error("Please fill all required fields.");
       setLoading(false);
       return;
     }
@@ -336,10 +357,14 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                 <div
                   onClick={() => setShowCalendar(!showCalendar)}
                   className={`border-b-2 ${
-                    showCalendar ? "border-deepPurple/80" : "border-gray-300"
+                    errors.date
+                      ? "border-red-500 text-red-500"
+                      : showCalendar
+                      ? "border-deepPurple/80"
+                      : "border-gray-300"
                   } px-4 py-4 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition ${
                     selectedDates
-                      ? "border-neonPink text-neonPink"
+                      ? "border-deepPurple text-deepPurple"
                       : "border-gray-300"
                   }`}
                 >
@@ -360,13 +385,17 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                 )}
                 <div
                   onClick={() => setShowTimeSlots(!showTimeSlots)}
-                  className={`border-b-2 ${
-                    showCalendar ? "border-deepPurple/80" : "border-gray-300"
-                  } px-4 py-4 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition ${
-                    selectedSlot
+                  className={`border-b-2 px-4 py-4 w-full text-center text-sm font-medium transition
+                  ${
+                    errors.date
+                      ? "border-red-500 text-red-500"
+                      : selectedSlot
                       ? "border-neonPink text-neonPink"
-                      : "border-gray-300"
-                  }`}
+                      : showCalendar
+                      ? "border-deepPurple/80 text-deepPurple hover:border-deepPurple/80"
+                      : "border-gray-300 text-deepPurple hover:border-deepPurple/80"
+                  }
+                                 `}
                 >
                   <Input
                     type="text"
@@ -384,9 +413,12 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
               )}
               {showCalendar && (
                 <div className="flex justify-center">
-                  <CustomCalendar
-                    availableDates={data.availableDates || []}
-                    onSelect={(date) => setSelectedDates(date)}
+                  <Calendar
+                    selectedDates={selectedDates}
+                    onChange={setSelectedDates}
+                    availableDates={(data.availableDates || []).map(
+                      (d) => new Date(d)
+                    )}
                   />
                 </div>
               )}
@@ -406,7 +438,9 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                 name="attendees"
                 value={bookingForm.attendees}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none"
+                className={`w-full border ${
+                  errors.attendees ? "border-red-500" : "border-gray-300"
+                } rounded px-3 py-2 text-sm focus:outline-none `}
               >
                 <option value="">Select attendees</option>
                 <option value="100">100 - 500 people</option>
@@ -486,9 +520,16 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                 <div className="flex justify-center gap-6 cursor-pointer mb-3">
                   <div
                     onClick={() => setShowCalendar(!showCalendar)}
-                    className={`border-b-2 ${
-                      showCalendar ? "border-deepPurple/80" : "border-gray-300"
-                    } px-4 py-2 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition`}
+                    className={`border-b-2 px-4 py-2 w-full text-center text-sm font-medium transition
+                     ${
+                       errors.date
+                         ? "border-red-500"
+                         : showCalendar
+                         ? "border-deepPurple/80"
+                         : "border-gray-300"
+                     }
+                           text-deepPurple hover:border-deepPurple/80
+                            `}
                   >
                     <Input
                       type="text"
@@ -519,38 +560,12 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                 </div>
                 {showCalendar && (
                   <div className="flex justify-center">
-                    <CustomCalendar
-                      availableDates={data.availableDates || []} 
-                      multiSelect={true}
-                      onSelect={(dates: Date[]) => {
-
-                        if (dates.length > 1) {
-                          const sortedDates = [...dates].sort(
-                            (a, b) => a.getTime() - b.getTime()
-                          );
-                          let isConsecutive = true;
-
-                          for (let i = 1; i < sortedDates.length; i++) {
-                            const prev = sortedDates[i - 1];
-                            const curr = sortedDates[i];
-                            const diffDays =
-                              (curr.getTime() - prev.getTime()) /
-                              (1000 * 60 * 60 * 24);
-
-                            if (diffDays !== 1) {
-                              isConsecutive = false;
-                              break;
-                            }
-                          }
-
-                          if (!isConsecutive) {
-                            setSelectedDates([dates[dates.length - 1]]);
-                            return;
-                          }
-                        }
-
-                        setSelectedDates(dates);
-                      }}
+                    <Calendar
+                      selectedDates={selectedDates}
+                      onChange={setSelectedDates}
+                      availableDates={(data.availableDates || []).map(
+                        (d) => new Date(d)
+                      )}
                     />
                   </div>
                 )}
@@ -571,7 +586,9 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                 name="attendees"
                 value={bookingForm.attendees}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none"
+                className={`w-full border ${
+                  errors.attendees ? "border-red-500" : "border-gray-300"
+                } rounded px-3 py-2 text-sm focus:outline-none`}
               >
                 <option value="">Select attendees</option>
                 <option value="100">100 - 500 people</option>

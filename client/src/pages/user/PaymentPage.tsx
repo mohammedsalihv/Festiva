@@ -12,10 +12,17 @@ import {
 } from "@/utils/validations/user/bookings/payment";
 import Select from "react-select";
 import countryList from "react-select-country-list";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { IAsset } from "@/utils/Types/user/commonDetails";
 
 const PaymentPage = () => {
-  const [billing, setBilling] = useState("yearly");
   const [method, setMethod] = useState("card");
+
+  const bookedService = useSelector(
+    (state: RootState) => state.booking.currentBooking
+  );
+  console.log("-", bookedService);
 
   const countryOptions = useMemo(() => countryList().getData(), []);
 
@@ -59,6 +66,42 @@ const PaymentPage = () => {
     }
   };
 
+  const formatDate = (dateStr: string) =>
+    new Date(dateStr).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+
+  // Calculate total amount
+  const calculateTotal = () => {
+    if (!bookedService) return 0;
+
+    const service = bookedService.serviceData as IAsset;
+
+    let pricePerUnit: string | number | undefined = "0";
+
+    switch (service.typeOfAsset) {
+      case "venue":
+      case "rentcar":
+        pricePerUnit = service.rent;
+        break;
+      case "caters":
+        pricePerUnit = service.totalAmount;
+        break;
+      case "studio":
+        pricePerUnit = service.about;
+        break;
+      default:
+        pricePerUnit = "0";
+    }
+
+    const dateCount = bookedService.selectedDates?.length || 1;
+    return Number(pricePerUnit || 0) * dateCount;
+  };
+
+  const totalAmount = calculateTotal();
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-JosephicSans">
       {/* Left Panel */}
@@ -67,8 +110,9 @@ const PaymentPage = () => {
           <ChevronLeft className="w-5 h-5 mr-2 font-extrabold" /> Booked data
         </button>
         <h1 className="text-2xl md:text-4xl font-bold mb-4">
-          <span className="text-gray-200 text-base md:text-xl">Total : </span>
-          2,268.00
+          <span className="text-gray-200 text-base md:text-xl">
+            Total : {totalAmount}{" "}
+          </span>
         </h1>
 
         <div className="bg-white text-black rounded-md p-4 shadow-lg">
@@ -77,60 +121,86 @@ const PaymentPage = () => {
               <h2 className="font-bold text-lg mb-2">Service Details</h2>
               <div className="border w-full px-2 md:px-4 py-5 rounded-sm shadow-md">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                 
                   <div className="w-full sm:w-32 h-24 bg-gray-100 rounded overflow-hidden">
                     <img
-                      src="/path-to-service-image.jpg"
+                      src={
+                        bookedService?.serviceData?.Images?.[0] ||
+                        "/placeholder.jpg"
+                      }
                       alt="Selected Service"
                       className="object-cover w-full h-full"
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold">
-                      Deluxe Photography Studio
+                    <h3 className="text-xl">
+                      {bookedService?.serviceData &&
+                        ("venueName" in bookedService.serviceData
+                          ? bookedService.serviceData.venueName
+                          : "studioName" in bookedService.serviceData
+                          ? bookedService.serviceData.studioName
+                          : "carName" in bookedService.serviceData
+                          ? bookedService.serviceData.carName
+                          : "catersName" in bookedService.serviceData
+                          ? bookedService.serviceData.catersName
+                          : "Service")}
                     </h3>
                     <p className="text-gray-500 text-sm">
-                       AC | 1200 sq ft
+                      {bookedService?.serviceData &&
+                      "squareFeet" in bookedService.serviceData &&
+                      bookedService.serviceData.squareFeet
+                        ? `${bookedService.serviceData.squareFeet} sq ft`
+                        : ""}
                     </p>
                   </div>
                 </div>
 
-                {/* Divider */}
                 <hr className="my-4" />
-
-                {/* Bottom: Time, Date, Attendees */}
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm text-gray-700">
+                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm md:text-base text-gray-700">
                   <div>
-                    <p className="font-medium text-gray-500">Date</p>
-                    <p className="text-black">Aug 5, 2025</p>
+                    <p className="font-bold text-gray-500">Date</p>
+                    <p className="text-black">
+                      {Array.isArray(bookedService?.selectedDates)
+                        ? bookedService.selectedDates.map(formatDate).join(", ")
+                        : formatDate(bookedService?.selectedDates || "")}
+                    </p>
                   </div>
+                  {bookedService?.selectedTimeSlot && (
+                    <div>
+                      <p className="font-bold text-gray-500">Time</p>
+                      <p className="text-black">
+                        {bookedService?.selectedTimeSlot}
+                      </p>
+                    </div>
+                  )}
+                  {bookedService?.attendeesCount && (
+                    <div>
+                      <p className="font-bold text-gray-500">Attendees</p>
+                      <p className="text-black">
+                        {bookedService?.attendeesCount} people
+                      </p>
+                    </div>
+                  )}
                   <div>
-                    <p className="font-medium text-gray-500">Time</p>
-                    <p className="text-black">10:00 AM - 1:00 PM</p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-500">Attendees</p>
-                    <p className="text-black">5 people</p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-500">Service type</p>
-                    <span className="bg-blue-600 text-white p-1 rounded-md">venue</span> 
+                    <p className="font-bold text-gray-500">Service type</p>
+                    <span className="bg-blue-600 text-white p-1 rounded-md">
+                      {bookedService?.assetType}
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div className="flex justify-between text-sm text-gray-600 px-3 pt-2">
-            <span>Subtotal</span>
-            <span>$2,268.00</span>
+            <span className="text-base">Subtotal</span>
+            <span className="text-base font-bold">{totalAmount.toLocaleString()}.00</span>
           </div>
-           <div className="flex justify-between text-sm text-gray-600 px-3 pb-1">
-            <span>Platform fee</span>
-            <span>$2,268.00</span>
+          <div className="flex justify-between text-sm text-gray-600 px-3 pb-1">
+            <span className="text-base">Platform fee</span>
+            <span className="text-base">50.00</span>
           </div>
-          <div className="flex justify-between text-black font-semibold text-base md:text-lg px-3 ">
+          <div className="flex justify-between text-black font-semibold text-lg md:text-2xl px-3">
             <span>Total payable amount</span>
-            <span>$189.00</span>
+            <span>{(totalAmount + 50).toLocaleString()}/-</span>
           </div>
         </div>
         <p className=" text-sm md:text-base mt-4">
@@ -152,38 +222,7 @@ const PaymentPage = () => {
         </p>
       </div>
 
-      {/* Right Panel */}
       <div className="px-3 py-8 sm:px-5 sm:py-10 md:px-7 md:py-20 max-w-7xl w-full mx-auto">
-        <h2 className="text-xl font-semibold mb-6">Billing frequency</h2>
-        <div className="flex gap-4 mb-6">
-          {["monthly", "yearly"].map((val) => (
-            <button
-              key={val}
-              onClick={() => setBilling(val)}
-              className={cn(
-                "border rounded-lg px-2 py-2 w-full",
-                billing === val
-                  ? "border-blue-600 text-blue-600 bg-blue-50"
-                  : "border-gray-300 text-gray-700"
-              )}
-            >
-              <div className="text-lg font-medium">
-                {val === "monthly" ? "$239/month" : "$189/month"}
-              </div>
-              <div className="text-sm">
-                {val === "monthly" ? (
-                  "Pay monthly"
-                ) : (
-                  <>
-                    Pay yearly{" "}
-                    <span className="text-green-600 ml-1">Save 20%</span>
-                  </>
-                )}
-              </div>
-            </button>
-          ))}
-        </div>
-
         <h2 className="text-xl font-semibold mb-4">Payment method</h2>
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           {[
