@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
-import { HostNotificationUseCase } from "../../../../application/usecases/host/hostAccountUsecases/usecase.hostNotification";
+import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostNotificationUseCase";
 import { IHostNotificationController } from "../../../../domain/controlInterface/host/account controller interfaces/interface.hostNotificationController";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
@@ -9,7 +9,7 @@ interface AuthRequest extends Request {
 }
 
 export class HostNotificationController implements IHostNotificationController {
-  constructor(private hostNotificationUseCase: HostNotificationUseCase) {}
+  constructor(private hostNotificationUseCase: IHostNotificationUseCase) {}
 
   async getAllNotifications(req: AuthRequest, res: Response) {
     try {

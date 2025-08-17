@@ -4,15 +4,15 @@ import { googleSignupHostDTO } from "../../../../types/DTO/user/dto.hostGoogleSi
 import { IHostGoogle } from "../../../../domain/entities/baseInterface/host/authenticationInterfaces/interface.hostGoogle";
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
 import { IHostGoogleLoginRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostGoogleLoginRepository";
-import { TokenService } from "../../../tokenService/service.token";
+import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class HostGoogleLoginUseCase implements IHostGoogleLoginUseCase {
   constructor(
-    private hostRepository: IHostRepository,
-    private hostGoogleLoginRepository: IHostGoogleLoginRepository,
-    private tokenService: TokenService
+    private _hostRepository: IHostRepository,
+    private _hostGoogleLoginRepository: IHostGoogleLoginRepository,
+    private _tokenService: ITokenService
   ) {}
 
   async hostGoogleLogin(data: googleSignupHostDTO): Promise<HostDetailsDTO> {
@@ -30,7 +30,7 @@ export class HostGoogleLoginUseCase implements IHostGoogleLoginUseCase {
       );
     }
 
-    const existingHost = await this.hostRepository.findByEmail(data.email);
+    const existingHost = await this._hostRepository.findByEmail(data.email);
 
     let host: IHostGoogle;
 
@@ -43,19 +43,17 @@ export class HostGoogleLoginUseCase implements IHostGoogleLoginUseCase {
         password: "",
         phone: data.phone || "",
         location: data.location?.trim() || "Not specified",
-        profilePic:
-          data.profilePic?.trim() ||
-          "https://res.cloudinary.com/salvix/image/upload/v1754079301/user_z8tayu.png",
+        profilePic: data.profilePic?.trim(),
         role: "host",
       };
-      host = await this.hostGoogleLoginRepository.createHost(newHost);
+      host = await this._hostGoogleLoginRepository.createHost(newHost);
     }
 
-    const accessToken = this.tokenService.generateAccessToken({
+    const accessToken = this._tokenService.generateAccessToken({
       id: host.id!,
       role: host.role,
     });
-    const refreshToken = this.tokenService.generateRefreshToken({
+    const refreshToken = this._tokenService.generateRefreshToken({
       id: host.id!,
       role: host.role,
     });

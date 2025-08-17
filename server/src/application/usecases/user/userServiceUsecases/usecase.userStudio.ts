@@ -8,13 +8,14 @@ import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class UserStudioUseCase implements IUserStudioUseCase {
-  constructor(private userStudioRepository: IUserStudioRepository) {}
+  constructor(private _userStudioRepository: IUserStudioRepository) {}
+
   async allStudios(): Promise<IStudioBase[]> {
-    return await this.userStudioRepository.findAllStudios();
+    return await this._userStudioRepository.findAllStudios();
   }
 
   async studioDetails(studioId: string): Promise<IStudio> {
-    const studio = await this.userStudioRepository.fetchStudioDetailsById(
+    const studio = await this._userStudioRepository.fetchStudioDetailsById(
       studioId
     );
 
@@ -29,10 +30,10 @@ export class UserStudioUseCase implements IUserStudioUseCase {
     page: number,
     limit: number
   ) {
-    return await this.userStudioRepository.findByFilters(filters, page, limit);
+    return await this._userStudioRepository.findByFilters(filters, page, limit);
   }
 
   async sortStudios(sorts: any, page: number, limit: number) {
-    return await this.userStudioRepository.sortStudios(sorts, page, limit);
+    return await this._userStudioRepository.sortStudios(sorts, page, limit);
   }
 }

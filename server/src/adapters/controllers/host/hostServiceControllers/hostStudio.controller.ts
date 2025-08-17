@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IStudio } from "../../../../domain/entities/serviceInterface/host/interface.studio";
-import { HostStudioUseCase } from "../../../../application/usecases/host/hostServicesUsecases/usecase.hostStudio";
+import { IHostStudioUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.studioUseCase";
 import { IHostStudioController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostStudioController";
 import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
@@ -23,8 +23,8 @@ export interface MulterRequest extends Request {
 
 export class HostStudioController implements IHostStudioController {
   constructor(
-    private hostStudioUseCase: HostStudioUseCase,
-    private locationRepository: ILocationRepository
+    private _hostStudioUseCase: IHostStudioUseCase,
+    private _locationRepository: ILocationRepository
   ) {}
 
   async addStudioService(req: MulterRequest, res: Response): Promise<void> {
@@ -52,7 +52,7 @@ export class HostStudioController implements IHostStudioController {
 
       try {
         await assetFilesValidate({ files, typeOfAsset });
-        const newLocation = await this.locationRepository.addLocation(
+        const newLocation = await this._locationRepository.addLocation(
           newStudio.location
         );
 
@@ -100,7 +100,7 @@ export class HostStudioController implements IHostStudioController {
           host: new Types.ObjectId(hostId),
         };
 
-        const createdStudio = await this.hostStudioUseCase.addStudio(studio);
+        const createdStudio = await this._hostStudioUseCase.addStudio(studio);
         res.status(statusCodes.Success).json(createdStudio);
         return;
       } catch (error: any) {
@@ -131,7 +131,7 @@ export class HostStudioController implements IHostStudioController {
         });
         return;
       }
-      const studio = await this.hostStudioUseCase.studioDetails(studioId);
+      const studio = await this._hostStudioUseCase.studioDetails(studioId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "studio details fetched successfully",
@@ -164,7 +164,7 @@ export class HostStudioController implements IHostStudioController {
         return;
       }
 
-      const success = await this.hostStudioUseCase.reApplyStudio(studioId);
+      const success = await this._hostStudioUseCase.reApplyStudio(studioId);
 
       if (!success) {
         res.status(statusCodes.serverError).json({
@@ -206,7 +206,7 @@ export class HostStudioController implements IHostStudioController {
         return;
       }
 
-      const success = await this.hostStudioUseCase.updateStudioAvailability(
+      const success = await this._hostStudioUseCase.updateStudioAvailability(
         studioId,
         isAvailable
       );
@@ -252,7 +252,7 @@ export class HostStudioController implements IHostStudioController {
         return;
       }
 
-      const success = await this.hostStudioUseCase.removeStudio(studioId);
+      const success = await this._hostStudioUseCase.removeStudio(studioId);
 
       if (!success) {
         res.status(statusCodes.serverError).json({

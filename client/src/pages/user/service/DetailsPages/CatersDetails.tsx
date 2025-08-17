@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Images } from "@/assets";
 import { X } from "lucide-react";
 import { ICaters } from "@/utils/Types/user/catersTypes";
@@ -6,22 +6,168 @@ import { VscDebugBreakpointData } from "react-icons/vsc";
 import { BsCurrencyRupee } from "react-icons/bs";
 import { CiLocationOn } from "react-icons/ci";
 import { IoClose } from "react-icons/io5";
-import CustomCalendar from "@/components/CustomCalendar";
+import { toast } from "react-toastify";
 import TimeSlotPicker from "@/components/TimeSlotPicker";
+import { RootState } from "@/redux/store";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  bookingErrorState,
+  bookingState,
+  validateBooking,
+} from "@/utils/validations/user/bookings/serviceBooking";
+import Calendar from "@/components/Calendar";
+import { Input } from "@/components/Input";
+import { Button } from "@/components/Button";
+import Spinner from "@/components/Spinner";
+import { useNavigate } from "react-router-dom";
+import { IBookingBase } from "@/utils/Types/user/commonDetails";
+import { setBooking } from "@/redux/Slice/user/bookingSlice";
 
 interface catersDetailsProps {
   data: ICaters & { typeOfAsset: "caters" };
 }
 
 const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
-  console.log(data);
+  const user = useSelector((state: RootState) => state.user.userInfo);
   const [showGallery, setShowGallery] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTimeSlots, setShowTimeSlots] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
-  console.log(selectedDate, selectedSlot);
+  const [bookingForm, setBookingForm] = useState<bookingState>({
+    time: "",
+    date: "",
+    attendees: "",
+  });
+  const [errors, setErrors] = useState<bookingErrorState>({
+    time: "",
+    date: "",
+    attendees: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (selectedDates) {
+      setBookingForm((prev) => ({
+        ...prev,
+        date: selectedDates.map((d) => d.toISOString()).join(", "),
+      }));
+    }
+  }, [selectedDates]);
+
+  useEffect(() => {
+    if (selectedSlot) {
+      setBookingForm((prev) => ({
+        ...prev,
+        time: selectedSlot,
+      }));
+    }
+  }, [selectedSlot]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    if (name === "manpowerCount") {
+      const manpowerNum = Number(value);
+      if (!isNaN(manpowerNum) && manpowerNum > Number(data.manpower || 0)) {
+        toast.error(`Maximum manpower allowed is ${data.manpower}`);
+        return;
+      }
+    }
+
+    setBookingForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (errors[name as keyof typeof errors]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const highlightError = (field: keyof bookingErrorState) => {
+    setErrors((prev) => ({ ...prev, [field]: "Required" }));
+    setTimeout(() => {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }, 3000);
+  };
+
+  const handleBooking = () => {
+    setLoading(true);
+    let hasError = false;
+
+    if (!selectedDates.length) {
+      highlightError("date");
+      hasError = true;
+    }
+    if (!selectedSlot) {
+      highlightError("time");
+      hasError = true;
+    }
+
+    if (hasError) {
+      toast.error("Please fill all required fields.");
+      setLoading(false);
+      return;
+    }
+    if (!bookingForm.manpowerCount) {
+      highlightError("manpowerCount");
+      hasError = true;
+    } else if (Number(bookingForm.manpowerCount) > Number(data.manpower || 0)) {
+      toast.error(`Manpower cannot exceed ${data.manpower}`);
+      hasError = true;
+    }
+
+    if (!areDatesConsecutive(selectedDates)) {
+      toast.error("Please select consecutive dates only.");
+      setLoading(false);
+      return;
+    }
+
+    const { isValid, errors: validationErrors } = validateBooking({
+      ...bookingForm,
+      date: selectedDates.map((d) => d.toISOString()).join(", "),
+    });
+    if (!isValid) {
+      setErrors(validationErrors as bookingErrorState);
+      toast.error("Please correct the errors in the form.");
+      setLoading(false);
+      return;
+    }
+
+    const bookingPayload: IBookingBase = {
+      userId: user?.id,
+      assetId: data._id,
+      assetType: data.typeOfAsset,
+      selectedDates: selectedDates.map((d) => d.toISOString()), 
+      selectedTimeSlot: selectedSlot,
+      manpowerCount: bookingForm.manpowerCount,
+      total: (Number(data.totalAmount) || 0) * selectedDates.length,
+      serviceData: data,
+    };
+
+    dispatch(setBooking(bookingPayload));
+    toast.success("Processing...");
+    setLoading(false);
+    navigate("/user/payment");
+  };
+
+  const areDatesConsecutive = (dates: Date[]) => {
+    if (dates.length <= 1) return true;
+    dates.sort((a, b) => a.getTime() - b.getTime());
+    for (let i = 1; i < dates.length; i++) {
+      const prev = new Date(dates[i - 1]);
+      const curr = new Date(dates[i]);
+      const diff = (curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24);
+      if (diff !== 1) return false;
+    }
+    return true;
+  };
 
   return (
     <div className="relative mt-16 sm:mt-20 md:mt-24 font-JosephicSans">
@@ -202,25 +348,68 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
                 <div
                   onClick={() => setShowCalendar(!showCalendar)}
                   className={`border-b-2 ${
-                    showCalendar ? "border-main_color" : "border-gray-300"
-                  } px-4 py-4 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                    errors.date
+                      ? "border-red-500 text-red-500"
+                      : showCalendar
+                      ? "border-deepPurple/80"
+                      : "border-gray-300"
+                  } px-4 py-4 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition ${
+                    selectedDates
+                      ? "border-deepPurple text-deepPurple"
+                      : "border-gray-300"
+                  }`}
                 >
-                  Pick a date
+                  <Input
+                    type="text"
+                    name="date"
+                    className="hidden"
+                    onChange={handleChange}
+                  />
+                  {selectedDates.length
+                    ? selectedDates
+                        .map((d) => d.toLocaleDateString())
+                        .join(", ")
+                    : "Pick a date"}
                 </div>
+                {errors?.date && (
+                  <p className="text-red-600 text-xs mt-1">{errors.date}</p>
+                )}
                 <div
                   onClick={() => setShowTimeSlots(!showTimeSlots)}
-                  className={`border-b-2 ${
-                    showCalendar ? "border-main_color" : "border-gray-300"
-                  } px-4 py-4 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                  className={`border-b-2 px-4 py-4 w-full text-center text-sm font-medium transition
+                  ${
+                    errors.date
+                      ? "border-red-500 text-red-500"
+                      : selectedSlot
+                      ? "border-neonPink text-neonPink"
+                      : showCalendar
+                      ? "border-deepPurple/80 text-deepPurple hover:border-deepPurple/80"
+                      : "border-gray-300 text-deepPurple hover:border-deepPurple/80"
+                  }
+                                 `}
                 >
-                  Pick a time
+                  <Input
+                    type="text"
+                    name="time"
+                    className="hidden"
+                    onChange={handleChange}
+                  />
+                  {selectedSlot ? selectedSlot : "Pick a time"}
                 </div>
               </div>
+              {errors?.time && (
+                <p className="text-red-600 text-xs text-end mt-1">
+                  {errors.time}
+                </p>
+              )}
               {showCalendar && (
                 <div className="flex justify-center">
-                  <CustomCalendar
-                    availableDates={data.availableDates || []}
-                    onSelect={(date) => setSelectedDate(date)}
+                  <Calendar
+                    selectedDates={selectedDates}
+                    onChange={setSelectedDates}
+                    availableDates={(data.availableDates || []).map(
+                      (d) => new Date(d)
+                    )}
                   />
                 </div>
               )}
@@ -232,20 +421,29 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
                   />
                 </div>
               )}
-
-              <div className="text-right text-sm text-gray-500">
-                Total hours: 0
-              </div>
             </div>
 
             <div className="relative">
-              <select className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none">
-                <option>Attendees: 1 - 5 people</option>
-              </select>
+              <p className="px-1 py-1">Manpower Needed</p>
+              <Input
+                type="number"
+                name="manpower"
+                placeholder={`Max ${data.manpower}`}
+                max={Number(data.manpower) || undefined}
+                value={bookingForm.manpowerCount}
+                onChange={handleChange}
+                className={`w-full border ${
+                  errors.manpowerCount ? "border-red-500" : "border-gray-300"
+                } rounded px-3 py-2 text-sm focus:outline-none`}
+              />
             </div>
-            <button className="w-full bg-main_color text-white font-semibold py-2 rounded hover:bg-main_color_hover transition">
-              Reserve
-            </button>
+
+            <Button
+              onClick={handleBooking}
+              className="w-full bg-main_gradient text-white font-semibold py-3 rounded transition"
+            >
+              {loading ? <Spinner text="Booking started..." /> : "Reserve"}
+            </Button>
 
             <p className="text-xs text-gray-400 text-center">
               Cancel for free within 24 hours <span className="ml-1">ℹ️</span>
@@ -262,9 +460,9 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
                 Hosted by: {data.host.name}
               </p>
             </div>
-            <button className="w-full bg-gray-200 text-gray-800 py-2 rounded hover:bg-gray-300 transition">
+            <Button className="w-full bg-gray-200 text-deepPurple border hover:bg-deepPurple hover:text-white py-3 rounded transition">
               Message Host
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -277,12 +475,12 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
               <span className="text-gray-500 text-sm ml-1">/Day</span>
             </h2>
           </div>
-          <button
+          <Button
             onClick={() => setShowOverlay(true)}
-            className="bg-main_color text-white px-4 py-2 rounded"
+            className="bg-main_gradient text-white px-4 py-2 rounded"
           >
             Instant Book
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -309,26 +507,52 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
                 <div className="flex justify-center gap-6 cursor-pointer mb-3">
                   <div
                     onClick={() => setShowCalendar(!showCalendar)}
-                    className={`border-b-2 ${
-                      showCalendar ? "border-main_color" : "border-gray-300"
-                    } px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                    className={`border-b-2 px-4 py-2 w-full text-center text-sm font-medium transition
+                     ${
+                       errors.date
+                         ? "border-red-500"
+                         : showCalendar
+                         ? "border-deepPurple/80"
+                         : "border-gray-300"
+                     }
+                           text-deepPurple hover:border-deepPurple/80
+                            `}
                   >
-                    Pick a date
+                    <Input
+                      type="text"
+                      name="date"
+                      className="hidden"
+                      onChange={handleChange}
+                    />
+                    {selectedDates.length
+                      ? selectedDates
+                          .map((d) => d.toLocaleDateString())
+                          .join(", ")
+                      : "Pick a date"}
                   </div>
                   <div
                     onClick={() => setShowTimeSlots(!showTimeSlots)}
                     className={`border-b-2 ${
-                      showCalendar ? "border-main_color" : "border-gray-300"
-                    } px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                      showCalendar ? "border-deepPurple/80" : "border-gray-300"
+                    } px-4 py-2 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition`}
                   >
-                    Pick a time
+                    <Input
+                      type="text"
+                      name="time"
+                      className="hidden"
+                      onChange={handleChange}
+                    />
+                    {selectedSlot ? selectedSlot : "Pick a time"}
                   </div>
                 </div>
                 {showCalendar && (
                   <div className="flex justify-center">
-                    <CustomCalendar
-                      availableDates={data.availableDates || []}
-                      onSelect={(date) => setSelectedDate(date)}
+                    <Calendar
+                      selectedDates={selectedDates}
+                      onChange={setSelectedDates}
+                      availableDates={(data.availableDates || []).map(
+                        (d) => new Date(d)
+                      )}
                     />
                   </div>
                 )}
@@ -341,24 +565,29 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
                   </div>
                 )}
               </div>
-              <button className="text-sm text-main_color font-medium hover:underline">
-                Add a day
-              </button>
-
-              <div className="text-right text-sm text-gray-500">
-                Total hours: 0
-              </div>
             </div>
 
             <div className="relative">
-              <select className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none">
-                <option>Attendees: 1 - 5 people</option>
-              </select>
+              <p className="px-1 py-1">Manpower Needed</p>
+                <Input
+                type="number"
+                name="manpower"
+                placeholder={`Max ${data.manpower}`}
+                max={Number(data.manpower) || undefined}
+                value={bookingForm.manpowerCount}
+                onChange={handleChange}
+                className={`w-full border ${
+                  errors.manpowerCount ? "border-red-500" : "border-gray-300"
+                } rounded px-3 py-2 text-sm focus:outline-none`}
+              />
             </div>
 
-            <button className="w-full bg-main_color text-white font-semibold py-2 rounded hover:bg-main_color_hover transition">
-              Reserve
-            </button>
+            <Button
+              onClick={handleBooking}
+              className="w-full bg-main_gradient ..."
+            >
+              {loading ? <Spinner text="Booking started..." /> : "Reserve"}
+            </Button>
 
             <p className="text-xs text-gray-400 text-center">
               Cancel for free within 24 hours <span className="ml-1">ℹ️</span>

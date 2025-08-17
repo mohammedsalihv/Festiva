@@ -28,8 +28,6 @@ interface VenueDetailsProps {
 }
 
 const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
-  console.log(data);
-
   const user = useSelector((state: RootState) => state.user.userInfo);
   const [showGallery, setShowGallery] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -87,7 +85,7 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
   const highlightError = (field: keyof bookingErrorState) => {
     setErrors((prev) => ({ ...prev, [field]: "Required" }));
     setTimeout(() => {
-      setErrors((prev) => ({ ...prev, [field]: "" })); 
+      setErrors((prev) => ({ ...prev, [field]: "" }));
     }, 3000);
   };
 
@@ -137,7 +135,10 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
       assetType: data.typeOfAsset,
       selectedDates: selectedDates.map((d) => d.toISOString()),
       selectedTimeSlot: selectedSlot,
-      attendeesCount: parseInt(bookingForm.attendees) || 0,
+      attendeesCount: bookingForm?.attendees
+        ? parseInt(bookingForm.attendees)
+        : 0,
+
       total: (data.rent || 0) * selectedDates.length,
       serviceData: data,
     };
@@ -488,12 +489,12 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
               <span className="text-gray-500 text-sm ml-1">/Day</span>
             </h2>
           </div>
-          <button
+          <Button
             onClick={() => setShowOverlay(true)}
             className="bg-main_gradient text-white px-4 py-2 rounded"
           >
             Instant Book
-          </button>
+          </Button>
         </div>
       </div>
 

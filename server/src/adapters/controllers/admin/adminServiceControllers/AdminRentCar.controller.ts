@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { AdminRentCarUseCase } from "../../../../application/usecases/admin/adminServicesUsecases/usecase.adminRentCar";
+import { IAdminRentCarUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminRentCar";
 import { IAdminRentCarController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminRentCarController";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class AdminRentCarController implements IAdminRentCarController {
-  constructor(private adminRentCarUseCase: AdminRentCarUseCase) {}
+  constructor(private _adminRentCarUseCase: IAdminRentCarUseCase) {}
 
   async carFullDetails(req: Request, res: Response): Promise<void> {
     try {
@@ -17,7 +17,7 @@ export class AdminRentCarController implements IAdminRentCarController {
         });
         return;
       }
-      const car = await this.adminRentCarUseCase.rentCarDetails(carId);
+      const car = await this._adminRentCarUseCase.rentCarDetails(carId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "car details fetched successfully",

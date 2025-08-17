@@ -6,7 +6,7 @@ import {
 import { userSignupFactory } from "../../../../domain/factories/user/userSignup.factory";
 import { IUserSignupUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userSignupUseCase";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
-import { TokenService } from "../../../tokenService/service.token";
+import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
 import { IUserSignupRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userSignupRepository";
 import { userSignupMapper } from "../../../../utils/mapping/user/userSignupMapper";
 import {
@@ -17,7 +17,7 @@ import {
 export class UserSignupUseCase implements IUserSignupUseCase {
   constructor(
     private userSignupRepository: IUserSignupRepository,
-    private tokenService: TokenService
+    private tokenService: ITokenService
   ) {}
 
   async userSignup(userData: registerUserDTO): Promise<userDetailsDTO> {

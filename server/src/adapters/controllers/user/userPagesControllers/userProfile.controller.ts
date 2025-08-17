@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IUserProfileController } from "../../../../domain/controlInterface/user/userProfileControllerInterfaces/interface.userProfileController";
-import { UserProfileUseCase } from "../../../../application/usecases/user/userProfileUsecase/usecase.userProfile";
+import { IUserProfileUseCase } from "../../../../domain/usecaseInterface/user/userProfileUsecaseInterfaces/interface.userProfileUseCase";
 import logger from "../../../../utils/common/messages/logger";
 import { JwtPayload } from "jsonwebtoken";
 import { AuthRequest } from "../../../../domain/controlInterface/common/authentication/authType";
@@ -16,7 +16,7 @@ interface MulterRequest extends Request {
 }
 
 export class UserProfileController implements IUserProfileController {
-  constructor(private userProfileUseCase: UserProfileUseCase) {}
+  constructor(private _userProfileUseCase: IUserProfileUseCase) {}
 
   async setProfilePic(req: MulterRequest, res: Response): Promise<void> {
     try {
@@ -44,7 +44,7 @@ export class UserProfileController implements IUserProfileController {
         buffer: file.buffer,
       });
 
-      const updatedUser = await this.userProfileUseCase.execute(
+      const updatedUser = await this._userProfileUseCase.execute(
         userId,
         image.url
       );
@@ -92,7 +92,7 @@ export class UserProfileController implements IUserProfileController {
       return;
     }
     try {
-      const response = await this.userProfileUseCase.profileEdit(
+      const response = await this._userProfileUseCase.profileEdit(
         userId,
         formData
       );
@@ -125,7 +125,7 @@ export class UserProfileController implements IUserProfileController {
     }
 
     try {
-      await this.userProfileUseCase.validateEmail(email);
+      await this._userProfileUseCase.validateEmail(email);
       res.status(statusCodes.Success).json({
         success: true,
         message: "Email is available",
@@ -160,7 +160,7 @@ export class UserProfileController implements IUserProfileController {
     }
 
     try {
-      const response = await this.userProfileUseCase.passwordModify(
+      const response = await this._userProfileUseCase.passwordModify(
         userId,
         formData
       );
@@ -187,7 +187,7 @@ export class UserProfileController implements IUserProfileController {
     }
 
     try {
-      const isDeleted = await this.userProfileUseCase.deleteProfile(userId);
+      const isDeleted = await this._userProfileUseCase.deleteProfile(userId);
       if (!isDeleted) {
         res.status(statusCodes.notfound).json({
           success: false,

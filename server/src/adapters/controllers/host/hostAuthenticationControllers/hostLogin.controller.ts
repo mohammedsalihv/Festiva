@@ -9,17 +9,17 @@ import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class HostLoginController implements IHostLoginController {
   constructor(
-    private hostLoginUsecase: IHostLoginUseCase,
-    private validator: IHostLoginControllerValidator
+    private _hostLoginUsecase: IHostLoginUseCase,
+    private _validator: IHostLoginControllerValidator
   ) {}
 
   async hostLogin(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
-      this.validator.validate({ email, password });
+      this._validator.validate({ email, password });
 
       const { accessToken, refreshToken, host } =
-        await this.hostLoginUsecase.execute(email, password);
+        await this._hostLoginUsecase.execute(email, password);
 
       const hostResponse = toHostLoginResponseDTO(
         host,

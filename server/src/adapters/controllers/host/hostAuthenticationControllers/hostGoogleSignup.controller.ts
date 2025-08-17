@@ -11,18 +11,18 @@ import { IHostGoogleSignupValidator } from "../../../../domain/validatorInterfac
 
 export class HostGoogleSignupController implements IHostGoogleSignupController {
   constructor(
-    private googleSignupUseCase: IHostGoogleSignupUseCase,
-    private validator: IHostGoogleSignupValidator
+    private _googleSignupUseCase: IHostGoogleSignupUseCase,
+    private _validator: IHostGoogleSignupValidator
   ) {}
 
   async googleSignup(req: Request, res: Response): Promise<void> {
     try {
       const signupData = req.body as googleSignupHostDTO;
 
-      this.validator.validate(signupData);
+      this._validator.validate(signupData);
 
       const { host, accessToken, refreshToken } =
-        await this.googleSignupUseCase.hostGoogleSignup(signupData);
+        await this._googleSignupUseCase.hostGoogleSignup(signupData);
 
       res.status(statusCodes.Success).json({
         success: true,

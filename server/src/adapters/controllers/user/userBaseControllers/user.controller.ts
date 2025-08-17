@@ -10,8 +10,8 @@ import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSigned
 
 export class UserController implements IUserController {
   constructor(
-    private userPasswordResetUseCase: IUserPasswordResetUseCase,
-    private userUsecase: IUserUseCase
+    private _userPasswordResetUseCase: IUserPasswordResetUseCase,
+    private _userUsecase: IUserUseCase
   ) {}
 
   async resetPassword(req: Request, res: Response): Promise<void> {
@@ -19,7 +19,7 @@ export class UserController implements IUserController {
       const { email, newPassword } = req.body;
       const userData: resetPasswordDTO = { email, newPassword };
 
-      await this.userPasswordResetUseCase.execute(userData);
+      await this._userPasswordResetUseCase.execute(userData);
       res.status(statusCodes.Success).json({
         success: true,
         message: "Password changed!",
@@ -38,7 +38,7 @@ export class UserController implements IUserController {
       return;
     }
 
-    const user = await this.userUsecase.findById(userId);
+    const user = await this._userUsecase.findById(userId);
     if (!user || !user.profilePic) {
       res.status(statusCodes.notfound).json({ message: "Image not found" });
       return;

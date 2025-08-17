@@ -7,7 +7,7 @@ import { UserGoogleLoginValidator } from "../../../../utils/validations/user/use
 
 import { UserController } from "../../../../adapters/controllers/user/userBaseControllers/user.controller";
 import { UserSignupController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userSignup.controller";
-import { RefreshTokenController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userRefreshToken.controller";
+import { RefreshTokenController } from "../../../../adapters/controllers/base/baseAuthenticationControllers/refreshToken.controller";
 import { UserLoginController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userLogin.controller";
 import { UserGoogleLoginController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userGoogleLogin.controller";
 import { UserLogoutController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userLogout.controller";

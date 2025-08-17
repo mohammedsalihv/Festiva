@@ -10,14 +10,14 @@ import { statusCodes } from "../../../../utils/common/messages/constantResponses
 
 export class AdminUserManagementUseCase implements IAdminUserManagementUseCase {
   constructor(
-    private adminUserManagementRepository: IAdminUserManagementRepository
+    private _adminUserManagementRepository: IAdminUserManagementRepository
   ) {}
 
   async findAllUsers(
     page: number,
     limit: number
   ): Promise<responseAllUsersDTO> {
-    const response = await this.adminUserManagementRepository.findAllUsers(
+    const response = await this._adminUserManagementRepository.findAllUsers(
       page,
       limit
     );
@@ -30,7 +30,7 @@ export class AdminUserManagementUseCase implements IAdminUserManagementUseCase {
   }
 
   async userBlockUnblock(userId: string, isBlocked: boolean): Promise<boolean> {
-    const response = await this.adminUserManagementRepository.UserBlockUnblock(
+    const response = await this._adminUserManagementRepository.UserBlockUnblock(
       userId,
       isBlocked
     );
@@ -45,7 +45,7 @@ export class AdminUserManagementUseCase implements IAdminUserManagementUseCase {
     userId: string,
     form: EditUserPayload
   ): Promise<responseUserDTO[]> {
-    const response = await this.adminUserManagementRepository.editUser(
+    const response = await this._adminUserManagementRepository.editUser(
       userId,
       form
     );
@@ -58,7 +58,7 @@ export class AdminUserManagementUseCase implements IAdminUserManagementUseCase {
   }
 
   changeProfile(userId: string, imageUrl: string): Promise<responseUserDTO> {
-    const response = this.adminUserManagementRepository.changeProfile(
+    const response = this._adminUserManagementRepository.changeProfile(
       userId,
       imageUrl
     );
@@ -73,7 +73,7 @@ export class AdminUserManagementUseCase implements IAdminUserManagementUseCase {
   }
 
   async deleteUser(userId: string): Promise<boolean> {
-    const result = await this.adminUserManagementRepository.deleteUser(userId);
+    const result = await this._adminUserManagementRepository.deleteUser(userId);
     if (!result) {
       throw new CustomError("Deleting failed", statusCodes.serverError);
     }

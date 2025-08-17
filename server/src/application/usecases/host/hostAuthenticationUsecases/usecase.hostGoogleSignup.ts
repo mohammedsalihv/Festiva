@@ -4,17 +4,17 @@ import { googleSignupHostDTO } from "../../../../types/DTO/user/dto.hostGoogleSi
 import { IHostGoogle } from "../../../../domain/entities/baseInterface/host/authenticationInterfaces/interface.hostGoogle";
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
 import { IHostGoogleSignupRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostGoogleSignupRepository";
-import { TokenService } from "../../../tokenService/service.token";
+import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
 
 export class HostGoogleSignupUseCase implements IHostGoogleSignupUseCase {
   constructor(
-    private hostRepository: IHostRepository,
-    private hostGoogleSignupRepository: IHostGoogleSignupRepository,
-    private tokenService: TokenService
+    private _hostRepository: IHostRepository,
+    private _hostGoogleSignupRepository: IHostGoogleSignupRepository,
+    private _tokenService: ITokenService
   ) {}
 
   async hostGoogleSignup(data: googleSignupHostDTO): Promise<HostDetailsDTO> {
-    const existingHost = await this.hostRepository.findByEmail(data.email);
+    const existingHost = await this._hostRepository.findByEmail(data.email);
 
     let host: IHostGoogle;
 
@@ -30,14 +30,14 @@ export class HostGoogleSignupUseCase implements IHostGoogleSignupUseCase {
         profilePic: data.profilePic || "",
         role: "host",
       };
-      host = await this.hostGoogleSignupRepository.createHost(newHost);
+      host = await this._hostGoogleSignupRepository.createHost(newHost);
     }
 
-    const accessToken = this.tokenService.generateAccessToken({
+    const accessToken = this._tokenService.generateAccessToken({
       id: host.id!,
       role: host.role,
     });
-    const refreshToken = this.tokenService.generateRefreshToken({
+    const refreshToken = this._tokenService.generateRefreshToken({
       id: host.id!,
       role: host.role,
     });

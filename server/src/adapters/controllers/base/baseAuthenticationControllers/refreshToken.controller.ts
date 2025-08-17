@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import { TokenService } from "../../../../application/tokenService/service.token";
+import { IRefreshTokenController } from "../../../../domain/controlInterface/common/authentication/interface.refreshTokenController";
+import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
-export class RefreshTokenController {
-  constructor(private tokenService: TokenService) {}
+export class RefreshTokenController implements IRefreshTokenController{
+  constructor(private _tokenService: ITokenService) {}
   async refreshAccessToken(req: Request, res: Response): Promise<void> {
     const { refreshToken } = req.body;
     if (!refreshToken) {
@@ -13,7 +14,7 @@ export class RefreshTokenController {
       return;
     }
 
-    const user = this.tokenService.verifyRefreshToken(refreshToken);
+    const user = this._tokenService.verifyRefreshToken(refreshToken);
     if (!user) {
       res
         .status(statusCodes.forbidden)
@@ -21,7 +22,7 @@ export class RefreshTokenController {
       return;
     }
 
-    const newAccessToken = this.tokenService.generateAccessToken({
+    const newAccessToken = this._tokenService.generateAccessToken({
       id: user.id,
       role: user.role,
     });

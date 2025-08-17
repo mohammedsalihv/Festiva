@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import { IAdminAssetManagementController } from "../../../../domain/controlInterface/admin/management controller interfaces/interface.adminAssetManagementController";
-import { AdminAssetManagementUseCase } from "../../../../application/usecases/admin/adminManagementUsecases/usecase.adminAssetManagement";
-import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostNotificationUseCase";
-import { AdminRentCarController } from "../adminServiceControllers/AdminRentCar.controller";
-import { AdminStudioController } from "../adminServiceControllers/adminStudio.controller";
-import { AdminCatersController } from "../adminServiceControllers/adminCaters.controller";
-import { AdminVenueController } from "../adminServiceControllers/AdminVenue.controller";
+import { IAdminAssetManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminAssetManagementUseCase";
+import { IAdminNotificationUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminNotificationUsecase";
+import { IAdminVenueController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminVenueController";
+import { IAdminRentCarController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminRentCarController";
+import { IAdminCatersController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminCatersController";
+import { IAdminStudioController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminStudioController";
 import logger from "../../../../utils/common/messages/logger";
 import {
   statusCodes,
@@ -18,20 +18,20 @@ interface AuthRequest extends Request {
   auth?: JwtPayload & { id: string; role?: string };
 }
 
-export class AdminAssetsController implements IAdminAssetManagementController {
+export class AdminAssetManagementController implements IAdminAssetManagementController {
   constructor(
-    private adminAssetManagementUseCase: AdminAssetManagementUseCase,
-    private notificationUseCase: IHostNotificationUseCase,
-    private adminVenueController: AdminVenueController,
-    private adminRentCarController: AdminRentCarController,
-    private adminStudioController: AdminStudioController,
-    private adminCatersController: AdminCatersController
+    private _adminAssetManagementUseCase: IAdminAssetManagementUseCase,
+    private _adminNotificationUseCase: IAdminNotificationUseCase,
+    private _adminVenueController: IAdminVenueController,
+    private _adminRentCarController: IAdminRentCarController,
+    private _adminStudioController: IAdminStudioController,
+    private _adminCatersController: IAdminCatersController
   ) {}
 
   async Assets(req: Request, res: Response): Promise<void> {
     try {
       const typeOfAsset = req.params.typeOfAsset;
-      const assets = await this.adminAssetManagementUseCase.execute(
+      const assets = await this._adminAssetManagementUseCase.execute(
         typeOfAsset
       );
       res.status(statusCodes.Success).json({
@@ -61,16 +61,16 @@ export class AdminAssetsController implements IAdminAssetManagementController {
 
       switch (typeOfAsset) {
         case "venue":
-          await this.adminVenueController.venueFullDetails(req, res);
+          await this._adminVenueController.venueFullDetails(req, res);
           break;
         case "rentcar":
-          await this.adminRentCarController.carFullDetails(req, res);
+          await this._adminRentCarController.carFullDetails(req, res);
           break;
         case "studio":
-          await this.adminStudioController.studioFullDetails(req, res);
+          await this._adminStudioController.studioFullDetails(req, res);
           break;
         case "caters":
-          await this.adminCatersController.catersFullDetails(req, res);
+          await this._adminCatersController.catersFullDetails(req, res);
           break;
         default:
           res.status(statusCodes.forbidden).json({
@@ -100,14 +100,14 @@ export class AdminAssetsController implements IAdminAssetManagementController {
         return;
       }
 
-      const result = await this.adminAssetManagementUseCase.assetApprove(
+      const result = await this._adminAssetManagementUseCase.assetApprove(
         id,
         String(type),
         String(assetStatus)
       );
 
       if (result && result.hostId) {
-        await this.notificationUseCase.createNotification({
+        await this._adminNotificationUseCase.createNotification({
           createrId: req.auth!.id,
           receiverId: result.hostId,
           assetId: result._id,
@@ -150,7 +150,7 @@ export class AdminAssetsController implements IAdminAssetManagementController {
         return;
       }
 
-      const result = await this.adminAssetManagementUseCase.assetReject(
+      const result = await this._adminAssetManagementUseCase.assetReject(
         id,
         String(type),
         String(assetStatus),
@@ -158,7 +158,7 @@ export class AdminAssetsController implements IAdminAssetManagementController {
       );
 
       if (result && result.hostId) {
-        await this.notificationUseCase.createNotification({
+        await this._adminNotificationUseCase.createNotification({
           createrId: req.auth!.id,
           receiverId: result.hostId,
           assetId: result._id,

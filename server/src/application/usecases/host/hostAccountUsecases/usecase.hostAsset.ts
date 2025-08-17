@@ -2,7 +2,7 @@ import { IHostAssetUseCase } from "../../../../domain/usecaseInterface/host/acco
 import { IHostAssetRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetRepository";
 
 export class HostAssetUseCase implements IHostAssetUseCase {
-  constructor(private hostAssetRepository: IHostAssetRepository) {}
+  constructor(private _hostAssetRepository: IHostAssetRepository) {}
 
   async getAllAssets(
     hostId: string,
@@ -13,7 +13,7 @@ export class HostAssetUseCase implements IHostAssetUseCase {
     status?: string | string[],
     sortBy?: "newest" | "oldest"
   ) {
-    return await this.hostAssetRepository.myAssets(
+    return await this._hostAssetRepository.myAssets(
       hostId,
       page,
       limit,
@@ -39,7 +39,7 @@ export class HostAssetUseCase implements IHostAssetUseCase {
       ? (sortBy as (typeof validSortFields)[number])
       : undefined;
 
-    return await this.hostAssetRepository.getAllRequests(
+    return await this._hostAssetRepository.getAllRequests(
       hostId,
       page,
       limit,

@@ -12,15 +12,15 @@ import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class HostSignupController implements IHostSignupController {
   constructor(
-    private hostSignupUsecase: IHostSignupUseCase,
-    private validator: IHostSignupValidator
+    private _hostSignupUsecase: IHostSignupUseCase,
+    private _validator: IHostSignupValidator
   ) {}
   async signupNewHost(req: Request, res: Response): Promise<void> {
     try {
-      const hostData = this.validator.validate(req.body);
+      const hostData = this._validator.validate(req.body);
 
       const { host, accessToken, refreshToken } =
-        await this.hostSignupUsecase.hostSignup(hostData);
+        await this._hostSignupUsecase.hostSignup(hostData);
 
       const responseData = toHostSignupResponseDTO(
         host,

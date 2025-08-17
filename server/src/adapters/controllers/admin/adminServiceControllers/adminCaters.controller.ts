@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { IAdminCatersController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminCatersController";
-import { AdminCatersUseCase } from "../../../../application/usecases/admin/adminServicesUsecases/usecase.adminCaters";
+import { IAdminCatersUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminCatersUseCase";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 
 export class AdminCatersController implements IAdminCatersController {
-  constructor(private adminCatersUseCase: AdminCatersUseCase) {}
+  constructor(private _adminCatersUseCase: IAdminCatersUseCase) {}
 
   async catersFullDetails(req: Request, res: Response): Promise<void> {
     try {
@@ -18,7 +18,7 @@ export class AdminCatersController implements IAdminCatersController {
         });
         return;
       }
-      const caters = await this.adminCatersUseCase.catersDetails(catersId);
+      const caters = await this._adminCatersUseCase.catersDetails(catersId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "Caters details fetched successfully",

@@ -22,6 +22,12 @@ export const USER_API = {
     filterAssets: (type: string) => `/assets/filter/${type}`,
     sortAssets: (type: string) => `/assets/sort/${type}`,
   },
+  bookingRoutes : {
+    createBooking:'createBooking'
+  },
+  paymentRoutes: {
+    startPayment: "/startPayment",
+  },
   venueService: {
     getVenues: "/getVenues",
   },

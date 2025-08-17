@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IAdminHostManagementController } from "../../../../domain/controlInterface/admin/management controller interfaces/interface.adminHostManagementController";
-import { AdminHostManagementUseCase } from "../../../../application/usecases/admin/adminManagementUsecases/usecase.adminHostManagement";
+import { IAdminHostManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminHostManagementUseCase";
 import logger from "../../../../utils/common/messages/logger";
 import { AuthRequest } from "../../../../domain/controlInterface/common/authentication/authType";
 import { JwtPayload } from "jsonwebtoken";
@@ -17,14 +17,14 @@ interface MulterRequest extends Request {
 }
 
 export class AdminHostsController implements IAdminHostManagementController {
-  constructor(private AdminHostManagementUseCase: AdminHostManagementUseCase) {}
+  constructor(private _adminHostManagementUseCase: IAdminHostManagementUseCase) {}
 
  async getAllHosts(req: Request, res: Response): Promise<void> {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
 
-      const users = await this.AdminHostManagementUseCase.findAllHosts(
+      const users = await this._adminHostManagementUseCase.findAllHosts(
         page,
         limit
       );
@@ -56,7 +56,7 @@ export class AdminHostsController implements IAdminHostManagementController {
     }
 
     try {
-      const response = await this.AdminHostManagementUseCase.HostblockUnblock(
+      const response = await this._adminHostManagementUseCase.HostblockUnblock(
         hostId,
         isBlocked
       );
@@ -89,7 +89,7 @@ export class AdminHostsController implements IAdminHostManagementController {
     }
 
     try {
-      const hosts = await this.AdminHostManagementUseCase.editHost(
+      const hosts = await this._adminHostManagementUseCase.editHost(
         hostId,
         formData
       );
@@ -133,7 +133,7 @@ export class AdminHostsController implements IAdminHostManagementController {
         buffer: file.buffer,
       });
 
-      const updatedHost = await this.AdminHostManagementUseCase.changeProfile(
+      const updatedHost = await this._adminHostManagementUseCase.changeProfile(
         hostId,
         image.public_id
       );
@@ -178,7 +178,7 @@ export class AdminHostsController implements IAdminHostManagementController {
     }
 
     try {
-      const isDeleted = await this.AdminHostManagementUseCase.deleteHost(
+      const isDeleted = await this._adminHostManagementUseCase.deleteHost(
         hostId
       );
 

@@ -9,6 +9,7 @@ export const ADMIN_ROUTES = {
     hosts: "hosts",
     assets: "assets",
     assetRequests: "asset/request",
+    adminBookings: "bookings",
   },
   errorPage: "/error",
 };

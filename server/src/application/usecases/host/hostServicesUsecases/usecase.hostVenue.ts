@@ -6,10 +6,10 @@ import { IHostVenueUseCase } from "../../../../domain/usecaseInterface/host/serv
 import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class HostVenueUseCase implements IHostVenueUseCase {
-  constructor(private hostVenueRepository: IHostVenueRepository) {}
+  constructor(private _hostVenueRepository: IHostVenueRepository) {}
 
   async addVenue(venue: IVenue): Promise<IVenue> {
-    const addedVenue = await this.hostVenueRepository.addVenue(venue);
+    const addedVenue = await this._hostVenueRepository.addVenue(venue);
     if (!addedVenue) {
       throw new ErrorHandler("Venue not added", statusCodes.serverError);
     }
@@ -20,7 +20,7 @@ export class HostVenueUseCase implements IHostVenueUseCase {
     if (!venueId) {
       throw new CustomError("Venue ID is required", statusCodes.unAuthorized);
     }
-    const venue = await this.hostVenueRepository.findVenueById(venueId);
+    const venue = await this._hostVenueRepository.findVenueById(venueId);
     if (!venue) {
       throw new CustomError("Venue not found", statusCodes.notfound);
     }
@@ -31,34 +31,39 @@ export class HostVenueUseCase implements IHostVenueUseCase {
     if (!venueId) {
       throw new CustomError("Venue ID is required", statusCodes.unAuthorized);
     }
-    const updated = await this.hostVenueRepository.reApply(venueId);
+    const updated = await this._hostVenueRepository.reApply(venueId);
     if (!updated) {
       throw new CustomError("Venue re-apply failed", statusCodes.serverError);
     }
     return true;
   }
 
-  async updateVenueAvailability(venueId: string, isAvailable: boolean): Promise<boolean> {
-  if (!venueId) {
-    throw new CustomError("Venue ID is required", statusCodes.unAuthorized);
-  }
-  const updated = await this.hostVenueRepository.updateAvailability(venueId, isAvailable);
-
-  if (!updated) {
-    throw new CustomError(
-      `Venue ${isAvailable ? "available" : "unavailable"} request failed`,
-      statusCodes.serverError
+  async updateVenueAvailability(
+    venueId: string,
+    isAvailable: boolean
+  ): Promise<boolean> {
+    if (!venueId) {
+      throw new CustomError("Venue ID is required", statusCodes.unAuthorized);
+    }
+    const updated = await this._hostVenueRepository.updateAvailability(
+      venueId,
+      isAvailable
     );
-  }
-  return true;
-}
 
+    if (!updated) {
+      throw new CustomError(
+        `Venue ${isAvailable ? "available" : "unavailable"} request failed`,
+        statusCodes.serverError
+      );
+    }
+    return true;
+  }
 
   async removeVenue(venueId: string): Promise<boolean> {
     if (!venueId) {
       throw new CustomError("Venue ID is required", statusCodes.unAuthorized);
     }
-    const updated = await this.hostVenueRepository.deleteVenue(venueId);
+    const updated = await this._hostVenueRepository.deleteVenue(venueId);
     if (!updated) {
       throw new CustomError("Venue deleting failed", statusCodes.serverError);
     }

@@ -9,10 +9,10 @@ import {
 import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class UserCatersController implements IUserCatersController {
-  constructor(private userCatersUseCase: IUserCatersUseCase) {}
+  constructor(private _userCatersUseCase: IUserCatersUseCase) {}
   async getCaters(req: Request, res: Response): Promise<void> {
     try {
-      const caters = await this.userCatersUseCase.allCaters();
+      const caters = await this._userCatersUseCase.allCaters();
 
       if (caters.length === 0) {
         res.status(statusCodes.Success).json({
@@ -55,7 +55,7 @@ export class UserCatersController implements IUserCatersController {
         });
         return;
       }
-      const caters = await this.userCatersUseCase.catersDetails(catersId);
+      const caters = await this._userCatersUseCase.catersDetails(catersId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "Caters details fetched successfully",
@@ -82,7 +82,7 @@ export class UserCatersController implements IUserCatersController {
       const page = parseInt(filters.page as string) || 1;
       const limit = parseInt(filters.limit as string) || 10;
 
-      const result = await this.userCatersUseCase.filterCaters(
+      const result = await this._userCatersUseCase.filterCaters(
         filters,
         page,
         limit
@@ -110,7 +110,7 @@ export class UserCatersController implements IUserCatersController {
       const page = parseInt(sorts.page as string) || 1;
       const limit = parseInt(sorts.limit as string) || 10;
 
-      const result = await this.userCatersUseCase.sortCaters(
+      const result = await this._userCatersUseCase.sortCaters(
         sorts,
         page,
         limit

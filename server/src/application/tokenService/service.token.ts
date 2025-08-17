@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
 import logger from "../../utils/common/messages/logger";
+import { ITokenService } from "../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
 
-export class TokenService {
+export class TokenService implements ITokenService {
   constructor(
     private accessSecret: string = process.env.ACCESS_TOKEN_SECRET as string,
     private refreshSecret: string = process.env.REFRESH_TOKEN_SECRET as string

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IRentCar } from "../../../../domain/entities/serviceInterface/host/interface.rentCar";
-import { HostRentCarUseCase } from "../../../../application/usecases/host/hostServicesUsecases/usecase.hostRentcar";
+import { IHostRentCarUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.rentCarUseCase";
 import { IHostRentCarController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostRentCarController";
 import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
@@ -23,8 +23,8 @@ export interface MulterRequest extends Request {
 
 export class HostRentCarController implements IHostRentCarController {
   constructor(
-    private hostRentCarUseCase: HostRentCarUseCase,
-    private locationRepository: ILocationRepository
+    private _hostRentCarUseCase: IHostRentCarUseCase,
+    private _locationRepository: ILocationRepository
   ) {}
 
   async addRentCarService(req: MulterRequest, res: Response): Promise<void> {
@@ -43,7 +43,7 @@ export class HostRentCarController implements IHostRentCarController {
 
       try {
         await assetFilesValidate({ files, typeOfAsset: typeOfAsset });
-        const newLocation = await this.locationRepository.addLocation(
+        const newLocation = await this._locationRepository.addLocation(
           newRentCar.location
         );
 
@@ -114,7 +114,7 @@ export class HostRentCarController implements IHostRentCarController {
           host: new Types.ObjectId(hostId),
         };
 
-        const createdRentCar = await this.hostRentCarUseCase.addRentCar(
+        const createdRentCar = await this._hostRentCarUseCase.addRentCar(
           rentCar
         );
         res.status(statusCodes.Success).json(createdRentCar);
@@ -147,7 +147,7 @@ export class HostRentCarController implements IHostRentCarController {
         });
         return;
       }
-      const car = await this.hostRentCarUseCase.rentCarDetails(carId);
+      const car = await this._hostRentCarUseCase.rentCarDetails(carId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "car details fetched successfully",
@@ -179,7 +179,7 @@ export class HostRentCarController implements IHostRentCarController {
         return;
       }
 
-      const success = await this.hostRentCarUseCase.reApplyRentcar(rentcarId);
+      const success = await this._hostRentCarUseCase.reApplyRentcar(rentcarId);
 
       if (!success) {
         res.status(statusCodes.serverError).json({
@@ -221,7 +221,7 @@ export class HostRentCarController implements IHostRentCarController {
         return;
       }
 
-      const success = await this.hostRentCarUseCase.updateRentcarAvailability(
+      const success = await this._hostRentCarUseCase.updateRentcarAvailability(
         rentcarId,
         isAvailable
       );
@@ -269,7 +269,7 @@ export class HostRentCarController implements IHostRentCarController {
         return;
       }
 
-      const success = await this.hostRentCarUseCase.removeRentcar(rentcarId);
+      const success = await this._hostRentCarUseCase.removeRentcar(rentcarId);
 
       if (!success) {
         res.status(statusCodes.serverError).json({

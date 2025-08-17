@@ -114,7 +114,7 @@ const Otp = ({
                   value={otp[index]}
                   onChange={(e) => handleChange(e, index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
-                  className="w-10 h-10 md:w-12 md:h-12 text-lg md:text-xl text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-main_color"
+                  className="w-10 h-10 md:w-12 md:h-12 text-lg md:text-xl text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-deepPurple"
                   autoFocus={index === 0}
                   disabled={loading}
                 />
@@ -123,7 +123,7 @@ const Otp = ({
 
             <Button
               type="submit"
-              className={`h-10 md:h-12 w-full ${buttonColorClass ?? "bg-main_color hover:bg-main_color_dark"} ${buttonTextColorClass ?? "text-white"} py-2 md:py-3 rounded-lg transition duration-200`}
+              className={`h-10 md:h-12 w-full ${buttonColorClass ?? "bg-main_gradient hover:opacity-90"} ${buttonTextColorClass ?? "text-white"} py-2 md:py-3 rounded-lg transition duration-200`}
               disabled={loading}
             >
               {loading ? "Verifying..." : "Verify OTP"}

@@ -6,10 +6,10 @@ import { statusCodes } from "../../../../utils/common/messages/constantResponses
 import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class HostCatersUseCase implements IHostCatersUseCase {
-  constructor(private hostCatersRepository: IHostCatersRepository) {}
+  constructor(private _hostCatersRepository: IHostCatersRepository) {}
 
   async addCaters(caters: ICaters): Promise<ICaters> {
-    const addedCaters = await this.hostCatersRepository.addCaters(caters);
+    const addedCaters = await this._hostCatersRepository.addCaters(caters);
     if (!addedCaters) {
       throw new ErrorHandler("caters team not added", statusCodes.serverError);
     }
@@ -20,7 +20,7 @@ export class HostCatersUseCase implements IHostCatersUseCase {
     if (!catersId) {
       throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
     }
-    const caters = await this.hostCatersRepository.findCatersById(catersId);
+    const caters = await this._hostCatersRepository.findCatersById(catersId);
     if (!caters) {
       throw new CustomError("Caters not found", statusCodes.notfound);
     }
@@ -31,7 +31,7 @@ export class HostCatersUseCase implements IHostCatersUseCase {
     if (!catersId) {
       throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
     }
-    const updated = await this.hostCatersRepository.reApply(catersId);
+    const updated = await this._hostCatersRepository.reApply(catersId);
     if (!updated) {
       throw new CustomError("caters re-apply failed", statusCodes.serverError);
     }
@@ -46,7 +46,7 @@ export class HostCatersUseCase implements IHostCatersUseCase {
       throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
     }
 
-    const updated = await this.hostCatersRepository.updateAvailability(
+    const updated = await this._hostCatersRepository.updateAvailability(
       catersId,
       isAvailable
     );
@@ -65,7 +65,7 @@ export class HostCatersUseCase implements IHostCatersUseCase {
     if (!catersId) {
       throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
     }
-    const updated = await this.hostCatersRepository.deleteCaters(catersId);
+    const updated = await this._hostCatersRepository.deleteCaters(catersId);
     if (!updated) {
       throw new CustomError("caters deleting failed", statusCodes.serverError);
     }

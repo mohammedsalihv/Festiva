@@ -4,7 +4,7 @@ import { adminLoginMapper } from "../../../../utils/mapping/admin/adminLoginMapp
 import { IAdminRepository } from "../../../../domain/entities/baseInterface/admin/interface.admin";
 import { AdminDetailsDTO } from "../../../../types/DTO/admin/admin.dto";
 import CustomError from "../../../../utils/common/errors/CustomError";
-import { TokenService } from "../../../tokenService/service.token";
+import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
 import bcrypt from "bcrypt";
 import {
   statusCodes,
@@ -14,27 +14,27 @@ import { IAdminLoginValidator } from "../../../../domain/validatorInterface/admi
 
 export class AdminLoginUsecase implements IAdminLoginUseCase {
   constructor(
-    private adminLoginRepository: IAdminLoginRepository,
-    private adminRepository: IAdminRepository,
-    private tokenService: TokenService,
-    private validator: IAdminLoginValidator
+    private _adminLoginRepository: IAdminLoginRepository,
+    private _adminRepository: IAdminRepository,
+    private _tokenService: ITokenService,
+    private _validator: IAdminLoginValidator
   ) {}
 
   async loginByadmin(
     email: string,
     password: string
   ): Promise<AdminDetailsDTO> {
-    const admin = await this.adminLoginRepository.findByEmail(email);
-    this.validator.validateAdminExistence(admin);
-    this.validator.validateAdminRole(admin);
-    this.validator.validateAdminBlocked(admin);
+    const admin = await this._adminLoginRepository.findByEmail(email);
+    this._validator.validateAdminExistence(admin);
+    this._validator.validateAdminRole(admin);
+    this._validator.validateAdminBlocked(admin);
     const validatedAdmin = admin!;
 
-    const adminValidate = await this.adminRepository.findByEmail(email);
-    this.validator.validateAdminExistence(adminValidate);
+    const adminValidate = await this._adminRepository.findByEmail(email);
+    this._validator.validateAdminExistence(adminValidate);
     const validatedAdminData = adminValidate!;
 
-    await this.validator.validatePassword(
+    await this._validator.validatePassword(
       validatedAdminData.password!,
       password
     );
@@ -50,11 +50,11 @@ export class AdminLoginUsecase implements IAdminLoginUseCase {
       );
     }
 
-    const accessToken = this.tokenService.generateAccessToken({
+    const accessToken = this._tokenService.generateAccessToken({
       id: validatedAdmin.id!,
       role: validatedAdmin.role,
     });
-    const refreshToken = this.tokenService.generateRefreshToken({
+    const refreshToken = this._tokenService.generateRefreshToken({
       id: validatedAdmin.id!,
       role: validatedAdmin.role,
     });

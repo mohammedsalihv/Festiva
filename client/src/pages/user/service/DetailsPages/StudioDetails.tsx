@@ -1,29 +1,158 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Images } from "@/assets";
 import { X } from "lucide-react";
 import { IStudio } from "@/utils/Types/user/studioTypes";
 import { Button } from "@/components/Button";
 import { IoClose } from "react-icons/io5";
-import { BsCurrencyRupee } from "react-icons/bs";
 import { CiLocationOn } from "react-icons/ci";
 import { VscDebugBreakpointData } from "react-icons/vsc";
 import { FaRegHandPointRight } from "react-icons/fa6";
-import CustomCalendar from "@/components/CustomCalendar";
 import TimeSlotPicker from "@/components/TimeSlotPicker";
+import { toast } from "react-toastify";
+import {
+  bookingErrorState,
+  bookingState,
+} from "@/utils/validations/user/bookings/serviceBooking";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { IBookingBase } from "@/utils/Types/user/commonDetails";
+import { setBooking } from "@/redux/Slice/user/bookingSlice";
+import Calendar from "@/components/Calendar";
+import { Input } from "@/components/Input";
+import Spinner from "@/components/Spinner";
 
 interface studioDetailsProps {
   data: IStudio & { typeOfAsset: "studio" };
 }
 
 const StudioDetails: React.FC<studioDetailsProps> = ({ data }) => {
-  console.log(data);
+  const user = useSelector((state: RootState) => state.user.userInfo);
   const [showGallery, setShowGallery] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showTimeSlots, setShowTimeSlots] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
-  console.log(selectedDate, selectedSlot);
+  const [selectedPackage, setSelectedPackage] = useState<number | null>(null);
+  const [bookingForm, setBookingForm] = useState<bookingState>({
+    time: "",
+    date: "",
+  });
+  const [errors, setErrors] = useState<bookingErrorState>({
+    time: "",
+    date: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (selectedDates) {
+      setBookingForm((prev) => ({
+        ...prev,
+        date: selectedDates.map((d) => d.toISOString()).join(", "),
+      }));
+    }
+  }, [selectedDates]);
+
+  useEffect(() => {
+    if (selectedSlot) {
+      setBookingForm((prev) => ({
+        ...prev,
+        time: selectedSlot,
+      }));
+    }
+  }, [selectedSlot]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setBookingForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (errors[name as keyof typeof errors]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const highlightError = (field: keyof bookingErrorState) => {
+    setErrors((prev) => ({ ...prev, [field]: "Required" }));
+    setTimeout(() => {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }, 3000);
+  };
+
+  const handleBooking = () => {
+    setLoading(true);
+    let hasError = false;
+
+    if (!selectedDates.length) {
+      highlightError("date");
+      hasError = true;
+    }
+    if (!selectedSlot) {
+      highlightError("time");
+      hasError = true;
+    }
+    if (selectedPackage === null) {
+      toast.error("Please select a package.");
+      hasError = true;
+    }
+
+    if (hasError) {
+      setLoading(false);
+      return;
+    }
+
+    if (!areDatesConsecutive(selectedDates)) {
+      toast.error("Please select consecutive dates only.");
+      setLoading(false);
+      return;
+    }
+
+    const chosenPkg =
+      selectedPackage != null ? data.packages[selectedPackage] : undefined;
+
+    if (!chosenPkg) {
+      throw new Error("Package must be selected before booking");
+    }
+
+    const bookingPayload: IBookingBase = {
+      userId: user?.id,
+      assetId: data._id,
+      assetType: data.typeOfAsset,
+      selectedDates: selectedDates.map((d) => d.toISOString()),
+      selectedTimeSlot: selectedSlot,
+      total: Number(chosenPkg.payment),
+      serviceData: {
+        ...data,
+        packages: data.packages,
+      },
+      packageName: data.packages[0]?.packageName,
+    };
+
+    dispatch(setBooking(bookingPayload));
+    toast.success("Processing...");
+    setLoading(false);
+    navigate("/user/payment");
+  };
+
+  const areDatesConsecutive = (dates: Date[]) => {
+    if (dates.length <= 1) return true;
+    dates.sort((a, b) => a.getTime() - b.getTime());
+    for (let i = 1; i < dates.length; i++) {
+      const prev = new Date(dates[i - 1]);
+      const curr = new Date(dates[i]);
+      const diff = (curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24);
+      if (diff !== 1) return false;
+    }
+    return true;
+  };
 
   return (
     <div className="relative mt-16 sm:mt-20 md:mt-24 font-JosephicSans">
@@ -125,7 +254,9 @@ const StudioDetails: React.FC<studioDetailsProps> = ({ data }) => {
               {data.packages.map((pkg, i) => (
                 <div
                   key={i}
-                  className="bg-gray-50 p-4 rounded-md shadow-xl hover:border-main_color  border space-y-2"
+                  onClick={() => setSelectedPackage(i)}
+                  className={`bg-gray-50 p-4 rounded-md shadow-xl hover:border-main_color border space-y-2 cursor-pointer
+                    ${selectedPackage === i ? "border-main_color border-2" : ""}`}
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div>
@@ -238,71 +369,103 @@ const StudioDetails: React.FC<studioDetailsProps> = ({ data }) => {
                   Responds within a few hours
                 </p>
               </div>
-              <button className="text-base mt-2 sm:mt-0 bg-gray-200 text-gray-800 px-4 py-2 rounded border hover:border-main_color_hover hover:text-main_color_hover">
+              <Button className="text-base mt-2 sm:mt-0 bg-gray-200 hover:bg-deepPurple text-gray-800 px-4 py-3 rounded border hover:text-white">
                 Message Host
-              </button>
+              </Button>
             </div>
           </div>
         </div>
         <div className="hidden lg:block space-y-4 rounded-md">
           <div className="border p-4 rounded-lg shadow-md w-full max-w-md space-y-4">
-            <div className="text-xl font-semibold flex items-center">
-              <BsCurrencyRupee className="text-xl" />
-              <Button className="border">Select a package</Button>
-              <span className="text-gray-500 text-sm ml-auto">
-                1 hr. minimum
-              </span>
-            </div>
+         
 
             <div className="space-y-2 text-sm text-gray-700">
               <div className="flex justify-center gap-6 pb-3 cursor-pointer">
                 <div
                   onClick={() => setShowCalendar(!showCalendar)}
                   className={`border-b-2 ${
-                    showCalendar ? "border-main_color" : "border-gray-300"
-                  } px-4 py-4 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                    errors.date
+                      ? "border-red-500 text-red-500"
+                      : showCalendar
+                      ? "border-deepPurple/80"
+                      : "border-gray-300"
+                  } px-4 py-4 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition ${
+                    selectedDates
+                      ? "border-deepPurple text-deepPurple"
+                      : "border-gray-300"
+                  }`}
                 >
-                  Pick a date
+                  <Input
+                    type="text"
+                    name="date"
+                    value={bookingForm.date}
+                    className="hidden"
+                    onChange={handleChange}
+                  />
+                  {selectedDates.length
+                    ? selectedDates
+                        .map((d) => d.toLocaleDateString())
+                        .join(", ")
+                    : "Pick a date"}
                 </div>
+                {errors?.date && (
+                  <p className="text-red-600 text-xs mt-1">{errors.date}</p>
+                )}
                 <div
                   onClick={() => setShowTimeSlots(!showTimeSlots)}
-                  className={`border-b-2 ${
-                    showCalendar ? "border-main_color" : "border-gray-300"
-                  } px-4 py-4 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                  className={`border-b-2 px-4 py-4 w-full text-center text-sm font-medium transition
+                  ${
+                    errors.date
+                      ? "border-red-500 text-red-500"
+                      : selectedSlot
+                      ? "border-neonPink text-neonPink"
+                      : showCalendar
+                      ? "border-deepPurple/80 text-deepPurple hover:border-deepPurple/80"
+                      : "border-gray-300 text-deepPurple hover:border-deepPurple/80"
+                  }
+                                 `}
                 >
-                  Pick a time
+                  <Input
+                    type="text"
+                    name="time"
+                    value={bookingForm.time}
+                    className="hidden"
+                    onChange={handleChange}
+                  />
+                  {selectedSlot ? selectedSlot : "Pick a time"}
                 </div>
               </div>
+              {errors?.time && (
+                <p className="text-red-600 text-xs text-end mt-1">
+                  {errors.time}
+                </p>
+              )}
               {showCalendar && (
                 <div className="flex justify-center">
-                  <CustomCalendar
-                    availableDates={data.availableDates}
-                    onSelect={(date) => setSelectedDate(date)}
+                  <Calendar
+                    selectedDates={selectedDates}
+                    onChange={setSelectedDates}
+                    availableDates={(data.availableDates || []).map(
+                      (d) => new Date(d)
+                    )}
                   />
                 </div>
               )}
               {showTimeSlots && (
                 <div className="flex justify-center">
                   <TimeSlotPicker
-                    timeSlots={data.timeSlots}
+                    timeSlots={data.timeSlots || []}
                     onSelect={(slot) => setSelectedSlot(slot)}
                   />
                 </div>
               )}
-              <div className="text-right text-sm text-gray-500">
-                Total hours: 0
-              </div>
             </div>
-
-            <div className="relative">
-              <select className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none">
-                <option>Attendees: 1 - 5 people</option>
-              </select>
-            </div>
-
-            <button className="w-full bg-main_color text-white font-semibold py-2 rounded hover:bg-main_color_hover transition">
-              Reserve
-            </button>
+            <Button
+              onClick={handleBooking}
+              className="w-full bg-main_gradient text-white font-semibold py-3 rounded transition"
+            >
+              {loading ? <Spinner text="Booking started..." /> : "Reserve"}
+            </Button>
 
             <p className="text-xs text-gray-400 text-center">
               Cancel for free within 24 hours <span className="ml-1">ℹ️</span>
@@ -329,13 +492,12 @@ const StudioDetails: React.FC<studioDetailsProps> = ({ data }) => {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold flex items-center">
-              <BsCurrencyRupee className="text-xl" />
               <Button className="border">Select a package</Button>
             </h2>
           </div>
           <Button
             onClick={() => setShowOverlay(true)}
-            className="bg-main_color text-white px-4 py-2 rounded"
+            className="bg-main_gradient text-white px-4 py-2 rounded"
           >
             Instant Book
           </Button>
@@ -351,70 +513,79 @@ const StudioDetails: React.FC<studioDetailsProps> = ({ data }) => {
           </div>
 
           <div className="space-y-4 mt-2">
-            <div className="text-xl font-semibold flex items-center">
-              <BsCurrencyRupee className="text-xl" />{" "}
-              <Button className="border">Select a package</Button>
-              <span className="text-gray-500 text-sm ml-auto">
-                1 hr. minimum
-              </span>
-            </div>
 
             <div className="space-y-2 text-sm text-gray-700">
               <div className="w-full border-b pb-3">
                 <div className="flex justify-center gap-6 cursor-pointer mb-3">
                   <div
                     onClick={() => setShowCalendar(!showCalendar)}
-                    className={`border-b-2 ${
-                      showCalendar ? "border-main_color" : "border-gray-300"
-                    } px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                    className={`border-b-2 px-4 py-2 w-full text-center text-sm font-medium transition
+                     ${
+                       errors.date
+                         ? "border-red-500"
+                         : showCalendar
+                         ? "border-deepPurple/80"
+                         : "border-gray-300"
+                     }
+                           text-deepPurple hover:border-deepPurple/80
+                            `}
                   >
-                    Pick a date
+                    <Input
+                      type="text"
+                      name="date"
+                      className="hidden"
+                      value={bookingForm.date}
+                      onChange={handleChange}
+                    />
+                    {selectedDates.length
+                      ? selectedDates
+                          .map((d) => d.toLocaleDateString())
+                          .join(", ")
+                      : "Pick a date"}
                   </div>
                   <div
                     onClick={() => setShowTimeSlots(!showTimeSlots)}
                     className={`border-b-2 ${
-                      showCalendar ? "border-main_color" : "border-gray-300"
-                    } px-4 py-2 w-full text-center text-sm font-medium text-main_color hover:border-main_color transition`}
+                      showCalendar ? "border-deepPurple/80" : "border-gray-300"
+                    } px-4 py-2 w-full text-center text-sm font-medium text-deepPurple hover:border-deepPurple/80 transition`}
                   >
-                    Pick a time
+                    <Input
+                      type="text"
+                      name="time"
+                      className="hidden"
+                      value={bookingForm.time}
+                      onChange={handleChange}
+                    />
+                    {selectedSlot ? selectedSlot : "Pick a time"}
                   </div>
                 </div>
                 {showCalendar && (
                   <div className="flex justify-center">
-                    <CustomCalendar
-                      availableDates={data.availableDates}
-                      onSelect={(date) => setSelectedDate(date)}
+                    <Calendar
+                      selectedDates={selectedDates}
+                      onChange={setSelectedDates}
+                      availableDates={(data.availableDates || []).map(
+                        (d) => new Date(d)
+                      )}
                     />
                   </div>
                 )}
                 {showTimeSlots && (
                   <div className="flex justify-center">
                     <TimeSlotPicker
-                      timeSlots={data.timeSlots}
+                      timeSlots={data.timeSlots || []}
                       onSelect={(slot) => setSelectedSlot(slot)}
                     />
                   </div>
                 )}
               </div>
-
-              <button className="text-sm text-main_color font-medium hover:underline">
-                Add a day
-              </button>
-
-              <div className="text-right text-sm text-gray-500">
-                Total hours: 0
-              </div>
             </div>
-
-            <div className="relative">
-              <select className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none">
-                <option>Attendees: 1 - 5 people</option>
-              </select>
-            </div>
-
-            <button className="w-full bg-main_color text-white font-semibold py-2 rounded hover:bg-main_color_hover transition">
-              Reserve
-            </button>
+            <Button
+              onClick={handleBooking}
+              className="w-full bg-main_gradient text-white ..."
+            >
+              {loading ? <Spinner text="Booking started..." /> : "Reserve"}
+            </Button>
 
             <p className="text-xs text-gray-400 text-center">
               Cancel for free within 24 hours <span className="ml-1">ℹ️</span>

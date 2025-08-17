@@ -11,7 +11,7 @@ import { HostLoginController } from "../../../../adapters/controllers/host/hostA
 import { HostSignupController } from "../../../../adapters/controllers/host/hostAuthenticationControllers/hostSignup.controller";
 import { HostGoogleSignupController } from "../../../../adapters/controllers/host/hostAuthenticationControllers/hostGoogleSignup.controller";
 import { HostGoogleLoginController } from "../../../../adapters/controllers/host/hostAuthenticationControllers/hostGoogleLogin.controller";
-import { RefreshTokenController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userRefreshToken.controller";
+import { RefreshTokenController } from "../../../../adapters/controllers/base/baseAuthenticationControllers/refreshToken.controller";
 import { HostLogoutController } from "../../../../adapters/controllers/host/hostAuthenticationControllers/hostLogout.controller";
 
 // use-case

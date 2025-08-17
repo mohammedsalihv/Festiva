@@ -9,14 +9,14 @@ import {
 import { IUserPasswordResetUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userPasswordResetUseCase";
 
 export class UserPasswordResetUseCase implements IUserPasswordResetUseCase {
-  constructor(private userRepository: IUserRepository) {}
+  constructor(private _userRepository: IUserRepository) {}
 
   async execute(form: resetPasswordDTO): Promise<boolean> {
     if (!form) {
       throw new CustomError("New password is required", statusCodes.forbidden);
     }
 
-    const user = await this.userRepository.findByEmail(form.email);
+    const user = await this._userRepository.findByEmail(form.email);
     if (!user) {
       throw new CustomError(
         statusMessages.accountNotfound,
@@ -25,7 +25,7 @@ export class UserPasswordResetUseCase implements IUserPasswordResetUseCase {
     }
 
     const hashedPassword = await hash(form.newPassword);
-    const updated = await this.userRepository.resetPassword(user.email, {
+    const updated = await this._userRepository.resetPassword(user.email, {
       email: user.email,
       newPassword: hashedPassword,
     });

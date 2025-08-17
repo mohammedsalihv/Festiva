@@ -8,12 +8,13 @@ import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class UserRentCarUseCase implements IUserRentCarUseCase {
-  constructor(private userRentCarRepository: IUserRentCarRepository) {}
+  constructor(private _userRentCarRepository: IUserRentCarRepository) {}
+
   async allRentCars(): Promise<IRentCarBase[]> {
-    return await this.userRentCarRepository.findAllRentCars();
+    return await this._userRentCarRepository.findAllRentCars();
   }
   async rentCarDetails(rentcarId: string): Promise<IRentCar> {
-    const car = await this.userRentCarRepository.fetchRentCarDetailsById(
+    const car = await this._userRentCarRepository.fetchRentCarDetailsById(
       rentcarId
     );
 
@@ -28,10 +29,10 @@ export class UserRentCarUseCase implements IUserRentCarUseCase {
     page: number,
     limit: number
   ) {
-    return await this.userRentCarRepository.findByFilters(filters, page, limit);
+    return await this._userRentCarRepository.findByFilters(filters, page, limit);
   }
 
   async sortRentCars(sorts: any, page: number, limit: number) {
-    return await this.userRentCarRepository.sortRentCars(sorts, page, limit);
+    return await this._userRentCarRepository.sortRentCars(sorts, page, limit);
   }
 }

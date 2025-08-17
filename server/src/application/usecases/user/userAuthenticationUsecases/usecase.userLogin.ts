@@ -1,35 +1,35 @@
 import { IUserLoginRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userLoginRepository";
 import { IUserLoginUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userLoginUseCase";
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
-import { TokenService } from "../../../tokenService/service.token";
+import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
 import { userDetailsDTO } from "../../../../types/DTO/user/dto.user";
 import { IUserLoginValidator } from "../../../../domain/validatorInterface/user/interface.userLoginValidator";
 import { userLoginMapper } from "../../../../utils/mapping/user/userLoginMapper";
 
 export class UserLoginUseCase implements IUserLoginUseCase {
   constructor(
-    private userLoginRepository: IUserLoginRepository,
-    private userRepository: IUserRepository,
-    private tokenService: TokenService,
-    private validator: IUserLoginValidator
+    private _userLoginRepository: IUserLoginRepository,
+    private _userRepository: IUserRepository,
+    private _tokenService: ITokenService,
+    private _validator: IUserLoginValidator
   ) {}
 
   async userLogin(email: string, password: string): Promise<userDetailsDTO> {
-    const user = await this.userLoginRepository.findByEmail(email);
-    this.validator.validateUserExistence(user);
-    this.validator.validateUserBlocked(user);
+    const user = await this._userLoginRepository.findByEmail(email);
+    this._validator.validateUserExistence(user);
+    this._validator.validateUserBlocked(user);
 
-    const userValidation = await this.userRepository.findByEmail(email);
-    this.validator.validateUserExistence(userValidation);
+    const userValidation = await this._userRepository.findByEmail(email);
+    this._validator.validateUserExistence(userValidation);
 
-    await this.validator.validatePassword(userValidation!.password!, password);
+    await this._validator.validatePassword(userValidation!.password!, password);
 
-    const accessToken = this.tokenService.generateAccessToken({
+    const accessToken = this._tokenService.generateAccessToken({
       id: user.id!,
       role: user.role,
     });
 
-    const refreshToken = this.tokenService.generateRefreshToken({
+    const refreshToken = this._tokenService.generateRefreshToken({
       id: user.id!,
       role: user.role,
     });

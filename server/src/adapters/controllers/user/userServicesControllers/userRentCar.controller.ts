@@ -10,11 +10,11 @@ import CustomError from "../../../../utils/common/errors/CustomError";
 
 
 export class UserRentCarController implements IUserRentCarController {
-  constructor(private userRentCarUseCase: IUserRentCarUseCase) {}
+  constructor(private _userRentCarUseCase: IUserRentCarUseCase) {}
 
   async getRentCars(req: Request, res: Response): Promise<void> {
     try {
-      const cars = await this.userRentCarUseCase.allRentCars();
+      const cars = await this._userRentCarUseCase.allRentCars();
 
       if (cars.length === 0) {
         res.status(statusCodes.Success).json({
@@ -57,7 +57,7 @@ export class UserRentCarController implements IUserRentCarController {
         });
         return;
       }
-      const car = await this.userRentCarUseCase.rentCarDetails(carId);
+      const car = await this._userRentCarUseCase.rentCarDetails(carId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "car details fetched successfully",
@@ -82,7 +82,7 @@ export class UserRentCarController implements IUserRentCarController {
       const filters = req.query;
       const page = parseInt(filters.page as string) || 1;
       const limit = parseInt(filters.limit as string) || 10;
-      const result = await this.userRentCarUseCase.filterRentCars(
+      const result = await this._userRentCarUseCase.filterRentCars(
         filters,
         page,
         limit
@@ -109,7 +109,7 @@ export class UserRentCarController implements IUserRentCarController {
       const sorts = req.query;
       const page = parseInt(sorts.page as string) || 1;
       const limit = parseInt(sorts.limit as string) || 10;
-      const result = await this.userRentCarUseCase.sortRentCars(
+      const result = await this._userRentCarUseCase.sortRentCars(
         sorts,
         page,
         limit

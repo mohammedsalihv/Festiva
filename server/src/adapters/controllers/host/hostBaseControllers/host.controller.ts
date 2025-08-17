@@ -5,7 +5,7 @@ import { statusCodes , statusMessages } from "../../../../utils/common/messages/
 import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class HostController implements IHostController {
-  constructor(private hostUseCase: IHostUseCase) {}
+  constructor(private _hostUseCase: IHostUseCase) {}
 
   async mailValidation(req: Request, res: Response): Promise<void> {
     try {
@@ -18,7 +18,7 @@ export class HostController implements IHostController {
         });
         return;
       }
-      const result = await this.hostUseCase.validateEmail(email);
+      const result = await this._hostUseCase.validateEmail(email);
       res.status(result.status).json({
         success: result.success,
         message: result.message,

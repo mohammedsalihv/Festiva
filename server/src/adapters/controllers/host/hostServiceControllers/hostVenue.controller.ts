@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { IVenue } from "../../../../domain/entities/serviceInterface/host/interface.venue";
 import { ILocationUseCase } from "../../../../domain/usecaseInterface/host/baseUsecaseInterfaces/interface.locationUsecase";
 import { IHostVenueController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostVenueController";
-import { HostVenueUseCase } from "../../../../application/usecases/host/hostServicesUsecases/usecase.hostVenue";
+import { IHostVenueUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.venueUseCase";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";
@@ -23,8 +23,8 @@ export interface MulterRequest extends Request {
 
 export class HostVenueController implements IHostVenueController {
   constructor(
-    private hostVenueUseCase: HostVenueUseCase,
-    private locationUsecase: ILocationUseCase
+    private _hostVenueUseCase: IHostVenueUseCase,
+    private _locationUsecase: ILocationUseCase
   ) {}
 
   async addVenueService(req: MulterRequest, res: Response): Promise<void> {
@@ -44,7 +44,7 @@ export class HostVenueController implements IHostVenueController {
 
       await assetFilesValidate({ files, typeOfAsset });
 
-      const newLocation = await this.locationUsecase.execute(newVenue.location);
+      const newLocation = await this._locationUsecase.execute(newVenue.location);
 
       if (!newLocation || !newLocation._id) {
         throw new ErrorHandler(
@@ -99,7 +99,7 @@ export class HostVenueController implements IHostVenueController {
         host: new Types.ObjectId(hostId),
       };
 
-      const createdVenue = await this.hostVenueUseCase.addVenue(venue);
+      const createdVenue = await this._hostVenueUseCase.addVenue(venue);
       res.status(statusCodes.Success).json(createdVenue);
     } catch (error: any) {
       logger.error(error);
@@ -126,7 +126,7 @@ export class HostVenueController implements IHostVenueController {
         });
         return;
       }
-      const venue = await this.hostVenueUseCase.venueDetails(venueId);
+      const venue = await this._hostVenueUseCase.venueDetails(venueId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "Venue details fetched successfully",
@@ -157,7 +157,7 @@ export class HostVenueController implements IHostVenueController {
         });
         return;
       }
-      const success = await this.hostVenueUseCase.reApplyVenue(venueId);
+      const success = await this._hostVenueUseCase.reApplyVenue(venueId);
       if (!success) {
         res.status(statusCodes.serverError).json({
           success: false,
@@ -206,7 +206,7 @@ export class HostVenueController implements IHostVenueController {
         return;
       }
 
-      const success = await this.hostVenueUseCase.updateVenueAvailability(
+      const success = await this._hostVenueUseCase.updateVenueAvailability(
         venueId,
         isAvailable
       );
@@ -254,7 +254,7 @@ export class HostVenueController implements IHostVenueController {
         return;
       }
 
-      const success = await this.hostVenueUseCase.removeVenue(venueId);
+      const success = await this._hostVenueUseCase.removeVenue(venueId);
 
       if (!success) {
         res.status(statusCodes.serverError).json({

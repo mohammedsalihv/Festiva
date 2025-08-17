@@ -10,11 +10,11 @@ import CustomError from "../../../../utils/common/errors/CustomError";
 
 
 export class UserStudioController implements IUserStudioController {
-  constructor(private userStudioUseCase: IUserStudioUseCase) {}
+  constructor(private _userStudioUseCase: IUserStudioUseCase) {}
 
   async getStudios(req: Request, res: Response): Promise<void> {
     try {
-      const studio = await this.userStudioUseCase.allStudios();
+      const studio = await this._userStudioUseCase.allStudios();
 
       if (studio.length === 0) {
         res.status(statusCodes.Success).json({
@@ -58,7 +58,7 @@ export class UserStudioController implements IUserStudioController {
         });
         return;
       }
-      const studio = await this.userStudioUseCase.studioDetails(studioId);
+      const studio = await this._userStudioUseCase.studioDetails(studioId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "studio details fetched successfully",
@@ -83,7 +83,7 @@ export class UserStudioController implements IUserStudioController {
       const filters = req.query;
       const page = parseInt(filters.page as string) || 1;
       const limit = parseInt(filters.limit as string) || 10;
-      const result = await this.userStudioUseCase.filterStudios(
+      const result = await this._userStudioUseCase.filterStudios(
         filters,
         page,
         limit
@@ -109,7 +109,7 @@ export class UserStudioController implements IUserStudioController {
       const sorts = req.query;
       const page = parseInt(sorts.page as string) || 1;
       const limit = parseInt(sorts.limit as string) || 10;
-      const result = await this.userStudioUseCase.sortStudios(
+      const result = await this._userStudioUseCase.sortStudios(
         sorts,
         page,
         limit

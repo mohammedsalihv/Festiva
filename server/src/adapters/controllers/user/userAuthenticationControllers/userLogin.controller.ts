@@ -11,13 +11,13 @@ import {
 import { IUserModel } from "../../../../domain/entities/modelInterface/user/interface.user";
 
 export class UserLoginController implements IUserLoginController {
-  constructor(private userLoginUseCase: IUserLoginUseCase) {}
+  constructor(private _userLoginUseCase: IUserLoginUseCase) {}
 
   async loginByUser(req: Request, res: Response): Promise<Response | void> {
     try {
       const { email, password } = req.body;
       const { accessToken, refreshToken, user } =
-        await this.userLoginUseCase.userLogin(email, password);
+        await this._userLoginUseCase.userLogin(email, password);
 
       res.status(statusCodes.Success).json({
         success: true,

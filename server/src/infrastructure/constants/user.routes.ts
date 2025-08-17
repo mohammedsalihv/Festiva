@@ -35,4 +35,11 @@ export const USER_ROUTES = {
     filterAssets: "/assets/filter/:type",
     sortAssets: "/assets/sort/:type",
   },
+  bookingRoutes: {
+    createbooking: "/createbooking",
+  },
+
+  paymentRoutes: {
+    startPayment: "/startPayment",
+  },
 } as const;

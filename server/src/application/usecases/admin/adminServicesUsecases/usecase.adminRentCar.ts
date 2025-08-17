@@ -5,7 +5,7 @@ import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class AdminRentCarUseCase implements IAdminRentCarUseCase {
-  constructor(private adminRentCarRepository: IAdminRentCarRepository) {}
+  constructor(private _adminRentCarRepository: IAdminRentCarRepository) {}
 
   async rentCarDetails(rentcarId: string): Promise<IRentCar> {
     if (!rentcarId) {
@@ -15,7 +15,7 @@ export class AdminRentCarUseCase implements IAdminRentCarUseCase {
       );
     }
 
-    const car = await this.adminRentCarRepository.carDetails(rentcarId);
+    const car = await this._adminRentCarRepository.carDetails(rentcarId);
 
     if (!car) {
       throw new CustomError("Car not found", statusCodes.notfound);

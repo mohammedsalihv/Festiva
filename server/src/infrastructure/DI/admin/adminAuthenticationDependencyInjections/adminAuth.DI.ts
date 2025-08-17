@@ -7,7 +7,7 @@ import { AdminLoginValidator } from "../../../../utils/validations/admin/adminLo
 // Controller
 
 import { AdminLoginController } from "../../../../adapters/controllers/admin/adminAuthControllers/adminLogin.controller";
-import { RefreshTokenController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userRefreshToken.controller";
+import { RefreshTokenController } from "../../../../adapters/controllers/base/baseAuthenticationControllers/refreshToken.controller";
 
 // use-case
 

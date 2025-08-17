@@ -9,7 +9,7 @@ import {
 } from "../../../../utils/common/messages/constantResponses";
 
 export class HostLogoutController implements IHostLogoutController {
-  constructor(private userLogoutUseCase: IHostLogoutUseCase) {}
+  constructor(private _userLogoutUseCase: IHostLogoutUseCase) {}
 
   async hostLogout(req: Request, res: Response): Promise<Response> {
     try {
@@ -22,7 +22,7 @@ export class HostLogoutController implements IHostLogoutController {
         });
       }
 
-      await this.userLogoutUseCase.logout(token);
+      await this._userLogoutUseCase.logout(token);
       return res.status(statusCodes.Success).json({
         success: true,
         message: "Logout successful. Token blacklisted.",

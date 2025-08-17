@@ -164,7 +164,7 @@ const Signup = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Card className="w-full h-full md:h-screen grid grid-cols-1 md:grid-cols-[40%_60%] overflow-hidden">
-        <div className="flex items-center justify-center bg-main_color w-full h-full px-4 py-6 sm:px-8 sm:py-12">
+        <div className="flex items-center justify-center bg-gradient-to-br bg-main_gradient w-full h-full px-4 py-6 sm:px-8 sm:py-12">
           <div className="text-white text-center">
             <p className="text-start text-2xl sm:text-3xl md:text-3xl lg:text-5xl font-extrabold">
               Explore limitless
@@ -289,7 +289,7 @@ const Signup = () => {
                       disabled={sendingOtp}
                     />
                     <p
-                      className={`text-xs mt-1 ${
+                      className={`text-xs md:text-sm mt-1 ${
                         errors.password
                           ? "text-red-700 font-bold"
                           : "text-red-500"
@@ -316,7 +316,7 @@ const Signup = () => {
                       disabled={sendingOtp}
                     />
                     <p
-                      className={`text-xs mt-1 ${
+                      className={`text-xs md:text-sm mt-1 ${
                         errors.confirmPassword
                           ? "text-red-700 font-bold"
                           : "text-red-500"
@@ -330,7 +330,7 @@ const Signup = () => {
                 </div>
                 <div className="flex flex-col sm:flex-row items-start justify-between w-full gap-4 md:mt-auto">
                   <div className="flex flex-col space-y-2">
-                    <div className="flex items-center space-x-1 max-sm:flex-nowrap max-sm:text-xs">
+                    <div className="flex items-center space-x-1 max-sm:flex-nowrap max-sm:text-xs gap-1">
                       <Checkbox
                         id="terms"
                         checked={isChecked}
@@ -343,22 +343,22 @@ const Signup = () => {
                             }));
                           }
                         }}
-                        className={`h-4 w-4 ${
+                        className={`h-5 w-5 ${
                           errors.terms ? "border-red-500" : ""
                         }`}
                       />
                       <label
                         htmlFor="terms"
-                        className="font-JosephicSans text-sm max-sm:text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        className="font-JosephicSans text-sm md:text-base leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                       >
                         I agree to the{" "}
-                        <span className="text-main_color hover:underline font-JosephicSans md:text-sm max-sm:text-xs">
+                        <span className="text-neonPink font-semibold hover:underline font-JosephicSans text-sm md:text-base cursor-pointer">
                           terms and conditions
                         </span>
                       </label>
                       <label className="font-JosephicSans text-sm max-sm:text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 max-sm:pl-2 sm:pl-4">
                         Already have an account?{" "}
-                        <span className="text-main_color hover:underline font-JosephicSans">
+                        <span className="text-neonPink font-semibold hover:underline font-JosephicSans">
                           <Link to={"/login"}>Login</Link>
                         </span>
                       </label>
@@ -369,11 +369,11 @@ const Signup = () => {
                       </p>
                     )}
                   </div>
-                  <div className="w-full sm:w-auto bg-main_color rounded-md h-12">
+                  <div className="w-full sm:w-auto bg-main_gradient hover:opacity-90 rounded-md h-12">
                     <Button
                       type="submit"
                       disabled={sendingOtp}
-                      className="w-full h-full text-white"
+                      className="w-full h-full text-white bg-main_gradient hover:opacity-90"
                     >
                       {sendingOtp ? "Sending OTP" : "Signup"}
                     </Button>

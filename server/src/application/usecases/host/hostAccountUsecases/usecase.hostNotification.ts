@@ -4,18 +4,18 @@ import { CreateAssetNotificationDTO } from "../../../../types/DTO/common/notific
 
 export class HostNotificationUseCase implements IHostNotificationUseCase {
   constructor(
-    private hostNotificationRepository: IHostNotificationRepository
+    private _hostNotificationRepository: IHostNotificationRepository
   ) {}
 
   async getNotifications(receiverId: string) {
-    return await this.hostNotificationRepository.allHostNotifications(
+    return await this._hostNotificationRepository.allHostNotifications(
       receiverId
     );
   }
   async createNotification(data: CreateAssetNotificationDTO): Promise<void> {
-    await this.hostNotificationRepository.createNotification(data);
+    await this._hostNotificationRepository.createNotification(data);
   }
   async markAllNotifications(hostId: string): Promise<void> {
-    await this.hostNotificationRepository.markAllRead(hostId);
+    await this._hostNotificationRepository.markAllRead(hostId);
   }
 }

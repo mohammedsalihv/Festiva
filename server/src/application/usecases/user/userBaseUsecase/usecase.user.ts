@@ -3,28 +3,28 @@ import { IUserRepository } from "../../../../domain/entities/repositoryInterface
 import { resetPasswordDTO } from "../../../../types/DTO/user/dto.user";
 
 export class UserUseCase implements IUserUseCase {
-  constructor(private userRepository: IUserRepository) {}
+  constructor(private _userRepository: IUserRepository) {}
 
   async checkMail(email: string): Promise<boolean | null> {
-    return this.userRepository.checkMail(email);
+    return this._userRepository.checkMail(email);
   }
 
   async resetPassword(
     email: string,
     form: resetPasswordDTO
   ): Promise<boolean | null> {
-    return this.userRepository.resetPassword(email, form);
+    return this._userRepository.resetPassword(email, form);
   }
 
   async findByEmail(email: string) {
-    return this.userRepository.findByEmail(email);
+    return this._userRepository.findByEmail(email);
   }
 
   async findById(userId: string) {
-    return this.userRepository.findById(userId);
+    return this._userRepository.findById(userId);
   }
 
   async deleteProfile(userId: string): Promise<boolean> {
-    return this.userRepository.deleteProfile(userId);
+    return this._userRepository.deleteProfile(userId);
   }
 }

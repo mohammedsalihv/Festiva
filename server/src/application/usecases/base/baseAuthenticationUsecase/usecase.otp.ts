@@ -1,17 +1,17 @@
-import { IOTPUseCase } from "../../../domain/usecaseInterface/base/authentication/interface.otpUseCase";
-import { IOTPRepository } from "../../../domain/entities/repositoryInterface/base/interface.otpRepository";
-import { OTPSendingDTO } from "../../../types/DTO/user/dto.otp";
-import { generateOTP } from "../../../utils/common/communication/otpGenerator";
-import CustomError from "../../../utils/common/errors/CustomError";
-import { statusCodes } from "../../../utils/common/messages/constantResponses";
+import { IOTPUseCase } from "../../../../domain/usecaseInterface/base/authentication/interface.otpUseCase";
+import { IOTPRepository } from "../../../../domain/entities/repositoryInterface/base/interface.otpRepository";
+import { OTPSendingDTO } from "../../../../types/DTO/user/dto.otp";
+import { generateOTP } from "../../../../utils/common/communication/otpGenerator";
+import CustomError from "../../../../utils/common/errors/CustomError";
+import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class OTPUseCase implements IOTPUseCase {
   private RESEND_WAIT_TIME = 60 * 1000;
 
-  constructor(private otpRepository: IOTPRepository) {}
+  constructor(private _otpRepository: IOTPRepository) {}
 
   async sendOTP(email: string): Promise<OTPSendingDTO> {
-    const existingOTP = await this.otpRepository.findByEmail(email);
+    const existingOTP = await this._otpRepository.findByEmail(email);
 
     if (existingOTP) {
       const timeElapsed = Date.now() - existingOTP.createdAt.getTime();
@@ -21,11 +21,11 @@ export class OTPUseCase implements IOTPUseCase {
           statusCodes.toManyRequests
         );
       }
-      await this.otpRepository.deleteOTP(email);
+      await this._otpRepository.deleteOTP(email);
     }
 
     const otp = generateOTP();
-    await this.otpRepository.createOTP({ email, otp });
+    await this._otpRepository.createOTP({ email, otp });
 
     return {
       success: true,
@@ -39,7 +39,7 @@ export class OTPUseCase implements IOTPUseCase {
       throw new CustomError("Email and OTP required", statusCodes.forbidden);
     }
 
-    const latestOtp = await this.otpRepository.findByEmail(email);
+    const latestOtp = await this._otpRepository.findByEmail(email);
     if (!latestOtp) {
       throw new CustomError("OTP not found", statusCodes.notfound);
     }
@@ -48,13 +48,13 @@ export class OTPUseCase implements IOTPUseCase {
       throw new CustomError("OTP not matched", statusCodes.serverError);
     }
 
-    await this.otpRepository.deleteOTP(email);
+    await this._otpRepository.deleteOTP(email);
   }
 
   async deleteExpiredOTPs(email: string): Promise<void> {
     if (!email) {
       throw new CustomError("Email is required", statusCodes.forbidden);
     }
-    await this.otpRepository.deleteOTP(email);
+    await this._otpRepository.deleteOTP(email);
   }
 }

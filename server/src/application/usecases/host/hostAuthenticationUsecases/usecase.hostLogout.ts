@@ -2,9 +2,9 @@ import { IHostLogoutRepository } from "../../../../domain/entities/repositoryInt
 import { IHostLogoutUseCase } from "../../../../domain/usecaseInterface/host/authenticationUsecaseInterfaces/interface.hostLogoutUseCase";
 
 export class HostLogoutUseCase implements IHostLogoutUseCase {
-  constructor(private hostLogoutRepository: IHostLogoutRepository) {}
+  constructor(private _hostLogoutRepository: IHostLogoutRepository) {}
 
   async logout(token: string): Promise<void> {
-    await this.hostLogoutRepository.blacklistToken(token);
+    await this._hostLogoutRepository.blacklistToken(token);
   }
 }

@@ -5,13 +5,13 @@ import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class AdminCatersUseCase implements IAdminCatersUseCase {
-  constructor(private adminCatersRepository: IAdminCatersRepository) {}
+  constructor(private _adminCatersRepository: IAdminCatersRepository) {}
 
   async catersDetails(catersId: string): Promise<ICaters> {
     if (!catersId) {
       throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
     }
-    const caters = await this.adminCatersRepository.catersDetails(catersId);
+    const caters = await this._adminCatersRepository.catersDetails(catersId);
 
     if (!caters) {
       throw new CustomError("Caters not found", statusCodes.notfound);

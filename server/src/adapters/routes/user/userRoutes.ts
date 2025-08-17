@@ -9,6 +9,8 @@ import { userRentCarController } from "../../../infrastructure/DI/user/userServi
 import { userStudioController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userStudio.DI";
 import { userCatersController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userCaters.DI";
 import { userController } from "../../../infrastructure/DI/user/userAuthenticationDependencyInjections/userAuth.DI";
+import { paymentController } from "../../../infrastructure/DI/base/paymentDependencyInjections/payment.DI";
+import { bookingController } from "../../../infrastructure/DI/base/bookingDependencyInjections/booking.DI";
 
 export interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -68,5 +70,20 @@ userRoutes.get(
   USER_ROUTES.StudioService.allStudios,
   userStudioController.getStudios.bind(userStudioController)
 );
+
+
+// booking
+
+userRoutes.post(
+  USER_ROUTES.bookingRoutes.createbooking,
+  bookingController.createBooking.bind(bookingController)
+);
+
+userRoutes.post(
+  USER_ROUTES.paymentRoutes.startPayment,
+  paymentController.startPayment.bind(paymentController)
+);
+
+
 
 export default userRoutes;

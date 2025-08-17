@@ -11,22 +11,22 @@ import logger from "../../../../utils/common/messages/logger";
 
 export class UserGoogleLoginController implements IUserGoogleLoginController {
   constructor(
-    private userGoogleLoginUseCase: IUserGoogleLoginUseCase,
-    private validator: IUserGoogleLoginValidator
+    private _userGoogleLoginUseCase: IUserGoogleLoginUseCase,
+    private _validator: IUserGoogleLoginValidator
   ) {}
 
   async userLogin(req: Request, res: Response): Promise<void> {
     try {
       const { email, name, profilePic } = req.body;
 
-      this.validator.validate({
+      this._validator.validate({
         email,
         firstname: name,
         profilePic: profilePic,
       });
 
       const { user, accessToken, refreshToken } =
-        await this.userGoogleLoginUseCase.execute({
+        await this._userGoogleLoginUseCase.execute({
           firstname: name,
           email,
           profilePic,

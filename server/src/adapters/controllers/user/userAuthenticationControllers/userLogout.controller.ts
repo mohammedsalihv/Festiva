@@ -9,7 +9,7 @@ import {
 } from "../../../../utils/common/messages/constantResponses";
 
 export class UserLogoutController implements IUserLogoutController {
-  constructor(private userLogoutUseCase: IUserLogoutUseCase) {}
+  constructor(private _userLogoutUseCase: IUserLogoutUseCase) {}
 
   async userLogout(req: Request, res: Response): Promise<Response> {
     try {
@@ -22,7 +22,7 @@ export class UserLogoutController implements IUserLogoutController {
         });
       }
 
-      await this.userLogoutUseCase.logout(token);
+      await this._userLogoutUseCase.logout(token);
       return res.status(statusCodes.Success).json({
         success: true,
         message: statusMessages.userLoginSuccess,

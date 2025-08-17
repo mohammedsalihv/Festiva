@@ -7,6 +7,7 @@ import AdminHosts from "@/pages/admin/AdminHosts";
 import AdminServices from "@/pages/admin/assets/AdminAssets";
 import LoaderPage from "@/reusable-components/Messages/LoaderPage";
 import RequestedAsset from "@/pages/admin/assets/RequestedAsset";
+import AdminBookings from "@/pages/admin/AdminBookings";
 
 const AdminRoutes: React.FC = () => {
   return (
@@ -48,6 +49,14 @@ const AdminRoutes: React.FC = () => {
         element={
           <LoaderPage>
             <RequestedAsset />
+          </LoaderPage>
+        }
+      />
+      <Route
+        path={ADMIN_ROUTES.adminPages.adminBookings}
+        element={
+          <LoaderPage>
+            <AdminBookings />
           </LoaderPage>
         }
       />

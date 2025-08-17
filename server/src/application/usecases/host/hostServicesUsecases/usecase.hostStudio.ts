@@ -6,10 +6,10 @@ import { IHostStudioUseCase } from "../../../../domain/usecaseInterface/host/ser
 import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class HostStudioUseCase implements IHostStudioUseCase {
-  constructor(private hostStudioRepository: IHostStudioRepository) {}
+  constructor(private _hostStudioRepository: IHostStudioRepository) {}
 
   async addStudio(studio: IStudio): Promise<IStudio> {
-    const addedStudio = await this.hostStudioRepository.addStudio(studio);
+    const addedStudio = await this._hostStudioRepository.addStudio(studio);
     if (!addedStudio) {
       throw new ErrorHandler("Studio not added", statusCodes.serverError);
     }
@@ -20,7 +20,7 @@ export class HostStudioUseCase implements IHostStudioUseCase {
     if (!studioId) {
       throw new CustomError("Studio ID is required", statusCodes.unAuthorized);
     }
-    const studio = await this.hostStudioRepository.studioDetails(studioId);
+    const studio = await this._hostStudioRepository.studioDetails(studioId);
     if (!studio) {
       throw new CustomError("Studio not found", statusCodes.notfound);
     }
@@ -31,7 +31,7 @@ export class HostStudioUseCase implements IHostStudioUseCase {
     if (!studioId) {
       throw new CustomError("Studio ID is required", statusCodes.unAuthorized);
     }
-    const updated = await this.hostStudioRepository.reApply(studioId);
+    const updated = await this._hostStudioRepository.reApply(studioId);
     if (!updated) {
       throw new CustomError("Studio re-apply failed", statusCodes.serverError);
     }
@@ -46,7 +46,7 @@ export class HostStudioUseCase implements IHostStudioUseCase {
       throw new CustomError("Studio ID is required", statusCodes.unAuthorized);
     }
 
-    const updated = await this.hostStudioRepository.updateAvailability(
+    const updated = await this._hostStudioRepository.updateAvailability(
       studioId,
       isAvailable
     );
@@ -65,7 +65,7 @@ export class HostStudioUseCase implements IHostStudioUseCase {
     if (!studioId) {
       throw new CustomError("Studio ID is required", statusCodes.unAuthorized);
     }
-    const updated = await this.hostStudioRepository.deleteStudio(studioId);
+    const updated = await this._hostStudioRepository.deleteStudio(studioId);
     if (!updated) {
       throw new CustomError("Studio deleting failed", statusCodes.serverError);
     }

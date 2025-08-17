@@ -1,13 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo} from "react";
 import { ChevronLeft } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Images } from "@/assets";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import {
   validateUserInformation,
-  validateCard,
-  cardInformation,
   userInformation,
 } from "@/utils/validations/user/bookings/payment";
 import Select from "react-select";
@@ -15,23 +11,20 @@ import countryList from "react-select-country-list";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { IAsset } from "@/utils/Types/user/commonDetails";
+import { createPayment } from "@/api/user/base/paymentService";
+import { startBooking } from "@/api/user/base/bookingService";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const PaymentPage = () => {
-  const [method, setMethod] = useState("card");
+  const navigate = useNavigate();;
+  const [loading, setLoading] = useState(false);
 
   const bookedService = useSelector(
     (state: RootState) => state.booking.currentBooking
   );
-  console.log("-", bookedService);
 
   const countryOptions = useMemo(() => countryList().getData(), []);
-
-  const [cardForm, setCardForm] = useState<cardInformation>({
-    cardNumber: "",
-    expiryDate: "",
-    cvc: "",
-    nameOfCardHolder: "",
-  });
 
   const [userForm, setUserForm] = useState<userInformation>({
     name: "",
@@ -43,28 +36,9 @@ const PaymentPage = () => {
     state: "",
     country: "",
   });
-
-  const [cardErrors, setCardErrors] = useState<
-    Partial<Record<keyof cardInformation, string>>
-  >({});
   const [userErrors, setUserErrors] = useState<
     Partial<Record<keyof userInformation, string>>
   >({});
-
-  const handleSubmit = () => {
-    const cardErrs = validateCard(cardForm);
-    const userErrs = validateUserInformation(userForm);
-
-    setCardErrors(cardErrs);
-    setUserErrors(userErrs);
-
-    if (
-      Object.keys(cardErrs).length === 0 &&
-      Object.keys(userErrs).length === 0
-    ) {
-      console.log("✅ Form valid! Proceed to payment gateway...");
-    }
-  };
 
   const formatDate = (dateStr: string) =>
     new Date(dateStr).toLocaleDateString("en-US", {
@@ -73,14 +47,10 @@ const PaymentPage = () => {
       day: "numeric",
     });
 
-  // Calculate total amount
   const calculateTotal = () => {
     if (!bookedService) return 0;
-
     const service = bookedService.serviceData as IAsset;
-
     let pricePerUnit: string | number | undefined = "0";
-
     switch (service.typeOfAsset) {
       case "venue":
       case "rentcar":
@@ -90,21 +60,77 @@ const PaymentPage = () => {
         pricePerUnit = service.totalAmount;
         break;
       case "studio":
-        pricePerUnit = service.about;
+        pricePerUnit = service.packages[0]?.payment;
         break;
       default:
         pricePerUnit = "0";
     }
-
     const dateCount = bookedService.selectedDates?.length || 1;
     return Number(pricePerUnit || 0) * dateCount;
   };
 
   const totalAmount = calculateTotal();
 
+  const completeBooking = async (paymentId: string) => {
+    const formData = new FormData();
+    if (bookedService?.assetId) {
+      formData.append("serviceId", bookedService.assetId);
+    }
+    formData.append("assetType", bookedService?.assetType || "");
+    formData.append(
+      "dates",
+      JSON.stringify(bookedService?.selectedDates || [])
+    );
+    if (bookedService?.selectedTimeSlot)
+      formData.append("timeSlot", bookedService.selectedTimeSlot);
+    if (bookedService?.attendeesCount)
+      formData.append(
+        "attendeesCount",
+        bookedService.attendeesCount.toString()
+      );
+    if (bookedService?.packageName)
+      formData.append("packageName", bookedService.packageName);
+
+    Object.entries(userForm).forEach(([key, value]) =>
+      formData.append(key, value)
+    );
+
+    formData.append("paymentId", paymentId);
+    formData.append("amountPaid", (totalAmount + 50).toString());
+
+    await startBooking(formData);
+    toast.success("The service has been booked!");
+    setLoading(false);
+    navigate("/success");
+  };
+
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    const userErrs = validateUserInformation(userForm);
+    setUserErrors(userErrs);
+
+    if (Object.keys(userErrs).length > 0) {
+      setLoading(false);
+      return;
+    }
+
+
+    try {
+       const res = await createPayment()
+       if(res){
+        completeBooking(res)
+       }
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong during payment");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-JosephicSans">
-      {/* Left Panel */}
       <div className="bg-gradient-to-br bg-main_gradient text-white px-3 py-20 sm:px-5 md:px-16 md:py-32 flex flex-col">
         <button className="flex items-center mb-8 text-white font-extrabold">
           <ChevronLeft className="w-5 h-5 mr-2 font-extrabold" /> Booked data
@@ -180,6 +206,12 @@ const PaymentPage = () => {
                       </p>
                     </div>
                   )}
+                  {bookedService?.packageName && (
+                    <div>
+                      <p className="font-bold text-gray-500">Package</p>
+                      <p className="text-black">{bookedService?.packageName}</p>
+                    </div>
+                  )}
                   <div>
                     <p className="font-bold text-gray-500">Service type</p>
                     <span className="bg-blue-600 text-white p-1 rounded-md">
@@ -192,7 +224,9 @@ const PaymentPage = () => {
           </div>
           <div className="flex justify-between text-sm text-gray-600 px-3 pt-2">
             <span className="text-base">Subtotal</span>
-            <span className="text-base font-bold">{totalAmount.toLocaleString()}.00</span>
+            <span className="text-base font-bold">
+              {totalAmount.toLocaleString()}.00
+            </span>
           </div>
           <div className="flex justify-between text-sm text-gray-600 px-3 pb-1">
             <span className="text-base">Platform fee</span>
@@ -223,114 +257,10 @@ const PaymentPage = () => {
       </div>
 
       <div className="px-3 py-8 sm:px-5 sm:py-10 md:px-7 md:py-20 max-w-7xl w-full mx-auto">
-        <h2 className="text-xl font-semibold mb-4">Payment method</h2>
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
-          {[
-            { id: "card", label: "Credit or Debit card", icon: Images.cards },
-            { id: "googlepay", label: "Google pay", icon: Images.googlePay },
-            { id: "phonepe", label: "Phone Pe", icon: Images.phonePe },
-            { id: "paytm", label: "Paytm", icon: Images.paytm },
-          ].map((opt) => (
-            <button
-              key={opt.id}
-              onClick={() => setMethod(opt.id)}
-              className={cn(
-                "border rounded-md px-4 py-3 flex items-center gap-2 w-full md:w-auto",
-                method === opt.id
-                  ? "border-deepPurple text-deepPurple"
-                  : "border-gray-300 text-gray-700"
-              )}
-            >
-              <img
-                className="w-4 h-4 sm:w-9 sm:h-9 md:w-10 md:h-10"
-                src={opt.icon}
-                alt=""
-              />
-              <span className="text-xs md:text-base">{opt.label}</span>
-            </button>
-          ))}
-        </div>
-
-        {method === "card" && (
-          <>
-            <h2 className="text-xl font-semibold mb-4">Payment information</h2>
-            <div className="grid grid-cols-1 gap-4">
-              <Input
-                value={cardForm.cardNumber}
-                onChange={(e) =>
-                  setCardForm({ ...cardForm, cardNumber: e.target.value })
-                }
-                className={`border ${
-                  cardErrors.cardNumber ? "border-red-600" : "border-gray-200"
-                } p-2 rounded`}
-                placeholder="Card number"
-              />
-              {cardErrors.cardNumber && (
-                <p className="text-red-600 text-sm md:text-base">
-                  {cardErrors.cardNumber}
-                </p>
-              )}
-
-              <Input
-                value={cardForm.nameOfCardHolder}
-                onChange={(e) =>
-                  setCardForm({ ...cardForm, nameOfCardHolder: e.target.value })
-                }
-                className={`border ${
-                  cardErrors.nameOfCardHolder
-                    ? "border-red-600"
-                    : "border-gray-200"
-                } p-2 rounded`}
-                placeholder="Name on card"
-              />
-              {cardErrors.nameOfCardHolder && (
-                <p className="text-red-600 text-sm md:text-base">
-                  {cardErrors.nameOfCardHolder}
-                </p>
-              )}
-
-              <div className="flex gap-4">
-                <Input
-                  value={cardForm.expiryDate}
-                  onChange={(e) =>
-                    setCardForm({ ...cardForm, expiryDate: e.target.value })
-                  }
-                  className={`border ${
-                    cardErrors.expiryDate ? "border-red-600" : "border-gray-200"
-                  } p-2 rounded w-1/2`}
-                  placeholder="Expiry date (MM/YY)"
-                />
-                <Input
-                  value={cardForm.cvc}
-                  onChange={(e) =>
-                    setCardForm({ ...cardForm, cvc: e.target.value })
-                  }
-                  className={`border ${
-                    cardErrors.cvc ? "border-red-600" : "border-gray-200"
-                  } p-2 rounded w-1/2`}
-                  placeholder="CVC"
-                />
-              </div>
-              {(cardErrors.expiryDate || cardErrors.cvc) && (
-                <div className="flex gap-4">
-                  {cardErrors.expiryDate && (
-                    <p className="text-red-600 text-sm md:text-base w-1/2">
-                      {cardErrors.expiryDate}
-                    </p>
-                  )}
-                  {cardErrors.cvc && (
-                    <p className="text-red-600 text-sm md:text-base w-1/2">
-                      {cardErrors.cvc}
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-          </>
-        )}
+      
 
         <h2 className="text-xl font-semibold mb-4 mt-6">User information</h2>
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-4 text-base">
           <Input
             value={userForm.name}
             onChange={(e) => setUserForm({ ...userForm, name: e.target.value })}
@@ -450,12 +380,12 @@ const PaymentPage = () => {
             </p>
           )}
         </div>
-
-        <Button
+     <Button
           onClick={handleSubmit}
-          className="mt-4 bg-deepPurple text-white py-5 font-semibold hover:bg-deepPurple/80 transition-all w-full"
+          disabled={loading}
+          className="mt-4 bg-deepPurple text-white py-6 font-semibold hover:bg-deepPurple/80 transition-all w-full"
         >
-          Pay & Confirm
+          {loading ? "Processing..." : "Pay & Confirm"}
         </Button>
       </div>
     </div>

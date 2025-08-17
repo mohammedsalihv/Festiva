@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "@/pages/user/Home";
 import MyBookings from "@/pages/user/MyBookings";
 import Profile from "@/pages/user/Profile";
-import MainServices from "@/pages/user/MainServices";
+import MainServices from "@/pages/user/service/MainServices";
 import PrivateRoute from "@/routes/user/Protect/PrivateRoute";
 import ErrorAlert from "@/components/ErrorAlert";
 import ServicesPage from "@/reusable-components/user/services/ServicesPage";

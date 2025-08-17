@@ -1,5 +1,5 @@
 import { IHostCatersController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostCatersController";
-import { HostCatersUseCase } from "../../../../application/usecases/host/hostServicesUsecases/usecase.hostCaters";
+import { IHostCatersUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.catersUseCase";
 import { ICaters } from "../../../../domain/entities/serviceInterface/host/interface.caters";
 import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
 import ErrorHandler from "../../../../utils/common/errors/CustomError";
@@ -23,8 +23,8 @@ export interface MulterRequest extends Request {
 
 export class HostCatersController implements IHostCatersController {
   constructor(
-    private hostCatersUseCase: HostCatersUseCase,
-    private locationRepository: ILocationRepository
+    private _hostCatersUseCase: IHostCatersUseCase,
+    private _locationRepository: ILocationRepository
   ) {}
 
   async addCatersService(req: MulterRequest, res: Response): Promise<void> {
@@ -41,7 +41,7 @@ export class HostCatersController implements IHostCatersController {
       const typeOfAsset = "caters";
       try {
         await assetFilesValidate({ files, typeOfAsset });
-        const newLocation = await this.locationRepository.addLocation(
+        const newLocation = await this._locationRepository.addLocation(
           newCaters.location
         );
 
@@ -98,7 +98,7 @@ export class HostCatersController implements IHostCatersController {
           host: new Types.ObjectId(hostId),
         };
 
-        const createdCaters = await this.hostCatersUseCase.addCaters(caters);
+        const createdCaters = await this._hostCatersUseCase.addCaters(caters);
         res.status(statusCodes.Success).json(createdCaters);
         return;
       } catch (error: any) {
@@ -129,7 +129,7 @@ export class HostCatersController implements IHostCatersController {
         });
         return;
       }
-      const caters = await this.hostCatersUseCase.catersDetails(catersId);
+      const caters = await this._hostCatersUseCase.catersDetails(catersId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "Caters details fetched successfully",
@@ -162,7 +162,7 @@ export class HostCatersController implements IHostCatersController {
         return;
       }
 
-      const success = await this.hostCatersUseCase.reApplyCaters(catersId);
+      const success = await this._hostCatersUseCase.reApplyCaters(catersId);
 
       if (!success) {
         res.status(statusCodes.serverError).json({
@@ -195,8 +195,6 @@ export class HostCatersController implements IHostCatersController {
     try {
       const catersId = req.params.assetId;
       const isAvailable = req.body.isAvailable;
-
-      console.log("99999999999", isAvailable);
       if (!catersId) {
         res.status(statusCodes.badRequest).json({
           success: false,
@@ -205,7 +203,7 @@ export class HostCatersController implements IHostCatersController {
         return;
       }
 
-      const success = await this.hostCatersUseCase.updateCatersAvailability(
+      const success = await this._hostCatersUseCase.updateCatersAvailability(
         catersId,
         isAvailable
       );
@@ -253,7 +251,7 @@ export class HostCatersController implements IHostCatersController {
         return;
       }
 
-      const success = await this.hostCatersUseCase.removeCaters(catersId);
+      const success = await this._hostCatersUseCase.removeCaters(catersId);
 
       if (!success) {
         res.status(statusCodes.serverError).json({

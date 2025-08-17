@@ -11,11 +11,11 @@ import { responseAllHostsDTO } from "../../../../types/DTO/host/dto.host";
 
 export class AdminHostManagementUseCase implements IAdminHostManagementUseCase{
   constructor(
-    private AdminHostManagementRepository: IAdminHostManagementRepository
+    private _adminHostManagementRepository: IAdminHostManagementRepository
   ) {}
 
    async findAllHosts(page: number, limit: number): Promise<responseAllHostsDTO> {
-    const response = await this.AdminHostManagementRepository.findAllHosts(page, limit);
+    const response = await this._adminHostManagementRepository.findAllHosts(page, limit);
     
     if (!response.data || response.data.length === 0) {
       throw new CustomError("No hosts found", statusCodes.notfound);
@@ -25,7 +25,7 @@ export class AdminHostManagementUseCase implements IAdminHostManagementUseCase{
   }
 
   async HostblockUnblock(hostId: string, isBlocked: boolean): Promise<boolean> {
-    const response = await this.AdminHostManagementRepository.HostblockUnblock(
+    const response = await this._adminHostManagementRepository.HostblockUnblock(
       hostId,
       isBlocked
     );
@@ -42,7 +42,7 @@ export class AdminHostManagementUseCase implements IAdminHostManagementUseCase{
     hostId: string,
     form: EditHostPayload
   ): Promise<responseHostDTO[]> {
-    const response = await this.AdminHostManagementRepository.editHost(
+    const response = await this._adminHostManagementRepository.editHost(
       hostId,
       form
     );
@@ -58,7 +58,7 @@ export class AdminHostManagementUseCase implements IAdminHostManagementUseCase{
     hostId: string,
     imageUrl: string
   ): Promise<responseHostDTO> {
-    const response = await this.AdminHostManagementRepository.changeProfile(
+    const response = await this._adminHostManagementRepository.changeProfile(
       hostId,
       imageUrl
     );
@@ -73,7 +73,7 @@ export class AdminHostManagementUseCase implements IAdminHostManagementUseCase{
   }
 
   async deleteHost(hostId: string): Promise<boolean> {
-    const result = await this.AdminHostManagementRepository.deleteHost(hostId);
+    const result = await this._adminHostManagementRepository.deleteHost(hostId);
     if (!result) {
       throw new CustomError("Deleting failed", statusCodes.serverError);
     }

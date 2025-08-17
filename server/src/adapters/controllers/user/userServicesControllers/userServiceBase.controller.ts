@@ -4,17 +4,16 @@ import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
-import { UserCatersController } from "./userCaters.controller";
-import { UserStudioController } from "./userStudio.controller";
-import { UserRentCarController } from "./userRentCar.controller";
-import { UserVenueController } from "./userVenue.controller";
-
+import { IUserVenueController } from "../../../../domain/controlInterface/user/services interface/interface.userVenueController";
+import { IUserRentCarController } from "../../../../domain/controlInterface/user/services interface/interface.userRentCarController";
+import { IUserCatersController } from "../../../../domain/controlInterface/user/services interface/interface.userCatersController";
+import { IUserStudioController } from "../../../../domain/controlInterface/user/services interface/interface.userStudioController";
 export class UserServiceBaseController implements IUserServicesBaseController {
   constructor(
-    private userVenueController: UserVenueController,
-    private userRentCarController: UserRentCarController,
-    private userCatersController: UserCatersController,
-    private userStudioController: UserStudioController
+    private _userVenueController: IUserVenueController,
+    private _userRentCarController: IUserRentCarController,
+    private _userCatersController: IUserCatersController,
+    private _userStudioController: IUserStudioController
   ) {}
 
   async getServiceDetails(req: Request, res: Response): Promise<void> {
@@ -30,16 +29,16 @@ export class UserServiceBaseController implements IUserServicesBaseController {
 
       switch (typeOfAsset) {
         case "venue":
-          await this.userVenueController.getVenueDetails(req, res);
+          await this._userVenueController.getVenueDetails(req, res);
           break;
         case "rentcar":
-          await this.userRentCarController.getRentCarDetails(req, res);
+          await this._userRentCarController.getRentCarDetails(req, res);
           break;
         case "studio":
-          await this.userStudioController.getStudioDetails(req, res);
+          await this._userStudioController.getStudioDetails(req, res);
           break;
         case "caters":
-          await this.userCatersController.getCatersDetails(req, res);
+          await this._userCatersController.getCatersDetails(req, res);
           break;
         default:
           res.status(statusCodes.forbidden).json({
@@ -62,16 +61,16 @@ export class UserServiceBaseController implements IUserServicesBaseController {
 
       switch (typeOfAsset) {
         case "venue":
-          await this.userVenueController.filterVenues(req, res);
+          await this._userVenueController.filterVenues(req, res);
           break;
         case "rentcar":
-          await this.userRentCarController.filterRentCars(req, res);
+          await this._userRentCarController.filterRentCars(req, res);
           break;
         case "studio":
-          await this.userStudioController.filterStudios(req, res);
+          await this._userStudioController.filterStudios(req, res);
           break;
         case "caters":
-          await this.userCatersController.filterCaters(req, res);
+          await this._userCatersController.filterCaters(req, res);
           break;
         default:
           res
@@ -93,16 +92,16 @@ export class UserServiceBaseController implements IUserServicesBaseController {
 
       switch (typeOfAsset) {
         case "venue":
-          await this.userVenueController.sortVenues(req, res);
+          await this._userVenueController.sortVenues(req, res);
           break;
         case "rentcar":
-          await this.userRentCarController.sortRentCars(req, res);
+          await this._userRentCarController.sortRentCars(req, res);
           break;
         case "studio":
-          await this.userStudioController.sortStudios(req, res);
+          await this._userStudioController.sortStudios(req, res);
           break;
         case "caters":
-          await this.userCatersController.sortCaters(req, res);
+          await this._userCatersController.sortCaters(req, res);
           break;
         default:
           res

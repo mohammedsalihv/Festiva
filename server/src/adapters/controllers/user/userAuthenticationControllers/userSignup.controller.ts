@@ -7,7 +7,7 @@ import { statusCodes } from "../../../../utils/common/messages/constantResponses
 import { userSignupSanitizer } from "../../../../utils/sanitizers/user/userSignupSanitizer";
 
 export class UserSignupController implements IUserSignupController {
-  constructor(private userSignupUseCase: IUserSignupUseCase) {}
+  constructor(private _userSignupUseCase: IUserSignupUseCase) {}
 
   async signupByUser(req: Request, res: Response): Promise<void> {
     try {
@@ -21,7 +21,7 @@ export class UserSignupController implements IUserSignupController {
       };
 
       const { user, accessToken, refreshToken } =
-        await this.userSignupUseCase.userSignup(userData);
+        await this._userSignupUseCase.userSignup(userData);
       res.status(statusCodes.Success).json({
         success: true,
         message: "User registered successfully",

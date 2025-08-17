@@ -5,13 +5,13 @@ import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class AdminVenueUseCase implements IAdminVenueUseCase {
-  constructor(private adminVenueRepository: IAdminVenueRepository) {}
+  constructor(private _adminVenueRepository: IAdminVenueRepository) {}
 
   async execute(venueId: string): Promise<IVenue> {
     if (!venueId) {
       throw new CustomError("Venue ID is required", statusCodes.unAuthorized);
     }
-    const venue = await this.adminVenueRepository.venueDetails(venueId);
+    const venue = await this._adminVenueRepository.venueDetails(venueId);
     if (!venue) {
       throw new CustomError("Venue not found", statusCodes.notfound);
     }

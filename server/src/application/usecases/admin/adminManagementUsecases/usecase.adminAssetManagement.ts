@@ -6,18 +6,18 @@ export class AdminAssetManagementUseCase
   implements IAdminAssetManagementUseCase
 {
   constructor(
-    private adminAssetManagementRepository: IAdminAssetManagementRepository
+    private _adminAssetManagementRepository: IAdminAssetManagementRepository
   ) {}
 
   async execute(typeOfAsset: string): Promise<IAdminAssetBaseUseCase[]> {
-    return await this.adminAssetManagementRepository.findAssets(typeOfAsset);
+    return await this._adminAssetManagementRepository.findAssets(typeOfAsset);
   }
 
   async fetchAssetById(
     id: string,
     typeOfAsset: string
   ): Promise<IAdminAssetBaseUseCase | null> {
-    return await this.adminAssetManagementRepository.findAssetById(
+    return await this._adminAssetManagementRepository.findAssetById(
       id,
       typeOfAsset
     );
@@ -28,7 +28,7 @@ export class AdminAssetManagementUseCase
     typeOfAsset: string,
     assetStatus: string
   ): Promise<{ _id: string; hostId: string } | null> {
-    return await this.adminAssetManagementRepository.assetApprove(
+    return await this._adminAssetManagementRepository.assetApprove(
       id,
       typeOfAsset,
       assetStatus
@@ -41,7 +41,7 @@ export class AdminAssetManagementUseCase
     assetStatus: string,
     reason: string
   ): Promise<{ _id: string; hostId: string } | null> {
-    return await this.adminAssetManagementRepository.assetReject(
+    return await this._adminAssetManagementRepository.assetReject(
       id,
       typeOfAsset,
       assetStatus,

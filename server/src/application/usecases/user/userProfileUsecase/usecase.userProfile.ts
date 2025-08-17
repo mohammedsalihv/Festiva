@@ -16,12 +16,12 @@ import bcrypt from "bcrypt";
 
 export class UserProfileUseCase implements IUserProfileUseCase {
   constructor(
-    private userProfileRepository: IUserProfileRepository,
-    private userRepository: IUserRepository
+    private _userProfileRepository: IUserProfileRepository,
+    private _userRepository: IUserRepository
   ) {}
 
   async execute(userId: string, image: string): Promise<responseUserDTO> {
-    const response = await this.userProfileRepository.setProfilePic(
+    const response = await this._userProfileRepository.setProfilePic(
       userId,
       image
     );
@@ -40,7 +40,7 @@ export class UserProfileUseCase implements IUserProfileUseCase {
     form: profileEditDTO
   ): Promise<responseUserDTO> {
     if (form.email) {
-      const existedEmail = await this.userRepository.findByEmail(form.email);
+      const existedEmail = await this._userRepository.findByEmail(form.email);
       if (
         existedEmail?.id?.toString() !== userId.toString() &&
         existedEmail?.id !== undefined
@@ -52,7 +52,10 @@ export class UserProfileUseCase implements IUserProfileUseCase {
       }
     }
 
-    const response = await this.userProfileRepository.profileEdit(userId, form);
+    const response = await this._userProfileRepository.profileEdit(
+      userId,
+      form
+    );
 
     if (!response) {
       throw new CustomError("User update failed", statusCodes.serverError);
@@ -62,7 +65,7 @@ export class UserProfileUseCase implements IUserProfileUseCase {
   }
 
   async validateEmail(email: string): Promise<Boolean> {
-    const existedEmail = await this.userRepository.checkMail(email);
+    const existedEmail = await this._userRepository.checkMail(email);
     if (!existedEmail) {
       throw new CustomError(
         statusMessages.accountExisted,
@@ -83,7 +86,7 @@ export class UserProfileUseCase implements IUserProfileUseCase {
       );
     }
 
-    const user = await this.userRepository.findById(userId);
+    const user = await this._userRepository.findById(userId);
 
     if (!user) {
       throw new CustomError(
@@ -104,7 +107,7 @@ export class UserProfileUseCase implements IUserProfileUseCase {
     }
 
     const hashedPassword = await hash(form.newPassword);
-    const updatedUser = await this.userProfileRepository.changePassword(
+    const updatedUser = await this._userProfileRepository.changePassword(
       userId,
       hashedPassword
     );
@@ -112,7 +115,7 @@ export class UserProfileUseCase implements IUserProfileUseCase {
   }
 
   async deleteProfile(userId: string): Promise<Boolean> {
-    const response = await this.userRepository.deleteProfile(userId);
+    const response = await this._userRepository.deleteProfile(userId);
     if (!response) {
       throw new CustomError("Deleting failed", statusCodes.serverError);
     }

@@ -20,6 +20,7 @@ import ErrorAlert from "@/components/ErrorAlert";
 import { AssetStatus } from "@/pages/host/landing/AssetStatus";
 import MyAssets from "@/pages/host/landing/MyAssets";
 import { AssetDetails } from "@/pages/host/landing/AssetDetails";
+import Bookings from "@/pages/host/landing/Bookings";
 
 const HostRoutes: React.FC = () => {
   return (
@@ -34,6 +35,7 @@ const HostRoutes: React.FC = () => {
       />
       <Route path={HOST_ROUTES.hostAccount.myAssets} element={<MyAssets />} />
       <Route path="/assets/details/:type/:id" element={<AssetDetails />} />
+      <Route path={HOST_ROUTES.hostAccount.bookings} element={<Bookings/>} />
 
       <Route
         path={HOST_ROUTES.hostAccount.hostProfile}

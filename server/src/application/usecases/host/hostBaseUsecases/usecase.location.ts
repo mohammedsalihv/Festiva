@@ -7,7 +7,7 @@ import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class LocationUseCase implements ILocationUseCase {
-  constructor(private locationRepository: ILocationRepository) {}
+  constructor(private _locationRepository: ILocationRepository) {}
 
   async execute(location: ILocation): Promise<ILocation> {
     const fullAddress = `${location.houseNo || ""}, ${location.street || ""}, ${
@@ -26,7 +26,7 @@ export class LocationUseCase implements ILocationUseCase {
       },
     };
 
-    const locationDetails = await this.locationRepository.addLocation(
+    const locationDetails = await this._locationRepository.addLocation(
       enrichedLocation
     );
 

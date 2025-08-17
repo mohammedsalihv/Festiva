@@ -10,11 +10,11 @@ import CustomError from "../../../../utils/common/errors/CustomError";
 
 
 export class UserVenueController implements IUserVenueController {
-  constructor(private userVenueUseCase: IUserVenueUseCase) {}
+  constructor(private _userVenueUseCase: IUserVenueUseCase) {}
 
   async getVenues(req: Request, res: Response): Promise<void> {
     try {
-      const venues = await this.userVenueUseCase.allVenues();
+      const venues = await this._userVenueUseCase.allVenues();
 
       if (!venues) {
         res.status(statusCodes.notfound).json({
@@ -58,7 +58,7 @@ export class UserVenueController implements IUserVenueController {
         return;
       }
 
-      const venue = await this.userVenueUseCase.venueDetails(venueId);
+      const venue = await this._userVenueUseCase.venueDetails(venueId);
 
       res.status(statusCodes.Success).json({
         success: true,
@@ -84,7 +84,7 @@ export class UserVenueController implements IUserVenueController {
       const filters = req.query;
       const page = parseInt(filters.page as string) || 1;
       const limit = parseInt(filters.limit as string) || 10;
-      const result = await this.userVenueUseCase.filterVenues(
+      const result = await this._userVenueUseCase.filterVenues(
         filters,
         page,
         limit
@@ -110,7 +110,7 @@ export class UserVenueController implements IUserVenueController {
       const sorts = req.query;
       const page = parseInt(sorts.page as string) || 1;
       const limit = parseInt(sorts.limit as string) || 10;
-      const result = await this.userVenueUseCase.sortVenues(sorts, page, limit);
+      const result = await this._userVenueUseCase.sortVenues(sorts, page, limit);
 
       res.status(statusCodes.Success).json({
         success: true,

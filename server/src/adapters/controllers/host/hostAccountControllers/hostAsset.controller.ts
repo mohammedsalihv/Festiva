@@ -6,18 +6,18 @@ import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
-import { HostVenueController } from "../hostServiceControllers/hostVenue.controller";
-import { HostRentCarController } from "../hostServiceControllers/hostRentCar.controller";
-import { HostCatersController } from "../hostServiceControllers/hostCaters.controller";
-import { HostStudioController } from "../hostServiceControllers/hostStudio.controller";
+import { IHostVenueController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostVenueController";
+import { IHostRentCarController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostRentCarController";
+import { IHostCatersController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostCatersController";
+import { IHostStudioController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostStudioController";
 
 export class HostAssetController implements IHostAssetController {
   constructor(
-    private hostAssetUseCase: IHostAssetUseCase,
-    private hostVenueController: HostVenueController,
-    private hostRentCarController: HostRentCarController,
-    private hostCatersController: HostCatersController,
-    private hostStudioController: HostStudioController
+    private _hostAssetUseCase: IHostAssetUseCase,
+    private _hostVenueController: IHostVenueController,
+    private _hostRentCarController: IHostRentCarController,
+    private _hostCatersController: IHostCatersController,
+    private _hostStudioController: IHostStudioController
   ) {}
 
   async allAssets(req: authenticationRequest, res: Response): Promise<void> {
@@ -30,7 +30,7 @@ export class HostAssetController implements IHostAssetController {
       const status = req.query.status as string | string[];
       const sortBy = req.query.sortBy as "newest" | "oldest";
 
-      const { data, totalPages } = await this.hostAssetUseCase.getAllAssets(
+      const { data, totalPages } = await this._hostAssetUseCase.getAllAssets(
         hostId,
         page,
         limit,
@@ -72,16 +72,16 @@ export class HostAssetController implements IHostAssetController {
 
       switch (typeOfAsset) {
         case "venue":
-          await this.hostVenueController.venueFullDetails(req, res);
+          await this._hostVenueController.venueFullDetails(req, res);
           break;
         case "rentcar":
-          await this.hostRentCarController.carFullDetails(req, res);
+          await this._hostRentCarController.carFullDetails(req, res);
           break;
         case "studio":
-          await this.hostStudioController.studioFullDetails(req, res);
+          await this._hostStudioController.studioFullDetails(req, res);
           break;
         case "caters":
-          await this.hostCatersController.catersFullDetails(req, res);
+          await this._hostCatersController.catersFullDetails(req, res);
           break;
         default:
           res.status(statusCodes.forbidden).json({
@@ -116,7 +116,7 @@ export class HostAssetController implements IHostAssetController {
         ? (sortByRaw as (typeof validSortFields)[number])
         : undefined;
 
-      const { data, totalPages } = await this.hostAssetUseCase.getAllRequests(
+      const { data, totalPages } = await this._hostAssetUseCase.getAllRequests(
         hostId,
         page,
         limit,
@@ -159,16 +159,16 @@ export class HostAssetController implements IHostAssetController {
 
       switch (typeOfAsset) {
         case "venue":
-          await this.hostVenueController.requestReApproval(req, res);
+          await this._hostVenueController.requestReApproval(req, res);
           break;
         case "rentcar":
-          await this.hostRentCarController.requestReApproval(req, res);
+          await this._hostRentCarController.requestReApproval(req, res);
           break;
         case "studio":
-          await this.hostStudioController.requestReApproval(req, res);
+          await this._hostStudioController.requestReApproval(req, res);
           break;
         case "caters":
-          await this.hostCatersController.requestReApproval(req, res);
+          await this._hostCatersController.requestReApproval(req, res);
           break;
         default:
           res.status(statusCodes.forbidden).json({
@@ -209,16 +209,16 @@ export class HostAssetController implements IHostAssetController {
 
       switch (typeOfAsset) {
         case "venue":
-          await this.hostVenueController.availability(req, res);
+          await this._hostVenueController.availability(req, res);
           break;
         case "rentcar":
-          await this.hostRentCarController.availability(req, res);
+          await this._hostRentCarController.availability(req, res);
           break;
         case "studio":
-          await this.hostStudioController.availability(req, res);
+          await this._hostStudioController.availability(req, res);
           break;
         case "caters":
-          await this.hostCatersController.availability(req, res);
+          await this._hostCatersController.availability(req, res);
           break;
         default:
           res.status(statusCodes.forbidden).json({
@@ -259,16 +259,16 @@ export class HostAssetController implements IHostAssetController {
 
       switch (typeOfAsset) {
         case "venue":
-          await this.hostVenueController.deleteRequest(req, res);
+          await this._hostVenueController.deleteRequest(req, res);
           break;
         case "rentcar":
-          await this.hostRentCarController.deleteRequest(req, res);
+          await this._hostRentCarController.deleteRequest(req, res);
           break;
         case "studio":
-          await this.hostStudioController.deleteRequest(req, res);
+          await this._hostStudioController.deleteRequest(req, res);
           break;
         case "caters":
-          await this.hostCatersController.deleteRequest(req, res);
+          await this._hostCatersController.deleteRequest(req, res);
           break;
         default:
           res.status(statusCodes.forbidden).json({

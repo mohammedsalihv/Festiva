@@ -8,12 +8,12 @@ import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class UserCatersUseCase implements IUserCatersUseCase {
-  constructor(private userCatersRepository: IUserCatersRepository) {}
+  constructor(private _userCatersRepository: IUserCatersRepository) {}
   async allCaters(): Promise<ICatersBase[]> {
-    return await this.userCatersRepository.findAllCaters();
+    return await this._userCatersRepository.findAllCaters();
   }
   async catersDetails(catersId: string): Promise<ICaters> {
-    const caters = await this.userCatersRepository.fetchCatersById(catersId);
+    const caters = await this._userCatersRepository.fetchCatersById(catersId);
 
     if (!caters) {
       throw new CustomError("Caters not found", statusCodes.notfound);
@@ -26,7 +26,7 @@ export class UserCatersUseCase implements IUserCatersUseCase {
     page: number,
     limit: number
   ): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }> {
-    return await this.userCatersRepository.filterCaters(filters, page, limit);
+    return await this._userCatersRepository.filterCaters(filters, page, limit);
   }
 
   async sortCaters(
@@ -34,6 +34,6 @@ export class UserCatersUseCase implements IUserCatersUseCase {
     page: number,
     limit: number
   ): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }> {
-    return await this.userCatersRepository.sortCaters(sorts, page, limit);
+    return await this._userCatersRepository.sortCaters(sorts, page, limit);
   }
 }

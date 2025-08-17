@@ -10,14 +10,14 @@ import {
 } from "../../../../utils/common/messages/constantResponses";
 
 export class AdminLoginController implements IAdminLoginController {
-  constructor(private adminLoginUsecase: IAdminLoginUseCase) {}
+  constructor(private _adminLoginUsecase: IAdminLoginUseCase) {}
 
   async adminLogin(req: Request, res: Response): Promise<Response | void> {
     try {
       const { email, password } = req.body;
 
       const { accessToken, refreshToken, admin } =
-        await this.adminLoginUsecase.loginByadmin(email, password);
+        await this._adminLoginUsecase.loginByadmin(email, password);
 
       const formattedResponse = adminLoginPresenter.format(
         admin,

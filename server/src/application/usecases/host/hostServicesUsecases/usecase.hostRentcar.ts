@@ -6,10 +6,10 @@ import { IHostRentCarUseCase } from "../../../../domain/usecaseInterface/host/se
 import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class HostRentCarUseCase implements IHostRentCarUseCase {
-  constructor(private hostRentCarRepository: IHostRentCarRepository) {}
+  constructor(private _hostRentCarRepository: IHostRentCarRepository) {}
 
   async addRentCar(rentCar: IRentCar): Promise<IRentCar> {
-    const addedRentCar = await this.hostRentCarRepository.addRentCar(rentCar);
+    const addedRentCar = await this._hostRentCarRepository.addRentCar(rentCar);
     if (!addedRentCar) {
       throw new ErrorHandler("Rent car not added", statusCodes.serverError);
     }
@@ -23,13 +23,13 @@ export class HostRentCarUseCase implements IHostRentCarUseCase {
         statusCodes.unAuthorized
       );
     }
-    const car = await this.hostRentCarRepository.findCarById(rentcarId);
+    const car = await this._hostRentCarRepository.findCarById(rentcarId);
     if (!car) {
       throw new CustomError("Car not found", statusCodes.notfound);
     }
     return car;
   }
-  
+
   async reApplyRentcar(rentcarId: string): Promise<boolean> {
     if (!rentcarId) {
       throw new CustomError(
@@ -37,7 +37,7 @@ export class HostRentCarUseCase implements IHostRentCarUseCase {
         statusCodes.unAuthorized
       );
     }
-    const updated = await this.hostRentCarRepository.reApply(rentcarId);
+    const updated = await this._hostRentCarRepository.reApply(rentcarId);
     if (!updated) {
       throw new CustomError(
         "Rent car re-apply failed",
@@ -47,31 +47,37 @@ export class HostRentCarUseCase implements IHostRentCarUseCase {
     return true;
   }
 
-  async updateRentcarAvailability(rentcarId: string, isAvailable: boolean): Promise<boolean> {
-  if (!rentcarId) {
-    throw new CustomError("Rentcar ID is required", statusCodes.unAuthorized);
-  }
+  async updateRentcarAvailability(
+    rentcarId: string,
+    isAvailable: boolean
+  ): Promise<boolean> {
+    if (!rentcarId) {
+      throw new CustomError("Rentcar ID is required", statusCodes.unAuthorized);
+    }
 
-  const updated = await this.hostRentCarRepository.updateAvailability(rentcarId, isAvailable);
-
-  if (!updated) {
-    throw new CustomError(
-      `Rentcar ${isAvailable ? "available" : "unavailable"} request failed`,
-      statusCodes.serverError
+    const updated = await this._hostRentCarRepository.updateAvailability(
+      rentcarId,
+      isAvailable
     );
-  }
 
-  return true;
-}
+    if (!updated) {
+      throw new CustomError(
+        `Rentcar ${isAvailable ? "available" : "unavailable"} request failed`,
+        statusCodes.serverError
+      );
+    }
+
+    return true;
+  }
 
   async removeRentcar(rentcarId: string): Promise<boolean> {
-      if (!rentcarId) {
+    if (!rentcarId) {
       throw new CustomError(
         "Rent car ID is required",
         statusCodes.unAuthorized
       );
     }
-    const updated = await this.hostRentCarRepository.deleteRentcar(rentcarId);
+    const updated = await this._hostRentCarRepository.deleteRentcar(rentcarId);
     if (!updated) {
       throw new CustomError(
         "Rent car deleting failed",

@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { IAdminStudioController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminStudioController";
-import { AdminStudioUseCase } from "../../../../application/usecases/admin/adminServicesUsecases/usecase.adminStudio";
+import { IAdminStudioUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminStudioUseCase";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class AdminStudioController implements IAdminStudioController {
-  constructor(private adminStudioUseCase: AdminStudioUseCase) {}
+  constructor(private _adminStudioUseCase: IAdminStudioUseCase) {}
 
   async studioFullDetails(req: Request, res: Response): Promise<void> {
     try {
@@ -17,7 +17,7 @@ export class AdminStudioController implements IAdminStudioController {
         });
         return;
       }
-      const studio = await this.adminStudioUseCase.studioDetails(studioId);
+      const studio = await this._adminStudioUseCase.studioDetails(studioId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "studio details fetched successfully",

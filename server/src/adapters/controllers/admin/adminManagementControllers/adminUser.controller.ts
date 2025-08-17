@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IAdminUserManagementController } from "../../../../domain/controlInterface/admin/management controller interfaces/interface.adminUserManagementController";
-import { AdminUserManagementUseCase } from "../../../../application/usecases/admin/adminManagementUsecases/usecase.adminUserManagement";
+import { IAdminUserManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminUserManagementUseCase";
 import logger from "../../../../utils/common/messages/logger";
 import { JwtPayload } from "jsonwebtoken";
 import {
@@ -16,13 +16,13 @@ interface MulterRequest extends Request {
 }
 
 export class AdminUsersController implements IAdminUserManagementController {
-  constructor(private adminUserManagementUseCase: AdminUserManagementUseCase) {}
+  constructor(private _adminUserManagementUseCase: IAdminUserManagementUseCase) {}
 
    async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
-      const users = await this.adminUserManagementUseCase.findAllUsers(
+      const users = await this._adminUserManagementUseCase.findAllUsers(
         page,
         limit
       );
@@ -53,7 +53,7 @@ export class AdminUsersController implements IAdminUserManagementController {
     }
 
     try {
-      const response = await this.adminUserManagementUseCase.userBlockUnblock(
+      const response = await this._adminUserManagementUseCase.userBlockUnblock(
         userId,
         isBlocked
       );
@@ -86,7 +86,7 @@ export class AdminUsersController implements IAdminUserManagementController {
     }
 
     try {
-      const users = await this.adminUserManagementUseCase.editUser(
+      const users = await this._adminUserManagementUseCase.editUser(
         userId,
         formData
       );
@@ -130,7 +130,7 @@ export class AdminUsersController implements IAdminUserManagementController {
         buffer: file.buffer,
       });
 
-      const updatedUser = await this.adminUserManagementUseCase.changeProfile(
+      const updatedUser = await this._adminUserManagementUseCase.changeProfile(
         userId,
         image.public_id
       );
@@ -173,7 +173,7 @@ export class AdminUsersController implements IAdminUserManagementController {
     }
 
     try {
-      const isDeleted = await this.adminUserManagementUseCase.deleteUser(
+      const isDeleted = await this._adminUserManagementUseCase.deleteUser(
         userId
       );
       if (!isDeleted) {

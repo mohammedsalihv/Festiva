@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { IAdminVenueController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminVenueController";
-import { AdminVenueUseCase } from "../../../../application/usecases/admin/adminServicesUsecases/usecase.adminVenue";
+import { IAdminVenueUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminVenueUseCase";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 
 export class AdminVenueController implements IAdminVenueController {
-  constructor(private adminVenueUseCase: AdminVenueUseCase) {}
+  constructor(private _adminVenueUseCase: IAdminVenueUseCase) {}
 
   async venueFullDetails(req: Request, res: Response): Promise<void> {
     try {
@@ -18,7 +18,7 @@ export class AdminVenueController implements IAdminVenueController {
         });
         return;
       }
-      const venue = await this.adminVenueUseCase.execute(venueId);
+      const venue = await this._adminVenueUseCase.execute(venueId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "Venue details fetched successfully",
