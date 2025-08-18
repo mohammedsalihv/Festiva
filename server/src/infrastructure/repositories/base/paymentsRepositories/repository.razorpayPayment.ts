@@ -1,11 +1,26 @@
-import { IPaymentGatewayRepository } from "../../../../domain/entities/repositoryInterface/base/interface.paymentGateways";
-import razorpay from "razorpay"
+import Razorpay from "razorpay";
+import { IPaymentRepository } from "../../../../domain/entities/repositoryInterface/base/interface.paymentGateways";
 
+export class RazorpayPaymentRepository implements IPaymentRepository {
+  private razorpay: Razorpay;
 
-export class RazorpayPaymentRepository implements IPaymentGatewayRepository {
+  constructor() {
+    this.razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID as string,
+      key_secret: process.env.RAZORPAY_KEY_SECRET as string,
+    });
+  }
 
-    
   async createPayment(amount: number, currency: string) {
-    return this.razorpay.orders.create({ amount: amount * 100, currency });
+    const order = await this.razorpay.orders.create({
+      amount,
+      currency,
+    });
+    return { id: order.id, status: order.status };
+  }
+
+  async retrievePayment(id: string) {
+    const payment = await this.razorpay.payments.fetch(id);
+    return { id: payment.id, status: payment.status };
   }
 }

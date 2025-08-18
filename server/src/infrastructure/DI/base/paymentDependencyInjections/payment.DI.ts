@@ -1,9 +1,9 @@
-import { StripePaymentRepository } from "../../../repositories/base/paymentsRepositories/repository.stripePayment";
-import { StripePaymentUseCase } from "../../../../application/usecases/base/paymentUsecases/usecase.stripePayment";
+import { RazorpayPaymentRepository } from "../../../repositories/base/paymentsRepositories/repository.razorpayPayment";
+import { PaymentUseCase } from "../../../../application/usecases/base/paymentUsecases/usecase.payment";
 import { PaymentController } from "../../../../adapters/controllers/base/paymentControllers/payment.controller";
 
-const stripePaymentRepository = new StripePaymentRepository();
-const stripePaymentUsecase = new StripePaymentUseCase(stripePaymentRepository);
-const paymentController = new PaymentController(stripePaymentUsecase);
+const razorpayPaymentRepository = new RazorpayPaymentRepository();
+const paymentUsecase = new PaymentUseCase(razorpayPaymentRepository);
+const paymentController = new PaymentController(paymentUsecase);
 
 export { paymentController };

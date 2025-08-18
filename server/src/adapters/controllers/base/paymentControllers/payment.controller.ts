@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IPaymentController } from "../../../../domain/controlInterface/common/payment/interface.paymentController";
-import { IStripePaymentUseCase } from "../../../../domain/usecaseInterface/base/payment/interface.stripePaymentUsecase";
+import { IPaymentUseCase } from "../../../../domain/usecaseInterface/base/payment/interface.paymentUsecase";
 import {
   statusCodes,
   statusMessages,
@@ -9,26 +9,23 @@ import logger from "../../../../utils/common/messages/logger";
 import CustomError from "../../../../utils/common/errors/CustomError";
 
 export class PaymentController implements IPaymentController {
-  constructor(private _stripePaymentUseCase: IStripePaymentUseCase) {}
+  constructor(private _paymentUseCase: IPaymentUseCase) {}
 
   async startPayment(req: Request, res: Response): Promise<void> {
     try {
-      const { amount, currency, paymentMethodType } = req.body;
+      const { amount, currency } = req.body;
 
-      const allowedCurrencies = ["inr", "usd"];
-      if (!allowedCurrencies.includes(currency.toLowerCase())) {
-        throw new CustomError("Unsupported currency", statusCodes.badRequest);
+      if (!amount || !currency) {
+        throw new CustomError(
+          "Amount and currency are required",
+          statusCodes.badRequest
+        );
       }
-
-      const paymentIntent = await this._stripePaymentUseCase.execute(
-        amount,
-        currency,
-        paymentMethodType || "card"
-      );
+      const paymentResult = await this._paymentUseCase.execute(amount, currency);
 
       res.status(statusCodes.Success).json({
         success: true,
-        clientSecret: paymentIntent.client_secret,
+        payment: paymentResult,
       });
     } catch (error: any) {
       logger.error("Start Payment Error:", error);

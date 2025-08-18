@@ -105,15 +105,50 @@ const PaymentPage = () => {
 
 
   const handleSubmit = async () => {
-    setLoading(true);
-    const userErrs = validateUserInformation(userForm);
-    setUserErrors(userErrs);
+  setLoading(true);
+  const userErrs = validateUserInformation(userForm);
+  setUserErrors(userErrs);
 
-    if (Object.keys(userErrs).length > 0) {
-      setLoading(false);
-      return;
-    }
-  };
+  if (Object.keys(userErrs).length > 0) {
+    setLoading(false);
+    return;
+  }
+
+  try {
+    // 1. Create Razorpay order from backend
+    const { orderId, amount, currency } = await createPayment({
+      amount: (totalAmount + 50) * 100, // Razorpay takes paise
+      currency: "INR",
+    });
+
+    // 2. Open Razorpay checkout
+    const options: any = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount,
+      currency,
+      name: "My Platform",
+      description: "Service booking",
+      order_id: orderId,
+      handler: async (response: any) => {
+        // 3. On success → verify payment on backend
+        await completeBooking(response.razorpay_payment_id);
+      },
+      prefill: {
+        name: userForm.name,
+        email: userForm.email,
+        contact: userForm.phone,
+      },
+      theme: { color: "#5A2D82" },
+    };
+
+    const rzp = new (window as any).Razorpay(options);
+    rzp.open();
+  } catch (err) {
+    toast.error("Payment initiation failed");
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-JosephicSans">
