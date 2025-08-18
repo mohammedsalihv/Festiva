@@ -1,5 +1,4 @@
 import { useState, useMemo} from "react";
-import { ChevronLeft } from "lucide-react";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import {
@@ -114,27 +113,11 @@ const PaymentPage = () => {
       setLoading(false);
       return;
     }
-
-
-    try {
-       const res = await createPayment()
-       if(res){
-        completeBooking(res)
-       }
-    } catch (err) {
-      console.error(err);
-      toast.error("Something went wrong during payment");
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-JosephicSans">
       <div className="bg-gradient-to-br bg-main_gradient text-white px-3 py-20 sm:px-5 md:px-16 md:py-32 flex flex-col">
-        <button className="flex items-center mb-8 text-white font-extrabold">
-          <ChevronLeft className="w-5 h-5 mr-2 font-extrabold" /> Booked data
-        </button>
         <h1 className="text-2xl md:text-4xl font-bold mb-4">
           <span className="text-gray-200 text-base md:text-xl">
             Total : {totalAmount}{" "}

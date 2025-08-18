@@ -11,5 +11,5 @@ export const createPayment = async ({ amount, currency }: CreatePaymentParams) =
     USER_API.paymentRoutes.startPayment,
     { amount, currency }
   );
-  return response.data.data;
+  return response.data;
 };

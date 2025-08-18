@@ -10,10 +10,7 @@ export class StripePaymentRepository implements IStripePaymentRepository {
     });
   }
 
-  async createPaymentIntent(
-    amount: number,
-    currency: string
-  ): Promise<Stripe.PaymentIntent> {
+    async createPaymentIntent(amount: number, currency: string): Promise<Stripe.PaymentIntent> {
     return await this.stripe.paymentIntents.create({
       amount,
       currency,
@@ -34,7 +31,7 @@ export class StripePaymentRepository implements IStripePaymentRepository {
     return this.stripe.webhooks.constructEvent(
       payload,
       sig,
-      process.env.STRIPE_WEBHOOK_SECRET as string
+      process.env.STRIPE_PUBLISHABLE_KEY as string
     );
   }
 }

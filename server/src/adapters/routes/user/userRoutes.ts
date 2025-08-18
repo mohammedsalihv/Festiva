@@ -79,6 +79,7 @@ userRoutes.post(
   bookingController.createBooking.bind(bookingController)
 );
 
+// payment 
 userRoutes.post(
   USER_ROUTES.paymentRoutes.startPayment,
   paymentController.startPayment.bind(paymentController)

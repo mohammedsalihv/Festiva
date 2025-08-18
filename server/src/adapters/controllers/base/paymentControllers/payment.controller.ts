@@ -13,16 +13,19 @@ export class PaymentController implements IPaymentController {
 
   async startPayment(req: Request, res: Response): Promise<void> {
     try {
-      const { amount, currency } = req.body;
+      const { amount, currency, paymentMethodType } = req.body;
 
       const allowedCurrencies = ["inr", "usd"];
       if (!allowedCurrencies.includes(currency.toLowerCase())) {
         throw new CustomError("Unsupported currency", statusCodes.badRequest);
       }
+
       const paymentIntent = await this._stripePaymentUseCase.execute(
         amount,
-        currency
+        currency,
+        paymentMethodType || "card"
       );
+
       res.status(statusCodes.Success).json({
         success: true,
         clientSecret: paymentIntent.client_secret,

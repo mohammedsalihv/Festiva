@@ -7,12 +7,7 @@ import { IStripePaymentUseCase } from "../../../../domain/usecaseInterface/base/
 export class StripePaymentUseCase implements IStripePaymentUseCase {
   constructor(private _stripePaymentRepository: IStripePaymentRepository) {}
 
-  async execute(
-    amount: number,
-    currency: string
-  ): Promise<Stripe.PaymentIntent> {
-    if (amount <= 0)
-      throw new CustomError("Invalid amount", statusCodes.forbidden);
-    return this._stripePaymentRepository.createPaymentIntent(amount, currency);
+ async execute(amount: number, currency: string, paymentMethodType: string = "card"): Promise<Stripe.PaymentIntent> {
+    return await this._stripePaymentRepository.createPaymentIntent(amount, currency, paymentMethodType);
   }
 }

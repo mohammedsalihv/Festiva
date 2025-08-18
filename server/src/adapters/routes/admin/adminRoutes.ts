@@ -2,7 +2,7 @@ import express, { Request, Response, RequestHandler } from "express";
 import { ADMIN_ROUTES } from "../../../infrastructure/constants/admin.routes";
 import { adminUserController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminUserManagement.DI";
 import { adminHostController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminHostManagement.DI";
-import { adminAssetController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminAssetManagement.DI";
+import { adminAssetManagementController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminAssetManagement.DI";
 import { singleImageUpload } from "../../../utils/common/middlewares/multer";
 import {
   authenticateToken,
@@ -88,26 +88,32 @@ adminRoutes.get(
   ADMIN_ROUTES.AssetManagement.allAssets,
   authenticateToken,
   isAdmin,
-  adminAssetController.Assets.bind(adminAssetController)
+  adminAssetManagementController.Assets.bind(adminAssetManagementController)
 );
 
 adminRoutes.get(
   ADMIN_ROUTES.AssetManagement.assetDetails,
   authenticateToken,
   isAdmin,
-  adminAssetController.assetDetails.bind(adminAssetController)
+  adminAssetManagementController.assetDetails.bind(
+    adminAssetManagementController
+  )
 );
 
 adminRoutes.put(
   ADMIN_ROUTES.AssetManagement.assetApprove,
   authenticateToken,
   isAdmin,
-  adminAssetController.approveAsset.bind(adminAssetController)
+  adminAssetManagementController.approveAsset.bind(
+    adminAssetManagementController
+  )
 );
 adminRoutes.put(
   ADMIN_ROUTES.AssetManagement.assetReject,
   authenticateToken,
   isAdmin,
-  adminAssetController.rejectAsset.bind(adminAssetController)
+  adminAssetManagementController.rejectAsset.bind(
+    adminAssetManagementController
+  )
 );
 export default adminRoutes;
