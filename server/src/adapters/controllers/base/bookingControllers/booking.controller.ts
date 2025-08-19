@@ -13,6 +13,7 @@ export class BookingController implements IBookingController {
 
   async createBooking(req: Request, res: Response): Promise<void> {
     try {
+      console.log(req.body)
       const booking: IBooking = req.body;
 
       if (!booking || !booking.userId || !booking.assetType) {

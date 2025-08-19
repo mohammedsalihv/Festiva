@@ -1,5 +1,7 @@
 import Razorpay from "razorpay";
 import { IPaymentRepository } from "../../../../domain/entities/repositoryInterface/base/interface.paymentGateways";
+import paymentModel from "../../../../domain/models/base/payment/paymentModel";
+
 
 export class RazorpayPaymentRepository implements IPaymentRepository {
   private razorpay: Razorpay;
@@ -16,6 +18,7 @@ export class RazorpayPaymentRepository implements IPaymentRepository {
       amount,
       currency,
     });
+    paymentModel
     return { id: order.id, status: order.status };
   }
 

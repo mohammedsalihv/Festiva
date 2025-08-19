@@ -1,4 +1,4 @@
-import { useState, useMemo} from "react";
+import { useState, useMemo } from "react";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
 import {
@@ -16,12 +16,13 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const PaymentPage = () => {
-  const navigate = useNavigate();;
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const bookedService = useSelector(
     (state: RootState) => state.booking.currentBooking
   );
+  const user = useSelector((state: RootState) => state.user.userInfo);
 
   const countryOptions = useMemo(() => countryList().getData(), []);
 
@@ -47,226 +48,288 @@ const PaymentPage = () => {
     });
 
   const calculateTotal = () => {
-    if (!bookedService) return 0;
+    if (!bookedService) return { breakdown: [], total: 0 };
     const service = bookedService.serviceData as IAsset;
-    let pricePerUnit: string | number | undefined = "0";
+    let pricePerUnit = 0;
     switch (service.typeOfAsset) {
       case "venue":
       case "rentcar":
-        pricePerUnit = service.rent;
+        pricePerUnit = Number(service.rent || 0);
         break;
       case "caters":
-        pricePerUnit = service.totalAmount;
+        pricePerUnit = Number(service.totalAmount || 0);
         break;
       case "studio":
-        pricePerUnit = service.packages[0]?.payment;
+        pricePerUnit = Number(service.packages[0]?.payment || 0);
         break;
-      default:
-        pricePerUnit = "0";
     }
+
     const dateCount = bookedService.selectedDates?.length || 1;
-    return Number(pricePerUnit || 0) * dateCount;
-  };
 
-  const totalAmount = calculateTotal();
+    const breakdown: { day: number; price: number; discountNote?: string }[] =
+      [];
+    let total = 0;
 
-  const completeBooking = async (paymentId: string) => {
-    const formData = new FormData();
-    if (bookedService?.assetId) {
-      formData.append("serviceId", bookedService.assetId);
+    for (let i = 1; i <= dateCount; i++) {
+      let dayPrice = 0;
+      let discountNote = "";
+
+      if (i === 1) {
+        dayPrice = pricePerUnit; 
+      } else if (i === 2) {
+        dayPrice = pricePerUnit * 0.8; // 20% off
+        discountNote = "20% off";
+      } else {
+        dayPrice = pricePerUnit * 0.5; // 50% off
+        discountNote = "50% off";
+      }
+
+      breakdown.push({ day: i, price: dayPrice, discountNote });
+      total += dayPrice;
     }
-    formData.append("assetType", bookedService?.assetType || "");
-    formData.append(
-      "dates",
-      JSON.stringify(bookedService?.selectedDates || [])
-    );
-    if (bookedService?.selectedTimeSlot)
-      formData.append("timeSlot", bookedService.selectedTimeSlot);
-    if (bookedService?.attendeesCount)
-      formData.append(
-        "attendeesCount",
-        bookedService.attendeesCount.toString()
-      );
-    if (bookedService?.packageName)
-      formData.append("packageName", bookedService.packageName);
 
-    Object.entries(userForm).forEach(([key, value]) =>
-      formData.append(key, value)
-    );
-
-    formData.append("paymentId", paymentId);
-    formData.append("amountPaid", (totalAmount + 50).toString());
-
-    await startBooking(formData);
-    toast.success("The service has been booked!");
-    setLoading(false);
-    navigate("/success");
+    return { breakdown, total };
   };
+  const { breakdown, total } = calculateTotal();
+  const platformFee = 50;
+  const totalPayable = total + platformFee;
 
+  const completeBooking = async (transactionId: string) => {
+    if (!bookedService) {
+      toast.error("Booking data missing!");
+      setLoading(false);
+      return;
+    }
+
+    const bookingPayload = {
+      assetId: bookedService.assetId,
+      assetType: bookedService.assetType,
+      selectedDates: bookedService.selectedDates,
+      selectedTimeSlot: bookedService.selectedTimeSlot,
+      attendeesCount: bookedService.attendeesCount,
+      packageName: bookedService.packageName,
+      serviceData: bookedService.serviceData,
+      transactionId,
+      total: totalPayable,
+      userId: user?.id,
+    };
+    try {
+      const res = await startBooking(bookingPayload);
+      if (!res.success) {
+        toast.error(res.message || "Booking failed");
+        setLoading(false);
+        return;
+      }
+      toast.success("The service has been booked!");
+      navigate("/success");
+    } catch (err) {
+      toast.error("Booking failed");
+      console.error(err);
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async () => {
-  setLoading(true);
-  const userErrs = validateUserInformation(userForm);
-  setUserErrors(userErrs);
+    setLoading(true);
+    const userErrs = validateUserInformation(userForm);
+    setUserErrors(userErrs);
 
-  if (Object.keys(userErrs).length > 0) {
-    setLoading(false);
-    return;
-  }
+    if (Object.keys(userErrs).length > 0) {
+      setLoading(false);
+      return;
+    }
+    try {
 
-  try {
-    // 1. Create Razorpay order from backend
-    const { orderId, amount, currency } = await createPayment({
-      amount: (totalAmount + 50) * 100, // Razorpay takes paise
+      const paymentData : = {
+        
+      }
+        const res = await createPayment({
+      payerId: userForm.id,
+      assetId: selectedAssetId,
+      amount: totalPayable * 100,
       currency: "INR",
     });
 
-    // 2. Open Razorpay checkout
-    const options: any = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount,
-      currency,
-      name: "My Platform",
-      description: "Service booking",
-      order_id: orderId,
-      handler: async (response: any) => {
-        // 3. On success → verify payment on backend
-        await completeBooking(response.razorpay_payment_id);
-      },
-      prefill: {
-        name: userForm.name,
-        email: userForm.email,
-        contact: userForm.phone,
-      },
-      theme: { color: "#5A2D82" },
-    };
+    if (!res?.transactionId) {
+      toast.error("Failed to create Razorpay order");
+      setLoading(false);
+      return;
+    }
 
-    const rzp = new (window as any).Razorpay(options);
-    rzp.open();
-  } catch (err) {
-    toast.error("Payment initiation failed");
-    setLoading(false);
-  }
-};
+      const options: any = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: totalPayable * 100,
+        currency: "INR",
+        name: "Festiva",
+        description: "Service booking",
+        order_id: res.payment.id,
+        handler: async (response: any) => {
+          await completeBooking(response.razorpay_payment_id);
+        },
+        prefill: {
+          name: userForm.name,
+          email: userForm.email,
+          contact: userForm.phone,
+        },
+        theme: { color: "#5A2D82" },
+      };
 
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      toast.error("Payment initiation failed");
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-JosephicSans">
-      <div className="bg-gradient-to-br bg-main_gradient text-white px-3 py-20 sm:px-5 md:px-16 md:py-32 flex flex-col">
-        <h1 className="text-2xl md:text-4xl font-bold mb-4">
-          <span className="text-gray-200 text-base md:text-xl">
-            Total : {totalAmount}{" "}
-          </span>
-        </h1>
+      <div className="bg-main_gradient text-white px-3 sm:px-6 md:px-16 md:py-20 flex flex-col">
+        <div className="p-4 space-y-8 mt-3">
+          {/* Service Details */}
+          <div>
+            <h2 className="font-bold text-2xl mb-4">Service Details</h2>
 
-        <div className="bg-white text-black rounded-md p-4 shadow-lg">
-          <div className="flex justify-between items-center mb-2">
-            <div className="w-full">
-              <h2 className="font-bold text-lg mb-2">Service Details</h2>
-              <div className="border w-full px-2 md:px-4 py-5 rounded-sm shadow-md">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                  <div className="w-full sm:w-32 h-24 bg-gray-100 rounded overflow-hidden">
-                    <img
-                      src={
-                        bookedService?.serviceData?.Images?.[0] ||
-                        "/placeholder.jpg"
-                      }
-                      alt="Selected Service"
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl">
-                      {bookedService?.serviceData &&
-                        ("venueName" in bookedService.serviceData
-                          ? bookedService.serviceData.venueName
-                          : "studioName" in bookedService.serviceData
-                          ? bookedService.serviceData.studioName
-                          : "carName" in bookedService.serviceData
-                          ? bookedService.serviceData.carName
-                          : "catersName" in bookedService.serviceData
-                          ? bookedService.serviceData.catersName
-                          : "Service")}
-                    </h3>
-                    <p className="text-gray-500 text-sm">
-                      {bookedService?.serviceData &&
-                      "squareFeet" in bookedService.serviceData &&
-                      bookedService.serviceData.squareFeet
-                        ? `${bookedService.serviceData.squareFeet} sq ft`
-                        : ""}
-                    </p>
-                  </div>
-                </div>
+            <div className="flex flex-col sm:flex-row gap-4">
+              {/* Image */}
+              <div className="w-full sm:w-64 md:w-96 md:h-64 h-44 rounded-md overflow-hidden shadow-md">
+                <img
+                  src={
+                    bookedService?.serviceData?.Images?.[0] ||
+                    "/placeholder.jpg"
+                  }
+                  alt="Selected Service"
+                  className="object-cover w-full h-full"
+                />
+              </div>
 
-                <hr className="my-4" />
-                <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-sm md:text-base text-gray-700">
-                  <div>
-                    <p className="font-bold text-gray-500">Date</p>
-                    <p className="text-black">
-                      {Array.isArray(bookedService?.selectedDates)
-                        ? bookedService.selectedDates.map(formatDate).join(", ")
-                        : formatDate(bookedService?.selectedDates || "")}
+              {/* Info */}
+              <div className="flex-1">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold">
+                  {bookedService?.serviceData &&
+                    ("venueName" in bookedService.serviceData
+                      ? bookedService.serviceData.venueName
+                      : "studioName" in bookedService.serviceData
+                      ? bookedService.serviceData.studioName
+                      : "carName" in bookedService.serviceData
+                      ? bookedService.serviceData.carName
+                      : "catersName" in bookedService.serviceData
+                      ? bookedService.serviceData.catersName
+                      : "Service")}
+                </h3>
+                {bookedService?.assetType === "venue" &&
+                  "squareFeet" in bookedService.serviceData && (
+                    <p className="text-gray-300 text-sm">
+                      {bookedService.serviceData.squareFeet} sq ft
                     </p>
-                  </div>
-                  {bookedService?.selectedTimeSlot && (
-                    <div>
-                      <p className="font-bold text-gray-500">Time</p>
-                      <p className="text-black">
-                        {bookedService?.selectedTimeSlot}
-                      </p>
-                    </div>
                   )}
-                  {bookedService?.attendeesCount && (
-                    <div>
-                      <p className="font-bold text-gray-500">Attendees</p>
-                      <p className="text-black">
-                        {bookedService?.attendeesCount} people
-                      </p>
-                    </div>
-                  )}
-                  {bookedService?.packageName && (
-                    <div>
-                      <p className="font-bold text-gray-500">Package</p>
-                      <p className="text-black">{bookedService?.packageName}</p>
-                    </div>
-                  )}
-                  <div>
-                    <p className="font-bold text-gray-500">Service type</p>
-                    <span className="bg-blue-600 text-white p-1 rounded-md">
-                      {bookedService?.assetType}
-                    </span>
-                  </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+              <div className="bg-white/10 rounded-lg p-3">
+                <p className="text-sm md:text-base text-gray-300">Date</p>
+                <p className="font-medium">
+                  {Array.isArray(bookedService?.selectedDates)
+                    ? bookedService.selectedDates.map(formatDate).join(", ")
+                    : formatDate(bookedService?.selectedDates || "")}
+                </p>
+              </div>
+
+              {bookedService?.selectedTimeSlot && (
+                <div className="bg-white/10 rounded-lg p-3">
+                  <p className="text-sm md:text-base text-gray-300">Time</p>
+                  <p className="font-medium">
+                    {bookedService.selectedTimeSlot}
+                  </p>
                 </div>
+              )}
+
+              {bookedService?.attendeesCount && (
+                <div className="bg-white/10 rounded-lg p-3">
+                  <p className="text-sm md:text-base text-gray-300">
+                    Attendees
+                  </p>
+                  <p className="font-medium">
+                    {bookedService.attendeesCount} people
+                  </p>
+                </div>
+              )}
+
+              {bookedService?.packageName && (
+                <div className="bg-white/10 rounded-lg p-3">
+                  <p className="text-sm md:text-base text-gray-300">Package</p>
+                  <p className="font-medium">{bookedService.packageName}</p>
+                </div>
+              )}
+
+              <div className="bg-white/10 rounded-lg p-3">
+                <p className="text-sm md:text-base text-gray-300">
+                  Service type
+                </p>
+                <p className="font-bold text-blue-400">
+                  {bookedService?.assetType
+                    ? bookedService.assetType.charAt(0).toUpperCase() +
+                      bookedService.assetType.slice(1)
+                    : ""}
+                </p>
               </div>
             </div>
           </div>
-          <div className="flex justify-between text-sm text-gray-600 px-3 pt-2">
-            <span className="text-base">Subtotal</span>
-            <span className="text-base font-bold">
-              {totalAmount.toLocaleString()}.00
-            </span>
+
+          {/* Price Breakdown */}
+          <div>
+            <h2 className="font-bold text-xl mb-3">Price Breakdown</h2>
+            <ul className="divide-y divide-gray-600">
+              {breakdown.map((day, index) => (
+                <li key={index} className="flex justify-between py-2">
+                  <span>
+                    Day {day.day}{" "}
+                    {day.discountNote && (
+                      <span className="text-green-400 font-bold">
+                        ({day.discountNote})
+                      </span>
+                    )}
+                  </span>
+                  <span>₹{day.price.toLocaleString()}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className="flex justify-between text-sm text-gray-600 px-3 pb-1">
-            <span className="text-base">Platform fee</span>
-            <span className="text-base">50.00</span>
-          </div>
-          <div className="flex justify-between text-black font-semibold text-lg md:text-2xl px-3">
-            <span>Total payable amount</span>
-            <span>{(totalAmount + 50).toLocaleString()}/-</span>
+
+          {/* Totals */}
+          <div className="space-y-2 text-sm md:text-base">
+            <div className="flex justify-between">
+              <span>Subtotal</span>
+              <span className="font-semibold text-lg">
+                ₹{total.toLocaleString()}.00
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span>Platform fee</span>
+              <span className="text-base">₹50.00</span>
+            </div>
+            <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-600">
+              <span>Total payable</span>
+              <span className="text-2xl">
+                ₹{totalPayable.toLocaleString()}/-
+              </span>
+            </div>
           </div>
         </div>
-        <p className=" text-sm md:text-base mt-4">
+
+        {/* Terms */}
+        <p className="text-sm md:text-base p-4 text-gray-300 text-center">
           This price includes platform fees. By subscribing, you agree to our{" "}
           <a
             href="/terms"
-            className="underline text-white hover:text-gray-200 font-semibold"
+            className="underline text-blue-400 hover:text-blue-300 font-semibold"
           >
             Terms
           </a>{" "}
           and{" "}
           <a
             href="/privacy"
-            className="underline text-white hover:text-gray-200 font-semibold"
+            className="underline text-blue-400 hover:text-blue-300 font-semibold"
           >
             Privacy Policy
           </a>
@@ -274,110 +337,131 @@ const PaymentPage = () => {
         </p>
       </div>
 
-      <div className="px-3 py-8 sm:px-5 sm:py-10 md:px-7 md:py-20 max-w-7xl w-full mx-auto">
-      
+      <div className="px-3 sm:px-5 sm:py-10 md:px-12 md:py-20 mt-4 max-w-3xl w-full mx-auto">
+        <h2 className="text-lg md:text-2xl font-bold mb-6 text-deepPurple">
+          User Information
+        </h2>
 
-        <h2 className="text-xl font-semibold mb-4 mt-6">User information</h2>
-        <div className="grid grid-cols-1 gap-4 text-base">
+        <div className="grid grid-cols-1 gap-5 text-base">
+          {/* Name */}
           <Input
             value={userForm.name}
             onChange={(e) => setUserForm({ ...userForm, name: e.target.value })}
-            className={`border ${
-              userErrors.name ? "border-red-600" : "border-gray-200"
-            } p-2 rounded`}
             placeholder="Name"
+            className={`px-3 py-2 rounded border focus:outline-none focus:ring-2 
+        ${
+          userErrors.name
+            ? "border-red-600 focus:ring-red-400"
+            : "border-gray-300 focus:ring-deepPurple"
+        }`}
           />
           {userErrors.name && (
-            <p className="text-red-600 text-sm md:text-base">
-              {userErrors.name}
-            </p>
+            <p className="text-red-600 text-sm">{userErrors.name}</p>
           )}
 
-          <div className="flex gap-4">
+          {/* Email & Phone */}
+          <div className="flex flex-col sm:flex-row gap-4">
             <Input
               value={userForm.email}
               onChange={(e) =>
                 setUserForm({ ...userForm, email: e.target.value })
               }
-              className={`border ${
-                userErrors.email ? "border-red-600" : "border-gray-200"
-              } p-2 rounded w-1/2`}
               placeholder="Email"
+              className={`flex-1 px-3 py-2 rounded border focus:outline-none focus:ring-2 
+          ${
+            userErrors.email
+              ? "border-red-600 focus:ring-red-400"
+              : "border-gray-300 focus:ring-deepPurple"
+          }`}
             />
             <Input
               value={userForm.phone}
               onChange={(e) =>
                 setUserForm({ ...userForm, phone: e.target.value })
               }
-              className={`border ${
-                userErrors.phone ? "border-red-600" : "border-gray-200"
-              } p-2 rounded w-1/2`}
               placeholder="Phone"
+              className={`flex-1 px-3 py-2 rounded border focus:outline-none focus:ring-2 
+          ${
+            userErrors.phone
+              ? "border-red-600 focus:ring-red-400"
+              : "border-gray-300 focus:ring-deepPurple"
+          }`}
             />
           </div>
           {(userErrors.email || userErrors.phone) && (
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               {userErrors.email && (
-                <p className="text-red-600 text-sm md:text-base w-1/2">
+                <p className="text-red-600 text-sm flex-1">
                   {userErrors.email}
                 </p>
               )}
               {userErrors.phone && (
-                <p className="text-red-600 text-sm md:text-base w-1/2">
+                <p className="text-red-600 text-sm flex-1">
                   {userErrors.phone}
                 </p>
               )}
             </div>
           )}
 
+          {/* Address */}
           <Input
             value={userForm.address}
             onChange={(e) =>
               setUserForm({ ...userForm, address: e.target.value })
             }
-            className={`border ${
-              userErrors.address ? "border-red-600" : "border-gray-200"
-            } p-2 rounded`}
             placeholder="Street address or PO box"
+            className={`px-3 py-2 rounded border focus:outline-none focus:ring-2 
+        ${
+          userErrors.address
+            ? "border-red-600 focus:ring-red-400"
+            : "border-gray-300 focus:ring-deepPurple"
+        }`}
           />
           {userErrors.address && (
-            <p className="text-red-600 text-sm md:text-base">
-              {userErrors.address}
-            </p>
+            <p className="text-red-600 text-sm">{userErrors.address}</p>
           )}
 
+          {/* Landmark */}
           <Input
             value={userForm.landmark}
             onChange={(e) =>
               setUserForm({ ...userForm, landmark: e.target.value })
             }
-            className="border p-2 rounded"
             placeholder="Apt, suite, unit (optional)"
+            className="px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-deepPurple"
           />
 
-          <div className="flex gap-4">
+          {/* City & State */}
+          <div className="flex flex-col sm:flex-row gap-4">
             <Input
               value={userForm.city}
               onChange={(e) =>
                 setUserForm({ ...userForm, city: e.target.value })
               }
-              className={`border ${
-                userErrors.city ? "border-red-600" : "border-gray-200"
-              } p-2 rounded w-1/2`}
               placeholder="City"
+              className={`flex-1 px-3 py-2 rounded border focus:outline-none focus:ring-2 
+          ${
+            userErrors.city
+              ? "border-red-600 focus:ring-red-400"
+              : "border-gray-300 focus:ring-deepPurple"
+          }`}
             />
             <Input
               value={userForm.state}
               onChange={(e) =>
                 setUserForm({ ...userForm, state: e.target.value })
               }
-              className={`border ${
-                userErrors.state ? "border-red-600" : "border-gray-200"
-              } p-2 rounded w-1/2`}
               placeholder="State"
+              className={`flex-1 px-3 py-2 rounded border focus:outline-none focus:ring-2 
+          ${
+            userErrors.state
+              ? "border-red-600 focus:ring-red-400"
+              : "border-gray-300 focus:ring-deepPurple"
+          }`}
             />
           </div>
 
+          {/* Country */}
           <Select
             options={countryOptions}
             value={
@@ -387,21 +471,17 @@ const PaymentPage = () => {
               setUserForm({ ...userForm, country: selected?.label || "" })
             }
             placeholder="Select country"
+            className="w-full"
             classNamePrefix="react-select"
-            className={`w-full ${
-              userErrors.country ? "border border-red-600 rounded" : ""
-            }`}
           />
           {userErrors.country && (
-            <p className="text-red-600 text-sm md:text-base">
-              {userErrors.country}
-            </p>
+            <p className="text-red-600 text-sm">{userErrors.country}</p>
           )}
         </div>
-     <Button
+        <Button
           onClick={handleSubmit}
           disabled={loading}
-          className="mt-4 bg-deepPurple text-white py-6 font-semibold hover:bg-deepPurple/80 transition-all w-full"
+          className="mt-6 bg-deepPurple text-white py-5 font-semibold hover:bg-deepPurple/90 transition-all w-full"
         >
           {loading ? "Processing..." : "Pay & Confirm"}
         </Button>

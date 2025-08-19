@@ -1,11 +1,11 @@
 import { Types } from "mongoose";
 
 export interface IPayment {
-  method: "card" | "googlepay" | "phonepe" | "paytm";
-  status: "pending" | "success" | "failed";
-  bookingId: Types.ObjectId;
+  payerId: Types.ObjectId;
+  assetId: Types.ObjectId;
+  status: string;
   transactionId: string;
   platformFee: number;
   total: number;
-  paidAt?: Date;
+  paymentDate:Date;
 }
