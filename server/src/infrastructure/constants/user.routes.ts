@@ -41,5 +41,6 @@ export const USER_ROUTES = {
 
   paymentRoutes: {
     startPayment: "/startPayment",
+    statusUpdate: "/payment/status",
   },
 } as const;

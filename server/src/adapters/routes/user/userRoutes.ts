@@ -85,6 +85,11 @@ userRoutes.post(
   paymentController.startPayment.bind(paymentController)
 );
 
+userRoutes.put(
+  USER_ROUTES.paymentRoutes.statusUpdate,
+  paymentController.paymentStatusUpdate.bind(paymentController)
+);
+
 
 
 export default userRoutes;

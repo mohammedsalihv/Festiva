@@ -18,6 +18,7 @@ const BookingSchema = new Schema<IBookingDoc>(
     packageName: { type: String },
     total: { type: Number, required: true },
     serviceData: { type: Schema.Types.Mixed, required: true },
+    transactionId: { type: String },
     paymentId: { type: Schema.Types.ObjectId, ref: "Payment" },
     status: {
       type: String,

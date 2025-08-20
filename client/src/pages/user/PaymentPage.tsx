@@ -95,7 +95,7 @@ const PaymentPage = () => {
   const platformFee = 50;
   const totalPayable = total + platformFee;
 
-  const completeBooking = async (transactionId: string) => {
+  const completeBooking = async (transactionId: string , paymentId:string) => {
     if (!bookedService) {
       toast.error("Booking data missing!");
       setLoading(false);
@@ -110,18 +110,15 @@ const PaymentPage = () => {
       attendeesCount: bookedService.attendeesCount,
       packageName: bookedService.packageName,
       serviceData: bookedService.serviceData,
-      transactionId,
+      transactionId:transactionId,
+      paymentId:paymentId,
       total: totalPayable,
       userId: user?.id,
     };
     try {
-      const res = await startBooking(bookingPayload);
-      if (!res.success) {
-        toast.error(res.message || "Booking failed");
-        setLoading(false);
-        return;
-      }
+      await startBooking(bookingPayload);
       toast.success("The service has been booked!");
+      navigate('/success')
     } catch (err) {
       toast.error("Booking failed");
       console.error(err);
@@ -129,70 +126,80 @@ const PaymentPage = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    const userErrs = validateUserInformation(userForm);
-    setUserErrors(userErrs);
+ const handleSubmit = async () => {
+  setLoading(true);
 
-    if (Object.keys(userErrs).length > 0) {
+  const userErrs = validateUserInformation(userForm);
+  setUserErrors(userErrs);
+  if (Object.keys(userErrs).length > 0) {
+    setLoading(false);
+    return;
+  }
+
+  let paymentId: string | null = null;
+  try {
+    const paymentData: paymentPayload = {
+      payerId: user?.id ?? "",
+      assetId: bookedService?.assetId ?? "",
+      platformFee,
+      amount: totalPayable,
+      currency: "INR",
+    };
+
+    const res = await createPayment(paymentData);
+    const orderId = res?.payment?.transactionId;
+    paymentId = res?.payment?._id;
+
+    if (!orderId || !paymentId) {
+      toast.error("Failed to create Razorpay order");
       setLoading(false);
       return;
     }
-    try {
-      const paymentData: paymentPayload = {
-        payerId: user?.id ?? "",
-        assetId: bookedService?.assetId ?? "",
-        platformFee: platformFee,
-        amount: totalPayable,
-        currency: "INR",
-      };
-      const res = await createPayment(paymentData);
-      const orderId = res?.payment?.transactionId;
 
-      if (!orderId) {
-        toast.error("Failed to create Razorpay order");
-        setLoading(false);
-        return;
-      }
+    const options: any = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: res.payment.total * 100,
+      currency: "INR",
+      name: "Festiva",
+      description: "Service booking",
+      order_id: orderId,
+      handler: async () => {
+        await paymentUpdate("success", paymentId!);
+        await completeBooking(orderId, paymentId!);
+      },
+      prefill: {
+        name: userForm.name,
+        email: userForm.email,
+        contact: userForm.phone,
+      },
+      theme: { color: "#5A2D82" },
+    };
 
-      const options: any = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount: res.payment.total * 100,
-        currency: "INR",
-        name: "Festiva",
-        description: "Service booking",
-        order_id: orderId,
-        handler: async (res: any) => {
-          await paymentUpdate('success',res.payment._id)
-          await completeBooking(res.payment._id);
-        },
-        prefill: {
-          name: userForm.name,
-          email: userForm.email,
-          contact: userForm.phone,
-        },
-        theme: { color: "#5A2D82" },
-      };
+    const rzp = new (window as any).Razorpay(options);
 
-      const rzp = new (window as any).Razorpay(options);
-      rzp.open();
-    } catch (err) {
-      toast.error("Payment initiation failed");
-      setLoading(false);
-      console.log(err);
-    }
-  };
+    rzp.on("payment.failed", async () => {
+      if (paymentId) await paymentUpdate("failed", paymentId);
+    });
+
+    rzp.open();
+  } catch (err) {
+    if (paymentId) await paymentUpdate("failed", paymentId);
+    toast.error("Payment initiation failed");
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-JosephicSans">
       <div className="bg-main_gradient text-white px-3 sm:px-6 md:px-16 md:py-20 flex flex-col">
         <div className="p-4 space-y-8 mt-3">
-          {/* Service Details */}
           <div>
             <h2 className="font-bold text-2xl mb-4">Service Details</h2>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              {/* Image */}
               <div className="w-full sm:w-64 md:w-96 md:h-64 h-44 rounded-md overflow-hidden shadow-md">
                 <img
                   src={
@@ -203,8 +210,6 @@ const PaymentPage = () => {
                   className="object-cover w-full h-full"
                 />
               </div>
-
-              {/* Info */}
               <div className="flex-1">
                 <h3 className="text-lg sm:text-xl md:text-2xl font-semibold">
                   {bookedService?.serviceData &&
@@ -276,8 +281,6 @@ const PaymentPage = () => {
               </div>
             </div>
           </div>
-
-          {/* Price Breakdown */}
           <div>
             <h2 className="font-bold text-xl mb-3">Price Breakdown</h2>
             <ul className="divide-y divide-gray-600">
@@ -317,8 +320,6 @@ const PaymentPage = () => {
             </div>
           </div>
         </div>
-
-        {/* Terms */}
         <p className="text-sm md:text-base p-4 text-gray-300 text-center">
           This price includes platform fees. By subscribing, you agree to our{" "}
           <a
@@ -344,7 +345,6 @@ const PaymentPage = () => {
         </h2>
 
         <div className="grid grid-cols-1 gap-5 text-base">
-          {/* Name */}
           <Input
             value={userForm.name}
             onChange={(e) => setUserForm({ ...userForm, name: e.target.value })}
@@ -359,8 +359,6 @@ const PaymentPage = () => {
           {userErrors.name && (
             <p className="text-red-600 text-sm">{userErrors.name}</p>
           )}
-
-          {/* Email & Phone */}
           <div className="flex flex-col sm:flex-row gap-4">
             <Input
               value={userForm.email}
@@ -403,8 +401,6 @@ const PaymentPage = () => {
               )}
             </div>
           )}
-
-          {/* Address */}
           <Input
             value={userForm.address}
             onChange={(e) =>
@@ -421,8 +417,6 @@ const PaymentPage = () => {
           {userErrors.address && (
             <p className="text-red-600 text-sm">{userErrors.address}</p>
           )}
-
-          {/* Landmark */}
           <Input
             value={userForm.landmark}
             onChange={(e) =>
@@ -431,8 +425,6 @@ const PaymentPage = () => {
             placeholder="Apt, suite, unit (optional)"
             className="px-3 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-deepPurple"
           />
-
-          {/* City & State */}
           <div className="flex flex-col sm:flex-row gap-4">
             <Input
               value={userForm.city}
@@ -461,8 +453,6 @@ const PaymentPage = () => {
           }`}
             />
           </div>
-
-          {/* Country */}
           <Select
             options={countryOptions}
             value={

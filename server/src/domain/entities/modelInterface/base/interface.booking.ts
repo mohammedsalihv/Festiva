@@ -12,6 +12,7 @@ export interface IBooking {
   packageName?: string;
   total: number;
   serviceData: IAsset;
+  transactionId:string;
   paymentId: Types.ObjectId;
   status: "pending" | "confirmed" | "cancelled";
   createdAt?: Date;
