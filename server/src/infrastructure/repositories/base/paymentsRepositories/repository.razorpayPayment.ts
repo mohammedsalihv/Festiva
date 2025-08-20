@@ -1,9 +1,11 @@
 import Razorpay from "razorpay";
-import { IPaymentRepository } from "../../../../domain/entities/repositoryInterface/base/interface.paymentGateways";
-import paymentModel from "../../../../domain/models/base/payment/paymentModel";
+import { PaymentRequestDTO } from "../../../../types/DTO/common/payment";
+import { IRazorpayRepository } from "../../../../domain/entities/repositoryInterface/base/interface.razorpayRepository";
+import paymentModel, {
+  IPaymentDoc,
+} from "../../../../domain/models/base/payment/paymentModel";
 
-
-export class RazorpayPaymentRepository implements IPaymentRepository {
+export class RazorpayPaymentRepository implements IRazorpayRepository {
   private razorpay: Razorpay;
 
   constructor() {
@@ -13,16 +15,27 @@ export class RazorpayPaymentRepository implements IPaymentRepository {
     });
   }
 
-  async createPayment(amount: number, currency: string) {
+  async createPayment(data: PaymentRequestDTO): Promise<IPaymentDoc> {
     const order = await this.razorpay.orders.create({
-      amount,
-      currency,
+      amount: data.amount * 100,
+      currency: data.currency,
+      receipt: `receipt_${Date.now()}`,
     });
-    paymentModel
-    return { id: order.id, status: order.status };
+
+    const payment = new paymentModel({
+      payerId: data.payerId,
+      assetId: data.assetId,
+      transactionId: order.id,
+      platformFee: data.platformFee,
+      total: data.amount,
+      paymentDate: new Date(),
+    });
+
+    const savedPayment = await payment.save();
+    return savedPayment;
   }
 
-  async retrievePayment(id: string) {
+  async retrievePayment(id: string): Promise<{ id: string; status: string }> {
     const payment = await this.razorpay.payments.fetch(id);
     return { id: payment.id, status: payment.status };
   }

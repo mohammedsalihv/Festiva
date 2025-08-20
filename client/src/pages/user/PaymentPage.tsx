@@ -10,10 +10,11 @@ import countryList from "react-select-country-list";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { IAsset } from "@/utils/Types/user/commonDetails";
-import { createPayment } from "@/api/user/base/paymentService";
+import { createPayment, paymentUpdate } from "@/api/user/base/paymentService";
 import { startBooking } from "@/api/user/base/bookingService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { paymentPayload } from "@/utils/Types/base/payment";
 
 const PaymentPage = () => {
   const navigate = useNavigate();
@@ -75,12 +76,12 @@ const PaymentPage = () => {
       let discountNote = "";
 
       if (i === 1) {
-        dayPrice = pricePerUnit; 
+        dayPrice = pricePerUnit;
       } else if (i === 2) {
-        dayPrice = pricePerUnit * 0.8; // 20% off
+        dayPrice = pricePerUnit * 0.8; 
         discountNote = "20% off";
       } else {
-        dayPrice = pricePerUnit * 0.5; // 50% off
+        dayPrice = pricePerUnit * 0.5;
         discountNote = "50% off";
       }
 
@@ -121,7 +122,6 @@ const PaymentPage = () => {
         return;
       }
       toast.success("The service has been booked!");
-      navigate("/success");
     } catch (err) {
       toast.error("Booking failed");
       console.error(err);
@@ -139,32 +139,32 @@ const PaymentPage = () => {
       return;
     }
     try {
+      const paymentData: paymentPayload = {
+        payerId: user?.id ?? "",
+        assetId: bookedService?.assetId ?? "",
+        platformFee: platformFee,
+        amount: totalPayable,
+        currency: "INR",
+      };
+      const res = await createPayment(paymentData);
+      const orderId = res?.payment?.transactionId;
 
-      const paymentData : = {
-        
+      if (!orderId) {
+        toast.error("Failed to create Razorpay order");
+        setLoading(false);
+        return;
       }
-        const res = await createPayment({
-      payerId: userForm.id,
-      assetId: selectedAssetId,
-      amount: totalPayable * 100,
-      currency: "INR",
-    });
-
-    if (!res?.transactionId) {
-      toast.error("Failed to create Razorpay order");
-      setLoading(false);
-      return;
-    }
 
       const options: any = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount: totalPayable * 100,
+        amount: res.payment.total * 100,
         currency: "INR",
         name: "Festiva",
         description: "Service booking",
-        order_id: res.payment.id,
-        handler: async (response: any) => {
-          await completeBooking(response.razorpay_payment_id);
+        order_id: orderId,
+        handler: async (res: any) => {
+          await paymentUpdate('success',res.payment._id)
+          await completeBooking(res.payment._id);
         },
         prefill: {
           name: userForm.name,
@@ -179,6 +179,7 @@ const PaymentPage = () => {
     } catch (err) {
       toast.error("Payment initiation failed");
       setLoading(false);
+      console.log(err);
     }
   };
 

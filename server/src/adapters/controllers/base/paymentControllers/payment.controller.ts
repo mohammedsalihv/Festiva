@@ -6,22 +6,15 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import logger from "../../../../utils/common/messages/logger";
-import CustomError from "../../../../utils/common/errors/CustomError";
+import { validatePaymentRequest } from "../../../../types/DTO/common/payment";
 
 export class PaymentController implements IPaymentController {
   constructor(private _paymentUseCase: IPaymentUseCase) {}
 
   async startPayment(req: Request, res: Response): Promise<void> {
     try {
-      const { amount, currency } = req.body;
-
-      if (!amount || !currency) {
-        throw new CustomError(
-          "Amount and currency are required",
-          statusCodes.badRequest
-        );
-      }
-      const paymentResult = await this._paymentUseCase.execute(amount, currency);
+      const paymentPayload = validatePaymentRequest(req.body);
+      const paymentResult = await this._paymentUseCase.execute(paymentPayload);
 
       res.status(statusCodes.Success).json({
         success: true,
@@ -35,4 +28,20 @@ export class PaymentController implements IPaymentController {
       });
     }
   }
+
+async paymentStatusUpdate(req: Request, res: Response): Promise<void> {
+  try {
+    const { status, paymentId } = req.body;
+    await this._paymentUseCase.paymentStatus(status, paymentId);
+    res.status(statusCodes.Success).json({ success: true });
+  } catch (error: any) {
+    logger.error("Payment Status Update Error:", error);
+    res.status(error.statusCode || statusCodes.serverError).json({
+      success: false,
+      message: error.message || statusMessages.serverError,
+    });
+  }
+}
+
+
 }

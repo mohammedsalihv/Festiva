@@ -1,15 +1,20 @@
 import axiosInstance from "@/config/user/userAxiosInstence";
 import { USER_API } from "@/utils/constants/api endpoints/user.api";
+import { paymentPayload } from "@/utils/Types/base/payment";
 
-interface CreatePaymentParams {
-  amount: number;
-  currency: string;
-}
-
-export const createPayment = async ({ amount, currency }: CreatePaymentParams) => {
+export const createPayment = async (data: paymentPayload) => {
   const response = await axiosInstance.post(
     USER_API.paymentRoutes.startPayment,
-    { amount, currency }
+    data
   );
   return response.data;
 };
+
+export const paymentUpdate = async (status: string, paymentId: string) => {
+  const response = await axiosInstance.put(
+    USER_API.paymentRoutes.paymentStatus,
+    { status, paymentId }
+  );
+  return response.data;
+};
+

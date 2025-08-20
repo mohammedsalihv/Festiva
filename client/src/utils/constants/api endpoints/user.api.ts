@@ -27,6 +27,7 @@ export const USER_API = {
   },
   paymentRoutes: {
     startPayment: "/startPayment",
+    paymentStatus:'/status'
   },
   venueService: {
     getVenues: "/getVenues",
