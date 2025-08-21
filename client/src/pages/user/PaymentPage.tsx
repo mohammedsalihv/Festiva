@@ -13,19 +13,21 @@ import { IAsset } from "@/utils/Types/user/commonDetails";
 import { createPayment, paymentUpdate } from "@/api/user/base/paymentService";
 import { startBooking } from "@/api/user/base/bookingService";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { paymentPayload } from "@/utils/Types/base/payment";
+import { BookingConfirmation } from "@/reusable-components/user/Landing/BookingConfirm";
+import { USER_ROUTE } from "@/utils/constants/routes/user.routes";
 
 const PaymentPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const bookedService = useSelector(
     (state: RootState) => state.booking.currentBooking
   );
   const user = useSelector((state: RootState) => state.user.userInfo);
-
   const countryOptions = useMemo(() => countryList().getData(), []);
+  const [paymentResponse, setPaymentResponse] = useState<any | null>(null);
 
   const [userForm, setUserForm] = useState<userInformation>({
     name: "",
@@ -40,6 +42,10 @@ const PaymentPage = () => {
   const [userErrors, setUserErrors] = useState<
     Partial<Record<keyof userInformation, string>>
   >({});
+
+  if (!bookedService) {
+    return <Navigate to={USER_ROUTE.userRedirectLinks.toUserHome} replace />;
+  }
 
   const formatDate = (dateStr: string) =>
     new Date(dateStr).toLocaleDateString("en-US", {
@@ -78,7 +84,7 @@ const PaymentPage = () => {
       if (i === 1) {
         dayPrice = pricePerUnit;
       } else if (i === 2) {
-        dayPrice = pricePerUnit * 0.8; 
+        dayPrice = pricePerUnit * 0.8;
         discountNote = "20% off";
       } else {
         dayPrice = pricePerUnit * 0.5;
@@ -95,7 +101,7 @@ const PaymentPage = () => {
   const platformFee = 50;
   const totalPayable = total + platformFee;
 
-  const completeBooking = async (transactionId: string , paymentId:string) => {
+  const completeBooking = async (transactionId: string, paymentId: string) => {
     if (!bookedService) {
       toast.error("Booking data missing!");
       setLoading(false);
@@ -110,15 +116,15 @@ const PaymentPage = () => {
       attendeesCount: bookedService.attendeesCount,
       packageName: bookedService.packageName,
       serviceData: bookedService.serviceData,
-      transactionId:transactionId,
-      paymentId:paymentId,
+      transactionId: transactionId,
+      paymentId: paymentId,
       total: totalPayable,
       userId: user?.id,
     };
     try {
       await startBooking(bookingPayload);
       toast.success("The service has been booked!");
-      navigate('/success')
+      setShowConfirmation(true);
     } catch (err) {
       toast.error("Booking failed");
       console.error(err);
@@ -126,71 +132,85 @@ const PaymentPage = () => {
     }
   };
 
- const handleSubmit = async () => {
-  setLoading(true);
+  const handleSubmit = async () => {
+    setLoading(true);
 
-  const userErrs = validateUserInformation(userForm);
-  setUserErrors(userErrs);
-  if (Object.keys(userErrs).length > 0) {
-    setLoading(false);
-    return;
-  }
-
-  let paymentId: string | null = null;
-  try {
-    const paymentData: paymentPayload = {
-      payerId: user?.id ?? "",
-      assetId: bookedService?.assetId ?? "",
-      platformFee,
-      amount: totalPayable,
-      currency: "INR",
-    };
-
-    const res = await createPayment(paymentData);
-    const orderId = res?.payment?.transactionId;
-    paymentId = res?.payment?._id;
-
-    if (!orderId || !paymentId) {
-      toast.error("Failed to create Razorpay order");
+    const userErrs = validateUserInformation(userForm);
+    setUserErrors(userErrs);
+    if (Object.keys(userErrs).length > 0) {
       setLoading(false);
       return;
     }
 
-    const options: any = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount: res.payment.total * 100,
-      currency: "INR",
-      name: "Festiva",
-      description: "Service booking",
-      order_id: orderId,
-      handler: async () => {
-        await paymentUpdate("success", paymentId!);
-        await completeBooking(orderId, paymentId!);
-      },
-      prefill: {
-        name: userForm.name,
-        email: userForm.email,
-        contact: userForm.phone,
-      },
-      theme: { color: "#5A2D82" },
-    };
+    let paymentId: string | null = null;
+    try {
+      const paymentData: paymentPayload = {
+        payerId: user?.id ?? "",
+        assetId: bookedService?.assetId ?? "",
+        platformFee,
+        amount: totalPayable,
+        currency: "INR",
+      };
 
-    const rzp = new (window as any).Razorpay(options);
+      const response = await createPayment(paymentData);
+      const orderId = response?.payment?.transactionId;
+      paymentId = response?.payment?._id;
 
-    rzp.on("payment.failed", async () => {
+      if (!orderId || !paymentId) {
+        toast.error("Failed to create Razorpay order");
+        setLoading(false);
+        return;
+      }
+
+      const options: any = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: response.payment.total * 100,
+        currency: "INR",
+        name: "Festiva",
+        description: "Service booking",
+        order_id: orderId,
+        handler: async () => {
+          const updated = await paymentUpdate("success", paymentId!);
+          setPaymentResponse(updated.payment);
+          await completeBooking(orderId, paymentId!);
+        },
+        prefill: {
+          name: userForm.name,
+          email: userForm.email,
+          contact: userForm.phone,
+        },
+        theme: { color: "#5A2D82" },
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+
+      rzp.on("payment.failed", async () => {
+        if (paymentId) await paymentUpdate("failed", paymentId);
+      });
+
+      rzp.open();
+    } catch (err) {
       if (paymentId) await paymentUpdate("failed", paymentId);
-    });
+      toast.error("Payment initiation failed");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    rzp.open();
-  } catch (err) {
-    if (paymentId) await paymentUpdate("failed", paymentId);
-    toast.error("Payment initiation failed");
-    console.error(err);
-  } finally {
-    setLoading(false);
+  if (showConfirmation && paymentResponse) {
+    return (
+      <BookingConfirmation
+        amount={paymentResponse.total}
+        currency="INR"
+        date={paymentResponse.createdAt}
+        transactionId={paymentResponse.transactionId}
+        status={paymentResponse.status}
+        brandName="Festiva"
+        onViewTrip={() => navigate("/home")}
+      />
+    );
   }
-};
-
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-JosephicSans">
@@ -198,7 +218,6 @@ const PaymentPage = () => {
         <div className="p-4 space-y-8 mt-3">
           <div>
             <h2 className="font-bold text-2xl mb-4">Service Details</h2>
-
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="w-full sm:w-64 md:w-96 md:h-64 h-44 rounded-md overflow-hidden shadow-md">
                 <img

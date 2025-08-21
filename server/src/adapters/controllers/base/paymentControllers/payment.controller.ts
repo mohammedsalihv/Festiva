@@ -29,19 +29,33 @@ export class PaymentController implements IPaymentController {
     }
   }
 
-async paymentStatusUpdate(req: Request, res: Response): Promise<void> {
-  try {
-    const { status, paymentId } = req.body;
-    await this._paymentUseCase.paymentStatus(status, paymentId);
-    res.status(statusCodes.Success).json({ success: true });
-  } catch (error: any) {
-    logger.error("Payment Status Update Error:", error);
-    res.status(error.statusCode || statusCodes.serverError).json({
-      success: false,
-      message: error.message || statusMessages.serverError,
-    });
+  async paymentStatusUpdate(req: Request, res: Response): Promise<void> {
+    try {
+      const { status, paymentId } = req.body;
+
+      const updatedPayment = await this._paymentUseCase.paymentStatus(
+        status,
+        paymentId
+      );
+
+      if (!updatedPayment) {
+        res.status(statusCodes.notfound).json({
+          success: false,
+          message: "Payment not found",
+        });
+        return;
+      }
+
+      res.status(statusCodes.Success).json({
+        success: true,
+        payment: updatedPayment,
+      });
+    } catch (error: any) {
+      logger.error("Payment Status Update Error:", error);
+      res.status(error.statusCode || statusCodes.serverError).json({
+        success: false,
+        message: error.message || statusMessages.serverError,
+      });
+    }
   }
-}
-
-
 }

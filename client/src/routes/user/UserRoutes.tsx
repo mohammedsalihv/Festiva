@@ -12,6 +12,7 @@ import ServiceDetails from "@/reusable-components/user/services/ServiceDetails";
 import PaymentPage from "@/pages/user/PaymentPage";
 
 const UserRoutes: React.FC = () => {
+
   return (
     <Routes>
       <Route
