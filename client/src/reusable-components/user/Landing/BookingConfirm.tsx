@@ -1,4 +1,7 @@
-import React from "react";
+import { Button } from "@/components/Button";
+import RatingReview from "@/components/RatingReview";
+import React, { useState } from "react";
+
 
 type PaymentStatus = "success" | "failed" | "pending";
 
@@ -9,7 +12,6 @@ export interface BookingConfirmationProps {
   transactionId: string;
   status?: PaymentStatus;
   brandName?: string;
-  onViewTrip?: () => void;
 }
 
 const CheckIcon: React.FC<{ className?: string }> = ({ className }) => (
@@ -63,8 +65,8 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
   transactionId,
   status = "success",
   brandName = "Usecheckin",
-  onViewTrip,
 }) => {
+  const [showReviewModal, setShowReviewModal] = useState(true);
   const statusLabel =
     status === "success"
       ? "Success"
@@ -73,10 +75,12 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
       : "Pending";
 
   return (
+     <>
+    {showReviewModal && <RatingReview/>}
     <section className="w-full px-4 md:px-2 py-10 md:py-20 mt-5 md:mt-10">
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-8 md:grid-cols-2"> 
-           <div className="rounded-2xl bg-white p-6 shadow-md ring-1 ring-black/5 md:p-10 mx-auto max-w  mr-4">
+        <div className="grid gap-8 md:grid-cols-2">
+          <div className="rounded-2xl bg-white p-6 shadow-md ring-1 ring-black/5 md:p-10 mx-auto max-w  mr-4">
             <div className="mb-6 inline-flex h-10 w-10 items-center justify-center rounded-lg ring-1 ring-black/10">
               <span className="text-xl font-extrabold text-black">F</span>
             </div>
@@ -93,18 +97,17 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <button
-                onClick={onViewTrip}
+              <Button
+                onClick={() => {
+                  setShowReviewModal(true);
+                }}
                 className="w-full sm:w-auto inline-flex items-center justify-center rounded-full px-5 py-3 text-base font-JosephicSans text-white bg-deepPurple hover:bg-deepPurple/90 focus:outline-none focus:ring-2 focus:ring-offset-2"
               >
                 Go back to home
-              </button>
+              </Button>
             </div>
           </div>
-
-          {/* RIGHT: amount + details */}
           <div className="space-y-4">
-            {/* Amount pill */}
             <div className="rounded-xl bg-white p-5 shadow-md ring-1 ring-black/5 mx-auto max-w  mr-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -132,8 +135,6 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
                 </div>
               </div>
             </div>
-
-            {/* Details card */}
             <div className="rounded-xl bg-white p-6 shadow-md ring-1 ring-black/5 mx-auto max-w mr-4">
               <h2 className="text-base font-semibold text-gray-900">
                 Payment details
@@ -166,8 +167,6 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
                   </dd>
                 </div>
               </dl>
-
-              {/* Decorative stub (the scalloped bottom in the mock) */}
               <div className="mt-6 flex gap-2 opacity-20">
                 {Array.from({ length: 14 }).map((_, i) => (
                   <span key={i} className="h-2 w-6 rounded-full bg-gray-200" />
@@ -178,5 +177,7 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
         </div>
       </div>
     </section>
+    </>
   );
+
 };

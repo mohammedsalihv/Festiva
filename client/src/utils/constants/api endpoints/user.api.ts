@@ -29,6 +29,9 @@ export const USER_API = {
     startPayment: "/startPayment",
     paymentStatus:'/payment/status'
   },
+  reviewRoutes : {
+    Rating:'/rateService'
+  },
   venueService: {
     getVenues: "/getVenues",
   },

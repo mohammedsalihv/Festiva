@@ -13,13 +13,12 @@ import { IAsset } from "@/utils/Types/user/commonDetails";
 import { createPayment, paymentUpdate } from "@/api/user/base/paymentService";
 import { startBooking } from "@/api/user/base/bookingService";
 import { toast } from "react-toastify";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate} from "react-router-dom";
 import { paymentPayload } from "@/utils/Types/base/payment";
 import { BookingConfirmation } from "@/reusable-components/user/Landing/BookingConfirm";
 import { USER_ROUTE } from "@/utils/constants/routes/user.routes";
 
 const PaymentPage = () => {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const bookedService = useSelector(
@@ -207,7 +206,6 @@ const PaymentPage = () => {
         transactionId={paymentResponse.transactionId}
         status={paymentResponse.status}
         brandName="Festiva"
-        onViewTrip={() => navigate("/home")}
       />
     );
   }
