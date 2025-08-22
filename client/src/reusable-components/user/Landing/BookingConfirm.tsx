@@ -66,7 +66,7 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
   status = "success",
   brandName = "Usecheckin",
 }) => {
-  const [showReviewModal, setShowReviewModal] = useState(true);
+  const [showReviewModal, setShowReviewModal] = useState(false);
   const statusLabel =
     status === "success"
       ? "Success"

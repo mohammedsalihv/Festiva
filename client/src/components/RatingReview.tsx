@@ -53,7 +53,6 @@ const RatingReview = () => {
     }
   };
 
-  // Countdown + redirect when success
   useEffect(() => {
     if (showSuccess) {
       const timer = setInterval(() => {
@@ -79,10 +78,9 @@ const RatingReview = () => {
         style={{ perspective: "1000px" }}
       >
         {!showSuccess ? (
-          // Rating Form
           <>
             <h2 className="text-2xl font-bold mb-2">Rate your booking</h2>
-            <p className="text-gray-500 text-sm mb-4">
+            <p className="text-gray-500 text-sm md:text-base mb-4 font-JosephicSans">
               Your feedback helps us improve our services and provide you with a
               better booking experience.
             </p>
@@ -97,13 +95,15 @@ const RatingReview = () => {
                   <Button
                     key={starValue}
                     type="button"
-                    onClick={() => setRating(starValue)}
+                    onClick={() => {
+                      setRating((prev) => (prev === starValue ? 0 : starValue))
+                    }}
                     onMouseEnter={() => setHover(starValue)}
                     onMouseLeave={() => setHover(0)}
                     className="focus:outline-none shadow-none"
                   >
                     <Star
-                      size={36}
+                      size={40}
                       className={`transition-colors ${
                         starValue <= (hover || rating)
                           ? "fill-yellow-400 text-yellow-400"
@@ -128,21 +128,20 @@ const RatingReview = () => {
             <div className="flex justify-end gap-3">
               <Button
                 onClick={() => navigate(USER_ROUTE.userRedirectLinks.toUserHome)}
-                className="px-4 py-2 border border-deepPurple text-gray-700 hover:bg-gray-100 transition rounded-md"
+                className="px-4 py-2 border  text-gray-700 transition rounded-md shadow-none border-none text-md font-poppins"
               >
                 Skip
               </Button>
 
               <Button
                 onClick={handleSubmit}
-                className="px-4 py-2 rounded-md bg-main_gradient text-white transition"
+                className="px-4 py-2 rounded-md bg-main_gradient text-white transition text-md font-poppins"
               >
                 Submit
               </Button>
             </div>
           </>
         ) : (
-          // Success State
           <div className="flex flex-col items-center justify-center text-center space-y-4">
             <Gift size={60} className="text-green-500" />
             <h2 className="text-2xl font-bold">Thanks for your feedback!</h2>
