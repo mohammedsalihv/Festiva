@@ -34,10 +34,16 @@ const RatingReview = () => {
       return;
     }
 
+    if (!bookedAsset?.assetType) {
+      setError("Asset type required!");
+      return;
+    }
+
     const payload: serviceRatingPayload = {
       stars: rating,
       comment,
       assetId: bookedAsset?.assetId,
+      assetType:bookedAsset?.assetType,
       reviewer: user?.id,
     };
 
@@ -54,25 +60,27 @@ const RatingReview = () => {
   };
 
   useEffect(() => {
-    if (showSuccess) {
-      const timer = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            navigate(USER_ROUTE.userRedirectLinks.toUserHome);
-          }
-          return prev - 1;
-        });
-      }, 1000);
+  if (showSuccess) {
+    const timer = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 2000);
 
-      return () => clearInterval(timer);
-    }
-  }, [showSuccess, navigate]);
+    return () => clearInterval(timer);
+  }
+}, [showSuccess]);
+
+
+useEffect(() => {
+  if (countdown <= 0 && showSuccess) {
+    navigate(USER_ROUTE.userRedirectLinks.toUserHome);
+  }
+}, [countdown, showSuccess, navigate]);
+
 
   return (
     <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/10">
       <div
-        className={`bg-white rounded-lg max-w-md md:max-w-2xl w-full p-6 md:p-8 transform transition-transform duration-700 ${
+        className={`bg-white rounded-lg max-w-md md:max-w-2xl w-full p-6 md:p-8 transform transition-transform duration-700 font-poppins ${
           showSuccess ? "rotate-y-180" : ""
         }`}
         style={{ perspective: "1000px" }}
@@ -80,7 +88,7 @@ const RatingReview = () => {
         {!showSuccess ? (
           <>
             <h2 className="text-2xl font-bold mb-2">Rate your booking</h2>
-            <p className="text-gray-500 text-sm md:text-base mb-4 font-JosephicSans">
+            <p className="text-gray-500 text-sm md:text-base mb-4">
               Your feedback helps us improve our services and provide you with a
               better booking experience.
             </p>
@@ -128,7 +136,7 @@ const RatingReview = () => {
             <div className="flex justify-end gap-3">
               <Button
                 onClick={() => navigate(USER_ROUTE.userRedirectLinks.toUserHome)}
-                className="px-4 py-2 border  text-gray-700 transition rounded-md shadow-none border-none text-md font-poppins"
+                className="px-4 py-2 border  text-gray-700 transition rounded-md shadow-none border-none text-md"
               >
                 Skip
               </Button>
@@ -145,7 +153,7 @@ const RatingReview = () => {
           <div className="flex flex-col items-center justify-center text-center space-y-4">
             <Gift size={60} className="text-green-500" />
             <h2 className="text-2xl font-bold">Thanks for your feedback!</h2>
-            <p className="text-gray-500 text-sm">
+            <p className="text-deepPurple font-semibold text-sm">
               Redirecting you to home in {countdown} sec...
             </p>
           </div>

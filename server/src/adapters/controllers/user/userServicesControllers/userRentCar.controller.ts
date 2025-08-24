@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Types } from "mongoose";
 import { IUserRentCarUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userRentCarUseCase";
 import { IUserRentCarController } from "../../../../domain/controlInterface/user/services interface/interface.userRentCarController";
 import logger from "../../../../utils/common/messages/logger";
@@ -7,7 +8,6 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import CustomError from "../../../../utils/common/errors/CustomError";
-
 
 export class UserRentCarController implements IUserRentCarController {
   constructor(private _userRentCarUseCase: IUserRentCarUseCase) {}
@@ -118,13 +118,39 @@ export class UserRentCarController implements IUserRentCarController {
       res.status(statusCodes.Success).json({
         success: true,
         message: "Sorted cars fetched successfully",
-        ...result, 
+        ...result,
       });
     } catch (error) {
       res.status(statusCodes.serverError).json({
         success: false,
-        message: error instanceof Error ? error.message : statusMessages.serverError,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
       });
+    }
+  }
+  async getHostId(assetId: string): Promise<Types.ObjectId> {
+    try {
+      const rentCar: string | undefined =
+        typeof assetId === "string"
+          ? assetId
+          : Array.isArray(assetId) && typeof assetId[0] === "string"
+          ? assetId[0]
+          : undefined;
+
+      if (!rentCar) {
+        throw new CustomError("CatersId is required", statusCodes.badRequest);
+      }
+
+      const hostId = await this._userRentCarUseCase.findRentCarHost(rentCar);
+      return hostId;
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      throw new CustomError(
+        statusMessages.serverError,
+        statusCodes.serverError
+      );
     }
   }
 }

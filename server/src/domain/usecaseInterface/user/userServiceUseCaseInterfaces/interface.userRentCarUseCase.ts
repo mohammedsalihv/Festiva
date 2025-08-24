@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import {
   IRentCarBase,
   IRentCar,
@@ -16,4 +17,5 @@ export interface IUserRentCarUseCase {
     page: number,
     limit: number
   ): Promise<{ data: IRentCarBase[]; totalPages: number; currentPage: number }>;
+  findRentCarHost(rentcarId: string): Promise<Types.ObjectId>;
 }

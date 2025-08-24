@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Types } from "mongoose";
 import { IUserVenueController } from "../../../../domain/controlInterface/user/services interface/interface.userVenueController";
 import { IUserVenueUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userVenueUseCase";
 import logger from "../../../../utils/common/messages/logger";
@@ -7,7 +8,6 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import CustomError from "../../../../utils/common/errors/CustomError";
-
 
 export class UserVenueController implements IUserVenueController {
   constructor(private _userVenueUseCase: IUserVenueUseCase) {}
@@ -110,7 +110,11 @@ export class UserVenueController implements IUserVenueController {
       const sorts = req.query;
       const page = parseInt(sorts.page as string) || 1;
       const limit = parseInt(sorts.limit as string) || 10;
-      const result = await this._userVenueUseCase.sortVenues(sorts, page, limit);
+      const result = await this._userVenueUseCase.sortVenues(
+        sorts,
+        page,
+        limit
+      );
 
       res.status(statusCodes.Success).json({
         success: true,
@@ -118,10 +122,36 @@ export class UserVenueController implements IUserVenueController {
         ...result,
       });
     } catch (error) {
-       res.status(statusCodes.serverError).json({
+      res.status(statusCodes.serverError).json({
         success: false,
-        message: error instanceof Error ? error.message : statusMessages.serverError,
+        message:
+          error instanceof Error ? error.message : statusMessages.serverError,
       });
+    }
+  }
+  async getHostId(assetId: string): Promise<Types.ObjectId> {
+    try {
+      const venueId: string | undefined =
+        typeof assetId === "string"
+          ? assetId
+          : Array.isArray(assetId) && typeof assetId[0] === "string"
+          ? assetId[0]
+          : undefined;
+
+      if (!venueId) {
+        throw new CustomError("CatersId is required", statusCodes.badRequest);
+      }
+
+      const hostId = await this._userVenueUseCase.findVenueHost(venueId);
+      return hostId;
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      throw new CustomError(
+        statusMessages.serverError,
+        statusCodes.serverError
+      );
     }
   }
 }

@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IUserRentCarRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userRentCarRepository";
 import {
   IRentCar,
@@ -29,10 +30,23 @@ export class UserRentCarUseCase implements IUserRentCarUseCase {
     page: number,
     limit: number
   ) {
-    return await this._userRentCarRepository.findByFilters(filters, page, limit);
+    return await this._userRentCarRepository.findByFilters(
+      filters,
+      page,
+      limit
+    );
   }
 
   async sortRentCars(sorts: any, page: number, limit: number) {
     return await this._userRentCarRepository.sortRentCars(sorts, page, limit);
+  }
+  async findRentCarHost(catersId: string): Promise<Types.ObjectId> {
+    const rentCar = await this._userRentCarRepository.fetchRentCarDetailsById(
+      catersId
+    );
+    if (!rentCar) {
+      throw new CustomError("Rent car not found", statusCodes.notfound);
+    }
+    return rentCar.host as Types.ObjectId;
   }
 }

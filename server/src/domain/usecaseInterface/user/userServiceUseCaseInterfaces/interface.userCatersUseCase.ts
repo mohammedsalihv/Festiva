@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import {
   ICatersBase,
   ICaters,
@@ -16,4 +17,5 @@ export interface IUserCatersUseCase {
     page: number,
     limit: number
   ): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }>;
+  findCatersHost(catersId: string): Promise<Types.ObjectId>;
 }

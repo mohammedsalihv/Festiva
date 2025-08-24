@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import {
   IStudioBase,
   IStudio,
@@ -15,4 +16,5 @@ export interface IUserStudioUseCase {
     page: number,
     limit: number
   ): Promise<{ data: IStudioBase[]; totalPages: number; currentPage: number }>;
+  findStudioHost(studioId: string): Promise<Types.ObjectId>;
 }

@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IUserStudioRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userStudioRepository";
 import {
   IStudio,
@@ -35,5 +36,17 @@ export class UserStudioUseCase implements IUserStudioUseCase {
 
   async sortStudios(sorts: any, page: number, limit: number) {
     return await this._userStudioRepository.sortStudios(sorts, page, limit);
+  }
+  async findStudioHost(catersId: string): Promise<Types.ObjectId> {
+    const studio = await this._userStudioRepository.fetchStudioDetailsById(
+      catersId
+    );
+    if (!studio) {
+      throw new CustomError("Studio not found", statusCodes.notfound);
+    }
+    if (!studio.host) {
+      throw new CustomError("Host not found", statusCodes.notfound);
+    }
+    return studio.host as Types.ObjectId;
   }
 }

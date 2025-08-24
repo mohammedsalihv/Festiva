@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IUserVenueRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userVenueRepository";
 import {
   IVenue,
@@ -33,5 +34,14 @@ export class UserVenueUseCase implements IUserVenueUseCase {
 
   async sortVenues(sorts: any, page: number, limit: number) {
     return await this._userVenueRepository.sortVenues(sorts, page, limit);
+  }
+  async findVenueHost(venueId: string): Promise<Types.ObjectId> {
+    const venue = await this._userVenueRepository.fetchVenueDetailsById(
+      venueId
+    );
+    if (!venue) {
+      throw new CustomError("Venue not found", statusCodes.notfound);
+    }
+    return venue.host as Types.ObjectId;
   }
 }

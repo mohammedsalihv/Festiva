@@ -30,7 +30,7 @@ export const USER_API = {
     paymentStatus:'/payment/status'
   },
   reviewRoutes : {
-    Rating:'/rateService'
+    Rating:'/newReview'
   },
   venueService: {
     getVenues: "/getVenues",

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Types } from "mongoose";
 import { IUserServicesBaseController } from "../../../../domain/controlInterface/user/services interface/interface.userServicesBaseController";
 import {
   statusCodes,
@@ -8,6 +9,7 @@ import { IUserVenueController } from "../../../../domain/controlInterface/user/s
 import { IUserRentCarController } from "../../../../domain/controlInterface/user/services interface/interface.userRentCarController";
 import { IUserCatersController } from "../../../../domain/controlInterface/user/services interface/interface.userCatersController";
 import { IUserStudioController } from "../../../../domain/controlInterface/user/services interface/interface.userStudioController";
+import CustomError from "../../../../utils/common/errors/CustomError";
 export class UserServiceBaseController implements IUserServicesBaseController {
   constructor(
     private _userVenueController: IUserVenueController,
@@ -114,6 +116,28 @@ export class UserServiceBaseController implements IUserServicesBaseController {
         message:
           error instanceof Error ? error.message : statusMessages.serverError,
       });
+    }
+  }
+
+  async reviewReceiver(
+    assetType: string,
+    assetId: string
+  ): Promise<Types.ObjectId | string> {
+    try {
+      switch (assetType) {
+        case "venue":
+          return await this._userVenueController.getHostId(assetId);
+        case "rentcar":
+          return await this._userRentCarController.getHostId(assetId);
+        case "studio":
+          return await this._userStudioController.getHostId(assetId);
+        case "caters":
+          return await this._userCatersController.getHostId(assetId);
+        default:
+          throw new CustomError("Invalid asset type", statusCodes.notfound);
+      }
+    } catch (error) {
+      return "Failed to fech host id";
     }
   }
 }

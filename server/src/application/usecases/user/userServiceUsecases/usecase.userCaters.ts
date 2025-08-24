@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IUserCatersRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userCatersRepository";
 import {
   ICaters,
@@ -14,7 +15,6 @@ export class UserCatersUseCase implements IUserCatersUseCase {
   }
   async catersDetails(catersId: string): Promise<ICaters> {
     const caters = await this._userCatersRepository.fetchCatersById(catersId);
-
     if (!caters) {
       throw new CustomError("Caters not found", statusCodes.notfound);
     }
@@ -35,5 +35,13 @@ export class UserCatersUseCase implements IUserCatersUseCase {
     limit: number
   ): Promise<{ data: ICatersBase[]; totalPages: number; currentPage: number }> {
     return await this._userCatersRepository.sortCaters(sorts, page, limit);
+  }
+
+  async findCatersHost(catersId: string): Promise<Types.ObjectId> {
+    const caters = await this._userCatersRepository.fetchCatersById(catersId);
+    if (!caters) {
+      throw new CustomError("Caters not found", statusCodes.notfound);
+    }
+    return caters.host as Types.ObjectId;
   }
 }

@@ -140,8 +140,6 @@ export default function ServicesCard() {
           Object.keys(sorts).length > 0
             ? await sortAssets(type, params)
             : await filterAsset(type, params);
-
-        console.log("API response:", response);
         setAssets(response.data);
         setTotalPages(response.totalPages);
         setCurrentPage(page);
@@ -229,15 +227,16 @@ export default function ServicesCard() {
   };
 
   return (
-    <div className="max-w-full sm:px-6 md:px-4 mx-auto px-2 py-3 sm:py-6 font-JosephicSans mt-10">
+    <div className="max-w-full sm:px-6 md:px-4 mx-auto px-2 py-3 sm:py-6 font-poppins mt-14">
       <div className="w-full flex flex-col gap-3 mb-4 sm:gap-4 border-b py-3">
         <div className="flex flex-col gap-3 lg:hidden">
           <div className="flex gap-2">
             <div className="flex-1 min-w-[150px] relative border-b text-black">
-              <MdLocationPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm z-10" />
+              <MdLocationPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm pointer-events-none" />
               <div
+                id="mapbox-container"
                 ref={geocoderContainerRef}
-                className="w-full pl-10 pr-3 py-2 text-sm font-extralight"
+                className="w-full text-sm font-poppins"
               />
             </div>
             <Button
@@ -281,12 +280,12 @@ export default function ServicesCard() {
                 />
               </div>
 
-              <div className="relative flex-[2] min-w-[160px] w-full border-r">
+              <div className="relative flex-[2] min-w-[160px] w-full border-r font-poppins">
                 <MdLocationPin className="absolute right-3 top-1/2 -translate-y-1/2 text-deepPurple text-base pointer-events-none z-10" />
                 <div
                   id="mapbox-container"
                   ref={geocoderContainerRef}
-                  className="w-full pl-3 pr-10 py-1 text-base font-extralight"
+                  className="w-full pl-3 pr-10 py-1 text-base font-poppins"
                 />
               </div>
             </div>

@@ -38,9 +38,11 @@ export const USER_ROUTES = {
   bookingRoutes: {
     createbooking: "/createbooking",
   },
-
   paymentRoutes: {
     startPayment: "/startPayment",
     statusUpdate: "/payment/status",
+  },
+  reviewRoutes: {
+    addNewReview: "/newReview",
   },
 } as const;

@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import {
   IVenue,
   IVenueBase,
@@ -15,4 +16,5 @@ export interface IUserVenueUseCase {
     page: number,
     limit: number
   ): Promise<{ data: IVenueBase[]; totalPages: number; currentPage: number }>;
+  findVenueHost(venueId: string): Promise<Types.ObjectId>;
 }

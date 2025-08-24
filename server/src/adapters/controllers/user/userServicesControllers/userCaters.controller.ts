@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Types } from "mongoose";
 import { IUserCatersController } from "../../../../domain/controlInterface/user/services interface/interface.userCatersController";
 import { IUserCatersUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userCatersUseCase";
 import logger from "../../../../utils/common/messages/logger";
@@ -55,7 +56,7 @@ export class UserCatersController implements IUserCatersController {
         });
         return;
       }
-      const caters = await this._userCatersUseCase.catersDetails(catersId);
+      const caters = await this._userCatersUseCase.findCatersHost(catersId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "Caters details fetched successfully",
@@ -103,7 +104,6 @@ export class UserCatersController implements IUserCatersController {
     }
   }
 
-  
   async sortCaters(req: Request, res: Response): Promise<void> {
     try {
       const sorts = req.query;
@@ -127,6 +127,32 @@ export class UserCatersController implements IUserCatersController {
         message:
           error instanceof Error ? error.message : statusMessages.serverError,
       });
+    }
+  }
+
+  async getHostId(assetId: string): Promise<Types.ObjectId> {
+    try {
+      const catersId: string | undefined =
+        typeof assetId === "string"
+          ? assetId
+          : Array.isArray(assetId) && typeof assetId[0] === "string"
+          ? assetId[0]
+          : undefined;
+
+      if (!catersId) {
+        throw new CustomError("CatersId is required", statusCodes.badRequest);
+      }
+
+      const hostId = await this._userCatersUseCase.findCatersHost(catersId);
+      return hostId;
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      throw new CustomError(
+        statusMessages.serverError,
+        statusCodes.serverError
+      );
     }
   }
 }

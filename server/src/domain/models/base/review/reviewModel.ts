@@ -7,6 +7,7 @@ const reviewSchema = new Schema<IReview>({
   rating: { type: Number },
   comment: { type: String },
   assetId: { type: Schema.Types.ObjectId },
+  assetType: { type: String },
 });
 
 export const reviewModel = mongoose.model<IReview>("Review", reviewSchema);

@@ -8,5 +8,5 @@ export const rateService = async (data: serviceRatingPayload) => {
     USER_API.reviewRoutes.Rating,
     data
   );
-  return response.data.data;
+  return response.data;
 };

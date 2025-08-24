@@ -211,11 +211,11 @@ const PaymentPage = () => {
   }
 
   return (
-    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-JosephicSans">
-      <div className="bg-main_gradient text-white px-3 sm:px-6 md:px-16 md:py-20 flex flex-col">
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 font-poppins">
+      <div className="bg-white text-black px-3 sm:px-6 md:px-16 md:py-20 flex flex-col">
         <div className="p-4 space-y-8 mt-3">
           <div>
-            <h2 className="font-bold text-2xl mb-4">Service Details</h2>
+            <h2 className="font-semibold text-base md:text-lg mb-4">Service Details</h2>
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="w-full sm:w-64 md:w-96 md:h-64 h-44 rounded-md overflow-hidden shadow-md">
                 <img
@@ -228,7 +228,7 @@ const PaymentPage = () => {
                 />
               </div>
               <div className="flex-1">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold">
+                <h3 className="text-sm md:text-base mt-1">
                   {bookedService?.serviceData &&
                     ("venueName" in bookedService.serviceData
                       ? bookedService.serviceData.venueName
@@ -242,16 +242,16 @@ const PaymentPage = () => {
                 </h3>
                 {bookedService?.assetType === "venue" &&
                   "squareFeet" in bookedService.serviceData && (
-                    <p className="text-gray-300 text-sm">
+                    <p className="text-gray-400 text-xs">
                       {bookedService.serviceData.squareFeet} sq ft
                     </p>
                   )}
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-              <div className="bg-white/10 rounded-lg p-3">
-                <p className="text-sm md:text-base text-gray-300">Date</p>
-                <p className="font-medium">
+              <div className="bg-white/5 rounded-lg p-3 border">
+                <p className="text-xs text-gray-400 mb-1 font-bold">Date</p>
+                <p className="text-sm">
                   {Array.isArray(bookedService?.selectedDates)
                     ? bookedService.selectedDates.map(formatDate).join(", ")
                     : formatDate(bookedService?.selectedDates || "")}
@@ -259,37 +259,37 @@ const PaymentPage = () => {
               </div>
 
               {bookedService?.selectedTimeSlot && (
-                <div className="bg-white/10 rounded-lg p-3">
-                  <p className="text-sm md:text-base text-gray-300">Time</p>
-                  <p className="font-medium">
+                <div className="bg-white/5 rounded-lg p-3 border">
+                  <p className="text-xs text-gray-400 mb-1 font-bold">Time</p>
+                  <p className="text-sm">
                     {bookedService.selectedTimeSlot}
                   </p>
                 </div>
               )}
 
               {bookedService?.attendeesCount && (
-                <div className="bg-white/10 rounded-lg p-3">
-                  <p className="text-sm md:text-base text-gray-300">
+                <div className="bg-white/5 rounded-lg p-3 border">
+                  <p className="text-xs text-gray-400 mb-1 font-bold">
                     Attendees
                   </p>
-                  <p className="font-medium">
+                  <p className="text-sm">
                     {bookedService.attendeesCount} people
                   </p>
                 </div>
               )}
 
               {bookedService?.packageName && (
-                <div className="bg-white/10 rounded-lg p-3">
-                  <p className="text-sm md:text-base text-gray-300">Package</p>
-                  <p className="font-medium">{bookedService.packageName}</p>
+                <div className="bg-white/5 rounded-lg p-3 border">
+                  <p className="text-xs text-gray-400 mb-1 font-bold">Package</p>
+                  <p className="text-sm">{bookedService.packageName}</p>
                 </div>
               )}
 
-              <div className="bg-white/10 rounded-lg p-3">
-                <p className="text-sm md:text-base text-gray-300">
+              <div className="bg-white/5 rounded-lg p-3 border">
+                <p className="text-xs text-gray-400 mb-1 font-bold">
                   Service type
                 </p>
-                <p className="font-bold text-blue-400">
+                <p className="text-sm text-blue-400">
                   {bookedService?.assetType
                     ? bookedService.assetType.charAt(0).toUpperCase() +
                       bookedService.assetType.slice(1)
@@ -299,7 +299,7 @@ const PaymentPage = () => {
             </div>
           </div>
           <div>
-            <h2 className="font-bold text-xl mb-3">Price Breakdown</h2>
+            <h2 className="font-bold text-lg mb-3">Price Breakdown</h2>
             <ul className="divide-y divide-gray-600">
               {breakdown.map((day, index) => (
                 <li key={index} className="flex justify-between py-2">
@@ -318,10 +318,10 @@ const PaymentPage = () => {
           </div>
 
           {/* Totals */}
-          <div className="space-y-2 text-sm md:text-base">
+          <div className="space-y-2 text-xs md:text-sm">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span className="font-semibold text-lg">
+              <span className="font-semibold text-sm md:text-base">
                 ₹{total.toLocaleString()}.00
               </span>
             </div>
@@ -331,13 +331,13 @@ const PaymentPage = () => {
             </div>
             <div className="flex justify-between font-bold text-lg pt-2 border-t border-gray-600">
               <span>Total payable</span>
-              <span className="text-2xl">
+              <span className="text-lg md:text-xl">
                 ₹{totalPayable.toLocaleString()}/-
               </span>
             </div>
           </div>
         </div>
-        <p className="text-sm md:text-base p-4 text-gray-300 text-center">
+        <p className="text-xs md:text-sm p-4 text-gray-600 text-center">
           This price includes platform fees. By subscribing, you agree to our{" "}
           <a
             href="/terms"
@@ -357,7 +357,7 @@ const PaymentPage = () => {
       </div>
 
       <div className="px-3 sm:px-5 sm:py-10 md:px-12 md:py-20 mt-4 max-w-3xl w-full mx-auto">
-        <h2 className="text-lg md:text-2xl font-bold mb-6 text-deepPurple">
+        <h2 className="font-semibold text-base md:text-lg mb-6 text-deepPurple">
           User Information
         </h2>
 
@@ -489,7 +489,7 @@ const PaymentPage = () => {
         <Button
           onClick={handleSubmit}
           disabled={loading}
-          className="mt-6 bg-deepPurple text-white py-5 font-semibold hover:bg-deepPurple/90 transition-all w-full"
+          className="mt-6 mb-3 bg-deepPurple text-white py-6 font-semibold hover:bg-deepPurple/90 transition-all w-full"
         >
           {loading ? "Processing..." : "Pay & Confirm"}
         </Button>

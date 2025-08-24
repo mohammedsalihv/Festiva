@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Types } from "mongoose";
 import { IUserStudioController } from "../../../../domain/controlInterface/user/services interface/interface.userStudioController";
 import { IUserStudioUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userStudioUseCase";
 import logger from "../../../../utils/common/messages/logger";
@@ -7,7 +8,6 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import CustomError from "../../../../utils/common/errors/CustomError";
-
 
 export class UserStudioController implements IUserStudioController {
   constructor(private _userStudioUseCase: IUserStudioUseCase) {}
@@ -126,6 +126,31 @@ export class UserStudioController implements IUserStudioController {
         message:
           error instanceof Error ? error.message : statusMessages.serverError,
       });
+    }
+  }
+  async getHostId(assetId: string): Promise<Types.ObjectId> {
+    try {
+      const studioId: string | undefined =
+        typeof assetId === "string"
+          ? assetId
+          : Array.isArray(assetId) && typeof assetId[0] === "string"
+          ? assetId[0]
+          : undefined;
+
+      if (!studioId) {
+        throw new CustomError("CatersId is required", statusCodes.badRequest);
+      }
+
+      const hostId = await this._userStudioUseCase.findStudioHost(studioId);
+      return hostId;
+    } catch (error) {
+      if (error instanceof CustomError) {
+        throw error;
+      }
+      throw new CustomError(
+        statusMessages.serverError,
+        statusCodes.serverError
+      );
     }
   }
 }

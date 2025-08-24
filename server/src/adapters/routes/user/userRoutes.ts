@@ -11,6 +11,7 @@ import { userCatersController } from "../../../infrastructure/DI/user/userServic
 import { userController } from "../../../infrastructure/DI/user/userAuthenticationDependencyInjections/userAuth.DI";
 import { paymentController } from "../../../infrastructure/DI/base/paymentDependencyInjections/payment.DI";
 import { bookingController } from "../../../infrastructure/DI/base/bookingDependencyInjections/booking.DI";
+import { reviewController } from "../../../infrastructure/DI/base/reviewDependencyInjections/review.DI";
 
 export interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -90,6 +91,13 @@ userRoutes.put(
   paymentController.paymentStatusUpdate.bind(paymentController)
 );
 
+
+// review 
+
+userRoutes.post(
+  USER_ROUTES.reviewRoutes.addNewReview,
+  reviewController.addReview.bind(reviewController)
+);
 
 
 export default userRoutes;
