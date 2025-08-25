@@ -8,7 +8,7 @@ import {
 import ImageCropper from "@/components/ImageCropper";
 import { Images } from "@/assets";
 import { toast } from "react-toastify";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
 import { useNavigate } from "react-router-dom";
 import Spinner from "@/components/Spinner";
 import { GrFormClose } from "react-icons/gr";

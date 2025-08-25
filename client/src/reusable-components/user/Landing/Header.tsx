@@ -12,7 +12,7 @@ import { logoutUser } from "@/redux/Slice/user/userSlice";
 import { Images } from "@/assets";
 import ConfirmDialog from "./ConfirmDialog";
 import { userLogout } from "@/api/user/auth/userAuthService";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { CgMenuRight } from "react-icons/cg";
@@ -118,8 +118,8 @@ const Header = () => {
                   className="w-10 h-10 cursor-pointer rounded-full"
                 />
                 {dropDown && (
-                  <div className="fixed inset-0 z-50 flex justify-end items-end pointer-events-none">
-                    <div className="w-64 h-full bg-white/10 backdrop-blur-md shadow-lg animate-slide-up-full pointer-events-auto font-JosephicSans">
+                  <div className="fixed inset-0 z-50 flex justify-end items-end pointer-events-none ">
+                    <div className="w-64 h-full bg-white/10 backdrop-blur-md shadow-lg animate-slide-up-full pointer-events-auto font-poppins">
                       <div className="flex justify-end p-4">
                         <IoIosClose
                           onClick={() => setDropDown(false)}

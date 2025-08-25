@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutAdmin } from "@/redux/Slice/admin/adminSlice";
 import { toast } from "react-toastify";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
 
 const AdminSidebar: FC = () => {
   const dispatch = useDispatch();

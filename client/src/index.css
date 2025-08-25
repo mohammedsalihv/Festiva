@@ -45,47 +45,49 @@
 }
 
 .mapboxgl-ctrl-geocoder input[type="text"]::placeholder {
-  font-family: 'Poppins' !important;
-  font-size: 16px; 
+  font-family: "Poppins" !important;
+  font-size: 16px;
   color: #9ca3af;
 }
 
 .mapboxgl-ctrl-geocoder input[type="text"] {
-  font-family: 'Poppins'!important;
+  font-family: "Poppins" !important;
 }
 
-#mapbox-container .mapboxgl-ctrl-geocoder {
-  min-height: 40px;       /* ensure clickable height */
-  width: 100% !important;
-  font-family: 'Poppins', sans-serif;
-}
-
-#mapbox-container .mapboxgl-ctrl-geocoder--input {
-  padding-left: 28px;     /* leave space for icon */
-  font-size: 14px;
-}
-
-
-/* Ensure container doesn't block */
 #mapbox-container .mapboxgl-ctrl-geocoder {
   position: relative;
+  z-index: 10; 
   width: 100% !important;
   min-height: 40px;
-  background: transparent !important;
-  pointer-events: auto !important; /* accept touches */
-}
-
-/* Ensure actual input is clickable */
-#mapbox-container .mapboxgl-ctrl-geocoder--input {
-  position: relative;
-  z-index: 50 !important; /* always above siblings */
   background: transparent !important;
   pointer-events: auto !important;
 }
 
+
+#mapbox-container .mapboxgl-ctrl-geocoder--input {
+  position: relative !important;
+  z-index: 9999 !important;
+  background: transparent !important;
+  pointer-events: auto !important;
+  padding-left: 2.5rem !important; 
+  font-size: 14px;
+}
+
+
+
 /* Hide Mapbox search icon (already done, but double enforce) */
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--icon-search {
   display: none !important;
+}
+
+.mapboxgl-ctrl-geocoder svg,
+.mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--icon {
+  pointer-events: none !important;
+}
+
+#mapbox-container {
+  flex: 1 1 auto;
+  min-width: 150px; /* force visibility */
 }
 
 /* On mobile, prevent flex shrink */

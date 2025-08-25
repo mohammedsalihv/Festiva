@@ -8,7 +8,7 @@ import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
 import { LoginUser, validateEmail } from "@/api/user/auth/userAuthService";
 import { setUserDetails } from "@/redux/Slice/user/userSlice";
 import { AxiosError } from "axios";

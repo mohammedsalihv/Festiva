@@ -13,7 +13,7 @@ import { RiCameraAiLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
 
 const venueOptions = [
   {

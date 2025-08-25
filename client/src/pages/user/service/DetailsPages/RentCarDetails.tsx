@@ -156,7 +156,7 @@ const RentCarDetails: React.FC<rentCarDetailsProps> = ({ data }) => {
   };
 
   return (
-    <div className="relative mt-16 sm:mt-20 md:mt-24 font-JosephicSans">
+    <div className="relative mt-16 sm:mt-20 md:mt-24 font-poppins">
       <div className="w-full max-w-[1350px] mx-auto p-1">
         <div className="grid lg:grid-cols-3 gap-2">
           <div className="lg:col-span-2">

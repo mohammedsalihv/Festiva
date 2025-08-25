@@ -13,7 +13,7 @@ import UserPrivateRoute from "./routes/user/Protect/UserPrivateRoute";
 import AdminPrivateRoute from "./routes/admin/AdminPrivateRoutes";
 import AdminLogin from "./pages/admin/auth/AdminLogin";
 import RobotError from "./components/ErrorAlert";
-import CustomToastContainer from "./reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "./reusable-components/messages/ToastContainer";
 
 const App: React.FC = () => {
   return (

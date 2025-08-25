@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { logoutHost } from "@/redux/Slice/host/common/hostSlice";
 import TooltipIcon from "@/components/TooltipIcon";
 import { toast } from "react-toastify";
-import CustomToastContainer from "../Messages/ToastContainer";
+import CustomToastContainer from "../messages/ToastContainer";
 import LogoText from "@/components/LogoText";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { LuUserRoundCog } from "react-icons/lu";

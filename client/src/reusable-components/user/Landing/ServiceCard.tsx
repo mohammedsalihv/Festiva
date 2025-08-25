@@ -231,23 +231,6 @@ export default function ServicesCard() {
       <div className="w-full flex flex-col gap-3 mb-4 sm:gap-4 border-b py-3">
         <div className="flex flex-col gap-3 lg:hidden">
           <div className="flex gap-2">
-            <div className="flex-1 min-w-[150px] relative border-b text-black">
-              <MdLocationPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm pointer-events-none" />
-              <div
-                id="mapbox-container"
-                ref={geocoderContainerRef}
-                className="w-full text-sm font-poppins"
-              />
-            </div>
-            <Button
-              onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="flex items-center px-3 py-2 shadow-none hover:opacity-90 rounded-md bg-main_gradient text-white text-xs"
-            >
-              <FaFilter className="mr-1 text-xs" />
-            </Button>
-          </div>
-
-          <div className="flex gap-2">
             <div className="relative flex-1 min-w-[150px]">
               <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs" />
               <Input
@@ -263,6 +246,22 @@ export default function ServicesCard() {
               className="flex items-center px-3 py-2 shadow-none hover:opacity-90 rounded-md bg-main_gradient text-white text-xs"
             >
               <FaSortAmountDownAlt className="mr-1 text-xs " />
+            </Button>
+          </div>
+          <div className="flex gap-2">
+            <div className="flex-1 min-w-0 relative border-b text-black">
+              <MdLocationPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg pointer-events-none z-[1001]" />
+              <div
+                id="mapbox-container"
+                ref={geocoderContainerRef}
+                className="w-full pr-3 py-2 text-xs font-extralight"
+              />
+            </div>
+            <Button
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className="flex items-center px-3 py-2 shadow-none hover:opacity-90 rounded-md bg-main_gradient text-white text-xs"
+            >
+              <FaFilter className="mr-1 text-xs" />
             </Button>
           </div>
         </div>

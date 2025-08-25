@@ -12,7 +12,7 @@ import {
   FormState,
 } from "@/utils/validations/host/auth/hostRegisterValidation";
 import { sendOtp, verifyOtp } from "@/api/user/auth/userAuthService";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";

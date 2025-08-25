@@ -16,7 +16,7 @@ import {
   verifyOtp,
 } from "@/api/user/auth/userAuthService";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
 import { AxiosError } from "axios";
 import Otp from "@/components/Otp";
 import { BiSolidEditAlt } from "react-icons/bi";
@@ -311,7 +311,7 @@ const Profile: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white p-4 md:p-10 text-black font-JosephicSans mt-9">
+    <div className="min-h-screen bg-white p-4 md:p-10 text-black font-poppins mt-9">
       <div className="flex flex-col md:flex-row gap-10">
         <div className="bg-white p-6 rounded-xl w-full md:w-60 space-y-4 border border-gray-400">
           <div className="flex flex-col space-y-2 text-sm">

@@ -1,7 +1,7 @@
 import { Images } from "@/assets";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import ToastContainer from "@/reusable-components/Messages/ToastContainer";
+import ToastContainer from "@/reusable-components/messages/ToastContainer";
 import LogoText from "@/components/LogoText";
 
 const Footer = () => {

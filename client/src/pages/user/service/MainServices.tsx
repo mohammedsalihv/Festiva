@@ -4,7 +4,7 @@ import { services } from "@/utils/Options/user/serviceOptions";
 
 const MainServices: React.FC = () => {
   return (
-    <div className="max-w-7xl mx-auto px-2 py-8 font-JosephicSans mt-20">
+    <div className="max-w-7xl mx-auto px-2 py-8 font-poppins mt-20">
       <div className="space-y-10">
         {services.map((service) => (
           <div

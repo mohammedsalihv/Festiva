@@ -2,7 +2,7 @@ import { Images } from "@/assets";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
 import { validateCatersDetailsForm } from "@/utils/validations/host/service/catersFormValidation";
 
 import {

@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import { GiCampCookingPot } from "react-icons/gi";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
 
 const CatersRequestView: React.FC<catersRequestProps> = ({ data }) => {
   const {
