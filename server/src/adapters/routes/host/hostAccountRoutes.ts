@@ -6,6 +6,7 @@ import {
 } from "../../../utils/common/middlewares/auth";
 import { hostNotificationController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostNotification.DI";
 import { hostAssetController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostAsset.DI";
+import { hostBookingController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostBookings.DI";
 
 const hostAccountRoutes = express.Router();
 
@@ -30,6 +31,13 @@ hostAccountRoutes.get(
   authenticateToken,
   isHost,
   hostAssetController.allAssets.bind(hostAssetController)
+);
+
+hostAccountRoutes.get(
+  HOST_ROUTES.HostAccount.bookings,
+  authenticateToken,
+  isHost,
+  hostBookingController.getAllBookings.bind(hostBookingController)
 );
 
 hostAccountRoutes.get(

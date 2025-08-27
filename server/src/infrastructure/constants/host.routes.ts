@@ -12,6 +12,7 @@ export const HOST_ROUTES = {
     notifications: "/notifications",
     notificationsMarkAllRead: "/notifications/mark-all-read",
     myAssets:'/myassets',
+    bookings:'/bookings',
     assetDetails: "/assets/details/:assetId",
     assetReApply:"/assets/re-apply/:assetId",
    assetAvailability: "/assets/:assetId",

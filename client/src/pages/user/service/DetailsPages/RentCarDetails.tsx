@@ -445,7 +445,7 @@ const RentCarDetails: React.FC<rentCarDetailsProps> = ({ data }) => {
               {data.rent}
               <span className="text-gray-500 text-sm ml-1">/Day</span>
               <span className="text-gray-500 text-sm ml-auto">
-                1 hr. minimum
+                1 Day. minimum
               </span>
             </div>
 
@@ -528,27 +528,6 @@ const RentCarDetails: React.FC<rentCarDetailsProps> = ({ data }) => {
                 </div>
               )}
             </div>
-
-            <div className="relative">
-              <p className="px-1 py-1">Attendees</p>
-              <select
-                name="attendees"
-                value={bookingForm.attendees}
-                onChange={handleChange}
-                className={`w-full border ${
-                  errors.attendees ? "border-red-500" : "border-gray-300"
-                } rounded px-3 py-2 text-sm focus:outline-none `}
-              >
-                <option value="">Select attendees</option>
-                <option value="100">100 - 500 people</option>
-                <option value="500">500 - 1500 people</option>
-                <option value="2000">2000 & above</option>
-              </select>
-              {errors?.attendees && (
-                <p className="text-red-600 text-xs mt-1">{errors.attendees}</p>
-              )}
-            </div>
-
             <Button
               onClick={handleBooking}
               className="w-full bg-main_gradient text-white font-semibold py-3 rounded transition"
@@ -609,7 +588,7 @@ const RentCarDetails: React.FC<rentCarDetailsProps> = ({ data }) => {
               {data.rent}
               <span className="text-gray-500 text-sm ml-1">/Day</span>
               <span className="text-gray-500 text-sm ml-auto">
-                1 hr. minimum
+                1 Day. minimum
               </span>
             </div>
 
@@ -676,23 +655,6 @@ const RentCarDetails: React.FC<rentCarDetailsProps> = ({ data }) => {
                   </div>
                 )}
               </div>
-            </div>
-
-            <div className="relative">
-              <p className="px-1 py-1">Attendees</p>
-              <select
-                name="attendees"
-                value={bookingForm.attendees}
-                onChange={handleChange}
-                className={`w-full border ${
-                  errors.attendees ? "border-red-500" : "border-gray-300"
-                } rounded px-3 py-2 text-sm focus:outline-none`}
-              >
-                <option value="">Select attendees</option>
-                <option value="100">100 - 500 people</option>
-                <option value="500">500 - 1500 people</option>
-                <option value="2000">2000 & above</option>
-              </select>
             </div>
             <Button
               onClick={handleBooking}

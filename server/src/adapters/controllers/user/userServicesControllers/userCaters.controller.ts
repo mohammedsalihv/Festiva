@@ -56,7 +56,7 @@ export class UserCatersController implements IUserCatersController {
         });
         return;
       }
-      const caters = await this._userCatersUseCase.findCatersHost(catersId);
+      const caters = await this._userCatersUseCase.catersDetails(catersId);
       res.status(statusCodes.Success).json({
         success: true,
         message: "Caters details fetched successfully",

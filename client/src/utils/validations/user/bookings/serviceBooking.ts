@@ -41,9 +41,6 @@ export const validateBooking = (
     errors.date = "Please select a date";
   }
 
-  if (!state.attendees?.trim()) {
-    errors.attendees = "Please enter attendee count";
-  }
 
   return {
     isValid: !errors.time && !errors.date && !errors.attendees,

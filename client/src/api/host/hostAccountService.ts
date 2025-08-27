@@ -104,3 +104,14 @@ export const assetDelete = async (assetId: string, assetType: string) => {
   );
   return response.data;
 };
+
+export const allBookings = async (  page: number,
+  limit: number) => {
+  const response = await axiosInstance.get(HOST_API.hostAccount.hostBookings,{
+    params: {
+      page,
+      limit,
+    },
+  })
+  return response.data;
+};

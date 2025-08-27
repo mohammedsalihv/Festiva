@@ -16,6 +16,7 @@ export const HOST_API = {
     updateAvailability: (assetId: string) => `/assets/${assetId}`,
     assetDelete: (assetId: string) => `/assets/delete/${assetId}`,
     requets: "/requests",
+    hostBookings: "/bookings",
   },
   venueService: {
     addVenue: "/addVenue",
