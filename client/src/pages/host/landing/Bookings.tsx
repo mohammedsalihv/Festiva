@@ -118,13 +118,13 @@ const Bookings = () => {
           </div>
         ) : (
           <div className="space-y-8">
-            {mockBookings.map((booking) => (
+            {recivedBookings.map((booking) => (
               <div
                 key={booking.id}
                 className="bg-white rounded-lg shadow-lg p-4 sm:p-6 space-y-6 border"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between">
-                  <h2 className="text-xl font-semibold">{booking.eventType}</h2>
+                  <h2 className="text-xl font-semibold">{booking.assetType} service</h2>
                   {booking.status && (
                     <span
                       className={`text-sm font-medium px-3 py-1 rounded-full ${
@@ -139,21 +139,14 @@ const Bookings = () => {
                     </span>
                   )}
                 </div>
-
-                {/* Reason */}
-                {booking.statusReason && (
-                  <p className="text-sm text-gray-500">
-                    {booking.statusReason}
-                  </p>
-                )}
+                {booking.status && <p className="text-sm text-gray-500">{}</p>}
 
                 {/* Booking details */}
                 <div className="flex flex-col sm:flex-row gap-4">
                   {/* Image */}
                   <div className="sm:w-48 flex-shrink-0">
                     <img
-                      src={booking.imageUrl}
-                      alt={booking.eventType}
+                      src={booking.id}
                       className="rounded-lg w-full h-32 sm:h-40 object-cover"
                     />
                   </div>
@@ -162,28 +155,30 @@ const Bookings = () => {
                   <div className="flex-1 space-y-2 text-sm">
                     <p>
                       <span className="font-medium">Booked date:</span>{" "}
-                      {new Date(booking.bookedDate).toLocaleDateString()}
+                      {Array.isArray(booking.selectedDates)
+                        ? booking.selectedDates.map((date, i) => (
+                            <span key={i}>
+                              {new Date(date).toLocaleDateString()}
+                              {i < booking.selectedDates.length - 1 && ", "}
+                            </span>
+                          ))
+                        : new Date(booking.selectedDates).toLocaleDateString()}
                     </p>
+
                     <p>
                       <span className="font-medium">Time:</span>{" "}
-                      {booking.startTime} - {booking.endTime}
+                      {booking.selectedTimeSlot}
                     </p>
-                    {booking.totalHours !== undefined && (
-                      <p>
-                        <span className="font-medium">Total hours:</span>{" "}
-                        {booking.totalHours}
-                      </p>
-                    )}
-                    {booking.attendeesRange && (
+                    {booking.transactionId && (
                       <p>
                         <span className="font-medium">Attendees:</span>{" "}
-                        {booking.attendeesRange}
+                        {booking.transactionId}
                       </p>
                     )}
                     <p>
                       <span className="font-medium">Booking type:</span>{" "}
-                      {booking.bookingType.charAt(0).toUpperCase() +
-                        booking.bookingType.slice(1)}
+                      {booking.assetType.charAt(0).toUpperCase() +
+                        booking.assetType.slice(1)}
                     </p>
                   </div>
                 </div>
@@ -193,8 +188,7 @@ const Bookings = () => {
                   <p className="text-lg font-semibold">
                     Total price:{" "}
                     <span className="text-green-600">
-                      {booking.currency}
-                      {booking.totalAmount.toFixed(2)}
+                      {booking.total.toFixed(2)}
                     </span>
                   </p>
                   <button className="text-sm text-green-600 hover:underline">
