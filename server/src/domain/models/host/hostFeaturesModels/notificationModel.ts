@@ -22,7 +22,7 @@ const notificationSchema = new Schema<INotification>(
     },
     status: {
       type: String,
-      enum: ["approved", "rejected"],
+      enum: ["approved", "rejected" , "created" ,  "accepted"],
     },
     message: {
       type: String,

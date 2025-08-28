@@ -7,9 +7,14 @@ import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
+import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostNotificationUseCase";
+import { getIO } from "../../../../config/socket";
 
 export class BookingController implements IBookingController {
-  constructor(private _bookingUseCase: IBookingUseCase) {}
+  constructor(
+    private _bookingUseCase: IBookingUseCase,
+    private _hostNotificationUseCase: IHostNotificationUseCase
+  ) {}
 
   async createBooking(req: Request, res: Response): Promise<void> {
     try {
@@ -23,6 +28,29 @@ export class BookingController implements IBookingController {
       }
 
       const newBooking = await this._bookingUseCase.createBooking(booking);
+
+      if (newBooking && newBooking.bookedData.host?._id) {
+        await this._hostNotificationUseCase.createNotification({
+          createrId: booking.userId,
+          receiverId: newBooking.bookedData.host?._id,
+          assetId: newBooking.assetId,
+          assetType: booking.assetType,
+          status: "created",
+          message: `Your ${booking.assetType} has received a new booking.`,
+        });
+
+        const io = getIO();
+        io.to(`host-${newBooking.bookedData.host?._id}`).emit(
+          "new-notification",
+          {
+            assetId: newBooking.assetId,
+            assetType: booking.assetType,
+            status: "Created",
+            message: `Your ${booking.assetType} has received a new booking.`,
+            createdAt: new Date(),
+          }
+        );
+      }
 
       res.status(statusCodes.Success).json({
         success: true,

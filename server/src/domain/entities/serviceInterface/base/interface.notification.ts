@@ -5,8 +5,8 @@ export interface INotification {
   createrId: Types.ObjectId;
   receiverId: Types.ObjectId;
   assetId: Types.ObjectId;
-  assetType: "venue" | "rentcar" | "studio" | "caters";
-  status: "approved" | "rejected";
+  assetType: string;
+  status: string;
   message: string;
   isRead: boolean;
   createdAt?: Date;

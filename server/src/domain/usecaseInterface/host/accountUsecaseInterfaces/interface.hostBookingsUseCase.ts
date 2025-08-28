@@ -7,4 +7,9 @@ export interface IHostBookingsUseCase {
     limit: number,
     status?: string
   ): Promise<{ bookings: IBooking[]; totalPages: number }>;
+  changeStatus(
+    bookingId: string,
+    status: string,
+    reason?: string
+  ): Promise<boolean>;
 }

@@ -5,9 +5,14 @@ export interface IHostBookingsRepository {
     hostId: string,
     page: number,
     limit: number,
-    status?:string
+    status?: string
   ): Promise<{
     bookings: IBooking[];
     totalPages: number;
   }>;
+  updateStatus(
+    bookingId: string,
+    status: string,
+    reason?: string
+  ): Promise<boolean>;
 }

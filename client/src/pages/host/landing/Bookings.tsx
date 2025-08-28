@@ -118,7 +118,7 @@ const Bookings = () => {
               {[
                 { label: "All", value: "all" },
                 { label: "Pendings", value: "pending" },
-                { label: "Confirmed", value: "confirmed" },
+                { label: "Accepted", value: "accepted" },
                 { label: "Rejected", value: "rejected" },
               ].map((tab) => (
                 <Button
@@ -148,9 +148,9 @@ const Bookings = () => {
                   {booking.status && (
                     <span
                       className={`text-sm font-medium px-3 py-1 rounded-full ${
-                        booking.status.toLowerCase().includes("reject")
+                        booking.status.toLowerCase().includes("rejected")
                           ? "bg-red-100 text-red-600"
-                          : booking.status.toLowerCase().includes("confirm")
+                          : booking.status.toLowerCase().includes("accepted")
                           ? "bg-green-100 text-green-600"
                           : "bg-yellow-100 text-yellow-600"
                       }`}

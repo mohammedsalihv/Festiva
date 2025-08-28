@@ -7,13 +7,13 @@ import {
   FileText,
   FolderKanban,
   LayoutDashboard,
-  DollarSign,
   Users,
   MessageCircle,
   Settings,
   HelpCircle,
   Bell,
   UserCog,
+  NotebookPen,
   LogOut,
 } from "lucide-react";
 interface MoreDrawerProps {
@@ -27,7 +27,7 @@ const links = [
   { name: "Asset Status", icon: FileText, path: "/host/asset/status" },
   { name: "My Assets", icon: FolderKanban, path: "/host/assets" },
   { name: "Bookings", icon: Calendar, path: "/host/bookings" },
-  { name: "Revenues", icon: DollarSign, path: "/host/revenues" },
+  { name: "Reviews", icon: NotebookPen, path: "/host/reviews" },
   { name: "Team", icon: Users, path: "/host/team" },
   { name: "Messages", icon: MessageCircle, path: "/host/chat" },
   { name: "Notifications", icon: Bell, path: "/host/notifications" },
@@ -74,7 +74,7 @@ export const MoreDrawer: React.FC<MoreDrawerProps> = ({
                 onClose();
               }}
             >
-              <Icon className={`w-5 h-5 ${name.toLowerCase() === 'logout' ? "text-red-600 hover:text-red-700" : "text-gray-500"}`} />
+              <Icon className={`w-6 h-6 ${name.toLowerCase() === 'logout' ? "text-red-600 hover:text-red-700" : "text-gray-500"}`} />
               <span className={`text-sm font-medium  ${name.toLowerCase() === 'logout' ? "text-red-600 hover:text-red-700" : "text-black"}`}>{name}</span>
             </li>
           ))}

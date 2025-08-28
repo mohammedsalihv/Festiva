@@ -3,6 +3,7 @@ import { IHostBookingsController } from "../../../../domain/controlInterface/com
 import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
 import { IHostBookingsUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostBookingsUseCase";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import logger from "../../../../utils/common/messages/logger";
 
 export class HostBookingController implements IHostBookingsController {
   constructor(private _hostBookingsUseCase: IHostBookingsUseCase) {}
@@ -31,6 +32,52 @@ export class HostBookingController implements IHostBookingsController {
       res
         .status(statusCodes.serverError)
         .json({ message: "Failed to fetch all bookings" });
+    }
+  }
+
+  async updateBookingsStatus(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const { status, reason } = req.query;
+      const id = req.params.bookingId;
+      const hostId = req.auth!.id;
+
+      if (!hostId) {
+        res.status(statusCodes.forbidden).json({
+          success: false,
+          message: "You are not authrized to change the booking status.",
+        });
+        return;
+      }
+
+      if (!status || !id) {
+        res.status(statusCodes.forbidden).json({
+          success: false,
+          message: "Booking id and status are required.",
+        });
+        return;
+      }
+
+      await this._hostBookingsUseCase.changeStatus(
+        id,
+        String(status),
+        String(reason)
+      );
+
+      res
+        .status(statusCodes.Success)
+        .json({ success: true, message: "Booking status changed" });
+    } catch (error) {
+      logger.error(error);
+      res.status(statusCodes.serverError).json({
+        success: false,
+        message:
+          error instanceof Error
+            ? error.message
+            : "Failed to change the booking status",
+      });
     }
   }
 }
