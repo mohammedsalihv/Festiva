@@ -1,13 +1,11 @@
 import { AssetType } from "../services/common/commonTypes";
 import { IAsset } from "../services/common/commonTypes";
 
-export interface bookedAsset {
-  bookedData: IAsset;
-}
 
 export interface receivedBookings {
-  id: string;
+  _id: string;
   bookedUser: string;
+  bookedData: IAsset;
   assetId: string;
   assetType: AssetType;
   selectedDates: string[];
@@ -19,8 +17,6 @@ export interface receivedBookings {
   createdAt: string;
 }
 
-export interface BookingsState {
+export interface ReceivedBookingsState {
   bookings: receivedBookings[];
-  loading: boolean;
-  error: string | null;
 }

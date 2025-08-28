@@ -4,7 +4,8 @@ export interface IHostBookingsRepository {
   getAllBookings(
     hostId: string,
     page: number,
-    limit: number
+    limit: number,
+    status?:string
   ): Promise<{
     bookings: IBooking[];
     totalPages: number;

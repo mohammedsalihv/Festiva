@@ -6,10 +6,19 @@ export class HostBookingsRepository implements IHostBookingsRepository {
   async getAllBookings(
     hostId: string,
     page: number,
-    limit: number
+    limit: number,
+    status?: string
   ): Promise<{ bookings: IBooking[]; totalPages: number }> {
-    const match = { "serviceData.host._id": hostId };
+    const match: Record<string, any> = {
+      "bookedData.host._id": hostId,
+    };
+
+    if (status) {
+      match.status = status;
+    }
+
     const skip = (page - 1) * limit;
+
     const [bookings, total] = await Promise.all([
       bookingModel
         .find(match)
@@ -19,7 +28,9 @@ export class HostBookingsRepository implements IHostBookingsRepository {
         .lean(),
       bookingModel.countDocuments(match),
     ]);
+
     const totalPages = Math.ceil(total / limit);
+
     return { bookings: bookings as IBooking[], totalPages };
   }
 }

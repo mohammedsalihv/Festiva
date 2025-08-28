@@ -38,12 +38,12 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
   const [bookingForm, setBookingForm] = useState<bookingState>({
     time: "",
     date: "",
-    attendees: "",
+    manpowerCount:0
   });
   const [errors, setErrors] = useState<bookingErrorState>({
     time: "",
     date: "",
-    attendees: "",
+    manpowerCount: 0,
   });
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -146,7 +146,7 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
       assetType: data.typeOfAsset,
       selectedDates: selectedDates.map((d) => d.toISOString()), 
       selectedTimeSlot: selectedSlot,
-      manpowerCount: bookingForm.manpowerCount,
+      manpowerCount: Number(bookingForm.manpowerCount),
       total: (Number(data.totalAmount) || 0) * selectedDates.length,
       serviceData: data,
     };
@@ -427,7 +427,7 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
               <p className="px-1 py-1">Manpower Needed</p>
               <Input
                 type="number"
-                name="manpower"
+                name="manpowerCount"
                 placeholder={`Max ${data.manpower}`}
                 max={Number(data.manpower) || undefined}
                 value={bookingForm.manpowerCount}
@@ -498,7 +498,7 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
               {data.totalAmount}
               <span className="text-gray-500 text-sm ml-1">/Day</span>
               <span className="text-gray-500 text-sm ml-auto">
-                1 hr. minimum
+                1 Day. minimum
               </span>
             </div>
 
@@ -571,7 +571,7 @@ const CatersDetails: React.FC<catersDetailsProps> = ({ data }) => {
               <p className="px-1 py-1">Manpower Needed</p>
                 <Input
                 type="number"
-                name="manpower"
+                name="manpowerCount"
                 placeholder={`Max ${data.manpower}`}
                 max={Number(data.manpower) || undefined}
                 value={bookingForm.manpowerCount}

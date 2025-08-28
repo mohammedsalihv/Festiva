@@ -8,12 +8,14 @@ export class HostBookingsUseCase implements IHostBookingsUseCase {
   async recivedBookings(
     hostId: string,
     page: number,
-    limit: number
+    limit: number,
+    status?: string
   ): Promise<{ bookings: IBooking[]; totalPages: number }> {
     return await this._hostBookingsRepository.getAllBookings(
       hostId,
       page,
-      limit
+      limit,
+      status
     );
   }
 }

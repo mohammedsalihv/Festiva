@@ -17,6 +17,17 @@ export const HOST_API = {
     assetDelete: (assetId: string) => `/assets/delete/${assetId}`,
     requets: "/requests",
     hostBookings: "/bookings",
+    updateBookingStatus: (
+      bookingId: string,
+      status: string,
+      reason?: string
+    ) => {
+      let url = `/bookings/status/${bookingId}?status=${status}`;
+      if (reason) {
+        url += `&reason=${encodeURIComponent(reason)}`;
+      }
+      return url;
+    },
   },
   venueService: {
     addVenue: "/addVenue",

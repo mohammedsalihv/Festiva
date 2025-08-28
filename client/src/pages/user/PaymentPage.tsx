@@ -24,6 +24,7 @@ const PaymentPage = () => {
   const bookedService = useSelector(
     (state: RootState) => state.booking.currentBooking
   );
+  console.log(bookedService)
   const user = useSelector((state: RootState) => state.user.userInfo);
   const countryOptions = useMemo(() => countryList().getData(), []);
   const [paymentResponse, setPaymentResponse] = useState<any | null>(null);
@@ -114,7 +115,7 @@ const PaymentPage = () => {
       selectedTimeSlot: bookedService.selectedTimeSlot,
       attendeesCount: bookedService.attendeesCount,
       packageName: bookedService.packageName,
-      serviceData: bookedService.serviceData,
+      bookedData: bookedService.serviceData,
       transactionId: transactionId,
       paymentId: paymentId,
       total: totalPayable,
@@ -228,7 +229,7 @@ const PaymentPage = () => {
                 />
               </div>
               <div className="flex-1">
-                <h3 className="text-sm md:text-base mt-1">
+                <h3 className="text-sm md:text-base mt-1 mb-1">
                   {bookedService?.serviceData &&
                     ("venueName" in bookedService.serviceData
                       ? bookedService.serviceData.venueName
@@ -242,10 +243,15 @@ const PaymentPage = () => {
                 </h3>
                 {bookedService?.assetType === "venue" &&
                   "squareFeet" in bookedService.serviceData && (
-                    <p className="text-gray-400 text-xs">
-                      {bookedService.serviceData.squareFeet} sq ft
+                    <p className="text-gray-400 text-sm">
+                      Squarefeet : {bookedService.serviceData.squareFeet}
                     </p>
                   )}
+                   {bookedService?.assetType === "caters" &&
+
+                 <p className="text-gray-400 text-sm">
+                      Manpower : {bookedService.manpowerCount as number}
+                    </p>}
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">

@@ -15,16 +15,18 @@ const BookingSchema = new Schema<IBookingDoc>(
     selectedDates: { type: [String], required: true },
     selectedTimeSlot: { type: String },
     attendeesCount: { type: Number },
+    manpowerCout: { type: Number },
     packageName: { type: String },
     total: { type: Number, required: true },
-    serviceData: { type: Schema.Types.Mixed, required: true },
+    bookedData: { type: Schema.Types.Mixed, required: true },
     transactionId: { type: String },
     paymentId: { type: Schema.Types.ObjectId, ref: "Payment" },
     status: {
       type: String,
-      enum: ["pending", "confirmed", "cancelled"],
+      enum: ["pending", "accepted", "rejected"],
       default: "pending",
     },
+    bookingRejectedReason: { type: String },
   },
   { timestamps: true }
 );

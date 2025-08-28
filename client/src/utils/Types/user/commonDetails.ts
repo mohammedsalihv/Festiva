@@ -42,5 +42,5 @@ export interface IBookingBase {
   packageName?: string;
   total: number | string;
   serviceData: IVenue | ICaters | IRentCar | IStudio;
-  manpowerCount?:string
+  manpowerCount?:number
 }

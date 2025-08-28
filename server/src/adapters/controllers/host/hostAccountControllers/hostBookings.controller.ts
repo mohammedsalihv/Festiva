@@ -15,9 +15,15 @@ export class HostBookingController implements IHostBookingsController {
       const hostId = req.auth!.id;
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
+      const status = req.query.status as string | undefined;
 
       const { bookings, totalPages } =
-        await this._hostBookingsUseCase.recivedBookings(hostId, page, limit);
+        await this._hostBookingsUseCase.recivedBookings(
+          hostId,
+          page,
+          limit,
+          status
+        );
 
       res.status(statusCodes.Success).json({ bookings, totalPages });
     } catch (error) {

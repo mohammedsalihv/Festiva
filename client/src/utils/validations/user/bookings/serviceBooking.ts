@@ -5,22 +5,22 @@ export interface ValidationResult {
 export interface bookingState {
   time: string;
   date: string;
-  attendees?: string;
-  manpowerCount?: string
+  attendees?: number;
+  manpowerCount?: number
 }
 
 export interface bookingErrorState {
   time: string;
   date: string;
-  attendees?: string;
-  manpowerCount?: string;
+  attendees?: number;
+  manpowerCount?: number;
 }
 
 export interface initialBookingErrorState {
   time: "";
   date: "";
-  attendees: "";
-  manpowerCount?: ""
+  attendees: 0;
+  manpowerCount?: 0
 }
 
 export const validateBooking = (
@@ -29,8 +29,8 @@ export const validateBooking = (
   const errors: bookingErrorState = {
     time: "",
     date: "",
-    attendees: "",
-    manpowerCount: ""
+    attendees: 0,
+    manpowerCount: 0
   };
 
   if (!state.time.trim()) {

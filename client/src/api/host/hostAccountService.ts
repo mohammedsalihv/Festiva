@@ -105,13 +105,28 @@ export const assetDelete = async (assetId: string, assetType: string) => {
   return response.data;
 };
 
-export const allBookings = async (  page: number,
-  limit: number) => {
-  const response = await axiosInstance.get(HOST_API.hostAccount.hostBookings,{
+export const allBookings = async (
+  page: number,
+  limit: number,
+  status?: string
+) => {
+  const response = await axiosInstance.get(HOST_API.hostAccount.hostBookings, {
     params: {
       page,
       limit,
+      status,
     },
-  })
+  });
+  return response.data;
+};
+
+export const updateBooking = async (
+  bookingId: string,
+  status: string,
+  reason?: string
+) => {
+  const response = await axiosInstance.put(
+    HOST_API.hostAccount.updateBookingStatus(bookingId, status, reason)
+  );
   return response.data;
 };

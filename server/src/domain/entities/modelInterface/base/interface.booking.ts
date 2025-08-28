@@ -8,13 +8,15 @@ export interface IBooking {
   assetType: AssetType;
   selectedDates: string[] | string;
   selectedTimeSlot?: string;
-  attendeesCount?: string;
+  attendeesCount?: number;
+  manpowerCout?:number;
   packageName?: string;
   total: number;
-  serviceData: IAsset;
+  bookedData: IAsset;
   transactionId:string;
   paymentId: Types.ObjectId;
-  status: "pending" | "confirmed" | "cancelled";
+  status: string;
+  bookingRejectedReason?:string;
   createdAt?: Date;
   updatedAt?: Date;
 }
