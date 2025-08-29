@@ -130,3 +130,17 @@ export const updateBooking = async (
   );
   return response.data;
 };
+
+
+export const allReviews = async (
+  page: number,
+  limit: number,
+) => {
+  const response = await axiosInstance.get(HOST_API.hostAccount.hostReviews, {
+    params: {
+      page,
+      limit,
+    },
+  });
+  return response.data;
+};

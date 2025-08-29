@@ -6,4 +6,7 @@ export class HostRepository implements IHostRepository {
   async findByEmail(email: string): Promise<IHostModel | null> {
     return HostModel.findOne({ email });
   }
+  async findById(hostId: string): Promise<IHostModel | null> {
+    return HostModel.findById(hostId);
+  }
 }

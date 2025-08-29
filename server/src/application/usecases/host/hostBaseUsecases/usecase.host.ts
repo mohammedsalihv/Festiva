@@ -6,6 +6,7 @@ import {
 import { mailValidation } from "../../../../types/DTO/host/dto.host";
 import { IHostUseCase } from "../../../../domain/usecaseInterface/host/baseUsecaseInterfaces/interface.hostUseCase";
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
+import { IHostModel } from "../../../../domain/entities/modelInterface/host/interface.host";
 
 export class HostUseCase implements IHostUseCase {
   constructor(private _hostRepository: IHostRepository) {}
@@ -32,5 +33,8 @@ export class HostUseCase implements IHostUseCase {
       statusMessages.accountExisted,
       statusCodes.unAuthorized
     );
+  }
+  async hostDetails(hostId: string): Promise<IHostModel> {
+    return await this._hostRepository.findById(hostId);
   }
 }

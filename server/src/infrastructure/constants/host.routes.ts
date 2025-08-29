@@ -14,7 +14,7 @@ export const HOST_ROUTES = {
     myAssets:'/myassets',
     bookings:'/bookings',
     bookingUpdates:'/bookings/status/:bookingId',
-    reviews:'reviews',
+    reviews:'/reviews',
     assetDetails: "/assets/details/:assetId",
     assetReApply:"/assets/re-apply/:assetId",
    assetAvailability: "/assets/:assetId",

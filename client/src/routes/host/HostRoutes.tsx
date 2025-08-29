@@ -21,6 +21,7 @@ import { AssetStatus } from "@/pages/host/landing/AssetStatus";
 import MyAssets from "@/pages/host/landing/MyAssets";
 import { AssetDetails } from "@/pages/host/landing/AssetDetails";
 import Bookings from "@/pages/host/landing/Bookings";
+import HostReviews from "@/pages/host/landing/HostReviews";
 
 const HostRoutes: React.FC = () => {
   return (
@@ -37,10 +38,13 @@ const HostRoutes: React.FC = () => {
       <Route path="/assets/details/:type/:id" element={<AssetDetails />} />
       <Route path={HOST_ROUTES.hostAccount.bookings} element={<Bookings/>} />
 
+      <Route path={HOST_ROUTES.hostAccount.reviews} element={<HostReviews/>} />
+
       <Route
         path={HOST_ROUTES.hostAccount.hostProfile}
         element={<HostProfile />}
       />
+
       <Route
         path={HOST_ROUTES.hostPages.kindOfServicePage}
         element={<KindOfService />}

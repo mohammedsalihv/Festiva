@@ -28,6 +28,7 @@ export const HOST_API = {
       }
       return url;
     },
+    hostReviews: "/reviews",
   },
   venueService: {
     addVenue: "/addVenue",

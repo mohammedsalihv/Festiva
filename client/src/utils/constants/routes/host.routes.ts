@@ -11,6 +11,7 @@ export const HOST_ROUTES = {
     myAssets: "assets",
     hostProfile: "account",
     bookings: "bookings",
+    reviews: "reviews",
   },
   hostPages: {
     kindOfServicePage: "kind-of-service",
