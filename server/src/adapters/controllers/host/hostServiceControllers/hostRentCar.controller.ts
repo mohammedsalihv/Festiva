@@ -14,6 +14,7 @@ import {
 import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
 import { assetFilesValidate } from "../../../../utils/mapping/host/assetFilesValidate";
 import CustomError from "../../../../utils/common/errors/CustomError";
+import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -28,15 +29,15 @@ export class HostRentCarController implements IHostRentCarController {
   ) {}
 
   async addRentCarService(req: MulterRequest, res: Response): Promise<void> {
-    const hostId = req.auth?.id;
-    if (!hostId) {
-      throw new ErrorHandler(
-        statusMessages.unAuthorized,
-        statusCodes.unAuthorized
-      );
-    }
-
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        throw new ErrorHandler(
+          statusMessages.unAuthorized,
+          statusCodes.unAuthorized
+        );
+      }
+
       const newRentCar = req.body;
       const files = req.files?.["Images"] || [];
       const typeOfAsset = "rentcar";
@@ -122,7 +123,7 @@ export class HostRentCarController implements IHostRentCarController {
       } catch (error: any) {
         res
           .status(error.statusCode || statusCodes.serverError)
-          .json({ message: error.message || "Something went wrong" });
+          .json({ message: error.message || statusMessages.serverError });
       }
     } catch (error) {
       if (error instanceof ErrorHandler) {
@@ -137,8 +138,19 @@ export class HostRentCarController implements IHostRentCarController {
     }
   }
 
-  async carFullDetails(req: Request, res: Response): Promise<void> {
+  async carFullDetails(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        throw new ErrorHandler(
+          statusMessages.unAuthorized,
+          statusCodes.unAuthorized
+        );
+      }
+
       const carId = req.params.assetId;
       if (!carId) {
         res.status(statusCodes.unAuthorized).json({
@@ -162,13 +174,24 @@ export class HostRentCarController implements IHostRentCarController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected server error",
+          message: statusMessages.serverError,
         });
       }
     }
   }
-  async requestReApproval(req: Request, res: Response): Promise<void> {
+  async requestReApproval(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        throw new ErrorHandler(
+          statusMessages.unAuthorized,
+          statusCodes.unAuthorized
+        );
+      }
+
       const rentcarId = req.params.assetId;
 
       if (!rentcarId) {
@@ -202,14 +225,22 @@ export class HostRentCarController implements IHostRentCarController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected server error",
+          message: statusMessages.serverError,
         });
       }
     }
   }
 
-  async availability(req: Request, res: Response): Promise<void> {
+  async availability(req: authenticationRequest, res: Response): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        throw new ErrorHandler(
+          statusMessages.unAuthorized,
+          statusCodes.unAuthorized
+        );
+      }
+
       const rentcarId = req.params.assetId;
       const { isAvailable } = req.body;
 
@@ -251,14 +282,25 @@ export class HostRentCarController implements IHostRentCarController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected error during rent car status updating",
+          message: statusMessages.serverError,
         });
       }
     }
   }
 
-  async deleteRequest(req: Request, res: Response): Promise<void> {
+  async deleteRequest(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        throw new ErrorHandler(
+          statusMessages.unAuthorized,
+          statusCodes.unAuthorized
+        );
+      }
+
       const rentcarId = req.params.assetId;
 
       if (!rentcarId) {
@@ -292,7 +334,7 @@ export class HostRentCarController implements IHostRentCarController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected error during rent car deleting",
+          message: statusMessages.serverError,
         });
       }
     }

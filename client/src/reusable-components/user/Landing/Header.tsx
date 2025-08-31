@@ -12,12 +12,22 @@ import { logoutUser } from "@/redux/Slice/user/userSlice";
 import { Images } from "@/assets";
 import ConfirmDialog from "./ConfirmDialog";
 import { userLogout } from "@/api/user/auth/userAuthService";
-import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { CgMenuRight } from "react-icons/cg";
+import { clearAllAssets , clearSingleAssetDetails } from "@/redux/Slice/admin/assetManagementSlice";
+import { clearBooking , clearAllMyBookings } from "@/redux/Slice/user/bookingSlice";
+import { clearFilters  } from "@/redux/Slice/user/assetSearchSlice";
+import { clearServiceDetails } from "@/redux/Slice/user/userServiceBaseSlice";
+import { resetCaters } from "@/redux/Slice/user/userCatersSlice";
+import { resetRentCars } from "@/redux/Slice/user/userRentCarSlice";
+import { resetStudios } from "@/redux/Slice/user/userStudioSlice";
+import { resetVenues } from "@/redux/Slice/user/userVenueSlice";
+
 
 const Header = () => {
+  
   const [open, setOpen] = useState(false);
   const [mainOpen, setMainOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false);
@@ -28,7 +38,6 @@ const Header = () => {
   const isHomePage = location.pathname === "/user/home";
   const landingPage = location.pathname === "/";
   const showTransparent = (isHomePage && !isScrolled) || landingPage;
-  // const [profileImage, setProfileImage] = useState<string>(Images.default_profile);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useSelector((state: RootState) => state.user.userInfo);
@@ -55,40 +64,33 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // useEffect(() => {
-  //   const fetchProfileImage = async () => {
-  //     if (!userInfo?.id) return;
-  //     try {
-  //       const blob = await getProfileImage(userInfo.id);
-  //       const objectUrl = URL.createObjectURL(blob);
-  //       setProfileImage(objectUrl);
-  //     } catch (error) {
-  //       console.log(error);
-  //       setProfileImage(Images.default_profile);
-  //     }
-  //   };
-  //   fetchProfileImage();
-  //   return () => {
-  //     if (profileImage?.startsWith("blob:")) {
-  //       URL.revokeObjectURL(profileImage);
-  //     }
-  //   };
-  // }, [userInfo]);
 
   const handleLogout = async () => {
-    try {
-      await userLogout();
-      toast.success("Logout successful");
-      dispatch(logoutUser());
-      setTimeout(() => {
-        navigate("/login");
-      }, 1500);
-    } catch (err: unknown) {
-      if (err instanceof AxiosError) {
-        toast.error("Logout failed");
-      }
+  try {
+    await userLogout();
+
+    dispatch(clearAllAssets());
+    dispatch(clearAllMyBookings());
+    dispatch(clearBooking());
+    dispatch(clearFilters());
+    dispatch(clearServiceDetails());
+    dispatch(clearSingleAssetDetails());
+    dispatch(resetCaters());
+    dispatch(resetRentCars());
+    dispatch(resetStudios());
+    dispatch(resetVenues());
+    dispatch(logoutUser());
+    toast.success("Logout successful");
+    setTimeout(() => {
+      navigate("/login");
+    }, 1500);
+  } catch (err: unknown) {
+    if (err instanceof AxiosError) {
+      toast.error("Logout failed");
     }
-  };
+  }
+};
+
 
   return (
     <>

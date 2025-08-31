@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 export interface IVenue {
-  venueName?: string;
+  venueName: string;
   rent?: string;
   capacity?: string;
   shift?: string;

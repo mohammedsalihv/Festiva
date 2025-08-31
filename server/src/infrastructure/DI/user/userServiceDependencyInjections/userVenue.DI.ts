@@ -1,4 +1,4 @@
-import { UserVenueRepository } from "../../../repositories/user/userPagesRepositories/repository.userVenue";
+import { UserVenueRepository } from "../../../repositories/user/userServicesRepositories/repository.userVenue";
 import { UserVenueUseCase } from "../../../../application/usecases/user/userServiceUsecases/usecase.userVenue";
 import { UserVenueController } from "../../../../adapters/controllers/user/userServicesControllers/userVenue.controller";
 

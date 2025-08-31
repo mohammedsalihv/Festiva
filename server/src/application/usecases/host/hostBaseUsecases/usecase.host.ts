@@ -34,7 +34,7 @@ export class HostUseCase implements IHostUseCase {
       statusCodes.unAuthorized
     );
   }
-  async hostDetails(hostId: string): Promise<IHostModel> {
+  async hostDetails(hostId: string): Promise<IHostModel | null> {
     return await this._hostRepository.findById(hostId);
   }
 }

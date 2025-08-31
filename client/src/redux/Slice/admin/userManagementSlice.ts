@@ -18,13 +18,17 @@ const userManagementSlice = createSlice({
     },
     updateUser: (state, action: PayloadAction<User>) => {
       const updatedUser = action.payload;
-      const index = state.users.findIndex(user => user._id === updatedUser._id);
+      const index = state.users.findIndex((user) => user.id === updatedUser.id);
       if (index !== -1) {
         state.users[index] = updatedUser;
       }
     },
+    clearAllUsers: (state) => {
+      state.users = [];
+    },
   },
 });
 
-export const { setAllUsers, updateUser } = userManagementSlice.actions;
+export const { setAllUsers, updateUser, clearAllUsers } =
+  userManagementSlice.actions;
 export default userManagementSlice.reducer;

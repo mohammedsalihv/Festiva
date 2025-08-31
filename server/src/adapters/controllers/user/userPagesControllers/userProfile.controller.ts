@@ -3,12 +3,12 @@ import { IUserProfileController } from "../../../../domain/controlInterface/user
 import { IUserProfileUseCase } from "../../../../domain/usecaseInterface/user/userProfileUsecaseInterfaces/interface.userProfileUseCase";
 import logger from "../../../../utils/common/messages/logger";
 import { JwtPayload } from "jsonwebtoken";
-import { AuthRequest } from "../../../../domain/controlInterface/common/authentication/authType";
 import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import { uploadProfileImage } from "../../../../utils/common/cloudinary/uploadProfileImage";
+import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -74,7 +74,7 @@ export class UserProfileController implements IUserProfileController {
     }
   }
 
-  async profileEdit(req: AuthRequest, res: Response): Promise<void> {
+  async profileEdit(req: authenticationRequest, res: Response): Promise<void> {
     const userId = req.auth?.id;
     const formData = req.body;
     if (!userId) {
@@ -114,7 +114,7 @@ export class UserProfileController implements IUserProfileController {
     }
   }
 
-  async validateMail(req: AuthRequest, res: Response): Promise<void> {
+  async validateMail(req: authenticationRequest, res: Response): Promise<void> {
     const { email } = req.params;
     if (!email) {
       res.status(statusCodes.unAuthorized).json({
@@ -141,7 +141,10 @@ export class UserProfileController implements IUserProfileController {
     }
   }
 
-  async passwordModify(req: AuthRequest, res: Response): Promise<void> {
+  async passwordModify(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     const userId = req.auth?.id;
     const formData = req.body;
 
@@ -175,7 +178,10 @@ export class UserProfileController implements IUserProfileController {
     }
   }
 
-  async deleteProfile(req: AuthRequest, res: Response): Promise<void> {
+  async deleteProfile(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     const userId = req.auth?.id;
 
     if (!userId) {

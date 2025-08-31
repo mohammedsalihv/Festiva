@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader, Star } from "lucide-react";
 import { allReviews } from "@/api/host/hostAccountService";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,46 +9,8 @@ import { IoIosRefresh } from "react-icons/io";
 import SwitchTabs from "@/components/SwitchTabs";
 import { tabOptions } from "@/utils/Options/admin/adminService";
 
-interface Review {
-  id: string;
-  name: string;
-  role: string;
-  avatar: string;
-  rating: number;
-  review: string;
-}
+const HostReviews  = () => {
 
-const reviews: Review[] = [
-  {
-    id: "1",
-    name: "Devon Lane",
-    role: "Designer",
-    avatar: "https://i.pravatar.cc/150?img=11",
-    rating: 5,
-    review:
-      "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem aperiam.",
-  },
-  {
-    id: "2",
-    name: "Jane Cooper",
-    role: "Developer",
-    avatar: "https://i.pravatar.cc/150?img=12",
-    rating: 5,
-    review:
-      "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit sed quia consequuntur magni dolores eos.",
-  },
-  {
-    id: "3",
-    name: "Eleanor Pena",
-    role: "Manager",
-    avatar: "https://i.pravatar.cc/150?img=13",
-    rating: 5,
-    review:
-      "Ut enim ad minima veniam quis nostrum exercitationem ullam corporis suscipit laboriosam nisi ut aliquid ex ea commodi.",
-  },
-];
-
-const HostReviews: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -59,8 +21,6 @@ const HostReviews: React.FC = () => {
   const recivedReviews = useSelector(
     (state: RootState) => state.hostRecivedReviews.reviews
   );
-
-  console.log(recivedReviews);
   const fetchAllReviews = async (pageNumber: number, pageLimit: number) => {
     setLoading(true);
     try {
@@ -79,16 +39,17 @@ const HostReviews: React.FC = () => {
     fetchAllReviews(currentPage, pageLimit);
   }, []);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [activeTab]);
+const filteredReviews = activeTab === "all"
+  ? recivedReviews
+  : recivedReviews.filter((review) => review.assetType === activeTab);
+
 
   const handlePageChange = (page: number) => {
     fetchAllReviews(page, pageLimit);
   };
 
   return (
-    <section className="py-12 bg-white font-poppins">
+    <section className="py-8 bg-white font-poppins">
       {loading ? (
         <div className="flex justify-center items-center py-16">
           <Loader />
@@ -107,8 +68,8 @@ const HostReviews: React.FC = () => {
           />
         </div>
       ) : (
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="px-4 pt-4">
+        <div className="max-w-7xl mx-auto px-2">
+          <div className="px-4 pt-4 py-4">
             <SwitchTabs
               options={tabOptions}
               value={activeTab}
@@ -116,35 +77,34 @@ const HostReviews: React.FC = () => {
             />
           </div>
           <div className="text-center mb-12">
-            <button className="text-sm font-medium bg-green-100 text-green-600 px-4 py-1 rounded-full mb-4">
-              User Reviews
-            </button>
             <h2 className="text-3xl md:text-4xl font-bold mb-3">
-              More than {reviews.length} Happy Users
+              More than {recivedReviews.length} Happy Users
             </h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-              accusantium doloremque laudantium totam rem aperiam.
+              Trusted by real people for real experiences — because your
+              satisfaction is our top priority.
             </p>
           </div>
 
           {/* Reviews Grid */}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {reviews.map((review) => (
+            {filteredReviews.map((review) => (
               <div
-                key={review.id}
+                key={review._id}
                 className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition border"
               >
                 {/* User */}
                 <div className="flex items-center gap-4 mb-4">
                   <img
-                    src={review.avatar}
-                    alt={review.name}
+                    src={review.createrProfilePic}
+                    alt={review.createrName}
                     className="w-12 h-12 rounded-full object-cover"
                   />
                   <div>
-                    <h4 className="font-semibold">{review.name}</h4>
-                    <p className="text-sm text-gray-500">{review.role}</p>
+                    <h4 className="font-semibold">{review.createrName}</h4>
+                    <p className="text-sm text-gray-500">
+                      {review.createrRole}
+                    </p>
                   </div>
                 </div>
 

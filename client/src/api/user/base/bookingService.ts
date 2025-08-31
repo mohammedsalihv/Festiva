@@ -8,3 +8,25 @@ export const startBooking = async (data: any) => {
   );
   return response.data.data;
 };
+
+export const myAllBookings = async (
+  page: number,
+  limit: number,
+  sortBy?: string,
+  searchBy?: string,
+  tabBy?: string
+) => {
+  const response = await axiosInstance.get(
+    USER_API.bookingRoutes.getMyBookings,
+    {
+      params: {
+        page,
+        limit,
+        sortBy,
+        searchBy,
+        tabBy,
+      },
+    }
+  );
+  return response.data;
+};

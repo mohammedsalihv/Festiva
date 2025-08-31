@@ -2,7 +2,10 @@ import { Response } from "express";
 import { IHostBookingsController } from "../../../../domain/controlInterface/common/account/interface.hostBookingsController";
 import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
 import { IHostBookingsUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostBookingsUseCase";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import {
+  statusCodes,
+  statusMessages,
+} from "../../../../utils/common/messages/constantResponses";
 import logger from "../../../../utils/common/messages/logger";
 
 export class HostBookingController implements IHostBookingsController {
@@ -14,6 +17,12 @@ export class HostBookingController implements IHostBookingsController {
   ): Promise<void> {
     try {
       const hostId = req.auth!.id;
+
+      if (!hostId) {
+        res.status(statusCodes.forbidden).json(statusMessages.unAuthorized);
+        return;
+      }
+
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
       const status = req.query.status as string | undefined;
@@ -47,7 +56,7 @@ export class HostBookingController implements IHostBookingsController {
       if (!hostId) {
         res.status(statusCodes.forbidden).json({
           success: false,
-          message: "You are not authrized to change the booking status.",
+          message: statusMessages.unAuthorized,
         });
         return;
       }

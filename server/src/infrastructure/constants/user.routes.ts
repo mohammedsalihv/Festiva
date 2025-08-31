@@ -37,6 +37,7 @@ export const USER_ROUTES = {
   },
   bookingRoutes: {
     createbooking: "/createbooking",
+    allBookings:'/myBookings'
   },
   paymentRoutes: {
     startPayment: "/startPayment",

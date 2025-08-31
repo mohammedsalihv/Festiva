@@ -12,6 +12,8 @@ import { userController } from "../../../infrastructure/DI/user/userAuthenticati
 import { paymentController } from "../../../infrastructure/DI/base/paymentDependencyInjections/payment.DI";
 import { bookingController } from "../../../infrastructure/DI/base/bookingDependencyInjections/booking.DI";
 import { reviewController } from "../../../infrastructure/DI/base/reviewDependencyInjections/review.DI";
+import { userBookingsController } from "../../../infrastructure/DI/user/userAccountDependencyInjections/userBookings.DI";
+
 
 export interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -50,6 +52,7 @@ userRoutes.get(
 
 userRoutes.get(
   USER_ROUTES.VenueService.allVenues,
+  authenticateToken,
   userVenueController.getVenues.bind(userVenueController)
 );
 
@@ -57,18 +60,21 @@ userRoutes.get(
 
 userRoutes.get(
   USER_ROUTES.RentcarService.allRentcars,
+  authenticateToken,
   userRentCarController.getRentCars.bind(userRentCarController)
 );
 
 // caters
 userRoutes.get(
   USER_ROUTES.CatersService.allCaters,
+  authenticateToken,
   userCatersController.getCaters.bind(userCatersController)
 );
 
 // studio
 userRoutes.get(
   USER_ROUTES.StudioService.allStudios,
+  authenticateToken,
   userStudioController.getStudios.bind(userStudioController)
 );
 
@@ -77,17 +83,27 @@ userRoutes.get(
 
 userRoutes.post(
   USER_ROUTES.bookingRoutes.createbooking,
+  authenticateToken,
   bookingController.createBooking.bind(bookingController)
 );
+
+userRoutes.get(
+  USER_ROUTES.bookingRoutes.allBookings,
+  authenticateToken,
+  userBookingsController.getMyBookings.bind(userBookingsController)
+);
+
 
 // payment 
 userRoutes.post(
   USER_ROUTES.paymentRoutes.startPayment,
+  authenticateToken,
   paymentController.startPayment.bind(paymentController)
 );
 
 userRoutes.put(
   USER_ROUTES.paymentRoutes.statusUpdate,
+  authenticateToken,
   paymentController.paymentStatusUpdate.bind(paymentController)
 );
 
@@ -96,6 +112,7 @@ userRoutes.put(
 
 userRoutes.post(
   USER_ROUTES.reviewRoutes.addNewReview,
+  authenticateToken,
   reviewController.addReview.bind(reviewController)
 );
 

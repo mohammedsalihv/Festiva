@@ -1,6 +1,7 @@
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
 import { resetPasswordDTO } from "../../../../types/DTO/user/dto.user";
 import { UserModel } from "../../../../domain/models/user/userAuthenticationModels/userModel";
+import { IUserModel } from "../../../../domain/entities/modelInterface/user/interface.user";
 
 export class UserRepository implements IUserRepository {
   async findByEmail(email: string) {
@@ -29,5 +30,9 @@ export class UserRepository implements IUserRepository {
   async deleteProfile(userId: string): Promise<boolean> {
     const response = await UserModel.findByIdAndDelete({ _id: userId });
     return response !== null;
+  }
+
+  findByIdsForReviews(userIds: string[]): Promise<IUserModel[] | null> {
+      return UserModel.find({ _id:{$in:userIds}})
   }
 }

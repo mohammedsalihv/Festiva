@@ -23,7 +23,7 @@ const BookingSchema = new Schema<IBookingDoc>(
     paymentId: { type: Schema.Types.ObjectId, ref: "Payment" },
     status: {
       type: String,
-      enum: ["pending", "accepted", "rejected"],
+      enum: ["pending", "accepted", "rejected" , "cancelled"],
       default: "pending",
     },
     bookingRejectedReason: { type: String },

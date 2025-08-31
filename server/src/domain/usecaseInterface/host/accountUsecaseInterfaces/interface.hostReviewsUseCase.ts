@@ -1,4 +1,4 @@
-import { IReview } from "../../../entities/modelInterface/base/interface.review";
+import { hostReviewsResponse } from "../../../entities/modelInterface/base/interface.review";
 
 export interface IHostReviewsUseCase {
   createdReviews(
@@ -6,5 +6,5 @@ export interface IHostReviewsUseCase {
     page: number,
     limit: number,
     status?: string
-  ): Promise<{ reviews: IReview[]; totalPages: number }>;
+  ): Promise<{ reviews: hostReviewsResponse[]; totalPages: number }>;
 }

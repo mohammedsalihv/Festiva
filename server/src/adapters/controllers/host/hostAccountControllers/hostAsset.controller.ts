@@ -23,6 +23,14 @@ export class HostAssetController implements IHostAssetController {
   async allAssets(req: authenticationRequest, res: Response): Promise<void> {
     try {
       const hostId = req.auth!.id;
+
+       if(!hostId){
+               res
+              .status(statusCodes.forbidden)
+              .json({ message: statusMessages.unAuthorized })
+              return;
+            }
+
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
       const type = req.query.assetType as any;
@@ -102,6 +110,14 @@ export class HostAssetController implements IHostAssetController {
   async getAllRequests(req: authenticationRequest, res: Response) {
     try {
       const hostId = req.auth!.id;
+
+       if(!hostId){
+               res
+              .status(statusCodes.forbidden)
+              .json({ message: statusMessages.unAuthorized })
+              return;
+            }
+            
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
 

@@ -1,5 +1,5 @@
 import { UserCatersController } from "../../../../adapters/controllers/user/userServicesControllers/userCaters.controller";
-import { UserCatersRepository } from "../../../repositories/user/userPagesRepositories/repository.userCaters";
+import { UserCatersRepository } from "../../../repositories/user/userServicesRepositories/repository.userCaters";
 import { UserCatersUseCase } from "../../../../application/usecases/user/userServiceUsecases/usecase.userCaters";
 
 const userCatersRepository = new UserCatersRepository();

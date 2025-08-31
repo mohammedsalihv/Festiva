@@ -5,13 +5,21 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutAdmin } from "@/redux/Slice/admin/adminSlice";
 import { toast } from "react-toastify";
-import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import { clearAllAssets } from "@/redux/Slice/admin/assetManagementSlice";
+import { clearAllHosts } from "@/redux/Slice/admin/hostManagementSlice";
+import { clearAllUsers } from "@/redux/Slice/admin/userManagementSlice";
 
 const AdminSidebar: FC = () => {
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [confirmLogout, setConfirmLogout] = useState(false);
+
   const handleLogout = () => {
+    dispatch(clearAllAssets());
+    dispatch(clearAllUsers());
+    dispatch(clearAllHosts());
     dispatch(logoutAdmin());
     setTimeout(() => {
       toast.success("Logout Successful!");

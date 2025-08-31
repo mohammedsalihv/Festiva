@@ -1,30 +1,35 @@
-import { IReview } from "../../../../domain/entities/modelInterface/base/interface.review";
+import { hostReviewsResponse } from "../../../../domain/entities/modelInterface/base/interface.review";
 import { IHostReviewsRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostReviewsRepository";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
+import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
 import { IHostReviewsUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostReviewsUseCase";
-import { IHostUseCase } from "../../../../domain/usecaseInterface/host/baseUsecaseInterfaces/interface.hostUseCase";
+import { mapHostReviews } from "../../../../utils/mapping/host/hostReviews.mapper";
 
 export class HostReviewsUseCase implements IHostReviewsUseCase {
   constructor(
     private _hostReviewsRepository: IHostReviewsRepository,
-    private _hostRepository : IHostRepository
+    private _userRepository: IUserRepository
   ) {}
-  
+
   async createdReviews(
     hostId: string,
     page: number,
     limit: number,
     status?: string
-  ): Promise<{ reviews: IReview[]; totalPages: number }> {
-
-    const result =  await this._hostReviewsRepository.reviews(
+  ): Promise<{ reviews: hostReviewsResponse[]; totalPages: number }> {
+    const reviewData = await this._hostReviewsRepository.reviews(
       hostId,
       page,
       limit,
       status
     );
-
-    return { reviews : result , totalPages}
+    const userIds = reviewData.reviews.map((review) =>
+      review.createrId.toString()
+    );
+    const users = await this._userRepository.findByIdsForReviews(userIds);
+    if (!users) {
+      return { reviews: [], totalPages: reviewData.totalPages };
+    }
+    const mappedReviews = mapHostReviews(reviewData.reviews, users);
+    return { reviews: mappedReviews, totalPages: reviewData.totalPages };
   }
-
 }

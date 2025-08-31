@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostNotificationUseCase";
 import { IHostNotificationController } from "../../../../domain/controlInterface/host/account controller interfaces/interface.hostNotificationController";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import { statusCodes, statusMessages } from "../../../../utils/common/messages/constantResponses";
 
 interface AuthRequest extends Request {
   auth?: JwtPayload & { id: string; role?: string };
@@ -14,6 +14,14 @@ export class HostNotificationController implements IHostNotificationController {
   async getAllNotifications(req: AuthRequest, res: Response) {
     try {
       const receiverId = req.auth!.id;
+
+      if (!receiverId) {
+        res
+          .status(statusCodes.forbidden)
+          .json(statusMessages.unAuthorized);
+        return;
+      }
+
       const notifications = await this.hostNotificationUseCase.getNotifications(
         receiverId
       );
@@ -30,6 +38,14 @@ export class HostNotificationController implements IHostNotificationController {
   async markAllRead(req: AuthRequest, res: Response): Promise<void> {
     try {
       const hostId = req.auth!.id;
+
+      if (!hostId) {
+        res
+          .status(statusCodes.forbidden)
+          .json(statusMessages.unAuthorized);
+        return;
+      }
+
       await this.hostNotificationUseCase.markAllNotifications(hostId);
 
       res.status(statusCodes.Success).json({

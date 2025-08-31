@@ -22,7 +22,7 @@ export class HostLoginUseCase implements IHostLoginUseCase {
 
     const fullHost = await this._hostRepository.findByEmail(email);
     this._validator.validateAccountExistence(fullHost);
-    await this._validator.validatePassword(fullHost.password, password);
+    await this._validator.validatePassword(fullHost!.password, password);
 
     const accessToken = this._tokenService.generateAccessToken({
       id: host?.id!,

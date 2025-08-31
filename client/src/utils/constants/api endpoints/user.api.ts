@@ -23,7 +23,8 @@ export const USER_API = {
     sortAssets: (type: string) => `/assets/sort/${type}`,
   },
   bookingRoutes : {
-    createBooking:'createBooking'
+    createBooking:'createBooking',
+    getMyBookings:'/myBookings'
   },
   paymentRoutes: {
     startPayment: "/startPayment",

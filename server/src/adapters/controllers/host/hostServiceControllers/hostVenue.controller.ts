@@ -14,6 +14,7 @@ import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAss
 import { assetFilesValidate } from "../../../../utils/mapping/host/assetFilesValidate";
 import logger from "../../../../utils/common/messages/logger";
 import CustomError from "../../../../utils/common/errors/CustomError";
+import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -28,23 +29,24 @@ export class HostVenueController implements IHostVenueController {
   ) {}
 
   async addVenueService(req: MulterRequest, res: Response): Promise<void> {
-    const hostId = req.auth?.id;
-
-    if (!hostId) {
-      res
-        .status(statusCodes.unAuthorized)
-        .json({ message: statusMessages.unAuthorized });
-      return;
-    }
-
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        res
+          .status(statusCodes.unAuthorized)
+          .json({ message: statusMessages.unAuthorized });
+        return;
+      }
+
       const newVenue = req.body;
       const files = req.files?.["Images"] || [];
       const typeOfAsset = "venue";
 
       await assetFilesValidate({ files, typeOfAsset });
 
-      const newLocation = await this._locationUsecase.execute(newVenue.location);
+      const newLocation = await this._locationUsecase.execute(
+        newVenue.location
+      );
 
       if (!newLocation || !newLocation._id) {
         throw new ErrorHandler(
@@ -106,18 +108,29 @@ export class HostVenueController implements IHostVenueController {
       if (error instanceof ErrorHandler) {
         res
           .status(error.statusCode)
-          .json({ message: error.message || "Something went wrong" });
+          .json({ message: error.message || statusMessages.serverError });
       } else {
         res.status(statusCodes.serverError).json({
           message: "Failed to add new venue",
-          error: error.message || error,
+          error: error.message || statusMessages.serverError,
         });
       }
     }
   }
 
-  async venueFullDetails(req: Request, res: Response): Promise<void> {
+  async venueFullDetails(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        res
+          .status(statusCodes.unAuthorized)
+          .json({ message: statusMessages.unAuthorized });
+        return;
+      }
+
       const venueId = req.params.assetId;
       if (!venueId) {
         res.status(statusCodes.unAuthorized).json({
@@ -141,14 +154,25 @@ export class HostVenueController implements IHostVenueController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected server error",
+          message: statusMessages.serverError,
         });
       }
     }
   }
 
-  async requestReApproval(req: Request, res: Response): Promise<void> {
+  async requestReApproval(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        res
+          .status(statusCodes.unAuthorized)
+          .json({ message: statusMessages.unAuthorized });
+        return;
+      }
+
       const venueId = req.params.assetId;
       if (!venueId) {
         res.status(statusCodes.badRequest).json({
@@ -179,14 +203,22 @@ export class HostVenueController implements IHostVenueController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected error during venue re-apply",
+          message: statusMessages.serverError,
         });
       }
     }
   }
 
-  async availability(req: Request, res: Response): Promise<void> {
+  async availability(req: authenticationRequest, res: Response): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        res
+          .status(statusCodes.unAuthorized)
+          .json({ message: statusMessages.unAuthorized });
+        return;
+      }
+
       const venueId = req.params.assetId;
       const { isAvailable } = req.body;
 
@@ -236,14 +268,25 @@ export class HostVenueController implements IHostVenueController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected error during venue availability update",
+          message: statusMessages.serverError,
         });
       }
     }
   }
 
-  async deleteRequest(req: Request, res: Response): Promise<void> {
+  async deleteRequest(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        res
+          .status(statusCodes.unAuthorized)
+          .json({ message: statusMessages.unAuthorized });
+        return;
+      }
+
       const venueId = req.params.assetId;
 
       if (!venueId) {
@@ -277,7 +320,7 @@ export class HostVenueController implements IHostVenueController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected error during venue status updating",
+          message: statusMessages.serverError,
         });
       }
     }

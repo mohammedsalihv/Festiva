@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { authenticateToken } from "../../../../utils/common/middlewares/auth";
 
 export interface IHostCatersController {
   addCatersService(req: Request, res: Response): Promise<void>;

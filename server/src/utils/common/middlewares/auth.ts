@@ -1,4 +1,3 @@
-
 import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import {
@@ -6,7 +5,8 @@ import {
   JwtPayload,
 } from "../../../domain/controlInterface/common/authentication/authType";
 import logger from "../messages/logger";
-import { statusCodes , statusMessages } from "../messages/constantResponses";
+import { statusCodes, statusMessages } from "../messages/constantResponses";
+import { authenticationRequest } from "../../../domain/controlInterface/common/authentication/authRequest";
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
 
@@ -16,7 +16,7 @@ if (!ACCESS_TOKEN_SECRET) {
 }
 
 export const authenticateToken = (
-  req: AuthRequest,
+  req: authenticationRequest,
   res: Response,
   next: NextFunction
 ): void => {
@@ -28,7 +28,10 @@ export const authenticateToken = (
   if (!token) {
     res
       .status(401)
-      .json({ message: statusMessages.noToken, status: statusCodes.unAuthorized});
+      .json({
+        message: statusMessages.noToken,
+        status: statusCodes.unAuthorized,
+      });
     return;
   }
 
@@ -38,7 +41,12 @@ export const authenticateToken = (
     next();
   } catch (error) {
     logger.error(statusMessages.jwtVerificationFailed, error);
-    res.status(statusCodes.invalidToken).json({ message: statusMessages.invalidToken, status:statusCodes.invalidToken });
+    res
+      .status(statusCodes.invalidToken)
+      .json({
+        message: statusMessages.invalidToken,
+        status: statusCodes.invalidToken,
+      });
   }
 };
 
@@ -47,12 +55,10 @@ export const authorizeRoles = (roles: string[]) => {
     const userRole = req.auth?.role;
 
     if (!req.auth || !userRole || !roles.includes(userRole)) {
-      res
-        .status(403)
-        .json({
-          message: "Unauthorized: Insufficient permissions",
-          status: 403,
-        });
+      res.status(403).json({
+        message: "Unauthorized: Insufficient permissions",
+        status: 403,
+      });
       return;
     }
 

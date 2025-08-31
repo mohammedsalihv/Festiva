@@ -14,6 +14,7 @@ import {
 import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
 import { assetFilesValidate } from "../../../../utils/mapping/host/assetFilesValidate";
 import CustomError from "../../../../utils/common/errors/CustomError";
+import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -28,15 +29,15 @@ export class HostStudioController implements IHostStudioController {
   ) {}
 
   async addStudioService(req: MulterRequest, res: Response): Promise<void> {
-    const hostId = req.auth?.id;
-    if (!hostId) {
-      throw new ErrorHandler(
-        statusMessages.unAuthorized,
-        statusCodes.unAuthorized
-      );
-    }
-
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        throw new ErrorHandler(
+          statusMessages.unAuthorized,
+          statusCodes.unAuthorized
+        );
+      }
+
       const newStudio = req.body;
       let parsedPackages: any[] = [];
       if (Array.isArray(newStudio.packages)) {
@@ -106,7 +107,7 @@ export class HostStudioController implements IHostStudioController {
       } catch (error: any) {
         res
           .status(error.statusCode || statusCodes.serverError)
-          .json({ message: error.message || "Something went wrong" });
+          .json({ message: error.message || statusMessages.serverError });
       }
     } catch (error) {
       if (error instanceof ErrorHandler) {
@@ -121,8 +122,19 @@ export class HostStudioController implements IHostStudioController {
     }
   }
 
-  async studioFullDetails(req: Request, res: Response): Promise<void> {
+  async studioFullDetails(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        throw new ErrorHandler(
+          statusMessages.unAuthorized,
+          statusCodes.unAuthorized
+        );
+      }
+
       const studioId = req.params.assetId;
       if (!studioId) {
         res.status(statusCodes.unAuthorized).json({
@@ -146,14 +158,25 @@ export class HostStudioController implements IHostStudioController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected server error",
+          message: statusMessages.serverError,
         });
       }
     }
   }
 
-  async requestReApproval(req: Request, res: Response): Promise<void> {
+  async requestReApproval(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        throw new ErrorHandler(
+          statusMessages.unAuthorized,
+          statusCodes.unAuthorized
+        );
+      }
+
       const studioId = req.params.assetId;
 
       if (!studioId) {
@@ -163,9 +186,7 @@ export class HostStudioController implements IHostStudioController {
         });
         return;
       }
-
       const success = await this._hostStudioUseCase.reApplyStudio(studioId);
-
       if (!success) {
         res.status(statusCodes.serverError).json({
           success: false,
@@ -187,14 +208,21 @@ export class HostStudioController implements IHostStudioController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected server error",
+          message: statusMessages.serverError,
         });
       }
     }
   }
 
-  async availability(req: Request, res: Response): Promise<void> {
+  async availability(req: authenticationRequest, res: Response): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        throw new ErrorHandler(
+          statusMessages.unAuthorized,
+          statusCodes.unAuthorized
+        );
+      }
       const studioId = req.params.assetId;
       const { isAvailable } = req.body;
 
@@ -234,14 +262,25 @@ export class HostStudioController implements IHostStudioController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected error during studio status updating",
+          message: statusMessages.serverError,
         });
       }
     }
   }
 
-  async deleteRequest(req: Request, res: Response): Promise<void> {
+  async deleteRequest(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        throw new ErrorHandler(
+          statusMessages.unAuthorized,
+          statusCodes.unAuthorized
+        );
+      }
+
       const studioId = req.params.assetId;
 
       if (!studioId) {
@@ -275,7 +314,7 @@ export class HostStudioController implements IHostStudioController {
       } else {
         res.status(statusCodes.serverError).json({
           success: false,
-          message: "Unexpected error during studio deleting",
+          message: statusMessages.serverError,
         });
       }
     }

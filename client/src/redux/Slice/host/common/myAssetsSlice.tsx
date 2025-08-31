@@ -16,8 +16,9 @@ const myAssetsSlice = createSlice({
     setMyAssets(state, action: PayloadAction<myAssetsCard[]>) {
       state.assets = action.payload;
     },
+    clearMyAssets: () => initialState
   },
 });
 
-export const { setMyAssets } = myAssetsSlice.actions;
+export const { setMyAssets , clearMyAssets } = myAssetsSlice.actions;
 export default myAssetsSlice.reducer;

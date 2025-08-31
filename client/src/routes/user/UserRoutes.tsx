@@ -3,6 +3,7 @@ import { USER_ROUTE } from "@/utils/constants/routes/user.routes";
 import { Routes, Route } from "react-router-dom";
 import Home from "@/pages/user/Home";
 import MyBookings from "@/pages/user/MyBookings";
+import BookingDetails from "@/pages/user/BookingDetails";
 import Profile from "@/pages/user/Profile";
 import MainServices from "@/pages/user/service/MainServices";
 import PrivateRoute from "@/routes/user/Protect/PrivateRoute";
@@ -29,6 +30,14 @@ const UserRoutes: React.FC = () => {
         element={
           <PrivateRoute>
             <MyBookings />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={USER_ROUTE.userPages.bookings}
+        element={
+          <PrivateRoute>
+            <BookingDetails/>
           </PrivateRoute>
         }
       />

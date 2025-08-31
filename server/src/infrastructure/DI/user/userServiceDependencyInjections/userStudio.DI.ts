@@ -1,4 +1,4 @@
-import { UserStudioRepository } from "../../../repositories/user/userPagesRepositories/repository.userStudio";
+import { UserStudioRepository } from "../../../repositories/user/userServicesRepositories/repository.userStudio";
 import { UserStudioUseCase } from "../../../../application/usecases/user/userServiceUsecases/usecase.userStudio";
 import { UserStudioController } from "../../../../adapters/controllers/user/userServicesControllers/userStudio.controller";
 

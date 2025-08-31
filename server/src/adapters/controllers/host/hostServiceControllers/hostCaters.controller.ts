@@ -14,6 +14,7 @@ import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAss
 import { assetFilesValidate } from "../../../../utils/mapping/host/assetFilesValidate";
 import { Request, Response } from "express";
 import CustomError from "../../../../utils/common/errors/CustomError";
+import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };
@@ -28,14 +29,15 @@ export class HostCatersController implements IHostCatersController {
   ) {}
 
   async addCatersService(req: MulterRequest, res: Response): Promise<void> {
-    const hostId = req.auth?.id;
-    if (!hostId) {
-      throw new ErrorHandler(
-        statusMessages.unAuthorized,
-        statusCodes.unAuthorized
-      );
-    }
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        res.json(statusMessages.unAuthorized).json({
+          success: false,
+          message: statusCodes.unAuthorized,
+        });
+      }
+
       const newCaters = req.body;
       const files = req.files?.["Images"] || [];
       const typeOfAsset = "caters";
@@ -119,8 +121,18 @@ export class HostCatersController implements IHostCatersController {
     }
   }
 
-  async catersFullDetails(req: Request, res: Response): Promise<void> {
+  async catersFullDetails(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        res.json(statusMessages.unAuthorized).json({
+          success: false,
+          message: statusCodes.unAuthorized,
+        });
+      }
       const catersId = req.params.assetId;
       if (!catersId) {
         res.status(statusCodes.unAuthorized).json({
@@ -150,8 +162,19 @@ export class HostCatersController implements IHostCatersController {
     }
   }
 
-  async requestReApproval(req: Request, res: Response): Promise<void> {
+  async requestReApproval(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        res.json(statusMessages.unAuthorized).json({
+          success: false,
+          message: statusCodes.unAuthorized,
+        });
+      }
+
       const catersId = req.params.assetId;
 
       if (!catersId) {
@@ -191,8 +214,16 @@ export class HostCatersController implements IHostCatersController {
     }
   }
 
-  async availability(req: Request, res: Response): Promise<void> {
+  async availability(req: authenticationRequest, res: Response): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        res.json(statusMessages.unAuthorized).json({
+          success: false,
+          message: statusCodes.unAuthorized,
+        });
+      }
+
       const catersId = req.params.assetId;
       const isAvailable = req.body.isAvailable;
       if (!catersId) {
@@ -239,8 +270,19 @@ export class HostCatersController implements IHostCatersController {
     }
   }
 
-  async deleteRequest(req: Request, res: Response): Promise<void> {
+  async deleteRequest(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
     try {
+      const hostId = req.auth?.id;
+      if (!hostId) {
+        res.json(statusMessages.unAuthorized).json({
+          success: false,
+          message: statusCodes.unAuthorized,
+        });
+      }
+
       const catersId = req.params.assetId;
 
       if (!catersId) {

@@ -13,8 +13,6 @@ const NotificationPanel: React.FC<notificationProps> = ({
   setNotifications,
 }) => {
   const navigate = useNavigate();
-  console.log(notifications)
-
   const handleMarkAllAsRead = async () => {
     try {
       await markAllNotificationsAsRead();

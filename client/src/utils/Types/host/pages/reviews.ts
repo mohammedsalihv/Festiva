@@ -5,6 +5,7 @@ export interface reviewsState {
   createrRole: string;
   rating: number;
   review: string;
+  assetType:string
 }
 
 export interface ReceivedReviewsState {
