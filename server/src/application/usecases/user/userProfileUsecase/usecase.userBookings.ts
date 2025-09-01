@@ -46,6 +46,7 @@ export class UserBookingsUseCase implements IUserBookingUseCase {
     const booking = await this._userBookingRepository.findBookingDetails(
       bookingId
     );
+    
 
     if (!booking) return null;
 
@@ -60,8 +61,8 @@ export class UserBookingsUseCase implements IUserBookingUseCase {
       throw new Error("Booking has no host");
     }
     const host = await this._hostRepository.findById(booking.bookedData.host);
-
     const mappedBookingDetails = mapBookingDetails(booking, payment, host);
+    console.log(mappedBookingDetails)
     return mappedBookingDetails;
   }
 }

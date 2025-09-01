@@ -1,9 +1,7 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IBooking } from "../../../entities/modelInterface/base/interface.booking";
 
-export interface IBookingDoc extends IBooking, Document {}
-
-const BookingSchema = new Schema<IBookingDoc>(
+const BookingSchema = new Schema<IBooking>(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     assetId: { type: Schema.Types.ObjectId, required: true },
@@ -23,7 +21,7 @@ const BookingSchema = new Schema<IBookingDoc>(
     paymentId: { type: Schema.Types.ObjectId, ref: "Payment" },
     status: {
       type: String,
-      enum: ["pending", "accepted", "rejected" , "cancelled"],
+      enum: ["pending", "accepted", "rejected", "cancelled"],
       default: "pending",
     },
     bookingRejectedReason: { type: String },
@@ -31,4 +29,4 @@ const BookingSchema = new Schema<IBookingDoc>(
   { timestamps: true }
 );
 
-export default mongoose.model<IBookingDoc>("Booking", BookingSchema);
+export default mongoose.model<IBooking>("Booking", BookingSchema);

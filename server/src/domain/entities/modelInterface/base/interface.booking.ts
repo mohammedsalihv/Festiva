@@ -2,6 +2,7 @@ import { IAsset, AssetType } from "../../../../types/base/AssetTypes/assets";
 import { Types } from "mongoose";
 
 export interface IBooking {
+  _id?:string|Types.ObjectId;
   bookingId?: string;
   userId:  Types.ObjectId;
   assetId:  Types.ObjectId;

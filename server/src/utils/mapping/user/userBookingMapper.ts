@@ -34,7 +34,7 @@ export const userBookingsMapping = (
     }
 
     return {
-      _id: booking.bookingId ? booking.bookingId.toString() : "",
+      _id: booking._id ? booking._id.toString() : "",
       assetName,
       assetImage,
       assetType: booking.assetType,

@@ -90,17 +90,23 @@ useEffect(() => {
   };
 
    const handleRowClick = async (row: myBookings) => {
-    try {
-      setLoading(true);
-      const details: bookingDetails = await fetchBookingDetails(row._id);
-      dispatch(setBookingDetails(details)); 
-      navigate(`/user/bookings/detail/${row._id}`)
-    } catch (error) {
-      console.error("Failed to fetch booking details", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (!row._id) {
+    console.error("Booking ID missing for row:", row);
+    return;
+  }
+  try {
+    setLoading(true);
+    const details: bookingDetails = await fetchBookingDetails(row._id);
+    console.log('ee',details)
+    dispatch(setBookingDetails(details)); 
+    navigate(`/user/bookings/detail/${row._id}`);
+  } catch (error) {
+    console.error("Failed to fetch booking details", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
 
   const columns: Column<myBookings>[] = [
