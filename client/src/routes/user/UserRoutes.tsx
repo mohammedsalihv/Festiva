@@ -13,7 +13,6 @@ import ServiceDetails from "@/reusable-components/user/services/ServiceDetails";
 import PaymentPage from "@/pages/user/PaymentPage";
 
 const UserRoutes: React.FC = () => {
-
   return (
     <Routes>
       <Route
@@ -34,13 +33,14 @@ const UserRoutes: React.FC = () => {
         }
       />
       <Route
-        path={USER_ROUTE.userPages.bookings}
+        path={USER_ROUTE.userPages.bookingDetail}
         element={
           <PrivateRoute>
-            <BookingDetails/>
+            <BookingDetails />
           </PrivateRoute>
         }
       />
+
       <Route
         path={USER_ROUTE.userPages.payment}
         element={

@@ -19,4 +19,5 @@ export class PaymentUseCase implements IPaymentUseCase {
   ): Promise<IPayment | null> {
     return await this._paymentRepository.paymentStatusChange(status, paymentId);
   }
+  
 }

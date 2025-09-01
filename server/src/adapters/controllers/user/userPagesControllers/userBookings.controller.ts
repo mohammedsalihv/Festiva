@@ -45,4 +45,25 @@ export class UserBookingsController implements IUserBookingsController {
         .json({ message: "Failed to fetch all bookings" });
     }
   }
+  
+  async getBookingDetails(
+    req: authenticationRequest,
+    res: Response
+  ): Promise<void> {
+    try {
+      const userId = req.auth!.id;
+      if (!userId) {
+        res.status(statusCodes.forbidden).json(statusMessages.unAuthorized);
+        return;
+      }
+      const { bookingId } = req.params
+      const details = this._userBookingsUsecase.bookingDetails(bookingId);
+      res.status(statusCodes.Success).json(details);
+    } catch (error) {
+      console.error("Error fetching booking details:", error);
+      res
+        .status(statusCodes.serverError)
+        .json({ message: "Failed to fetch booking details" });
+    }
+  }
 }

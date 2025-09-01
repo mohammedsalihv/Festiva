@@ -93,6 +93,12 @@ userRoutes.get(
   userBookingsController.getMyBookings.bind(userBookingsController)
 );
 
+userRoutes.get(
+  USER_ROUTES.bookingRoutes.bookingDetails,
+  authenticateToken,
+  userBookingsController.getBookingDetails.bind(userBookingsController)
+);
+
 
 // payment 
 userRoutes.post(

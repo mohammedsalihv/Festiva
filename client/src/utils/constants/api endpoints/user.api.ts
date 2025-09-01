@@ -24,7 +24,8 @@ export const USER_API = {
   },
   bookingRoutes : {
     createBooking:'createBooking',
-    getMyBookings:'/myBookings'
+    getMyBookings:'/myBookings',
+    bookingDetails: (bookingId:string) => `/bookings/${bookingId}/details`
   },
   paymentRoutes: {
     startPayment: "/startPayment",

@@ -1,4 +1,7 @@
-import { userMyBookingsResponse } from "../../../../types/DTO/user/dto.userBookings";
+import {
+  userBookingDetailsResponse,
+  userMyBookingsResponse,
+} from "../../../../types/DTO/user/dto.userBookings";
 
 export interface IUserBookingUseCase {
   allBookings(
@@ -9,4 +12,5 @@ export interface IUserBookingUseCase {
     searchBy?: string,
     tabBy?: string
   ): Promise<{ bookings: userMyBookingsResponse[]; totalPages: number }>;
+  bookingDetails(bookingId: string): Promise<userBookingDetailsResponse | null>;
 }

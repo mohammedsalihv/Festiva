@@ -11,6 +11,7 @@ export interface IBooking {
   attendeesCount?: number;
   manpowerCout?:number;
   packageName?: string;
+  seletedPackage?:[],
   total: number;
   bookedData: IAsset;
   transactionId:string;

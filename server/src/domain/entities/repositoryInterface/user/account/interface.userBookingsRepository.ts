@@ -9,4 +9,6 @@ export interface IUserBookingsRepository {
     searchBy?: string,
     tabBy?: string
   ): Promise<{ bookings: IBooking[]; total: number }>;
+
+  findBookingDetails(bookingId: string): Promise<IBooking | null>;
 }

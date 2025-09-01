@@ -85,4 +85,8 @@ export class UserBookingsRepository implements IUserBookingsRepository {
     ]);
     return { bookings, total };
   }
+
+  async findBookingDetails(bookingId: string): Promise<IBooking | null> {
+    return await bookingModel.findById(bookingId);
+  }
 }

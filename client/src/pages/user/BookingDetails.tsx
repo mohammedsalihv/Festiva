@@ -16,6 +16,12 @@ const statusColors: Record<string, string> = {
 };
 
 const BookingDetails: React.FC = () => {
+
+  
+  
+
+
+
   const bookings = [
     {
       _id: "68b095eff774e1d5be85868b",
@@ -55,13 +61,17 @@ const BookingDetails: React.FC = () => {
       {bookings.map((booking) => (
         <div
           key={booking._id}
-          className="bg-white rounded-xl sm:shadow-md sm:hover:shadow-lg overflow-hidden mb-10"
+          className="bg-white rounded-xl overflow-hidden mb-10"
         >
           {/* Header */}
-        <h1 className="text-lg font-semibold capitalize text-center sm:mb-2">
+          <div className=" flex justify-between sm:px-10 md:px-20 px-4">
+            <h1 className="text-lg font-semibold capitalize sm:mb-2">
               {booking.assetType} Booking
             </h1>
-
+            <p className="text-base text-blue-600 cursor-pointer hover:bg-blue-50 p-1 rounded-md">
+              Cancel
+            </p>
+          </div>
           <div className="flex flex-col md:flex-row gap-6 sm:px-8 py-6">
             {/* Left Column */}
             <div className="w-full md:w-1/3 space-y-6 px-3 md:px-8">
@@ -75,7 +85,9 @@ const BookingDetails: React.FC = () => {
               <div>
                 <p className="text-gray-500 text-sm">Status</p>
                 <span
-                  className={`px-3 py-1 rounded-full text-sm font-medium inline-block mt-1 ${statusColors[booking.bookedData.status]}`}
+                  className={`px-3 py-1 rounded-full text-sm font-medium inline-block mt-1 ${
+                    statusColors[booking.bookedData.status]
+                  }`}
                 >
                   {statusLabels[booking.bookedData.status]}
                 </span>
@@ -91,15 +103,24 @@ const BookingDetails: React.FC = () => {
               <div className="">
                 <p className="text-gray-500 text-sm mb-2">Payment Details</p>
                 <div className="bg-gray-50 rounded-lg p-3 space-y-1 text-sm ">
-                  <p className="py-1">Transaction ID: {booking.bookedData.transactionId}</p>
-                  <p className="py-1">Payment ID: {booking.bookedData.paymentId}</p>
-                  <p className="py-1">Platform Fee: ₹{booking.payment.platformFee}</p>
+                  <p className="py-1">
+                    Transaction ID: {booking.bookedData.transactionId}
+                  </p>
+                  <p className="py-1">
+                    Payment ID: {booking.bookedData.paymentId}
+                  </p>
+                  <p className="py-1">
+                    Platform Fee: ₹{booking.payment.platformFee}
+                  </p>
                   <p className="font-semibold py-1">
                     Total Paid: ₹{booking.payment.total}
                   </p>
                   <p className="text-gray-600 py-1">
                     Paid On:{" "}
-                    {format(new Date(booking.payment.paymentDate), "MMM d, yyyy p")}
+                    {format(
+                      new Date(booking.payment.paymentDate),
+                      "MMM d, yyyy p"
+                    )}
                   </p>
                 </div>
               </div>

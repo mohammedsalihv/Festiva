@@ -17,3 +17,33 @@ export type bookingSortOptions =
   | "completed"
   | "upcoming"
   | "cancelled";
+
+export interface bookingDetails {
+  _id: string;
+  assetImage: string;
+  assetName: string;
+  assetType: string;
+  bookingStatus: string;
+  bookedDate: string | Date;
+  bookingRejectedReason?: string;
+  bookedData: {
+    selectedDates: string | string[];
+    selectedTime: string;
+    attendeesCount?: number;
+    manPower?: number;
+    selectedPackageName?: string;
+    selectedPackage?: [];
+  };
+  paymentDetails: {
+    paymentStatus: string;
+    transactionId: string;
+    platformFee: number;
+    total: number;
+    paymentDate: string | Date;
+  };
+  hostDetails: {
+    hostName: string;
+    hostProfilePic: string;
+    hostRegisteredTime: string | Date;
+  };
+}

@@ -7,16 +7,18 @@ import { FaSearch, FaSort } from "react-icons/fa";
 import { Input } from "@/components/Input";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { setAllMyBookings } from "@/redux/Slice/user/bookingSlice";
-import { myAllBookings } from "@/api/user/base/bookingService";
+import { setAllMyBookings, setBookingDetails } from "@/redux/Slice/user/bookingSlice";
+import { fetchBookingDetails, myAllBookings } from "@/api/user/base/bookingService";
 import Pagination from "@/components/Pagination";
 import Loader from "@/components/Loader";
 import {
   myBookings,
   bookingSortOptions,
+  bookingDetails,
 } from "@/utils/Types/user/userBookingsTypes";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { useNavigate } from "react-router-dom";
 dayjs.extend(relativeTime);
 
 const MyBookings = () => {
@@ -31,6 +33,7 @@ const MyBookings = () => {
   const [sortBy, setSortBy] = useState<bookingSortOptions>("asc");
   const [showSort, setShowSort] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const pageLimit = 6;
 
   const fetchAllBookings = async (pageNumber: number, pageLimit: number) => {
@@ -85,6 +88,20 @@ useEffect(() => {
   const handlePageChange = (page: number) => {
     fetchAllBookings(page, pageLimit);
   };
+
+   const handleRowClick = async (row: myBookings) => {
+    try {
+      setLoading(true);
+      const details: bookingDetails = await fetchBookingDetails(row._id);
+      dispatch(setBookingDetails(details)); 
+      navigate(`/user/bookings/detail/${row._id}`)
+    } catch (error) {
+      console.error("Failed to fetch booking details", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const columns: Column<myBookings>[] = [
     {
@@ -190,7 +207,7 @@ useEffect(() => {
         <Table
           data={Bookings}
           columns={columns}
-          onRowClick={(row) => console.log("Clicked row:", row)}
+          onRowClick={handleRowClick}   
           fallback={
             <div className="flex items-center justify-center py-20 text-center gap-2">
               <p className="text-gray-500 text-lg font-semibold">
@@ -199,8 +216,6 @@ useEffect(() => {
             </div>
           }
         />
-
-        {/* 🔹 Pagination (only if totalPages > 1) */}
         {totalPages > 1 && (
           <div className="mt-6">
             <Pagination
