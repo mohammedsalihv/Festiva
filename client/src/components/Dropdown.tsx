@@ -21,7 +21,7 @@ const Dropdown = ({ options, onSelect }: DropdownProps) => {
   };
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block bg-white">
       <FaSort
         className="text-base md:text-xl cursor-pointer"
         onClick={() => setOpen((prev) => !prev)}

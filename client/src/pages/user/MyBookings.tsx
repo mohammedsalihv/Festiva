@@ -97,7 +97,6 @@ useEffect(() => {
   try {
     setLoading(true);
     const details: bookingDetails = await fetchBookingDetails(row._id);
-    console.log('ee',details)
     dispatch(setBookingDetails(details)); 
     navigate(`/user/bookings/detail/${row._id}`);
   } catch (error) {

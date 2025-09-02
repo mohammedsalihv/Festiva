@@ -28,7 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
-import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { clearSingleAssetDetails } from "@/redux/Slice/admin/assetManagementSlice";
 import { useDispatch } from "react-redux";
 
@@ -80,7 +80,7 @@ const RentCarRequestView: React.FC<studioRequestProps> = ({ data }) => {
 
   return (
     <div className="text-xs md:text-sm">
-      <div className="p-4 md:p-8 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 font-prompt bg-main_white rounded-md w-full h-full">
+      <div className="p-4 md:p-8 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 bg-gray-50 rounded-md w-full h-full">
         <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
           {Images?.length ? (
             Images.map((img, i) => (

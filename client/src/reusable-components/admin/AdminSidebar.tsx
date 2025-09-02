@@ -2,19 +2,22 @@ import { FC, useState } from "react";
 import navItems from "@/utils/Navbar/admin/AdminSidebarNav";
 import ConfirmDialog from "../user/Landing/ConfirmDialog";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { logoutAdmin } from "@/redux/Slice/admin/adminSlice";
 import { toast } from "react-toastify";
 import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { clearAllAssets } from "@/redux/Slice/admin/assetManagementSlice";
 import { clearAllHosts } from "@/redux/Slice/admin/hostManagementSlice";
 import { clearAllUsers } from "@/redux/Slice/admin/userManagementSlice";
+import { MdArrowCircleRight , MdArrowCircleLeft } from "react-icons/md";
+
 
 const AdminSidebar: FC = () => {
-  
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true); // sidebar toggle
 
   const handleLogout = () => {
     dispatch(clearAllAssets());
@@ -28,27 +31,51 @@ const AdminSidebar: FC = () => {
   };
 
   return (
-    <aside className="font-prompt fixed left-0 h-screen w-16 flex flex-col justify-center items-center py-4 space-y-6 z-50">
-      {navItems.map((item, i) => (
-        <a
-          key={i}
-          title={item.label}
-          className="text-black hover:text-blue-500 cursor-pointer"
-          onClick={(e) => {
-            e.preventDefault();
-            if (item.isLogout) {
-              setConfirmLogout(true);
-            } else if (item.link) {
-              navigate(item.link);
-            }
-          }}
+    <aside
+      className={`fixed left-0 top-0 h-screen transition-all duration-300 z-50
+        ${isExpanded ? "w-48" : "w-16"} 
+        bg-white shadow-lg flex flex-col justify-between`}
+    >
+      <div className="flex justify-end px-3 pt-3">
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="text-gray-600 hover:text-black"
         >
-          <item.icon className="text-[28px]" />
-        </a>
-      ))}
+          {isExpanded ? < MdArrowCircleLeft className="h-8 w-8"/> : <MdArrowCircleRight className="h-8 w-8"/>}
+        </button>
+      </div>
+      <nav className="flex flex-col space-y-2 px-2 ">
+        {navItems.map((item, i) => {
+          const isActive = location.pathname === item.link;
+          return (
+            <div
+              key={i}
+              onClick={() => {
+                if (item.isLogout) {
+                  setConfirmLogout(true);
+                } else if (item.link) {
+                  navigate(item.link);
+                }
+              }}
+              className={`flex items-center cursor-pointer rounded-lg px-3 py-2 transition-all duration-200
+                ${
+                  isActive
+                    ? "bg-black text-white"
+                    : "bg-white text-black hover:bg-gray-100"
+                }`}
+            >
+              <item.icon className={`${item.label === "Signout" ? "text-red-600" : ""} text-[28px]`} />
+              {isExpanded && (
+                <span className={`ml-3 text-sm font-medium ${item.label === "Signout" ? "text-red-600" : ""}`}>{item.label}</span>
+              )}
+            </div>
+          );
+        })}
+      </nav>
 
       <CustomToastContainer />
 
+      {/* Confirm Logout Modal */}
       <ConfirmDialog
         isOpen={confirmLogout}
         title="Confirm Logout"

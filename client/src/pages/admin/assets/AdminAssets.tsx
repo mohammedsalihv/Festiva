@@ -48,11 +48,11 @@ const AdminServices = () => {
   }, [selectedTab]);
 
   return (
-    <div className="flex flex-col bg-main_white rounded-md font-prompt overflow-hidden w-full h-full">
+    <div className="flex flex-col bg-gray-50 rounded-md overflow-hidden w-full h-full">
       <h2 className="text-lg md:text-xl font-semibold mt-5 px-6 py-3">
         Assets
       </h2>
-      <div className="px-4 pt-4">
+      <div className="px-1 pt-2 font-sans">
         <SwitchTabs
           options={tabOptions}
           value={selectedTab}

@@ -3,6 +3,7 @@ import { IBooking } from "../../../domain/entities/modelInterface/base/interface
 import { userBookingDetailsResponse } from "../../../types/DTO/user/dto.userBookings";
 import { IPayment } from "../../../domain/entities/modelInterface/base/interface.payment";
 import { IHostModel } from "../../../domain/entities/modelInterface/host/interface.host";
+import { ILocation } from "../../../domain/entities/serviceInterface/host/interface.location";
 
 export const userBookingsMapping = (
   bookings: IBooking[]
@@ -47,7 +48,8 @@ export const userBookingsMapping = (
 export const mapBookingDetails = (
   booking: IBooking,
   payment: IPayment | null,
-  host: IHostModel | null
+  host: IHostModel | null,
+  location: ILocation | null
 ): userBookingDetailsResponse => {
   const asset = booking.bookedData;
 
@@ -76,13 +78,13 @@ export const mapBookingDetails = (
   }
 
   return {
-    _id: booking.bookingId ?? "",
+    _id: booking._id ? booking._id.toString() : "",
     assetImage: asset?.Images?.[0] || "",
     assetName,
     assetType: booking.assetType,
     bookingStatus: booking.status,
     bookedDate: booking.createdAt ?? new Date(),
-    bookingRejectedReason: booking.bookingRejectedReason || undefined,
+    bookingRejectedReason: booking.bookingRejectedReason || "",
 
     bookedData: {
       selectedDates: booking.selectedDates || [],
@@ -105,6 +107,14 @@ export const mapBookingDetails = (
       hostName: host?.name || "",
       hostProfilePic: host?.profilePic || "",
       hostRegisteredTime: host?.timestamp || "",
+    },
+    servicerLocation: {
+      houseNo: location?.houseNo || "",
+      street: location?.street || "",
+      district: location?.district || "",
+      state: location?.state || "",
+      country: location?.country || "",
+      zip: location?.zip || "",
     },
   };
 };

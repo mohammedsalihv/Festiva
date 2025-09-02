@@ -57,7 +57,7 @@ export class UserBookingsController implements IUserBookingsController {
         return;
       }
       const { bookingId } = req.params
-      const details = this._userBookingsUsecase.bookingDetails(bookingId);
+      const details = await this._userBookingsUsecase.bookingDetails(bookingId);
       res.status(statusCodes.Success).json(details);
     } catch (error) {
       console.error("Error fetching booking details:", error);

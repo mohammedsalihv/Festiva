@@ -34,6 +34,6 @@ export const myAllBookings = async (
 export const fetchBookingDetails = async (bookingId: string) => {
   const response = await axiosInstance.get(
     USER_API.bookingRoutes.bookingDetails(bookingId)
-  );
+  )
   return response.data;
 };

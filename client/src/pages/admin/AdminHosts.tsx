@@ -328,7 +328,7 @@ const AdminHosts = () => {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row h-screen bg-main_white rounded-md font-prompt">
+      <div className="flex flex-col md:flex-row h-screen bg-gray-50 rounded-md ">
         <div className="transition-all duration-300 overflow-hidden p-4 w-full">
           <div className="flex justify-between items-center mb-10 mt-5 px-2">
             <h2 className="text-lg md:text-xl font-semibold">Hosts</h2>

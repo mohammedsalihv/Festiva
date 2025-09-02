@@ -359,7 +359,7 @@ const AdminUsers = () => {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row h-screen bg-main_white rounded-md font-prompt">
+      <div className="flex flex-col md:flex-row h-screen bg-gray-50 rounded-md ">
         <div
           className={`transition-all duration-300 ${
             selectedUser ? "md:w-2/3" : "w-full"
@@ -438,7 +438,7 @@ const AdminUsers = () => {
           />
         </div>
         {selectedUser && (
-          <div className="w-full md:w-1/3 p-2 bg-gray-50">
+          <div className="w-full md:w-1/3 p-2 bg-white">
             <div className="flex justify-between items-center mb-4 mt-2">
               <h3 className="text-sm lg:text-xl font-semibold px-2">
                 User Details

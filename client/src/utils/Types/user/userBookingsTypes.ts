@@ -46,4 +46,12 @@ export interface bookingDetails {
     hostProfilePic: string;
     hostRegisteredTime: string | Date;
   };
+    servicerLocation: {
+    houseNo: string;
+    street: string;
+    district: string;
+    state: string;
+    country: string;
+    zip: string;
+  };
 }

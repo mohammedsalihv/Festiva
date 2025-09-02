@@ -6,6 +6,7 @@ import { Images } from "@/assets";
 type Booking = {
   id: string;
   assetType: string;
+  Date:string;
   bookedDate: string;
   timeSlot: string;
   assetName: string;
@@ -22,11 +23,12 @@ const AdminBookings: React.FC = () => {
     {
       id: "1",
       assetType: "Venue",
-      bookedDate: "2025-08-12",
+      Date: "2025-08-12",
       timeSlot: "10:00 AM - 02:00 PM",
       assetName: "Grand Palace Hall",
       bookedUserName: "John Doe",
       bookedUserEmail: "john@example.com",
+      bookedDate: "2025-08-12",
       assetImage: "https://via.placeholder.com/60x40",
       status: "Confirmed",
       hostName: "Alice Smith",
@@ -36,6 +38,7 @@ const AdminBookings: React.FC = () => {
       id: "2",
       assetType: "Studio",
       bookedDate: "2025-08-14",
+      Date: "2025-08-12",
       timeSlot: "02:00 PM - 05:00 PM",
       assetName: "Dream Studio",
       bookedUserName: "Jane Brown",
@@ -59,11 +62,10 @@ const AdminBookings: React.FC = () => {
       ),
     },
     { header: "Type", accessor: "assetType" },
-    { header: "Booked Date", accessor: "bookedDate" },
+    { header: "Date", accessor: "Date" },
     { header: "Time Slot", accessor: "timeSlot" },
     { header: "Asset Name", accessor: "assetName" },
-    { header: "Booked User", accessor: "bookedUserName" },
-    { header: "Email", accessor: "bookedUserEmail" },
+    { header: "Booked Date", accessor: "bookedDate" },
     {
       header: "Status",
       accessor: (row) => (
@@ -81,6 +83,15 @@ const AdminBookings: React.FC = () => {
       ),
     },
     {
+      header: "User Details",
+      accessor: (row) => (
+        <div className="text-sm  md:text-base">
+          <div className="text-sm md:text-base">{row.bookedUserName}</div>
+          <div className="text-gray-500 text-sm md:text-base">{row.bookedUserEmail}</div>
+        </div>
+      ),
+    },
+    {
       header: "Host Details",
       accessor: (row) => (
         <div className="text-sm  md:text-base">
@@ -92,9 +103,9 @@ const AdminBookings: React.FC = () => {
   ];
 
   return (
-    <div className="sm:p-6 w-full bg-white mt-3 font-prompt">
+    <div className="sm:p-6 w-full bg-gray-50 mt-3">
       <h1 className="text-base sm:text-xl font-bold mb-4 px-3">Admin Bookings</h1>
-      <div className="bg-white shadow rounded-lg overflow-hidden mt-3">
+      <div className="bg-white shadow rounded-lg overflow-hidden">
         <Table
           data={bookings}
           columns={columns}

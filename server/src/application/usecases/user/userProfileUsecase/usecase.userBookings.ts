@@ -10,12 +10,14 @@ import {
 } from "../../../../utils/mapping/user/userBookingMapper";
 import { IPaymentRepository } from "../../../../domain/entities/repositoryInterface/base/interface.paymentRepository";
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
+import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
 
 export class UserBookingsUseCase implements IUserBookingUseCase {
   constructor(
     private _userBookingRepository: IUserBookingsRepository,
     private _paymentRepository: IPaymentRepository,
-    private _hostRepository: IHostRepository
+    private _hostRepository: IHostRepository,
+    private _locationRepository: ILocationRepository
   ) {}
 
   async allBookings(
@@ -46,7 +48,8 @@ export class UserBookingsUseCase implements IUserBookingUseCase {
     const booking = await this._userBookingRepository.findBookingDetails(
       bookingId
     );
-    
+
+    console.log("11", booking);
 
     if (!booking) return null;
 
@@ -60,9 +63,20 @@ export class UserBookingsUseCase implements IUserBookingUseCase {
     if (!booking.bookedData?.host) {
       throw new Error("Booking has no host");
     }
+    if (!booking.bookedData?.location) {
+      throw new Error("Booking has no host");
+    }
+
     const host = await this._hostRepository.findById(booking.bookedData.host);
-    const mappedBookingDetails = mapBookingDetails(booking, payment, host);
-    console.log(mappedBookingDetails)
+    const assetLocation = await this._locationRepository.findLocation(
+      booking.bookedData.location
+    );
+    const mappedBookingDetails = mapBookingDetails(
+      booking,
+      payment,
+      host,
+      assetLocation
+    );
     return mappedBookingDetails;
   }
 }

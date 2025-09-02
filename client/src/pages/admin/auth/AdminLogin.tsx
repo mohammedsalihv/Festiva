@@ -1,6 +1,5 @@
 import React, { useState, ChangeEvent } from "react";
 import { Mail, Lock } from "lucide-react";
-import { Images } from "@/assets";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
@@ -11,7 +10,7 @@ import {
 } from "@/utils/validations/admin/auth/loginValidation";
 import { setAdminDetails } from "@/redux/Slice/admin/adminSlice";
 import { AxiosError } from "axios";
-import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
 import { toast } from "react-toastify";
 
 interface ErrorState {
@@ -101,8 +100,8 @@ const AdminLogin: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <div className="flex w-full max-w-4xl flex-col-reverse items-center gap-10  p-8  md:flex-row md:justify-between">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
+      <div className="flex w-full max-w-4xl flex-col-reverse items-center gap-10  p-8">
         <div className="w-full md:w-1/2">
           <h2 className="mb-2 text-2xl font-semibold">Welcome to Dashboard</h2>
           <p className="mb-6 text-sm text-gray-500">
@@ -148,29 +147,19 @@ const AdminLogin: React.FC = () => {
                 <p className="text-red-600 text-xs mt-1">{errors.password}</p>
               )}
             </div>
-            <div className="text-right">
-              {/*  <a href="#" className="text-sm text-blue-600 hover:underline">
-                Forgot password?
-              </a>*/}
-            </div>
+            <div className="text-right"></div>
             <button
               onClick={handleLogin}
               type="button"
-              className="w-full rounded bg-black px-4 py-2 text-white hover:bg-gray-800"
+              className={`w-full rounded ${
+                mutation.isPending ? "bg-gray-800" : "bg-black"
+              }  px-4 py-2 text-white hover:bg-gray-800`}
               disabled={mutation.isPending}
             >
-              {mutation.isPending ? "Logging in" : "Login"}
+              {mutation.isPending ? "Logging in..." : "Login"}
             </button>
           </form>
           <CustomToastContainer />
-        </div>
-
-        <div className="hidden md:block md:w-1/2">
-          <img
-            src={Images.admin_login}
-            alt="Login Illustration"
-            className="max-w-full"
-          />
         </div>
       </div>
     </div>

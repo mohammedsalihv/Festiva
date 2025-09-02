@@ -7,7 +7,6 @@ export interface userMyBookingsResponse {
   bookingStatus: string;
 }
 
-
 export interface userBookingDetailsResponse {
   _id: string;
   assetImage: string;
@@ -35,5 +34,13 @@ export interface userBookingDetailsResponse {
     hostName: string;
     hostProfilePic: string;
     hostRegisteredTime: string | Date;
+  };
+  servicerLocation: {
+    houseNo: string;
+    street: string;
+    district: string;
+    state: string;
+    country: string;
+    zip: string;
   };
 }

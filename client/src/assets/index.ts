@@ -109,7 +109,7 @@ import paypal from "@/assets/images/payment/paypal.png";
 
 // admin
 
-import admin_login from '@/assets/images/admin/Admin_login.jpeg';
+import admin_login from "@/assets/images/admin/login_security.jpg"
 
 
 export const Images = {
