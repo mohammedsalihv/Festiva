@@ -9,6 +9,7 @@ import {
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
 import { uploadProfileImage } from "../../../../utils/common/cloudinary/uploadProfileImage";
+import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
 
 
 interface MulterRequest extends Request {
@@ -76,7 +77,7 @@ export class AdminHostsController implements IAdminHostManagementController {
     }
   }
 
-  async editHost(req: AuthRequest, res: Response): Promise<void> {
+  async editHost(req: authenticationRequest, res: Response): Promise<void> {
     const hostId = req.params.hostId;
     const formData = req.body;
 

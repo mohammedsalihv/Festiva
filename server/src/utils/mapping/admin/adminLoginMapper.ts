@@ -1,4 +1,4 @@
-import { AdminDetailsDTO } from "../../../types/DTO/admin/admin.dto";
+import { AdminDetailsDTO } from "../../../types/DTO/admin/dto.admin";
 
 export class adminLoginMapper {
   static toDTO(admin: any): AdminDetailsDTO["admin"] {

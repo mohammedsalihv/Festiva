@@ -2,7 +2,7 @@ import { IAdminLoginRepository } from "../../../../domain/entities/repositoryInt
 import { IAdminLoginUseCase } from "../../../../domain/usecaseInterface/admin/authenticationUsecaseInterfaces/interface.adminLoginUseCase";
 import { adminLoginMapper } from "../../../../utils/mapping/admin/adminLoginMapper";
 import { IAdminRepository } from "../../../../domain/entities/baseInterface/admin/interface.admin";
-import { AdminDetailsDTO } from "../../../../types/DTO/admin/admin.dto";
+import { AdminDetailsDTO } from "../../../../types/DTO/admin/dto.admin";
 import CustomError from "../../../../utils/common/errors/CustomError";
 import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
 import bcrypt from "bcrypt";

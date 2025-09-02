@@ -8,6 +8,7 @@ import {
   authenticateToken,
   isAdmin,
 } from "../../../utils/common/middlewares/auth";
+import { adminBookingManagementController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminBookingManagement.DI";
 
 const adminRoutes = express.Router();
 export interface MulterRequest extends Request {
@@ -116,4 +117,16 @@ adminRoutes.put(
     adminAssetManagementController
   )
 );
+
+//booking management
+
+adminRoutes.get(
+  ADMIN_ROUTES.BookingManagement.allBookings,
+  authenticateToken,
+  isAdmin,
+  adminBookingManagementController.getAllBookings.bind(
+    adminBookingManagementController
+  )
+);
+
 export default adminRoutes;

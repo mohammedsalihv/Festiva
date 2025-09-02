@@ -23,4 +23,7 @@ export const ADMIN_ROUTES = {
     assetApprove: "/assets/approve/:assetId",
     assetReject: "/assets/reject/:assetId",
   },
+  BookingManagement : {
+    allBookings : "/bookings"
+  }
 } as const;
