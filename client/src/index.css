@@ -90,6 +90,16 @@
   min-width: 150px; /* force visibility */
 }
 
+/* Hide scrollbar but keep scrolling */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+
 /* On mobile, prevent flex shrink */
 @media (max-width: 768px) {
   #mapbox-container {

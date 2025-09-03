@@ -10,6 +10,7 @@ import {
   PointElement,
   LineElement,
 } from "chart.js";
+import { Button } from "@/components/Button";
 
 ChartJS.register(
   ArcElement,
@@ -64,18 +65,46 @@ const AdminDashboard: React.FC = () => {
     ],
   };
 
+  const reviews = [
+    {
+      id: 1,
+      name: "John Doe",
+      image: "https://i.pravatar.cc/40?img=1",
+      comment: "Great venue, really enjoyed the event!",
+      assetType: "Venue",
+      rating: 5,
+      date: "2025-08-28",
+    },
+    {
+      id: 2,
+      name: "Sophia Smith",
+      image: "https://i.pravatar.cc/40?img=2",
+      comment: "Car was clean and on time.",
+      assetType: "RentCar",
+      rating: 4,
+      date: "2025-08-25",
+    },
+    {
+      id: 3,
+      name: "Alex Johnson",
+      image: "https://i.pravatar.cc/40?img=3",
+      comment: "Studio had excellent facilities.",
+      assetType: "Studio",
+      rating: 5,
+      date: "2025-08-22",
+    },
+  ];
+
   return (
     <div className="bg-gray-100 font-sans min-h-screen overflow-x-hidden">
       <div className="flex flex-col lg:flex-row">
         <main className="flex-1 p-4">
-          {/* Header */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2 space-y-4 md:space-y-0">
             <h1 className="text-2xl font-bold">Dashboard</h1>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-500">📊 Total Bookings</span>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded">
-                Filter Period
-              </button>
+              <Button className="bg-blue-500 text-white px-4 py-2 rounded">
+                Filter data
+              </Button>
             </div>
           </div>
 
@@ -122,11 +151,36 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
           </div>
-
+{/* Balance Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 max-w-full bg-gray-100">
+            <div className="bg-green-500 text-white p-4 rounded-lg shadow">
+              <p className="text-lg font-bold">Main Balance</p>
+              <p className="text-2xl">$22,466.24</p>
+              <p className="text-sm">Valid Thru 08/21</p>
+              <p>Card Holder: Admin</p>
+            </div>
+            <div className="bg-blue-500 text-white p-4 rounded-lg shadow">
+              <p className="text-lg font-bold">Main Balance</p>
+              <p className="text-2xl">$67,876.32</p>
+              <p className="text-sm">Valid Thru 08/21</p>
+              <p>Card Holder: Admin</p>
+            </div>
+            <div className="bg-purple-500 text-white p-4 rounded-lg shadow">
+              <p className="text-lg font-bold">Main Balance</p>
+              <p className="text-2xl">$240.56</p>
+              <p className="text-sm">Valid Thru 08/21</p>
+              <p>Card Holder: Admin</p>
+            </div>
+            <div className="bg-orange-500 text-white p-4 rounded-lg shadow">
+              <p className="text-lg font-bold">Main Balance</p>
+              <p className="text-2xl">$6,786.25</p>
+              <p className="text-sm">Valid Thru 08/21</p>
+              <p>Card Holder: Admin</p>
+            </div>
+          </div>
           <div className="bg-white p-4 rounded-lg shadow mb-6">
             <h2 className="text-lg font-bold mb-4">Statistics & Overview</h2>
             <div className="flex flex-col lg:flex-row gap-6">
-              {/* Pie Chart */}
               <div className="w-full lg:w-1/2">
                 <h3 className="text-md font-semibold mb-2">
                   Current Statistics
@@ -175,33 +229,7 @@ const AdminDashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Balance Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 max-w-full bg-gray-100">
-            <div className="bg-green-500 text-white p-4 rounded-lg shadow">
-              <p className="text-lg font-bold">Main Balance</p>
-              <p className="text-2xl">$22,466.24</p>
-              <p className="text-sm">Valid Thru 08/21</p>
-              <p>Card Holder: Admin</p>
-            </div>
-            <div className="bg-blue-500 text-white p-4 rounded-lg shadow">
-              <p className="text-lg font-bold">Main Balance</p>
-              <p className="text-2xl">$67,876.32</p>
-              <p className="text-sm">Valid Thru 08/21</p>
-              <p>Card Holder: Admin</p>
-            </div>
-            <div className="bg-purple-500 text-white p-4 rounded-lg shadow">
-              <p className="text-lg font-bold">Main Balance</p>
-              <p className="text-2xl">$240.56</p>
-              <p className="text-sm">Valid Thru 08/21</p>
-              <p>Card Holder: Admin</p>
-            </div>
-            <div className="bg-orange-500 text-white p-4 rounded-lg shadow">
-              <p className="text-lg font-bold">Main Balance</p>
-              <p className="text-2xl">$6,786.25</p>
-              <p className="text-sm">Valid Thru 08/21</p>
-              <p>Card Holder: Admin</p>
-            </div>
-          </div>
+          
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 bg-gray-100">
             <div className="bg-white p-4 rounded-lg shadow">
@@ -227,57 +255,44 @@ const AdminDashboard: React.FC = () => {
                 </span>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-white p-4 rounded-lg shadow">
-                <h2 className="text-lg font-bold mb-4">New Listing</h2>
-                <select className="w-full border p-2 mb-2 rounded">
-                  <option>Venue</option>
-                  <option>RentCar</option>
-                  <option>Studio</option>
-                  <option>Caters</option>
-                </select>
-                <input
-                  placeholder="Price"
-                  className="w-full border p-2 mb-2 rounded"
-                />
-                <input
-                  placeholder="Amount"
-                  className="w-full border p-2 mb-2 rounded"
-                />
-                <input
-                  placeholder="Total"
-                  className="w-full border p-2 mb-2 rounded"
-                />
-                <button className="w-full bg-red-500 text-white p-2 rounded">
-                  List Asset
-                </button>
-              </div>
-              <div className="bg-white p-4 rounded-lg shadow">
-                <h2 className="text-lg font-bold mb-4">New Booking</h2>
-                <select className="w-full border p-2 mb-2 rounded">
-                  <option>Venue</option>
-                  <option>RentCar</option>
-                  <option>Studio</option>
-                  <option>Caters</option>
-                </select>
-                <input
-                  placeholder="Price"
-                  className="w-full border p-2 mb-2 rounded"
-                />
-                <input
-                  placeholder="Amount"
-                  className="w-full border p-2 mb-2 rounded"
-                />
-                <input
-                  placeholder="Total"
-                  className="w-full border p-2 mb-2 rounded"
-                />
-                <button className="w-full bg-green-500 text-white p-2 rounded">
-                  Book Now
-                </button>
+          <div className="bg-white p-4 rounded-lg shadow">
+              <h2 className="text-lg font-bold mb-4">Reviews</h2>
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-sm text-left border">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="px-4 py-2 border">Reviewer</th>
+                      <th className="px-4 py-2 border">Comment</th>
+                      <th className="px-4 py-2 border">Asset Type</th>
+                      <th className="px-4 py-2 border">Rating</th>
+                      <th className="px-4 py-2 border">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {reviews.map((review) => (
+                      <tr key={review.id} className="hover:bg-gray-50">
+                        <td className="px-4 py-2 border flex items-center space-x-2">
+                          <img
+                            src={review.image}
+                            alt={review.name}
+                            className="w-8 h-8 rounded-full"
+                          />
+                          <span>{review.name}</span>
+                        </td>
+                        <td className="px-4 py-2 border">{review.comment}</td>
+                        <td className="px-4 py-2 border">{review.assetType}</td>
+                        <td className="px-4 py-2 border">
+                          {"⭐".repeat(review.rating)}
+                        </td>
+                        <td className="px-4 py-2 border">{review.date}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
+          
         </main>
       </div>
     </div>
