@@ -52,8 +52,8 @@ const AdminHeader = () => {
         </div>
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex gap-4 items-center">
-            <LuMessageSquareText className="w-9 h-9 p-1 bg-white rounded-3xl cursor-pointer hover:text-black" />
-            <LuBell className="w-9 h-9 p-1 bg-white rounded-3xl cursor-pointer hover:text-black" />
+            <LuMessageSquareText className="w-10 h-10 p-2 bg-white rounded-3xl cursor-pointer hover:text-white hover:bg-black" />
+            <LuBell className="w-10 h-10 p-2 bg-white rounded-3xl cursor-pointer hover:text-white hover:bg-black" />
           </div>
           <div className="flex items-center gap-2">
             <div

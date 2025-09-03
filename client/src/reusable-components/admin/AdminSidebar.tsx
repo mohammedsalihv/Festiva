@@ -9,8 +9,7 @@ import CustomToastContainer from "@/reusable-components/Messages/ToastContainer"
 import { clearAllAssets } from "@/redux/Slice/admin/assetManagementSlice";
 import { clearAllHosts } from "@/redux/Slice/admin/hostManagementSlice";
 import { clearAllUsers } from "@/redux/Slice/admin/userManagementSlice";
-import { MdArrowCircleRight , MdArrowCircleLeft } from "react-icons/md";
-
+import { MdArrowCircleRight, MdArrowCircleLeft } from "react-icons/md";
 
 const AdminSidebar: FC = () => {
   const dispatch = useDispatch();
@@ -32,16 +31,22 @@ const AdminSidebar: FC = () => {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-screen transition-all duration-300 z-50
-        ${isExpanded ? "w-48" : "w-16"} 
-        bg-white shadow-lg flex flex-col justify-between`}
+      className={`h-screen transition-all duration-300
+    ${isExpanded ? "w-48" : "w-16"} 
+    bg-white flex-col justify-between 
+    sm:flex hidden
+  `}
     >
       <div className="flex justify-end px-3 pt-3">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="text-gray-600 hover:text-black"
         >
-          {isExpanded ? < MdArrowCircleLeft className="h-8 w-8"/> : <MdArrowCircleRight className="h-8 w-8"/>}
+          {isExpanded ? (
+            <MdArrowCircleLeft className="h-8 w-8" />
+          ) : (
+            <MdArrowCircleRight className="h-8 w-8" />
+          )}
         </button>
       </div>
       <nav className="flex flex-col space-y-2 px-2 ">
@@ -57,16 +62,26 @@ const AdminSidebar: FC = () => {
                   navigate(item.link);
                 }
               }}
-              className={`flex items-center cursor-pointer rounded-lg px-3 py-2 transition-all duration-200
+              className={`flex items-center rounded-md cursor-pointer  px-3 py-2 transition-all duration-200
                 ${
                   isActive
                     ? "bg-black text-white"
                     : "bg-white text-black hover:bg-gray-100"
                 }`}
             >
-              <item.icon className={`${item.label === "Signout" ? "text-red-600" : ""} text-[28px]`} />
+              <item.icon
+                className={`${
+                  item.label === "Signout" ? "text-red-600" : ""
+                } text-[28px]`}
+              />
               {isExpanded && (
-                <span className={`ml-3 text-sm font-medium ${item.label === "Signout" ? "text-red-600" : ""}`}>{item.label}</span>
+                <span
+                  className={`ml-3 text-sm font-medium ${
+                    item.label === "Signout" ? "text-red-600" : ""
+                  }`}
+                >
+                  {item.label}
+                </span>
               )}
             </div>
           );
@@ -74,8 +89,6 @@ const AdminSidebar: FC = () => {
       </nav>
 
       <CustomToastContainer />
-
-      {/* Confirm Logout Modal */}
       <ConfirmDialog
         isOpen={confirmLogout}
         title="Confirm Logout"

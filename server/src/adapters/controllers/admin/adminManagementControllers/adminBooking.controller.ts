@@ -5,7 +5,7 @@ import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/common/messages/constantResponses";
-import { Response } from "express"; 
+import { Response } from "express";
 
 export class AdminBookingManagementController
   implements IAdminBookingManagementController
@@ -19,17 +19,26 @@ export class AdminBookingManagementController
     res: Response
   ): Promise<void> {
     try {
-      const userId = req.auth!.id;
-      if (!userId) {
+      const adminId = req.auth!.id;
+      if (!adminId) {
         res.status(statusCodes.forbidden).json(statusMessages.unAuthorized);
         return;
       }
 
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
+      const sortBy = req.query.sortBy as string;
+      const searchBy = req.query.searchBy as string;
+      const tabBy = req.query.tabBy as string;
 
       const { booking, totalPages } =
-        await this._adminBookingManagementUsecase.allBookings(page, limit);
+        await this._adminBookingManagementUsecase.allBookings(
+          page,
+          limit,
+          sortBy,
+          searchBy,
+          tabBy
+        );
 
       res.status(statusCodes.Success).json({ bookings: booking, totalPages });
     } catch (error) {

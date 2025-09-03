@@ -37,47 +37,53 @@ export class UserBookingsRepository implements IUserBookingsRepository {
         case "asc":
           sortObj = { createdAt: 1 };
           break;
+
         case "desc":
+        case "latest":
           sortObj = { createdAt: -1 };
           break;
+
         case "completed":
           match.status = "accepted";
           match["$expr"] = {
             $lte: [
               {
                 $cond: [
-                  { $isArray: "$bookedData.selectedDates" },
-                  { $arrayElemAt: ["$bookedData.selectedDates", 0] },
-                  "$bookedData.selectedDates",
+                  { $isArray: "$selectedDates" },
+                  { $toDate: { $arrayElemAt: ["$selectedDates", 0] } },
+                  { $toDate: "$selectedDates" },
                 ],
               },
-              new Date().toISOString(),
+              new Date(),
             ],
           };
-          sortObj = { "bookedData.selectedDates.0": -1 };
+          sortObj = { "selectedDates.0": -1 };
           break;
+
         case "upcoming":
-          match.status = "accepted";
+          match.status = "pending";
           match["$expr"] = {
             $gte: [
               {
                 $cond: [
-                  { $isArray: "$bookedData.selectedDates" },
-                  { $arrayElemAt: ["$bookedData.selectedDates", 0] },
-                  "$bookedData.selectedDates",
+                  { $isArray: "$selectedDates" },
+                  { $toDate: { $arrayElemAt: ["$selectedDates", 0] } },
+                  { $toDate: "$selectedDates" },
                 ],
               },
-              new Date().toISOString(),
+              new Date(),
             ],
           };
-          sortObj = { "bookedData.selectedDates.0": 1 };
+          sortObj = { "selectedDates.0": 1 };
           break;
+
         case "cancelled":
-          match.status = "cancelled";
+          match.status = "rejected";
           sortObj = { createdAt: -1 };
           break;
       }
     }
+
 
     const [bookings, total] = await Promise.all([
       bookingModel.find(match).skip(skip).limit(limit).sort(sortObj).lean(),

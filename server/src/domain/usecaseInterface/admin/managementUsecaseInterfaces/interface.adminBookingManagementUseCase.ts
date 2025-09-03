@@ -3,6 +3,9 @@ import { adminBookingsResponse } from "../../../../types/DTO/admin/dto.adminBook
 export interface IAdminBookingManagementUseCase {
   allBookings(
     page: number,
-    limit: number
+    limit: number,
+    sortBy?: string,
+    searchBy?: string,
+    tabBy?: string
   ): Promise<{ booking: adminBookingsResponse[]; totalPages: number }>;
 }

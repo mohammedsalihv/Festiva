@@ -16,6 +16,9 @@ import adminReduer from "@/redux/Slice/admin/adminSlice";
 import userManagementReducer from "@/redux/Slice/admin/userManagementSlice";
 import hostManagementReducer from "@/redux/Slice/admin/hostManagementSlice";
 import assetManagementReducer from "@/redux/Slice/admin/assetManagementSlice";
+import bookingManagementReducer from "@/redux/Slice/admin/bookingManagementSlice"
+
+
 
 import userVenueReducer from "@/redux/Slice/user/userVenueSlice";
 import userRentcarReducer from "@/redux/Slice/user/userRentCarSlice";
@@ -41,6 +44,7 @@ const rootReducer = combineReducers({
   userManagement: userManagementReducer,
   hostManagement: hostManagementReducer,
   asset: assetManagementReducer,
+  bookingManagement:bookingManagementReducer,
   userVenue: userVenueReducer,
   userRentcar: userRentcarReducer,
   assetSearch: assetSearchReducer,

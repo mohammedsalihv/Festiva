@@ -11,7 +11,7 @@ import { DiDatabase } from "react-icons/di";
 const navItems = [
   {
     icon: RiDashboardHorizontalFill,
-    label: "Home",
+    label: "Dashboard",
     link: "/admin/dashboard",
   },
   { icon: SiBookstack, label: "Bookings", link: "/admin/bookings" },

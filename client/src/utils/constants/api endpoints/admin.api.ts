@@ -25,4 +25,7 @@ export const ADMIN_API = {
     changeProfile: (userId: string) => `/users/changeprofile/${userId}`,
     deleteUser: (userId: string) => `/users/${userId}`,
   },
+  bookingManagement:{
+    getBookings:'/bookings'
+  }
 };
