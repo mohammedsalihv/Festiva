@@ -5,7 +5,7 @@ import bookingModel from "../../../../domain/models/base/booking/bookingModel";
 export class AdminBookingManagementRepository
   implements IAdminBookingManagementRepository
 {
-  async getAllBookings(
+  async findBookings(
     page: number,
     limit: number,
     sortBy?: string,
@@ -90,9 +90,11 @@ export class AdminBookingManagementRepository
       bookingModel.find(match).skip(skip).limit(limit).sort(sortObj).lean(),
       bookingModel.countDocuments(match),
     ]);
-
-    console.log(sortBy, searchBy, tabBy, bookings);
     const totalPages = Math.ceil(total / limit);
     return { bookings: bookings as IBooking[], totalPages };
+  }
+
+  async getAllBookings(): Promise<IBooking[]> {
+    return await bookingModel.find().lean();
   }
 }

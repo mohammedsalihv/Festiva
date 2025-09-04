@@ -14,4 +14,8 @@ export class PaymentRepository implements IPaymentRepository {
   async paymentDetails(paymentId: string): Promise<IPayment | null> {
     return await paymentModel.findById(paymentId);
   }
+
+  async getAllPayments(): Promise<IPayment[]> {
+    return await paymentModel.find().lean();
+  }
 }

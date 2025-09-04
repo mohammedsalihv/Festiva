@@ -8,4 +8,7 @@ export class ReviewRepository implements IReviewRepository {
     await review.save();
     return true;
   }
+  async getAllReviews(): Promise<IReview[]> {
+    return await reviewModel.find().lean();
+  }
 }

@@ -22,7 +22,7 @@ export class AdminBookingManagementUseCase
     tabBy?: string
   ): Promise<{ booking: adminBookingsResponse[]; totalPages: number }> {
     const { bookings, totalPages } =
-      await this._adminBookingRepository.getAllBookings(
+      await this._adminBookingRepository.findBookings(
         page,
         limit,
         sortBy,

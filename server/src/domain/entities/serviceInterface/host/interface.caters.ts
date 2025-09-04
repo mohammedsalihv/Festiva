@@ -2,12 +2,12 @@ import { Types } from "mongoose";
 
 export interface ICaters {
   catersName?: string;
-  manpower:string;
-  charge:string;
-  totalAmount:string;
+  manpower: string;
+  charge: string;
+  totalAmount: string;
   timeSlots?: string[];
   availableDates?: string[];
-  description?:string;
+  description?: string;
   features?: string[];
   serviceTypes?: string[];
   terms?: string;
@@ -15,16 +15,15 @@ export interface ICaters {
   about: string;
   Images: string[];
   status?: string;
-  rejectedReason?:string;
-  isReapplied?:boolean;
+  rejectedReason?: string;
+  isReapplied?: boolean;
   isAvailable?: boolean;
   typeOfAsset?: string;
   location: Types.ObjectId;
   host: Types.ObjectId;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
-
-
-
 
 export interface ICatersBase {
   _id: string;

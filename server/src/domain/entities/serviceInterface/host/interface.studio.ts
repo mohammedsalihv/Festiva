@@ -19,12 +19,14 @@ export interface IStudio {
   about: string;
   Images: string[];
   status?: string;
-  rejectedReason?:string;
-  isReapplied?:boolean;
+  rejectedReason?: string;
+  isReapplied?: boolean;
   isAvailable?: boolean;
   typeOfAsset?: string;
   location?: Types.ObjectId;
   host?: Types.ObjectId;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IStudioBase {

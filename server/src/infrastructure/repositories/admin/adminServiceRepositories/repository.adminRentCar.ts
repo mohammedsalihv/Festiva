@@ -10,4 +10,7 @@ export class AdminRentCarRepository implements IAdminRentCarRepository {
       .lean<IRentCar>()
       .exec();
   }
+  async getAllRentCars(): Promise<IRentCar[]> {
+    return await RentCarModel.find().lean();
+  }
 }

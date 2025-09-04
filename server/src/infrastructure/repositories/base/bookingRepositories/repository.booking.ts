@@ -16,11 +16,9 @@ export class BookingRepository implements IBookingRepository {
     bookingId: string,
     status: "pending" | "confirmed" | "cancelled"
   ): Promise<IBooking | null> {
-    return bookingModel.findByIdAndUpdate(
-      bookingId,
-      { status },
-      { new: true }
-    ).lean();
+    return bookingModel
+      .findByIdAndUpdate(bookingId, { status }, { new: true })
+      .lean();
   }
 
   async getBookingsByUser(userId: string): Promise<IBooking[]> {

@@ -10,4 +10,7 @@ export class AdminStudioRepository implements IAdminStudioRepository {
       .lean<IStudio>()
       .exec();
   }
+  async getAllStudios(): Promise<IStudio[]> {
+    return await StudioModel.find().lean();
+  }
 }

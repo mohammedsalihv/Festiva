@@ -81,6 +81,10 @@ export class AdminUserManagementRepository
     return toResponseUserDTO(updatedUser);
   }
 
+  async getAllUsers(): Promise<IUserModel[]> {
+    return await UserModel.find().lean();
+  }
+
   async deleteUser(userId: string): Promise<boolean> {
     const response = await UserModel.findByIdAndDelete({ _id: userId });
     return response !== null;

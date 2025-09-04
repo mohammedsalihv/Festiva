@@ -10,4 +10,7 @@ export class AdminCatersRepository implements IAdminCatersRepository {
       .lean<ICaters>()
       .exec();
   }
+  async getAllCaters(): Promise<ICaters[]> {
+    return await CatersModel.find().lean();
+  }
 }

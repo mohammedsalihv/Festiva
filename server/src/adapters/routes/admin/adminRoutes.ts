@@ -9,6 +9,7 @@ import {
   isAdmin,
 } from "../../../utils/common/middlewares/auth";
 import { adminBookingManagementController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminBookingManagement.DI";
+import { adminDashboardController } from "../../../infrastructure/DI/admin/adminBaseDependencyInjections/adminDashboard.DI";
 
 const adminRoutes = express.Router();
 export interface MulterRequest extends Request {
@@ -127,6 +128,15 @@ adminRoutes.get(
   adminBookingManagementController.getAllBookings.bind(
     adminBookingManagementController
   )
+);
+
+// dashbaord
+
+adminRoutes.get(
+  ADMIN_ROUTES.dashboardManagement.dashboard,
+  authenticateToken,
+  isAdmin,
+  adminDashboardController.getDashboard.bind(adminDashboardController)
 );
 
 export default adminRoutes;

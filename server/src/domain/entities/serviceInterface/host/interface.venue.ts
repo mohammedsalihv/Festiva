@@ -21,6 +21,8 @@ export interface IVenue {
   typeOfAsset?: string;
   location: Types.ObjectId;
   host: Types.ObjectId;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IVenueBase {

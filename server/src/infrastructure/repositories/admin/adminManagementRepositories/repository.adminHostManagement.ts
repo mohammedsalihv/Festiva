@@ -101,6 +101,10 @@ export class AdminHostManagementRepostory
     return updateHost;
   }
 
+  async getAllHosts(): Promise<IHostModel[]> {
+    return await HostModel.find().lean();
+  }
+
   async deleteHost(hostId: string): Promise<boolean> {
     const response = await HostModel.findByIdAndDelete({ _id: hostId });
     return response !== null;
