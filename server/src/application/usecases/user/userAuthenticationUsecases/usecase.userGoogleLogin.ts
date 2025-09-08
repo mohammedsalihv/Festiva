@@ -27,7 +27,7 @@ export class UserGoogleLoginUseCase implements IUserGoogleLoginUseCase {
 
     if (user) {
       if (!user.email) {
-        user = await this._userGoogleLoginRepository.updateUser(user.id!, {
+        user = await this._userGoogleLoginRepository.updateUser(user._id!, {
           firstname,
           isActive: true,
         });
@@ -49,12 +49,12 @@ export class UserGoogleLoginUseCase implements IUserGoogleLoginUseCase {
     }
 
     const accessToken = this._tokenService.generateAccessToken({
-      id: user.id!,
+      id: user._id!,
       role: user.role,
     });
 
     const refreshToken = this._tokenService.generateRefreshToken({
-      id: user.id!,
+      id: user._id!,
       role: user.role,
     });
 

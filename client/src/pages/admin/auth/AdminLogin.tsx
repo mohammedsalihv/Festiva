@@ -152,8 +152,8 @@ const AdminLogin: React.FC = () => {
               onClick={handleLogin}
               type="button"
               className={`w-full rounded ${
-                mutation.isPending ? "bg-gray-800" : "bg-black"
-              }  px-4 py-2 text-white hover:bg-gray-800`}
+                mutation.isPending ? "bg-gray-900" : "bg-black"
+              }  px-4 py-3 text-white hover:bg-gray-900`}
               disabled={mutation.isPending}
             >
               {mutation.isPending ? "Logging in..." : "Login"}

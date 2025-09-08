@@ -4,7 +4,7 @@ import { IUserModel } from "../../../domain/entities/modelInterface/user/interfa
 export class userSignupMapper {
   static toDTO(user: IUserModel): userDetailsDTO["user"] {
     return {
-      id: user.id!,
+      id: user._id!,
       firstname: user.firstname ?? "",
       lastname: user.lastname ?? "",
       email: user.email ?? "",

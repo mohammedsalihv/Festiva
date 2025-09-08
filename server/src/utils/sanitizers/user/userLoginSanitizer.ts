@@ -5,7 +5,7 @@ import { USER_ROUTES } from "../../../infrastructure/constants/user.routes";
 export class userLoginSanitizer {
   static toUserLoginResponse(user: IUserModel): userLoginResponseDTO {
     return {
-      id: user.id,
+      id: user._id,
       firstname: user.firstname,
       lastname: user.lastname,
       phone: user.phone,

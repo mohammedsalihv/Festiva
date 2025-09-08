@@ -3,7 +3,7 @@ import { IUserModel } from "../../../domain/entities/modelInterface/user/interfa
 export class userSignupSanitizer {
   static sanitize(user: IUserModel) {
     return {
-      id: user.id,
+      id: user._id,
       firstname: user.firstname,
       lastname: user.lastname,
       phone: user.phone,

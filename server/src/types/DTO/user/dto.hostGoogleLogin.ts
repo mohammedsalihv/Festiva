@@ -44,7 +44,7 @@ export const toUserGoogleLoginResponseDTO = (
 ): { user: responseUserDTO; accessToken: string; refreshToken: string } => {
   return {
     user: {
-      id: user.id?.toString(),
+      id: user._id?.toString(),
       firstname: user.firstname ?? "",
       lastname: user.lastname ?? "",
       email: user.email ?? "",

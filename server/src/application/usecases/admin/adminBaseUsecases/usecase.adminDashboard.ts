@@ -35,7 +35,7 @@ export class AdminDashboardUseCase implements IAdminDashboardUseCase {
   ) {}
 
   async adminDashboard(): Promise<{
-    revenues?: revenueResponse;
+    revenues?: revenueResponse[];
     serviceStatistics?: serviceStatisticsResponse;
     serviceOverviews?: serviceOverviewsResponse;
     users?: totalUsersResponse;

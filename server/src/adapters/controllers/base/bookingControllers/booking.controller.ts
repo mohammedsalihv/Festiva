@@ -9,11 +9,13 @@ import {
 } from "../../../../utils/common/messages/constantResponses";
 import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostNotificationUseCase";
 import { getIO } from "../../../../config/socket";
+import { IPaymentUseCase } from "../../../../domain/usecaseInterface/base/payment/interface.paymentUsecase";
 
 export class BookingController implements IBookingController {
   constructor(
     private _bookingUseCase: IBookingUseCase,
-    private _hostNotificationUseCase: IHostNotificationUseCase
+    private _hostNotificationUseCase: IHostNotificationUseCase,
+    private _paymentUsecase: IPaymentUseCase
   ) {}
 
   async createBooking(req: Request, res: Response): Promise<void> {
@@ -28,6 +30,13 @@ export class BookingController implements IBookingController {
       }
 
       const newBooking = await this._bookingUseCase.createBooking(booking);
+
+      if (newBooking.paymentId && newBooking._id) {
+        await this._paymentUsecase.updateBookingDetails(
+          newBooking.paymentId,
+          newBooking._id
+        );
+      }
 
       if (newBooking && newBooking.bookedData.host?._id) {
         await this._hostNotificationUseCase.createNotification({

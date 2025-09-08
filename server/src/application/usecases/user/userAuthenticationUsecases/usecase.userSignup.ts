@@ -38,12 +38,12 @@ export class UserSignupUseCase implements IUserSignupUseCase {
     const createdUser = await this.userSignupRepository.createUser(newUser);
 
     const accessToken = this.tokenService.generateAccessToken({
-      id: createdUser.id!,
+      id: createdUser._id!,
       role: createdUser.role,
     });
 
     const refreshToken = this.tokenService.generateRefreshToken({
-      id: createdUser.id!,
+      id: createdUser._id!,
       role: createdUser.role,
     });
 

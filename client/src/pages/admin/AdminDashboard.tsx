@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Pie, Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -9,8 +9,23 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  Filler,
 } from "chart.js";
 import { Button } from "@/components/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { getDashboard } from "@/api/admin/adminDashboardService";
+import { AppDispatch, RootState } from "@/redux/store";
+import {
+  setAllReviews,
+  setRecentActivities,
+  setRevenueCards,
+  setServiceOverviews,
+  setServiceStatics,
+  setTotalBookings,
+  setTotalHosts,
+  setTotalIncome,
+  setTotalUsers,
+} from "@/redux/Slice/admin/adminDashboardSlice";
 
 ChartJS.register(
   ArcElement,
@@ -19,10 +34,79 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement
+  LineElement,
+  Filler
 );
 
 const AdminDashboard: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [loading, setLoading] = useState(false);
+
+  const revenueCards = useSelector(
+    (state: RootState) => state.adminDashboard.revenueCards
+  );
+  const serviceStatics = useSelector(
+    (state: RootState) => state.adminDashboard.serviceStatics
+  );
+  const serviceOverviews = useSelector(
+    (state: RootState) => state.adminDashboard.serviceOverviews
+  );
+  const totalUsers = useSelector(
+    (state: RootState) => state.adminDashboard.totalUsers
+  );
+  const totalHosts = useSelector(
+    (state: RootState) => state.adminDashboard.totalHosts
+  );
+  const totalBookings = useSelector(
+    (state: RootState) => state.adminDashboard.totalBookings
+  );
+  const totalIncome = useSelector(
+    (state: RootState) => state.adminDashboard.totalIncome
+  );
+  const recentActivities = useSelector(
+    (state: RootState) => state.adminDashboard.recentActivities
+  );
+  const allReviews = useSelector(
+    (state: RootState) => state.adminDashboard.allReviews
+  );
+
+  console.log("revenueCards", revenueCards);
+  console.log("serviceStatics", serviceStatics);
+  console.log("serviceOverviews", serviceOverviews);
+  console.log("totalUsers", totalUsers);
+  console.log("totalHosts", totalHosts);
+  console.log("totalBookings", totalBookings);
+  console.log("totalIncome", totalIncome);
+  console.log("recentActivities", recentActivities);
+  console.log("allReviews", allReviews);
+
+  const fetchAdminDashboard = async () => {
+    setLoading(true);
+    try {
+      const response = await getDashboard();
+      console.log(response);
+      dispatch(setRevenueCards(response.revenues));
+      dispatch(setServiceStatics(response.serviceStatistics));
+      dispatch(setServiceOverviews(response.serviceOverviews));
+      dispatch(setTotalUsers(response.users));
+      dispatch(setTotalHosts(response.hosts));
+      dispatch(setTotalBookings(response.totalBookings));
+      dispatch(setTotalIncome(response.totalIncome));
+      dispatch(setRecentActivities(response.recentActivities));
+      dispatch(setAllReviews(response.reviews));
+    } catch (error) {
+      console.error("Failed to fetch dashboard:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAdminDashboard();
+  }, []);
+
+  if (loading) return <p>Loading dashboard...</p>;
+
   const pieData = {
     labels: ["Venue", "RentCar", "Studio", "Caters"],
     datasets: [
@@ -107,7 +191,61 @@ const AdminDashboard: React.FC = () => {
               </Button>
             </div>
           </div>
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 max-w-full bg-gray-100">
+            <div className="bg-green-500 text-white p-4 rounded-lg shadow">
+              <p className="text-lg">Total income</p>
+              <p className="text-xl sm:text-3xl font-bold">
+                {totalIncome?.total ?? 0}.00
+              </p>
+              <p className="text-sm font-semibold">
+                Total payments : {totalIncome?.totalPayments}.00
+              </p>
+              <p className="text-sm font-semibold">
+                Total platform fee : {totalIncome?.platformFee}.00
+              </p>
+              <p className="text-sm font-semibold">
+                Updated: {new Date().toLocaleDateString()}
+              </p>
+            </div>
+            <div className="bg-orange-500 text-white p-4 rounded-lg shadow">
+              <p className="text-lg">Total bookings</p>
+              <p className="text-xl sm:text-3xl font-bold">
+                {totalBookings?.bookingCount}
+              </p>
+              <p className="text-sm font-semibold">
+                Top booked asset:{" "}
+                {totalBookings?.topBookedAsset
+                  ? totalBookings.topBookedAsset.charAt(0).toUpperCase() +
+                    totalBookings.topBookedAsset.slice(1)
+                  : "N/A"}
+              </p>
 
+              <p className="text-sm font-semibold">
+                Top booked count: {totalBookings?.topBookedAssetCount}
+              </p>
+              <p className="text-sm font-semibold">
+                Updated: {new Date().toLocaleDateString()}
+              </p>
+            </div>
+            <div className="bg-blue-500 text-white p-4 rounded-lg shadow">
+              <p className="text-lg">Total users</p>
+              <p className="text-xl sm:text-3xl font-bold">
+                {totalUsers?.personCount ?? 0}
+              </p>
+              <p className="text-sm font-semibold">
+                Updated: {new Date().toLocaleDateString()}
+              </p>
+            </div>
+            <div className="bg-purple-500 text-white p-4 rounded-lg shadow">
+              <p className="text-lg">Total hosts</p>
+              <p className="text-xl sm:text-3xl font-bold">
+                {totalHosts?.personCount ?? 0}
+              </p>
+              <p className="text-sm font-semibold">
+                Updated: {new Date().toLocaleDateString()}
+              </p>
+            </div>
+          </div>
           {/* Revenue Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 max-w-full bg-gray-100">
             <div className="bg-white p-4 rounded-lg shadow flex items-center space-x-4">
@@ -151,33 +289,7 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
           </div>
-{/* Balance Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 max-w-full bg-gray-100">
-            <div className="bg-green-500 text-white p-4 rounded-lg shadow">
-              <p className="text-lg font-bold">Main Balance</p>
-              <p className="text-2xl">$22,466.24</p>
-              <p className="text-sm">Valid Thru 08/21</p>
-              <p>Card Holder: Admin</p>
-            </div>
-            <div className="bg-blue-500 text-white p-4 rounded-lg shadow">
-              <p className="text-lg font-bold">Main Balance</p>
-              <p className="text-2xl">$67,876.32</p>
-              <p className="text-sm">Valid Thru 08/21</p>
-              <p>Card Holder: Admin</p>
-            </div>
-            <div className="bg-purple-500 text-white p-4 rounded-lg shadow">
-              <p className="text-lg font-bold">Main Balance</p>
-              <p className="text-2xl">$240.56</p>
-              <p className="text-sm">Valid Thru 08/21</p>
-              <p>Card Holder: Admin</p>
-            </div>
-            <div className="bg-orange-500 text-white p-4 rounded-lg shadow">
-              <p className="text-lg font-bold">Main Balance</p>
-              <p className="text-2xl">$6,786.25</p>
-              <p className="text-sm">Valid Thru 08/21</p>
-              <p>Card Holder: Admin</p>
-            </div>
-          </div>
+          
           <div className="bg-white p-4 rounded-lg shadow mb-6">
             <h2 className="text-lg font-bold mb-4">Statistics & Overview</h2>
             <div className="flex flex-col lg:flex-row gap-6">
@@ -229,8 +341,6 @@ const AdminDashboard: React.FC = () => {
             </div>
           </div>
 
-          
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 bg-gray-100">
             <div className="bg-white p-4 rounded-lg shadow">
               <h2 className="text-lg font-bold mb-4">
@@ -255,7 +365,7 @@ const AdminDashboard: React.FC = () => {
                 </span>
               </div>
             </div>
-          <div className="bg-white p-4 rounded-lg shadow">
+            <div className="bg-white p-4 rounded-lg shadow">
               <h2 className="text-lg font-bold mb-4">Reviews</h2>
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm text-left border">
@@ -292,7 +402,6 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
           </div>
-          
         </main>
       </div>
     </div>

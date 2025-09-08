@@ -27,5 +27,8 @@ export const ADMIN_API = {
   },
   bookingManagement:{
     getBookings:'/bookings'
+  },
+  adminDashboard:{
+    dashboard:'/dashboard'
   }
 };

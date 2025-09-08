@@ -8,7 +8,7 @@ export const mapHostReviews = (
 ): hostReviewsResponse[] => {
   return reviews.map((review) => {
     const user = users.find(
-      (u) => u.id?.toString() === review.createrId.toString()
+      (u) => u._id?.toString() === review.createrId.toString()
     );
 
     return {

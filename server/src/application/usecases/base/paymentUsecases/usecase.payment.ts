@@ -3,6 +3,7 @@ import { IRazorpayRepository } from "../../../../domain/entities/repositoryInter
 import { PaymentRequestDTO } from "../../../../types/DTO/common/payment";
 import { IPaymentRepository } from "../../../../domain/entities/repositoryInterface/base/interface.paymentRepository";
 import { IPayment } from "../../../../domain/entities/modelInterface/base/interface.payment";
+import { Types } from "mongoose";
 
 export class PaymentUseCase implements IPaymentUseCase {
   constructor(
@@ -19,5 +20,11 @@ export class PaymentUseCase implements IPaymentUseCase {
   ): Promise<IPayment | null> {
     return await this._paymentRepository.paymentStatusChange(status, paymentId);
   }
-  
+
+  async updateBookingDetails(
+    paymentId: Types.ObjectId | string,
+    bookingId: Types.ObjectId | string
+  ): Promise<void> {
+    return await this._paymentRepository.bookingUpdate(paymentId, bookingId);
+  }
 }

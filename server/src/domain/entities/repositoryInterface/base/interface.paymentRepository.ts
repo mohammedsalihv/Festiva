@@ -7,4 +7,8 @@ export interface IPaymentRepository {
   ): Promise<IPayment | null>;
   paymentDetails(paymentId: string | Types.ObjectId): Promise<IPayment | null>;
   getAllPayments(): Promise<IPayment[]>;
+  bookingUpdate(
+    paymentId: Types.ObjectId | string,
+    bookingId: Types.ObjectId | string
+  ): Promise<void>;
 }

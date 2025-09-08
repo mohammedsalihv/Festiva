@@ -1,8 +1,7 @@
 export interface revenueResponse {
+  serviceType: string;
   totalRevenue: number;
-  revenueService: string;
-  serviceTypeImage?: string;
-  hikePercentage?: string;
+  bookingGrowthPercentage: string;
 }
 
 export interface serviceStatisticsResponse {
@@ -11,9 +10,11 @@ export interface serviceStatisticsResponse {
 }
 
 export interface serviceOverviewsResponse {
-  assetType: string;
-  assetCount: number[];
-  bookedTimes: number[];
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+  }[];
 }
 
 export interface totalUsersResponse {
@@ -30,7 +31,8 @@ export interface totalHostsResponse {
 
 export interface totalBookingsResponse {
   bookingCount: number;
-  bookingAsset: string;
+  topBookedAsset: string;
+  topBookedAssetCount: number;
   fromDate?: string | Date;
   toDate?: string | Date;
 }
@@ -52,28 +54,28 @@ export interface allReviewsResponse {
 }
 
 export interface recentActivitiesResponse {
-  booking?: {
+  bookings?: {
     assetImage: string | null;
     bookedService: string;
     bookedDate: string | Date;
     bookingStatus: string;
-  };
+  }[];
   registrations?: {
     userName: string;
     userImage: string;
     userEmail: string;
-  };
+  }[];
   listings?: {
     assetType: string;
     assetImage: string | null;
     assetName: string | null;
     listedStatus: string;
-  };
+  }[];
   reviews?: {
     reviewerName: string;
     reviewerImage: string;
     revieweComment: string;
-  };
+  }[];
   assetAdminUpdation?: {
     adminName: string;
     adminImage: string;
@@ -81,7 +83,7 @@ export interface recentActivitiesResponse {
     assetImage: string;
     assetStatus: string;
     rejectionReason?: string;
-  };
+  }[];
   hostBoookingApproval?: {
     bookedAssetName: string;
     bookedAssetType: string;
@@ -90,5 +92,5 @@ export interface recentActivitiesResponse {
     hostName: string;
     hostImage: string;
     rejectionReason?: string;
-  };
+  }[];
 }

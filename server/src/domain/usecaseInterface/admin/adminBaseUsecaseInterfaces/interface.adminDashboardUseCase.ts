@@ -12,7 +12,7 @@ import {
 
 export interface IAdminDashboardUseCase {
   adminDashboard(): Promise<{
-    revenues?: revenueResponse;
+    revenues?: revenueResponse[];
     serviceStatistics?: serviceStatisticsResponse;
     serviceOverviews?: serviceOverviewsResponse;
     users?: totalUsersResponse;

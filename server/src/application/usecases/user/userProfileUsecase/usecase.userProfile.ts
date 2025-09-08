@@ -42,8 +42,8 @@ export class UserProfileUseCase implements IUserProfileUseCase {
     if (form.email) {
       const existedEmail = await this._userRepository.findByEmail(form.email);
       if (
-        existedEmail?.id?.toString() !== userId.toString() &&
-        existedEmail?.id !== undefined
+        existedEmail?._id?.toString() !== userId.toString() &&
+        existedEmail?._id !== undefined
       ) {
         throw new CustomError(
           statusMessages.accountExisted,

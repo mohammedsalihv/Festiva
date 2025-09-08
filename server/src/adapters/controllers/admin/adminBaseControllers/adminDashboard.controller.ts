@@ -10,7 +10,7 @@ export class AdminDashboardController implements IAdminDashboardController {
   async getDashboard(req: authenticationRequest, res: Response): Promise<void> {
     try {
       const DashboardData = await this._adminDashboardUsecase.adminDashboard();
-
+      console.log(DashboardData)
       res.status(statusCodes.Success).json(DashboardData);
     } catch (error) {
       console.error("Error fetching admin dashboard data:", error);
