@@ -22,6 +22,7 @@ import {
   setRevenue,
 } from "@/redux/Slice/host/common/hostDashboard";
 import { getDashboard } from "@/api/host/hostAccountService";
+import { RevenueAndPaymentsResponse } from "@/utils/Types/host/pages/hostDashboard";
 
 ChartJS.register(
   ArcElement,
@@ -39,8 +40,21 @@ const HostDashboard = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  // const revenues = useSelector((state:RootState) => state.)
-
+  const revenues = useSelector(
+    (state: RootState) => state.hostDashboard.revenue
+  );
+  const overViews = useSelector(
+    (state: RootState) => state.hostDashboard.assetOverview
+  );
+  const bookingsStatistics = useSelector(
+    (state: RootState) => state.hostDashboard.bookingStats
+  );
+  const recentAllBookings = useSelector(
+    (state: RootState) => state.hostDashboard.recentBookings
+  );
+  const allBookings = useSelector(
+    (state: RootState) => state.hostDashboard.bookingTableRows
+  );
 
   const fetchHostDashboard = async () => {
     setLoading(true);
@@ -75,6 +89,26 @@ const HostDashboard = () => {
     };
   }, []);
 
+
+    // Revenue Bar
+
+  const revenueItem = revenues.length > 0 ? revenues[0] : null;
+  const revenueData = {
+  labels: revenueItem?.revenueByMonth.map((item) => item.month) || [],
+  datasets: [
+    {
+      label: "Revenue ($)",
+      data: revenueItem?.revenueByMonth.map((item) => item.revenue) || [],
+      backgroundColor: "#3B82F6",
+      borderRadius: 6,
+    },
+  ],
+};
+const totalRevenue = revenueItem?.total ?? 0;
+const platformFee = revenueItem?.platformFee ?? 0;
+const grossRevenue = revenueItem?.gross ?? 0;
+
+
   if (loading) return <p className="text-center p-10">Loading dashboard...</p>;
 
   const scroll = (direction: "left" | "right") => {
@@ -96,10 +130,6 @@ const HostDashboard = () => {
   };
 
   const assetTypes = { venue: 3, rentcar: 2, studio: 4, caters: 1 };
-  const totalRevenue = 4500;
-  const platformFee = 500;
-  const grossRevenue = totalRevenue + platformFee;
-
   const pieData = {
     labels: ["Venue", "Rent Car", "Studio", "Caters"],
     datasets: [
@@ -131,18 +161,6 @@ const HostDashboard = () => {
     maintainAspectRatio: false,
   };
 
-  // Revenue Bar
-  const revenueData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [
-      {
-        label: "Revenue ($)",
-        data: [1000, 1200, 800, 1500, 2000, 1800],
-        backgroundColor: "#3B82F6",
-        borderRadius: 6,
-      },
-    ],
-  };
 
   // Booking Stats
   const bookingStats = {
@@ -289,10 +307,9 @@ const HostDashboard = () => {
             />
           </div>
           <div className="mt-4">
-            <p className="text-2xl font-bold">${totalRevenue}</p>
-            <p className="text-gray-500 text-sm">Net Revenue</p>
-            <p className="text-sm">Platform Fees: ${platformFee}</p>
-            <p className="text-sm">Gross: ${grossRevenue}</p>
+            <p className="text-2xl font-bold">{totalRevenue}.00</p>
+            <p className="text-sm">Platform Fees: {platformFee}.00</p>
+            <p className="text-sm">Gross: {grossRevenue}.00</p>
           </div>
         </div>
 

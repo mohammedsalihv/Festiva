@@ -44,6 +44,6 @@ export class HostBookingsRepository implements IHostBookingsRepository {
   async getDashboardBookings(
     hostId: string | Types.ObjectId
   ): Promise<IBooking[]> {
-    return await bookingModel.find({ "bookedData.host": hostId }).lean();
+    return await bookingModel.find({ "bookedData.host._id": hostId }).lean();
   }
 }

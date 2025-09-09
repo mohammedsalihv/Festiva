@@ -9,7 +9,7 @@ import {
 } from "@/utils/Types/host/pages/hostDashboard";
 
 const initialState: HostDashboardState = {
-  revenue: null,
+  revenue: [],
   assetOverview: [],
   bookingStats: [],
   recentBookings: [],
@@ -20,7 +20,7 @@ const hostDashboardSlice = createSlice({
   name: "hostDashboard",
   initialState,
   reducers: {
-    setRevenue(state, action: PayloadAction<RevenueAndPaymentsResponse>) {
+    setRevenue(state, action: PayloadAction<RevenueAndPaymentsResponse[]>) {
       state.revenue = action.payload;
     },
     setAssetOverview(state, action: PayloadAction<AssetOverviewResponse>) {
@@ -36,7 +36,7 @@ const hostDashboardSlice = createSlice({
       state.bookingTableRows = action.payload;
     },
     clearDashboard(state) {
-      state.revenue = null;
+      state.revenue = [];
       state.assetOverview = [];
       state.bookingStats = [];
       state.recentBookings = [];

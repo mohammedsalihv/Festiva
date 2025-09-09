@@ -45,7 +45,7 @@ export interface BookingTableRow {
 
 
 export interface HostDashboardState {
-  revenue: RevenueAndPaymentsResponse | null;
+  revenue: RevenueAndPaymentsResponse[];
   assetOverview: AssetOverviewResponse;
   bookingStats: BookingStatsResponse;
   recentBookings: RecentBooking[];
