@@ -8,6 +8,7 @@ export const HOST_API = {
     hostLogout: "/auth/logout",
   },
   hostAccount: {
+    dashboard:'/dashboard',
     notifications: "/notifications",
     markAllReadNotifications: "/notifications/mark-all-read",
     myAssets: "/myassets",

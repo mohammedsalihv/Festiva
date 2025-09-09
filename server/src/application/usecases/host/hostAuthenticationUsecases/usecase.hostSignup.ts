@@ -8,7 +8,7 @@ import ErrorHandler from "../../../../utils/common/errors/CustomError";
 import { IHostModel } from "../../../../domain/entities/modelInterface/host/interface.host";
 import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
 import { IHostSignupRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostSignupRepository";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
+import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
 import { statusCodes } from "../../../../utils/common/messages/constantResponses";
 
 export class HostSignupUseCase implements IHostSignupUseCase {

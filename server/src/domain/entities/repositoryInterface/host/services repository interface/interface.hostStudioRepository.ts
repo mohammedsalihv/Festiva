@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IStudio } from "../../../serviceInterface/host/interface.studio";
 
 export interface IHostStudioRepository {
@@ -6,4 +7,5 @@ export interface IHostStudioRepository {
   reApply(studioId: string): Promise<boolean>;
   updateAvailability(studioId: string, isAvailable: boolean): Promise<boolean>;
   deleteStudio(studioId: string): Promise<boolean>;
+  getHostDashboardStudio(hostId: string | Types.ObjectId): Promise<IStudio[]>;
 }

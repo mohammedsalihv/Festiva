@@ -27,6 +27,7 @@ import assetSearchReducer from "@/redux/Slice/user/assetSearchSlice";
 import myAssetsReducer from "@/redux/Slice/host/common/myAssetsSlice";
 import recivedBookings from "@/redux/Slice/host/common/bookingsSlice";
 import recivedReviews from "@/redux/Slice/host/common/reviewsSlice";
+import hostDashboardReducer from "@/redux/Slice/host/common/hostDashboard";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -52,6 +53,7 @@ const rootReducer = combineReducers({
   myAssets: myAssetsReducer,
   hostRecivedBookings: recivedBookings,
   hostRecivedReviews: recivedReviews,
+  hostDashboard: hostDashboardReducer,
 });
 
 const persistConfig = {

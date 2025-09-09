@@ -1,16 +1,13 @@
 import { IStudio } from "../../../../domain/entities/serviceInterface/host/interface.studio";
 import { StudioModel } from "../../../../domain/models/host/hostServiceModels/studioModel";
 import { IHostStudioRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostStudioRepository";
+import { Types } from "mongoose";
 
 export class HostStudioRepository implements IHostStudioRepository {
   async addStudio(studio: IStudio): Promise<IStudio> {
-    try {
-      const newStudio = new StudioModel(studio);
-      await newStudio.save();
-      return newStudio;
-    } catch (error) {
-      throw new Error(`Error saving new Studio: ${error}`);
-    }
+    const newStudio = new StudioModel(studio);
+    await newStudio.save();
+    return newStudio;
   }
 
   studioDetails(studioId: string): Promise<IStudio | null> {
@@ -57,5 +54,11 @@ export class HostStudioRepository implements IHostStudioRepository {
       return false;
     }
     return true;
+  }
+
+  async getHostDashboardStudio(
+    hostId: string | Types.ObjectId
+  ): Promise<IStudio[]> {
+    return await StudioModel.find({ host: hostId }).lean();
   }
 }

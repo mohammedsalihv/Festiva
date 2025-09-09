@@ -8,9 +8,16 @@ import { hostNotificationController } from "../../../infrastructure/DI/host/host
 import { hostAssetController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostAsset.DI";
 import { hostBookingController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostBookings.DI";
 import { hostReviewsController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostReviews.DI";
-
+import { hostDashboardController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostDashboard.DI";
 
 const hostAccountRoutes = express.Router();
+
+hostAccountRoutes.get(
+  HOST_ROUTES.HostAccount.dashboard,
+  authenticateToken,
+  isHost,
+  hostDashboardController.getHostDashboard.bind(hostDashboardController)
+);
 
 hostAccountRoutes.get(
   HOST_ROUTES.HostAccount.notifications,
@@ -55,7 +62,6 @@ hostAccountRoutes.get(
   isHost,
   hostReviewsController.allReviews.bind(hostReviewsController)
 );
-
 
 hostAccountRoutes.get(
   HOST_ROUTES.HostAccount.assetDetails,

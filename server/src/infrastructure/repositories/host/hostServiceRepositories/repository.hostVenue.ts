@@ -1,16 +1,13 @@
 import { IVenue } from "../../../../domain/entities/serviceInterface/host/interface.venue";
 import { IHostVenueRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostVenueRepository";
 import { VenueModel } from "../../../../domain/models/host/hostServiceModels/venueModel";
+import { Types } from "mongoose";
 
 export class HostVenueRepository implements IHostVenueRepository {
   async addVenue(venue: IVenue): Promise<IVenue> {
-    try {
-      const newVenue = new VenueModel(venue);
-      await newVenue.save();
-      return newVenue;
-    } catch (error) {
-      throw new Error(`Error saving venue: ${error}`);
-    }
+    const newVenue = new VenueModel(venue);
+    await newVenue.save();
+    return newVenue;
   }
 
   async findVenueById(venueId: string): Promise<IVenue | null> {
@@ -58,5 +55,10 @@ export class HostVenueRepository implements IHostVenueRepository {
       return false;
     }
     return true;
+  }
+  async getHostDashboardVenue(
+    hostId: string | Types.ObjectId
+  ): Promise<IVenue[]> {
+    return await VenueModel.find({ host: hostId }).lean();
   }
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Pie, Bar } from "react-chartjs-2";
-import { FaAngleLeft ,  FaAngleRight } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -12,6 +12,16 @@ import {
 } from "chart.js";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "@/redux/store";
+import {
+  setAssetOverview,
+  setBookingStats,
+  setBookingTableRows,
+  setRecentBookings,
+  setRevenue,
+} from "@/redux/Slice/host/common/hostDashboard";
+import { getDashboard } from "@/api/host/hostAccountService";
 
 ChartJS.register(
   ArcElement,
@@ -26,6 +36,46 @@ const HostDashboard = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+
+  // const revenues = useSelector((state:RootState) => state.)
+
+
+  const fetchHostDashboard = async () => {
+    setLoading(true);
+    try {
+      const response = await getDashboard();
+      dispatch(setRevenue(response.revenue));
+      dispatch(setAssetOverview(response.assetOverview));
+      dispatch(setBookingStats(response.bookingStats));
+      dispatch(setRecentBookings(response.recentBookings));
+      dispatch(setBookingTableRows(response.bookingTableRows));
+    } catch (error) {
+      console.error("Failed to fetch dashboard:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchHostDashboard();
+  }, []);
+
+  useEffect(() => {
+    checkScroll();
+    const ref = scrollRef.current;
+    if (ref) {
+      ref.addEventListener("scroll", checkScroll);
+      window.addEventListener("resize", checkScroll);
+    }
+    return () => {
+      if (ref) ref.removeEventListener("scroll", checkScroll);
+      window.removeEventListener("resize", checkScroll);
+    };
+  }, []);
+
+  if (loading) return <p className="text-center p-10">Loading dashboard...</p>;
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -44,19 +94,6 @@ const HostDashboard = () => {
     setShowLeft(scrollLeft > 0);
     setShowRight(scrollLeft + clientWidth < scrollWidth - 5);
   };
-
-  useEffect(() => {
-    checkScroll();
-    const ref = scrollRef.current;
-    if (ref) {
-      ref.addEventListener("scroll", checkScroll);
-      window.addEventListener("resize", checkScroll);
-    }
-    return () => {
-      if (ref) ref.removeEventListener("scroll", checkScroll);
-      window.removeEventListener("resize", checkScroll);
-    };
-  }, []);
 
   const assetTypes = { venue: 3, rentcar: 2, studio: 4, caters: 1 };
   const totalRevenue = 4500;
@@ -292,7 +329,7 @@ const HostDashboard = () => {
               onClick={() => scroll("left")}
               className="absolute left-0 top-1/2 -translate-y-1/2 bg-black text-white shadow rounded-full p-2 z-10"
             >
-              <FaAngleLeft/>
+              <FaAngleLeft />
             </Button>
           )}
 
@@ -334,7 +371,7 @@ const HostDashboard = () => {
               onClick={() => scroll("right")}
               className="absolute right-0 top-1/2 -translate-y-1/2 bg-black text-white shadow rounded-full p-2 z-10"
             >
-              <FaAngleRight/>
+              <FaAngleRight />
             </Button>
           )}
         </div>

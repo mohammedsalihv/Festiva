@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IRentCar } from "../../../serviceInterface/host/interface.rentCar";
 
 export interface IHostRentCarRepository {
@@ -6,4 +7,5 @@ export interface IHostRentCarRepository {
   reApply(rentcarId: string): Promise<boolean>;
   updateAvailability(rentcarId: string, isAvailable: boolean): Promise<boolean>;
   deleteRentcar(rentcarId: string): Promise<boolean>;
+  getHostDashboardRentCar(hostId: string | Types.ObjectId): Promise<IRentCar[]>;
 }

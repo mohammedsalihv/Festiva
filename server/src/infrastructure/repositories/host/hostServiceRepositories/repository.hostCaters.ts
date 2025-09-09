@@ -4,13 +4,9 @@ import { CatersModel } from "../../../../domain/models/host/hostServiceModels/ca
 
 export class HostCatersRepository implements IHostCatersRepository {
   async addCaters(caters: ICaters): Promise<ICaters> {
-    try {
-      const newCaters = new CatersModel(caters);
-      await newCaters.save();
-      return newCaters;
-    } catch (error) {
-      throw new Error(`Error saving new Caters: ${error}`);
-    }
+    const newCaters = new CatersModel(caters);
+    await newCaters.save();
+    return newCaters;
   }
 
   findCatersById(catersId: string): Promise<ICaters | null> {
@@ -40,13 +36,11 @@ export class HostCatersRepository implements IHostCatersRepository {
     catersId: string,
     isAvailable: boolean
   ): Promise<boolean> {
-
-   
     const result = await CatersModel.updateOne(
       { _id: catersId },
       {
         $set: {
-          isAvailable : isAvailable,
+          isAvailable: isAvailable,
         },
       }
     );
@@ -60,5 +54,9 @@ export class HostCatersRepository implements IHostCatersRepository {
       return false;
     }
     return true;
+  }
+
+  async getHostDashboardCaters(hostId: string): Promise<ICaters[]> {
+    return await CatersModel.find({ host: hostId }).lean();
   }
 }

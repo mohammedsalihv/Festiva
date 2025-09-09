@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IBooking } from "../../../modelInterface/base/interface.booking";
 
 export interface IHostBookingsRepository {
@@ -15,4 +16,5 @@ export interface IHostBookingsRepository {
     status: string,
     reason?: string
   ): Promise<boolean>;
+  getDashboardBookings(hostId: string | Types.ObjectId): Promise<IBooking[]>;
 }

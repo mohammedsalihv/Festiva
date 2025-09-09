@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IVenue } from "../../../serviceInterface/host/interface.venue";
 
 export interface IHostVenueRepository {
@@ -6,4 +7,5 @@ export interface IHostVenueRepository {
   reApply(venueId: string): Promise<boolean>;
   updateAvailability(venueId: string, isAvailable: boolean): Promise<boolean>;
   deleteVenue(venueId: string): Promise<boolean>;
+  getHostDashboardVenue(hostId: string | Types.ObjectId): Promise<IVenue[]>;
 }

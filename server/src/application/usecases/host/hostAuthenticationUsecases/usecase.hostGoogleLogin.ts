@@ -2,7 +2,7 @@ import { IHostGoogleLoginUseCase } from "../../../../domain/usecaseInterface/hos
 import { HostDetailsDTO } from "../../../../types/DTO/host/dto.host";
 import { googleSignupHostDTO } from "../../../../types/DTO/user/dto.hostGoogleSignup";
 import { IHostGoogle } from "../../../../domain/entities/baseInterface/host/authenticationInterfaces/interface.hostGoogle";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
+import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
 import { IHostGoogleLoginRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostGoogleLoginRepository";
 import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
 import CustomError from "../../../../utils/common/errors/CustomError";

@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { ICaters } from "../../../serviceInterface/host/interface.caters";
 
 export interface IHostCatersRepository {
@@ -6,4 +7,5 @@ export interface IHostCatersRepository {
   reApply(catersId: string): Promise<boolean>;
   updateAvailability(catersId: string, isAvailable: boolean): Promise<boolean>;
   deleteCaters(catersId: string): Promise<boolean>;
+  getHostDashboardCaters(hostId: string | Types.ObjectId): Promise<ICaters[]>;
 }

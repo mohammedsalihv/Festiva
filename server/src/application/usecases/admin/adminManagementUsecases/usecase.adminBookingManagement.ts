@@ -1,5 +1,5 @@
 import { IAdminBookingManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminBookingManagementRepository";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
+import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
 import { IAdminBookingManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminBookingManagementUseCase";
 import { adminBookingsResponse } from "../../../../types/DTO/admin/dto.adminBookings";

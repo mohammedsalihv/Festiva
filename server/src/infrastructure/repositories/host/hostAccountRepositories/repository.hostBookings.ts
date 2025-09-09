@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IBooking } from "../../../../domain/entities/modelInterface/base/interface.booking";
 import { IHostBookingsRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostBookingsRepository";
 import bookingModel from "../../../../domain/models/base/booking/bookingModel";
@@ -39,5 +40,10 @@ export class HostBookingsRepository implements IHostBookingsRepository {
       bookingRejectedReason: reason,
     });
     return result ? true : false;
+  }
+  async getDashboardBookings(
+    hostId: string | Types.ObjectId
+  ): Promise<IBooking[]> {
+    return await bookingModel.find({ "bookedData.host": hostId }).lean();
   }
 }

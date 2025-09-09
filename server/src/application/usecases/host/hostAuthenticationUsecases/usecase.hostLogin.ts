@@ -1,6 +1,6 @@
 import { IHostLoginRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostLoginRepository";
 import { IHostLoginUseCase } from "../../../../domain/usecaseInterface/host/authenticationUsecaseInterfaces/interface.hostLoginUseCase";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
+import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
 import { IHostLoginUsecaseValidator } from "../../../../domain/validatorInterface/host/interface.hostLoginValidator";
 import { HostLoginMapper } from "../../../../utils/mapping/host/hostLoginMapper";
 import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";

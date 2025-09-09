@@ -9,7 +9,7 @@ import {
   userBookingsMapping,
 } from "../../../../utils/mapping/user/userBookingMapper";
 import { IPaymentRepository } from "../../../../domain/entities/repositoryInterface/base/interface.paymentRepository";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRepository";
+import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
 import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
 
 export class UserBookingsUseCase implements IUserBookingUseCase {
