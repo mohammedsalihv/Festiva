@@ -32,7 +32,7 @@ export class UserRepository implements IUserRepository {
     return response !== null;
   }
 
-  findByIdsForReviews(userIds: string[]): Promise<IUserModel[] | null> {
-      return UserModel.find({ _id:{$in:userIds}})
+  findByIds(userIds: string[]): Promise<IUserModel[] | null> {
+    return UserModel.find({ _id: { $in: userIds } });
   }
 }

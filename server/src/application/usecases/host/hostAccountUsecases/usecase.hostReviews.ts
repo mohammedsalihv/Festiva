@@ -25,7 +25,7 @@ export class HostReviewsUseCase implements IHostReviewsUseCase {
     const userIds = reviewData.reviews.map((review) =>
       review.createrId.toString()
     );
-    const users = await this._userRepository.findByIdsForReviews(userIds);
+    const users = await this._userRepository.findByIds(userIds);
     if (!users) {
       return { reviews: [], totalPages: reviewData.totalPages };
     }

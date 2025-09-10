@@ -11,6 +11,7 @@ import {
   RecentBooking,
   BookingTableRow,
 } from "../../../types/DTO/host/dto.hostDashbaord";
+import { IUserModel } from "../../../domain/entities/modelInterface/user/interface.user";
 
 export function mapPaymentsToRevenue(
   payments: IPayment[]
@@ -18,17 +19,47 @@ export function mapPaymentsToRevenue(
   const revenueByMonth: { [key: string]: number } = {};
 
   payments.forEach((payment) => {
-    const month = payment.paymentDate.toLocaleString("default", {
+    const monthYear = payment.paymentDate.toLocaleString("default", {
       month: "short",
+      year: "numeric",
     });
-    revenueByMonth[month] = (revenueByMonth[month] || 0) + payment.total;
+
+    revenueByMonth[monthYear] =
+      (revenueByMonth[monthYear] || 0) + payment.total;
+  });
+
+  // Find unique years in the payments
+  const years = [...new Set(payments.map((p) => p.paymentDate.getFullYear()))];
+
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const filledRevenue: { month: string; revenue: number }[] = [];
+
+  years.forEach((year) => {
+    months.forEach((m) => {
+      const key = `${m} ${year}`;
+      filledRevenue.push({
+        month: key,
+        revenue: revenueByMonth[key] || 0,
+      });
+    });
   });
 
   return {
-    revenueByMonth: Object.entries(revenueByMonth).map(([month, revenue]) => ({
-      month,
-      revenue,
-    })),
+    revenueByMonth: filledRevenue,
     total: payments.reduce((sum, p) => sum + p.total, 0),
     platformFee: payments.reduce((sum, p) => sum + p.platformFee, 0),
     gross: payments.reduce((sum, p) => sum + (p.total - p.platformFee), 0),
@@ -67,38 +98,52 @@ export function mapBookingsToStats(bookings: IBooking[]): BookingStatsResponse {
   }));
 }
 
-
-
 // ---------------- Recent Bookings ----------------
 export function mapBookingsToRecent(bookings: IBooking[]): RecentBooking[] {
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
   return bookings
-    .filter((b) => b.createdAt && b.createdAt >= oneWeekAgo) 
-    .sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0)) 
-    .slice(0, 6) // limit to 6
+    .filter(
+      (b) =>
+        b.createdAt && new Date(b.createdAt).getTime() >= oneWeekAgo.getTime()
+    )
+    .sort(
+      (a, b) =>
+        (b.createdAt ? new Date(b.createdAt).getTime() : 0) -
+        (a.createdAt ? new Date(a.createdAt).getTime() : 0)
+    )
+    .slice(0, 6)
     .map((b) => ({
       id: b._id?.toString() || "",
-      user: b.userId.toString(),
+      user: b.userId?.toString() || "",
       service: b.bookedData?.about || "",
       amount: b.total,
-      status: b.status as "accepted" | "pending" | "rejected",
+      status: (["accepted", "pending", "rejected"].includes(b.status)
+        ? b.status
+        : "pending") as "accepted" | "pending" | "rejected",
     }));
 }
+
 // ---------------- Booking Table ----------------
 export function mapBookingsToTable(
   bookings: IBooking[],
-  payments: IPayment[]
+  payments: IPayment[],
+  users: IUserModel[]
 ): BookingTableRow[] {
   return bookings.map((b) => {
     const relatedPayment = payments.find(
       (p) => p.bookingId?.toString() === b._id?.toString()
     );
+
+    const user = users.find((u) => u._id?.toString() === b.userId.toString());
+
     return {
-      id: b._id?.toString() || "",
-      user: b.userId.toString(),
-      service: b.bookedData?.about || "",
+      _id: b._id?.toString() || "",
+      userName: user
+        ? `${user.firstname || ""} ${user.lastname || ""}`.trim()
+        : "Unknown User",
+      profilePic: user?.profilePic || "",
       type: b.assetType,
       status: b.status as "accepted" | "pending" | "rejected",
       date: b.createdAt?.toISOString() || "",

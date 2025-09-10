@@ -9,14 +9,11 @@ export interface RevenueAndPaymentsResponse {
   gross: number;
 }
 
-
 export interface AssetOverviewItem {
   assetType: string;
   assetCount: number;
 }
 export type AssetOverviewResponse = AssetOverviewItem[];
-
-
 
 export interface BookingStatItem {
   status: string;
@@ -33,16 +30,15 @@ export interface RecentBooking {
 }
 
 export interface BookingTableRow {
-  id: string; 
-  user: string;
-  service: string;
+  _id: string;
+  userName: string;
+  profilePic: string;
   type: string;
   status: "accepted" | "pending" | "rejected";
-  date: string; 
+  date: string;
   amount: number;
   platformFee: number;
 }
-
 
 export interface HostDashboardState {
   revenue: RevenueAndPaymentsResponse[];

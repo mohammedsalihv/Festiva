@@ -13,6 +13,7 @@ import {
   mapBookingsToTable,
   mapPaymentsToRevenue,
 } from "../../../../utils/mapping/host/hostDashboard.mapper";
+import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
 
 export class HostDashbaordUseCase implements IHostDashboardUseCase {
   constructor(
@@ -22,14 +23,13 @@ export class HostDashbaordUseCase implements IHostDashboardUseCase {
     private _hostRentcarRepository: IHostRentCarRepository,
     private _hostCatersRepository: IHostCatersRepository,
     private _hostStudioRepository: IHostStudioRepository,
+    private _userRepository: IUserRepository
   ) {}
 
   async dashboard(hostId: string | Types.ObjectId) {
     const hostBookings =
       await this._hostBookingsRepository.getDashboardBookings(hostId);
 
-      console.log(hostBookings)
-      
     const hostVenues = await this._hostVenuesRepository.getHostDashboardVenue(
       hostId
     );
@@ -44,6 +44,9 @@ export class HostDashbaordUseCase implements IHostDashboardUseCase {
     const hostPayments =
       await this._hostPaymentRepository.getHostDashboardPayments(hostId);
 
+    const userIds = [...new Set(hostBookings.map((b) => b.userId.toString()))];
+    const users = (await this._userRepository.findByIds(userIds)) || [];
+
     return {
       revenues: [mapPaymentsToRevenue(hostPayments)],
       assetOverview: mapAssetsToOverview(
@@ -54,7 +57,7 @@ export class HostDashbaordUseCase implements IHostDashboardUseCase {
       ),
       bookingStatistics: mapBookingsToStats(hostBookings),
       recentBookings: mapBookingsToRecent(hostBookings),
-      bookingTable: mapBookingsToTable(hostBookings, hostPayments),
+      bookingTable: mapBookingsToTable(hostBookings, hostPayments, users),
     };
   }
 }

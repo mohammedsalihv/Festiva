@@ -23,7 +23,6 @@ export class HostDashboardController implements IHostDashboardController {
       }
 
       const hostDashboard = await this._hostDashboardUsecase.dashboard(hostId);
-      console.log(hostDashboard)
       res.status(statusCodes.Success).json(hostDashboard);
     } catch (error) {
       console.error("Error fetching dashboard:", error);
