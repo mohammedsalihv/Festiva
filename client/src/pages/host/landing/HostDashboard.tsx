@@ -22,7 +22,6 @@ import {
   setRevenue,
 } from "@/redux/Slice/host/common/hostDashboard";
 import { getDashboard } from "@/api/host/hostAccountService";
-import { RevenueAndPaymentsResponse } from "@/utils/Types/host/pages/hostDashboard";
 
 ChartJS.register(
   ArcElement,
@@ -40,21 +39,23 @@ const HostDashboard = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  const revenues = useSelector(
-    (state: RootState) => state.hostDashboard.revenue
-  );
-  const overViews = useSelector(
-    (state: RootState) => state.hostDashboard.assetOverview
-  );
-  const bookingsStatistics = useSelector(
-    (state: RootState) => state.hostDashboard.bookingStats
-  );
-  const recentAllBookings = useSelector(
-    (state: RootState) => state.hostDashboard.recentBookings
-  );
-  const allBookings = useSelector(
-    (state: RootState) => state.hostDashboard.bookingTableRows
-  );
+  const revenues =
+    useSelector((state: RootState) => state.hostDashboard.revenue) || [];
+
+  const overViews =
+    useSelector((state: RootState) => state.hostDashboard.assetOverview) || [];
+
+  const bookingStatsData =
+    useSelector((state: RootState) => state.hostDashboard.bookingStats) || [];
+
+    console.log('44444444',bookingStatsData)
+
+  const recentAllBookings =
+    useSelector((state: RootState) => state.hostDashboard.recentBookings) || [];
+
+  const allBookings =
+    useSelector((state: RootState) => state.hostDashboard.bookingTableRows) ||
+    [];
 
   const fetchHostDashboard = async () => {
     setLoading(true);
@@ -62,7 +63,7 @@ const HostDashboard = () => {
       const response = await getDashboard();
       dispatch(setRevenue(response.revenue));
       dispatch(setAssetOverview(response.assetOverview));
-      dispatch(setBookingStats(response.bookingStats));
+      dispatch(setBookingStats(response.bookingStatistics));
       dispatch(setRecentBookings(response.recentBookings));
       dispatch(setBookingTableRows(response.bookingTableRows));
     } catch (error) {
@@ -89,25 +90,70 @@ const HostDashboard = () => {
     };
   }, []);
 
+  // Revenue Bar
 
-    // Revenue Bar
-
-  const revenueItem = revenues.length > 0 ? revenues[0] : null;
+  const revenueItem =
+    Array.isArray(revenues) && revenues.length > 0 ? revenues[0] : null;
   const revenueData = {
-  labels: revenueItem?.revenueByMonth.map((item) => item.month) || [],
-  datasets: [
-    {
-      label: "Revenue ($)",
-      data: revenueItem?.revenueByMonth.map((item) => item.revenue) || [],
-      backgroundColor: "#3B82F6",
-      borderRadius: 6,
-    },
-  ],
-};
-const totalRevenue = revenueItem?.total ?? 0;
-const platformFee = revenueItem?.platformFee ?? 0;
-const grossRevenue = revenueItem?.gross ?? 0;
+    labels: revenueItem?.revenueByMonth.map((item) => item.month) || [],
+    datasets: [
+      {
+        label: "Revenue ($)",
+        data: revenueItem?.revenueByMonth.map((item) => item.revenue) || [],
+        backgroundColor: "#3B82F6",
+        borderRadius: 6,
+      },
+    ],
+  };
 
+  const totalRevenue = revenueItem?.total ?? 0;
+  const platformFee = revenueItem?.platformFee ?? 0;
+  const grossRevenue = revenueItem?.gross ?? 0;
+
+  const pieData = {
+    labels: overViews.map((a) => a.assetType),
+    datasets: [
+      {
+        data: overViews.map((a) => a.assetCount),
+        backgroundColor: ["#14B8A6", "#A78BFA", "#F472B6", "#F97316"],
+        borderColor: "#ffffff",
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const statusOrder = ["accepted", "pending", "rejected"];
+  const statusColors: Record<string, string> = {
+    accepted: "#10B981",
+    pending: "#FACC15",
+    rejected: "#EF4444",
+  };
+
+  const bookingStats = {
+    labels: statusOrder.map((s) => s.charAt(0).toUpperCase() + s.slice(1)),
+    datasets: [
+      {
+        label: "Bookings",
+        data: statusOrder.map(
+          (s) => bookingStatsData.find((b) => b.status === s)?.count ?? 0
+        ),
+        backgroundColor: statusOrder.map((s) => statusColors[s]),
+        borderRadius: 6,
+      },
+    ],
+  };
+
+  // const bookingStats = {
+  //     labels: ["Accepted", "Pending", "Rejected"],
+  //     datasets: [
+  //       {
+  //         label: "Bookings",
+  //         data: [10, 5, 2],
+  //         backgroundColor: ["#10B981", "#FACC15", "#EF4444"],
+  //         borderRadius: 6,
+  //       },
+  //     ],
+  //   };
 
   if (loading) return <p className="text-center p-10">Loading dashboard...</p>;
 
@@ -130,23 +176,6 @@ const grossRevenue = revenueItem?.gross ?? 0;
   };
 
   const assetTypes = { venue: 3, rentcar: 2, studio: 4, caters: 1 };
-  const pieData = {
-    labels: ["Venue", "Rent Car", "Studio", "Caters"],
-    datasets: [
-      {
-        data: [
-          assetTypes.venue,
-          assetTypes.rentcar,
-          assetTypes.studio,
-          assetTypes.caters,
-        ],
-        backgroundColor: ["#14B8A6", "#A78BFA", "#F472B6", "#F97316"],
-        borderColor: "#ffffff",
-        borderWidth: 2,
-      },
-    ],
-  };
-
   const pieOptions = {
     plugins: {
       legend: {
@@ -160,110 +189,6 @@ const grossRevenue = revenueItem?.gross ?? 0;
     responsive: true,
     maintainAspectRatio: false,
   };
-
-
-  // Booking Stats
-  const bookingStats = {
-    labels: ["Accepted", "Pending", "Rejected"],
-    datasets: [
-      {
-        label: "Bookings",
-        data: [10, 5, 2],
-        backgroundColor: ["#10B981", "#FACC15", "#EF4444"],
-        borderRadius: 6,
-      },
-    ],
-  };
-
-  // Recent bookings
-  const recentBookings = [
-    {
-      id: 1,
-      user: "Emma Ryan Jr.",
-      service: "Venue",
-      amount: 423,
-      status: "Accepted",
-    },
-    {
-      id: 2,
-      user: "Justin Weber",
-      service: "Rent Car",
-      amount: 337,
-      status: "Pending",
-    },
-    {
-      id: 3,
-      user: "Adrian Daren",
-      service: "Studio",
-      amount: 1073,
-      status: "Rejected",
-    },
-    {
-      id: 3,
-      user: "Adrian Daren",
-      service: "Studio",
-      amount: 1073,
-      status: "Rejected",
-    },
-    {
-      id: 3,
-      user: "Adrian Daren",
-      service: "Studio",
-      amount: 1073,
-      status: "Rejected",
-    },
-    {
-      id: 3,
-      user: "Adrian Daren",
-      service: "Studio",
-      amount: 1073,
-      status: "Rejected",
-    },
-  ];
-
-  // All bookings
-  const bookings = [
-    {
-      id: 1,
-      user: "Emma Ryan Jr.",
-      service: "Venue",
-      type: "Booking",
-      status: "Pending",
-      date: "Feb 18, 2023",
-      amount: 802,
-      platformFee: 80,
-    },
-    {
-      id: 2,
-      user: "Adrian Daren",
-      service: "Studio",
-      type: "Booking",
-      status: "Accepted",
-      date: "Feb 18, 2023",
-      amount: 1073,
-      platformFee: 107,
-    },
-    {
-      id: 3,
-      user: "Roxana Hills",
-      service: "Caters",
-      type: "Booking",
-      status: "Accepted",
-      date: "Apr 16, 2023",
-      amount: 790,
-      platformFee: 79,
-    },
-    {
-      id: 4,
-      user: "Justin Weber",
-      service: "Rent Car",
-      type: "Booking",
-      status: "Rejected",
-      date: "May 20, 2023",
-      amount: 337,
-      platformFee: 0,
-    },
-  ];
 
   return (
     <div className="bg-gray-100 min-h-screen px-3 py-4 sm:py-3 space-y-6">
@@ -313,17 +238,19 @@ const grossRevenue = revenueItem?.gross ?? 0;
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow p-4 flex flex-col">
-          <h2 className="text-lg font-semibold mb-2">Bookings Statistics</h2>
-          <div className="flex-1">
+        <div className="flex-1">
+          {loading ? (
+            <div className="animate-pulse h-40 bg-gray-100 rounded-lg" />
+          ) : bookingStatsData.length > 0 ? (
             <Bar
               data={bookingStats}
               options={{ responsive: true, maintainAspectRatio: false }}
             />
-          </div>
-          <p className="mt-4 text-green-600 font-semibold">
-            +15% from last month
-          </p>
+          ) : (
+            <p className="text-gray-500 text-center py-10 bg-white">
+              No booking data available
+            </p>
+          )}
         </div>
       </div>
 
@@ -354,7 +281,7 @@ const grossRevenue = revenueItem?.gross ?? 0;
             ref={scrollRef}
             className="flex overflow-x-auto space-x-4 pb-2 scrollbar-hide scroll-smooth"
           >
-            {recentBookings.map((booking) => (
+            {recentAllBookings.map((booking) => (
               <div
                 key={booking.id}
                 className="bg-white rounded-xl shadow p-4 min-w-[235px] flex-shrink-0 hover:shadow-md transition"
@@ -370,9 +297,9 @@ const grossRevenue = revenueItem?.gross ?? 0;
                   <p className="font-bold">${booking.amount}</p>
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      booking.status === "Accepted"
+                      booking.status === "accepted"
                         ? "bg-green-100 text-green-700"
-                        : booking.status === "Pending"
+                        : booking.status === "pending"
                         ? "bg-yellow-100 text-yellow-700"
                         : "bg-red-100 text-red-700"
                     }`}
@@ -420,7 +347,7 @@ const grossRevenue = revenueItem?.gross ?? 0;
               </tr>
             </thead>
             <tbody>
-              {bookings.map((booking, idx) => (
+              {allBookings.map((booking, idx) => (
                 <tr
                   key={booking.id}
                   className={`${
@@ -436,9 +363,9 @@ const grossRevenue = revenueItem?.gross ?? 0;
                   <td className="p-3">
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        booking.status === "Accepted"
+                        booking.status === "accepted"
                           ? "bg-green-100 text-green-700"
-                          : booking.status === "Pending"
+                          : booking.status === "pending"
                           ? "bg-yellow-100 text-yellow-700"
                           : "bg-red-100 text-red-700"
                       }`}

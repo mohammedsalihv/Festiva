@@ -53,15 +53,21 @@ export function mapAssetsToOverview(
 // ---------------- Booking Statistics ----------------
 export function mapBookingsToStats(bookings: IBooking[]): BookingStatsResponse {
   const counts: { [key: string]: number } = {};
+
   bookings.forEach((b) => {
     counts[b.status] = (counts[b.status] || 0) + 1;
   });
 
-  return Object.entries(counts).map(([status, count]) => ({
+  // Ensure all statuses exist with at least 0 count
+  const statuses: string[] = ["accepted", "pending", "rejected"];
+
+  return statuses.map((status) => ({
     status,
-    count,
+    count: counts[status] || 0,
   }));
 }
+
+
 
 // ---------------- Recent Bookings ----------------
 export function mapBookingsToRecent(bookings: IBooking[]): RecentBooking[] {
