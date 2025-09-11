@@ -1,211 +1,115 @@
-import React from 'react';
-import Header from '@/reusable-components/user/Landing/Header';
-import Footer from '@/reusable-components/user/Landing/Footer';
-import { Images } from '@/assets';
+import React from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/Button";
+import {
+  Building2,
+  Car,
+  Utensils,
+  Camera,
+  User,
+  Wallet,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
-// Interfaces for TypeScript
-interface Speaker {
-  name: string;
-  title: string;
-  image: string;
-}
-
-interface ScheduleItem {
-  day: string;
-  date: string;
-  events: { time: string; description: string }[];
-}
-
-interface Ticket {
-  type: string;
-  price: number;
-  features: string[];
-}
-
-interface Testimonial {
-  name: string;
-  title: string;
-  quote: string;
-  image: string;
-}
+const services = [
+  { title: "Venues", icon: Building2, desc: "Book event spaces for weddings, parties & more." },
+  { title: "Rent Cars", icon: Car, desc: "Find cars for travel, weddings, or business trips." },
+  { title: "Caterers", icon: Utensils, desc: "Delicious catering services for your special day." },
+  { title: "Studios", icon: Camera, desc: "Book photo & film studios for shoots & events." },
+];
 
 const LandingPage: React.FC = () => {
-  const speakers: Speaker[] = [
-    { name: "Don Carl Van Houston", title: "Senior UX Designer", image: "https://via.placeholder.com/150" },
-  ];
-
-  const schedule: ScheduleItem[] = [
-    {
-      day: "First Day",
-      date: "02 Mar, Monday",
-      events: [
-        { time: "09:00 AM - 10:00 AM", description: "Registration & Coffee" },
-        { time: "10:00 AM - 11:30 AM", description: "Plan Conduct User Research" },
-        { time: "11:30 AM - 12:00 PM", description: "Q&A Speaker" },
-        { time: "12:00 PM - 01:00 PM", description: "Lunch Break" },
-        { time: "01:00 PM - 02:00 PM", description: "Research The Right Thing" },
-      ],
-    },
-  ];
-
-  const tickets: Ticket[] = [
-    { type: "Standard", price: 120, features: ["One day pass", "Lecture", "Lunch and Snack", "Meet Event Speaker", "Front Seat"] },
-    { type: "Enterprise", price: 200, features: ["One day pass", "Lecture", "Lunch and Snack", "Meet Event Speaker", "Front Seat"] },
-    { type: "Premium", price: 250, features: ["One day pass", "Lecture", "Lunch and Snack", "Meet Event Speaker", "Front Seat"] },
-  ];
-
-  const testimonials: Testimonial[] = [
-    {
-      name: "Wahid Dwipa Santoso",
-      title: "Junior UI/UX Designer",
-      quote: "I would like to take this opportunity to thank Conference Design for the excellent work both pre-conference and support during the four days. As a flawless organisation, conducted with human and infinite patience. The virtual vision was easy to interact with and of future benefits.",
-      image: Images.casual_user,
-    },
-    {
-      name: "Wahid Dwipa Santoso",
-      title: "Junior UI/UX Designer",
-      quote: "I would like to take this opportunity to thank Conference Design for the excellent work both pre-conference and support during the four days. As a flawless organisation, conducted with human and infinite patience. The virtual vision was easy to interact with and of future benefits.",
-      image: Images.casual_user,
-    },
-    {
-      name: "Wahid Dwipa Santoso",
-      title: "Junior UI/UX Designer",
-      quote: "I would like to take this opportunity to thank Conference Design for the excellent work both pre-conference and support during the four days. As a flawless organisation, conducted with human and infinite patience. The virtual vision was easy to interact with and of future benefits.",
-      image: Images.casual_user,
-    },
-    {
-      name: "Wahid Dwipa Santoso",
-      title: "Junior UI/UX Designer",
-      quote: "I would like to take this opportunity to thank Conference Design for the excellent work both pre-conference and support during the four days. As a flawless organisation, conducted with human and infinite patience. The virtual vision was easy to interact with and of future benefits.",
-      image: Images.casual_user,
-    },
-    {
-      name: "Wahid Dwipa Santoso",
-      title: "Junior UI/UX Designer",
-      quote: "I would like to take this opportunity to thank Conference Design for the excellent work both pre-conference and support during the four days. As a flawless organisation, conducted with human and infinite patience. The virtual vision was easy to interact with and of future benefits.",
-      image: Images.casual_user,
-    },
-    {
-      name: "Wahid Dwipa Santoso",
-      title: "Junior UI/UX Designer",
-      quote: "I would like to take this opportunity to thank Conference Design for the excellent work both pre-conference and support during the four days. As a flawless organisation, conducted with human and infinite patience. The virtual vision was easy to interact with and of future benefits.",
-      image: Images.casual_user,
-    },
-  ];
-
   return (
-    <div className="bg-gray-900 text-white min-h-screen font-sans">
-       <Header />
-      <section id="home" className="relative bg-gray-800 h-[80vh] flex items-center justify-center text-center">
-        <div>
-          <p className="text-sm"></p>
-          <h1 className="text-3xl md:text-4xl mt-2 font-boldonse">DESIGN YOR NEED</h1>
-          <p className="mt-4 text-lg md:text-xl">We bring together exceptional designers sharing their most exclusive learnings. Join the event & accelerate your career!</p>
-          <div className="mt-6 space-x-4">
-            <a href="#tickets" className="bg-cyan-400 text-black px-6 py-3 rounded font-semibold hover:bg-cyan-500 transition">PARTICIPATE</a>
-            <button className="border border-white px-6 py-3 rounded font-semibold hover:bg-white hover:text-black transition">WATCH THE TEASER</button>
-          </div>
+    <div className="w-full min-h-screen flex flex-col">
+      <section className="relative bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white flex flex-col justify-center items-center text-center py-20 px-6">
+        <motion.h1
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="text-4xl md:text-6xl font-extrabold leading-tight max-w-4xl"
+        >
+          Find & Book Services Easily. <br />
+          <span className="text-yellow-300">Or Host & Earn Money.</span>
+        </motion.h1>
+        <p className="mt-4 text-lg md:text-xl max-w-2xl">
+          Whether you're looking for venues, cars, catering, or studios —
+          we’ve got you covered.
+        </p>
+        <div className="flex gap-4 mt-8 flex-wrap justify-center">
+          <Link to={'/login'}>
+          <Button
+           
+          size="lg" className="bg-yellow-400 hover:bg-yellow-500 text-black rounded-2xl px-6 py-3">
+            Book a Service
+          </Button>
+          </Link>
+             
+       
+       <Link to={'/host/landing'}>
+   <Button size="lg" variant="outline" className="border-white text-white rounded-2xl px-6 py-3">
+            Become a Host
+          </Button>
+       </Link>
         </div>
       </section>
-      <section id="speakers" className="py-16 px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center">MEET THE INCREDIBLE SPEAKERS</h2>
-        <p className="text-center mt-2 text-gray-400">Main event professionals in the world of design and architecture</p>
-        <div className="mt-8 flex flex-wrap justify-center gap-6">
-          {speakers.map((speaker, index) => (
-            <div key={index} className="bg-gray-800 p-6 rounded-lg text-center w-72">
-              <img src={speaker.image} alt={speaker.name} className="w-32 h-32 rounded-full mx-auto" />
-              <h3 className="mt-4 font-bold text-lg">{speaker.name}</h3>
-              <p className="text-sm text-gray-400">{speaker.title}</p>
-              <button className="mt-4 bg-cyan-400 text-black px-4 py-2 rounded font-semibold hover:bg-cyan-500 transition">See More</button>
-            </div>
+
+      {/* Services Section */}
+      <section className="py-16 px-6 bg-gray-50">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+          Our Services
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          {services.map((service, i) => (
+            <motion.div
+              key={i}
+              whileHover={{ scale: 1.05 }}
+              className="bg-white shadow-md rounded-2xl p-6 flex flex-col items-center text-center"
+            >
+              <service.icon className="w-12 h-12 text-indigo-600 mb-4" />
+              <h3 className="text-xl font-semibold">{service.title}</h3>
+              <p className="text-gray-600 text-sm mt-2">{service.desc}</p>
+            </motion.div>
           ))}
         </div>
       </section>
 
-      {/* Schedule Section */}
-      <section id="schedule" className="py-16 px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center">SCHEDULE AND AGENDA</h2>
-        <p className="text-center mt-2 text-gray-400">A representation of the event planning of Design Conferences</p>
-        <div className="mt-8 flex flex-wrap justify-center gap-6">
-          {schedule.map((day, index) => (
-            <div key={index} className="bg-gray-800 p-6 rounded-lg w-full max-w-md">
-              <h3 className="font-bold text-lg">{day.day}</h3>
-              <p className="text-sm text-gray-400">{day.date}</p>
-              <ul className="mt-4 space-y-4">
-                {day.events.map((event, idx) => (
-                  <li key={idx} className="flex items-start">
-                    <span className="text-cyan-400 mr-2">•</span>
-                    <div>
-                      <p className="text-sm text-gray-400">{event.time}</p>
-                      <p>{event.description}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <div className="text-center mt-6">
-          <button className="border border-white px-6 py-3 rounded font-semibold hover:bg-white hover:text-black transition">DOWNLOAD SCHEDULE</button>
-        </div>
-      </section>
+      {/* User Type Section */}
+      <section className="py-16 px-6 bg-white">
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+          Who Are You?
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+          {/* Casual User */}
+          <motion.div
+            whileHover={{ y: -5 }}
+            className="bg-indigo-50 rounded-2xl p-8 shadow-md"
+          >
+            <User className="w-12 h-12 text-indigo-600 mb-4" />
+            <h3 className="text-2xl font-bold mb-2">Casual User</h3>
+            <p className="text-gray-600 mb-4">
+              Explore services, book venues, rent cars, and hire caterers or studios with ease.
+            </p>
+           <Link to={'/login'}>
+            <Button className="bg-indigo-600 text-white rounded-xl">Start Booking</Button>
+           </Link>
+          </motion.div>
 
-      {/* Pricing Section */}
-      <section id="tickets" className="py-16 px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center">PRICING TICKETS</h2>
-        <div className="mt-8 flex flex-wrap justify-center gap-6">
-          {tickets.map((ticket, index) => (
-            <div key={index} className="bg-gray-800 p-6 rounded-lg text-center w-72">
-              <h3 className="font-bold text-lg">{ticket.type}</h3>
-              <p className="text-3xl mt-2">${ticket.price}</p>
-              <ul className="mt-4 space-y-2 text-sm text-gray-400">
-                {ticket.features.map((feature, idx) => (
-                  <li key={idx}>{feature}</li>
-                ))}
-              </ul>
-              <button
-                className={`mt-6 px-6 py-3 rounded font-semibold transition ${
-                  ticket.type === "Premium"
-                    ? "bg-cyan-400 text-black hover:bg-cyan-500"
-                    : "border border-white hover:bg-white hover:text-black"
-                }`}
-              >
-                GET YOUR TICKET
-              </button>
-            </div>
-          ))}
+          {/* Host */}
+          <motion.div
+            whileHover={{ y: -5 }}
+            className="bg-yellow-50 rounded-2xl p-8 shadow-md"
+          >
+            <Wallet className="w-12 h-12 text-yellow-600 mb-4" />
+            <h3 className="text-2xl font-bold mb-2">Host / Asset Owner</h3>
+            <p className="text-gray-600 mb-4">
+              List your venue, cars, catering, or studio services. Accept bookings and earn money.
+            </p>
+            <Link to={'/host/landing'}>
+            <Button className="bg-yellow-500 text-black rounded-xl">Become a Host</Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
-
-      {/* Testimonials Section */}
-      <section className="py-16 px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center">OUR PARTICIPANTS SAY</h2>
-        <div className="mt-8 flex flex-wrap justify-center gap-6">
-          {testimonials.map((testimonial, index) => (
-            <div key={index} className="bg-gray-800 p-6 rounded-lg flex items-start gap-4 w-full max-w-lg">
-              <img src={testimonial.image} alt={testimonial.name} className="w-12 h-12 rounded-full" />
-              <div>
-                <h3 className="font-bold">{testimonial.name}</h3>
-                <p className="text-sm text-gray-400">{testimonial.title}</p>
-                <p className="mt-2 text-sm">{testimonial.quote}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Location Section */}
-      <section className="py-16 px-4 bg-gray-800">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="w-full md:w-1/2">
-            <img src="https://via.placeholder.com/600x300" alt="Map" className="w-full h-64 object-cover rounded-lg" />
-          </div>
-          <div className="w-full md:w-1/2 text-center md:text-left">
-            <h2 className="text-3xl md:text-4xl font-bold">WE CARRY OUT IN CASA DE LA PANADERIA BUILDING</h2>
-          </div>
-        </div>
-      </section>
-      <Footer/>
     </div>
   );
 };

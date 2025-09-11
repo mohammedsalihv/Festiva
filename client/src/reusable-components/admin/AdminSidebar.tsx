@@ -5,23 +5,27 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logoutAdmin } from "@/redux/Slice/admin/adminSlice";
 import { toast } from "react-toastify";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
 import { clearAllAssets } from "@/redux/Slice/admin/assetManagementSlice";
 import { clearAllHosts } from "@/redux/Slice/admin/hostManagementSlice";
 import { clearAllUsers } from "@/redux/Slice/admin/userManagementSlice";
 import { MdArrowCircleRight, MdArrowCircleLeft } from "react-icons/md";
+import { clearAdminDashboard } from "@/redux/Slice/admin/adminDashboardSlice";
+import { adminLogout } from "@/api/admin/adminAuthService";
 
 const AdminSidebar: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const [confirmLogout, setConfirmLogout] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(true); // sidebar toggle
+  const [isExpanded, setIsExpanded] = useState(true);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await adminLogout();
     dispatch(clearAllAssets());
     dispatch(clearAllUsers());
     dispatch(clearAllHosts());
+    dispatch(clearAdminDashboard());
     dispatch(logoutAdmin());
     setTimeout(() => {
       toast.success("Logout Successful!");

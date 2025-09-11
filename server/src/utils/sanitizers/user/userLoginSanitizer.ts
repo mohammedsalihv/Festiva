@@ -1,11 +1,10 @@
 import { IUserModel } from "../../../domain/entities/modelInterface/user/interface.user";
 import { userLoginResponseDTO } from "../../../types/DTO/user/dto.userLogin";
-import { USER_ROUTES } from "../../../infrastructure/constants/user.routes";
 
 export class userLoginSanitizer {
   static toUserLoginResponse(user: IUserModel): userLoginResponseDTO {
     return {
-      id: user._id,
+      id: (user as any)._id?.toString() || (user as any).id?.toString(),
       firstname: user.firstname,
       lastname: user.lastname,
       phone: user.phone,

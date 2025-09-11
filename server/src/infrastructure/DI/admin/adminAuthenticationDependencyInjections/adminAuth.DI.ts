@@ -1,32 +1,20 @@
-// Jwt token
-
 import { TokenService } from "../../../../application/tokenService/service.token";
-
 import { AdminLoginValidator } from "../../../../utils/validations/admin/adminLoginValidation";
-
-// Controller
-
 import { AdminLoginController } from "../../../../adapters/controllers/admin/adminAuthControllers/adminLogin.controller";
+import { AdminLogoutController } from "../../../../adapters/controllers/admin/adminAuthControllers/adminLogout.controller";
 import { RefreshTokenController } from "../../../../adapters/controllers/base/baseAuthenticationControllers/refreshToken.controller";
-
-// use-case
-
 import { AdminLoginUsecase } from "../../../../application/usecases/admin/adminAuthenticationUsecases/usecase.adminLogin";
-
-// repositories
-
+import { AdminLogoutUseCase } from "../../../../application/usecases/admin/adminAuthenticationUsecases/usecase.adminLogout";
 import { AdminRepository } from "../../../repositories/admin/adminBaseRepositories/repository.admin";
 import { AdminLoginRepository } from "../../../repositories/admin/adminAuthenitcationRepositories/repository.adminLogin";
+import { AdminLogoutRepository } from "../../../repositories/admin/adminAuthenitcationRepositories/repository.adminLogout";
 
 const tokenService = new TokenService();
 const adminLoginValidator = new AdminLoginValidator();
 
-// Instantiating Repositories
-
 const adminLoginRepository = new AdminLoginRepository();
 const adminRepository = new AdminRepository();
-
-// Instantiating use-case
+const adminLogoutRepository = new AdminLogoutRepository();
 
 const adminLogin = new AdminLoginUsecase(
   adminLoginRepository,
@@ -34,11 +22,10 @@ const adminLogin = new AdminLoginUsecase(
   tokenService,
   adminLoginValidator
 );
-
-// Instantiating controllers
+const adminLogoutUseCase = new AdminLogoutUseCase(adminLogoutRepository);
 
 const adminLoginController = new AdminLoginController(adminLogin);
-
 const refreshTokenController = new RefreshTokenController(tokenService);
+const adminLogoutController = new AdminLogoutController(adminLogoutUseCase);
 
-export { adminLoginController, refreshTokenController };
+export { adminLoginController, refreshTokenController, adminLogoutController };

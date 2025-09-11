@@ -7,7 +7,7 @@ const PaymentSchema = new Schema<IPaymentDoc>(
   {
     payerId: { type: Schema.Types.ObjectId, required: true },
     assetId: { type: Schema.Types.ObjectId, required: true },
-    bookingId: { type: Schema.Types.ObjectId, required: true },
+    bookingId: { type: Schema.Types.ObjectId},
     status: {
       type: String,
       enum: ["pending", "success", "failed"],

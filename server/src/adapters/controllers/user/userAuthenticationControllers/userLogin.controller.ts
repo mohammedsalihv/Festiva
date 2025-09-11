@@ -18,7 +18,6 @@ export class UserLoginController implements IUserLoginController {
       const { email, password } = req.body;
       const { accessToken, refreshToken, user } =
         await this._userLoginUseCase.userLogin(email, password);
-
       res.status(statusCodes.Success).json({
         success: true,
         message: statusMessages.userLoginSuccess,

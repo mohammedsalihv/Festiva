@@ -120,6 +120,8 @@ const HostDashboard = () => {
   const recentAllBookings =
     useSelector((state: RootState) => state.hostDashboard.recentBookings) || [];
 
+  console.log(recentAllBookings);
+
   const allBookings = useSelector(
     (state: RootState) => state.hostDashboard.bookingTableRows ?? []
   );
@@ -293,8 +295,12 @@ const HostDashboard = () => {
     maintainAspectRatio: false,
   };
 
-
-  if (loading) return <p className="text-center p-10"><Loader/></p>;
+  if (loading)
+    return (
+      <p className="text-center p-10">
+        <Loader />
+      </p>
+    );
 
   return (
     <div className="bg-gray-100 min-h-screen px-3 py-4 sm:py-3 space-y-6">
@@ -364,66 +370,73 @@ const HostDashboard = () => {
             Recently Received Bookings
           </h2>
 
-          {recentAllBookings.length > 0 ? (
-            <>
-              {showLeft && (
-                <Button
-                  onClick={() => scroll("left")}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 bg-black text-white shadow rounded-full p-2 z-10"
-                >
-                  <FaAngleLeft />
-                </Button>
-              )}
+          {showLeft && recentAllBookings.length > 0 && (
+            <Button
+              onClick={() => scroll("left")}
+              className="absolute left-0 top-1/2 -translate-y-1/2 bg-black text-white shadow rounded-full p-2 z-10"
+            >
+              <FaAngleLeft />
+            </Button>
+          )}
 
-              <div
-                ref={scrollRef}
-                className="flex overflow-x-auto space-x-4 pb-2 scrollbar-hide scroll-smooth"
-              >
-                {recentAllBookings.map((booking) => (
-                  <div
-                    key={booking.id}
-                    className="bg-white rounded-xl shadow p-4 min-w-[235px] flex-shrink-0 hover:shadow-md transition"
-                  >
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 bg-gradient-to-r from-indigo-400 to-blue-500 rounded-full" />
-                      <div className="ml-3">
-                        <p className="font-semibold">{booking.user}</p>
-                        <p className="text-sm text-gray-500">
-                          {booking.service}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mt-3 flex justify-between items-center">
-                      <p className="font-bold">${booking.amount}</p>
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          booking.status === "accepted"
-                            ? "bg-green-100 text-green-700"
-                            : booking.status === "pending"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : "bg-red-100 text-red-700"
-                        }`}
-                      >
-                        {booking.status}
-                      </span>
+          <div
+            ref={scrollRef}
+            className="flex overflow-x-auto space-x-4 pb-2 scrollbar-hide scroll-smooth"
+          >
+            {recentAllBookings.length > 0 ? (
+              recentAllBookings.map((booking) => (
+                <div
+                  key={booking.id}
+                  className="bg-white rounded-xl shadow p-4 min-w-[235px] flex-shrink-0 hover:shadow-md transition"
+                >
+                  <div className="flex items-center">
+                    <img
+                      src={booking.userProfile || "/fallback-profile.png"}
+                      alt={booking.userName}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <div className="ml-3">
+                      <p className="font-semibold">
+                        {booking.userName || "Unknown User"}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {booking.serviceType.charAt(0).toUpperCase() + booking.serviceType.slice(1) || "-"}
+                      </p>
                     </div>
                   </div>
-                ))}
-              </div>
+                  <div className="mt-3 flex justify-between items-center">
+                    <p className="font-bold">
+                      {booking.totalAmount.toFixed(2)}
+                    </p>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        booking.bookingStatus === "accepted"
+                          ? "bg-green-100 text-green-700"
+                          : booking.bookingStatus === "pending"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {booking.bookingStatus.charAt(0).toUpperCase() +
+                        booking.bookingStatus.slice(1)}
+                    </span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-400 italic">
+                No recent bookings available.
+              </p>
+            )}
+          </div>
 
-              {showRight && (
-                <Button
-                  onClick={() => scroll("right")}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 bg-black text-white shadow rounded-full p-2 z-10"
-                >
-                  <FaAngleRight />
-                </Button>
-              )}
-            </>
-          ) : (
-            <div className="flex justify-center items-center h-32 bg-gray-50 rounded-xl text-gray-500">
-              No recent bookings found.
-            </div>
+          {showRight && recentAllBookings.length > 0 && (
+            <Button
+              onClick={() => scroll("right")}
+              className="absolute right-0 top-1/2 -translate-y-1/2 bg-black text-white shadow rounded-full p-2 z-10"
+            >
+              <FaAngleRight />
+            </Button>
           )}
         </div>
       </div>

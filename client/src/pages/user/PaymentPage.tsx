@@ -13,7 +13,7 @@ import { IAsset } from "@/utils/Types/user/commonDetails";
 import { createPayment, paymentUpdate } from "@/api/user/base/paymentService";
 import { startBooking } from "@/api/user/base/bookingService";
 import { toast } from "react-toastify";
-import { Navigate} from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { paymentPayload } from "@/utils/Types/base/payment";
 import { BookingConfirmation } from "@/reusable-components/user/Landing/BookingConfirm";
 import { USER_ROUTE } from "@/utils/constants/routes/user.routes";
@@ -24,7 +24,6 @@ const PaymentPage = () => {
   const bookedService = useSelector(
     (state: RootState) => state.booking.currentBooking
   );
-  console.log(bookedService)
   const user = useSelector((state: RootState) => state.user.userInfo);
   const countryOptions = useMemo(() => countryList().getData(), []);
   const [paymentResponse, setPaymentResponse] = useState<any | null>(null);
@@ -216,7 +215,9 @@ const PaymentPage = () => {
       <div className="bg-white text-black px-3 sm:px-6 md:px-16 md:py-20 flex flex-col">
         <div className="p-4 space-y-8 mt-3">
           <div>
-            <h2 className="font-semibold text-base md:text-lg mb-4">Service Details</h2>
+            <h2 className="font-semibold text-base md:text-lg mb-4">
+              Service Details
+            </h2>
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="w-full sm:w-64 md:w-96 md:h-64 h-44 rounded-md overflow-hidden shadow-md">
                 <img
@@ -247,11 +248,11 @@ const PaymentPage = () => {
                       Squarefeet : {bookedService.serviceData.squareFeet}
                     </p>
                   )}
-                   {bookedService?.assetType === "caters" &&
-
-                 <p className="text-gray-400 text-sm">
-                      Manpower : {bookedService.manpowerCount as number}
-                    </p>}
+                {bookedService?.assetType === "caters" && (
+                  <p className="text-gray-400 text-sm">
+                    Manpower : {bookedService.manpowerCount as number}
+                  </p>
+                )}
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
@@ -267,9 +268,7 @@ const PaymentPage = () => {
               {bookedService?.selectedTimeSlot && (
                 <div className="bg-white/5 rounded-lg p-3 border">
                   <p className="text-xs text-gray-400 mb-1 font-bold">Time</p>
-                  <p className="text-sm">
-                    {bookedService.selectedTimeSlot}
-                  </p>
+                  <p className="text-sm">{bookedService.selectedTimeSlot}</p>
                 </div>
               )}
 
@@ -286,7 +285,9 @@ const PaymentPage = () => {
 
               {bookedService?.packageName && (
                 <div className="bg-white/5 rounded-lg p-3 border">
-                  <p className="text-xs text-gray-400 mb-1 font-bold">Package</p>
+                  <p className="text-xs text-gray-400 mb-1 font-bold">
+                    Package
+                  </p>
                   <p className="text-sm">{bookedService.packageName}</p>
                 </div>
               )}

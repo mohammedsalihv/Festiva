@@ -56,7 +56,7 @@ export class HostDashbaordUseCase implements IHostDashboardUseCase {
         hostStudios
       ),
       bookingStatistics: mapBookingsToStats(hostBookings),
-      recentBookings: mapBookingsToRecent(hostBookings),
+      recentBookings: mapBookingsToRecent(hostBookings , users),
       bookingTable: mapBookingsToTable(hostBookings, hostPayments, users),
     };
   }

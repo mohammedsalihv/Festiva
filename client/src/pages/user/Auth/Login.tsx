@@ -9,7 +9,11 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
-import { LoginUser, validateEmail } from "@/api/user/auth/userAuthService";
+import {
+  LoginUser,
+  validateEmail,
+  googleLogin,
+} from "@/api/user/auth/userAuthService";
 import { setUserDetails } from "@/redux/Slice/user/userSlice";
 import { AxiosError } from "axios";
 import {
@@ -20,6 +24,8 @@ import { ErrorState } from "@/utils/Types/user/authTypes";
 import EmailVerification from "@/reusable-components/user/Auth/EmailVerification";
 import logger from "@/utils/logger";
 import ResetPassword from "@/reusable-components/user/Auth/ResetPassword";
+import { auth, googleProvider } from "@/config/base/auth/firebase";
+import { signInWithPopup } from "firebase/auth";
 
 const Login = () => {
   const [loginForm, setLoginForm] = useState<FormState>({
@@ -137,6 +143,42 @@ const Login = () => {
     mutation.mutate(loginForm);
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      const firstname = user.displayName || "";
+      const email = user.email || "";
+      const phone = user.phoneNumber || "";
+      const photo = user.photoURL || "";
+
+      const response = await googleLogin({
+        firstname,
+        email,
+        phone,
+        profilePic: photo,
+      });
+      const { userGoogle, accessToken, refreshToken } = response;
+
+      const userGooleData = {
+        id: userGoogle.id,
+        firstname: userGoogle.firstname,
+        lastname: userGoogle.lastname ?? "",
+        email: userGoogle.email,
+        phone: userGoogle.phone,
+        profilePic: userGoogle.profilePic,
+        role: userGoogle.role,
+        accessToken,
+        refreshToken,
+      };
+      dispatch(setUserDetails(userGooleData));
+      navigate("/user/home", { replace: true });
+    } catch (error) {
+      toast.error("Google Sign-In failed. Please try again.");
+      console.error(error);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -243,8 +285,7 @@ const Login = () => {
                 <Button
                   onClick={handleLogin}
                   disabled={mutation.isPending}
-                 className="my-3 text-white w-full h-12 text-lg bg-main_gradient hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed"
-
+                  className="my-3 text-white w-full h-12 text-lg bg-main_gradient hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {mutation.isPending ? (
                     <span className="flex items-center justify-center gap-2">
@@ -254,28 +295,44 @@ const Login = () => {
                     "Login"
                   )}
                 </Button>
-                <div className="text-center text-sm text-gray-600">
-                  Don't have an account?{" "}
-                  <button
-                    onClick={() => navigate("/signup")}
-                    className="text-deepPurple font-medium hover:underline focus:outline-none"
-                  >
-                    Sign up
-                  </button>
+
+                <div className="text-center text-sm text-gray-600 space-y-1">
+                  <p>
+                    Don&apos;t have an account?{" "}
+                    <button
+                      onClick={() => navigate("/signup")}
+                      className="text-deepPurple font-medium hover:underline focus:outline-none"
+                    >
+                      Sign up
+                    </button>
+                  </p>
+
+                  <p>
+                    Want to become a renter?{" "}
+                    <button
+                      onClick={() => navigate("/host/landing")}
+                      className="text-deepPurple font-medium hover:underline focus:outline-none"
+                    >
+                      Switch to Renter
+                    </button>
+                  </p>
                 </div>
               </div>
-              {/* <div className="flex items-center justify-center my-6">
+
+              <div className="flex items-center justify-center my-6">
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
                 <span className="mx-4 whitespace-nowrap text-sm text-neutral-500">
                   or login with
                 </span>
                 <hr className="flex-grow h-0.5 bg-neutral-300 border-none" />
-              </div> */}
+              </div>
               <div className="flex items-center justify-center space-x-4">
-                {/* <GoogleLogin
-                  onSuccess={handleGoogleLogin}
-                  onError={() => toast.error("Google login failed")}
-                /> */}
+                <img
+                  onClick={handleGoogleLogin}
+                  className="w-10 h-10 border rounded-full cursor-pointer border-gray-300 p-1"
+                  src={Images.google}
+                  alt=""
+                />
               </div>
             </CardContent>
           </div>

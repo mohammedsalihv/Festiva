@@ -1,6 +1,7 @@
 export const ADMIN_API = {
   Authentication: {
     adminLogin: "/auth/login",
+    adminLogout:"/auth/logout"
   },
   assetManagement: {
     getAllAssets: (type: string) => `/assets/${type}`,

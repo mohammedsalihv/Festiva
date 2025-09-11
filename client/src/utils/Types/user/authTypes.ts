@@ -33,11 +33,6 @@ export interface LoginData {
 }
 
 
-export type GoogleLoginData = {
-  name: string;
-  email: string;
-  sub: string;
-};
 
 export interface DecodedToken {
   name: string;
@@ -46,19 +41,9 @@ export interface DecodedToken {
   [key: string]: unknown;
 }
 
-export type GoogleAuthResult = {
-  code?: string;
-  [key: string]: unknown;
-};
-
-export interface GoogleUser {
+export interface userGoogleLogin {
+  firstname: string;
   email: string;
-  name: string;
-  image: string;
-}
-
-export interface GoogleLoginResponse {
-  user: User;
-  accessToken: string;
-  refreshToken: string;
+  profilePic?: string;
+  phone?: string;
 }

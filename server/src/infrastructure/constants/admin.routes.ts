@@ -2,6 +2,7 @@ export const ADMIN_ROUTES = {
   Authentiation: {
     adminLogin: "/login",
     Refresh_Token: "/refresh",
+    adminLogout:"/logout"
   },
   UserManagement: {
     allUsers: "/users",

@@ -4,16 +4,14 @@ import { UserLoginValidator } from "../../../../utils/validations/user/userLogin
 import { UserGoogleLoginValidator } from "../../../../utils/validations/user/userGoogleLoginValidator";
 
 // controllers
-
-import { UserController } from "../../../../adapters/controllers/user/userBaseControllers/user.controller";
 import { UserSignupController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userSignup.controller";
+import { UserController } from "../../../../adapters/controllers/user/userBaseControllers/user.controller";
 import { RefreshTokenController } from "../../../../adapters/controllers/base/baseAuthenticationControllers/refreshToken.controller";
 import { UserLoginController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userLogin.controller";
 import { UserGoogleLoginController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userGoogleLogin.controller";
 import { UserLogoutController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userLogout.controller";
 
 //use-cases
-
 import { UserSignupUseCase } from "../../../../application/usecases/user/userAuthenticationUsecases/usecase.userSignup";
 import { UserLoginUseCase } from "../../../../application/usecases/user/userAuthenticationUsecases/usecase.userLogin";
 import { UserGoogleLoginUseCase } from "../../../../application/usecases/user/userAuthenticationUsecases/usecase.userGoogleLogin";

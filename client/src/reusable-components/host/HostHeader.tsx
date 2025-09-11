@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { logoutHost } from "@/redux/Slice/host/common/hostSlice";
 import TooltipIcon from "@/components/TooltipIcon";
 import { toast } from "react-toastify";
-import CustomToastContainer from "../Messages/ToastContainer";
+import CustomToastContainer from "../messages/ToastContainer";
 import LogoText from "@/components/LogoText";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { LuUserRoundCog } from "react-icons/lu";
@@ -29,9 +29,13 @@ import { AxiosError } from "axios";
 import { HOST_ROUTES } from "@/utils/constants/routes/host.routes";
 import { RootState } from "@/redux/store";
 import socket from "@/config/base/services/socket";
-import { resetAllCatersStates , resetCatersDetailsForm , resetCatersForm } from "@/redux/Slice/host/caters/catersSlice";
+import {
+  resetAllCatersStates,
+  resetCatersDetailsForm,
+  resetCatersForm,
+} from "@/redux/Slice/host/caters/catersSlice";
 import { clearBookings } from "@/redux/Slice/host/common/bookingsSlice";
-import { clearImages , resetImages } from "@/redux/Slice/host/common/imageSlice";
+import { clearImages, resetImages } from "@/redux/Slice/host/common/imageSlice";
 import { resetLocationDetails } from "@/redux/Slice/host/common/locationSlice";
 import { clearMyAssets } from "@/redux/Slice/host/common/myAssetsSlice";
 import { clearReviews } from "@/redux/Slice/host/common/reviewsSlice";
@@ -39,9 +43,9 @@ import { resetAllService } from "@/redux/Slice/host/common/selectServiceSlice";
 import { resetAllRentCar } from "@/redux/Slice/host/rentcar/rentCarSlice";
 import { resetAllStudioStates } from "@/redux/Slice/host/studio/studioSlice";
 import { resetAllVenueStates } from "@/redux/Slice/host/venue/venueSlice";
+import { clearDashboard } from "@/redux/Slice/host/common/hostDashboard";
 
 const HostHeader: React.FC = () => {
-  
   const host = useSelector((state: RootState) => state.host.hostInfo);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -67,37 +71,37 @@ const HostHeader: React.FC = () => {
   }, [fetchNotifications]);
 
   const handleLogout = async () => {
-  try {
-    await hostLogout();
+    try {
+      await hostLogout();
 
-    toast.success("Logout successful");
+      toast.success("Logout successful");
 
-    // clear all redux slices
-    dispatch(logoutHost());
-    dispatch(resetAllCatersStates());
-    dispatch(resetCatersDetailsForm());
-    dispatch(resetCatersForm());
-    dispatch(clearBookings());
-    dispatch(clearImages());
-    dispatch(resetImages()); 
-    dispatch(resetLocationDetails());
-    dispatch(clearMyAssets());
-    dispatch(clearReviews());
-    dispatch(resetAllService());
-    dispatch(resetAllRentCar());
-    dispatch(resetAllStudioStates());
-    dispatch(resetAllVenueStates());
+      // clear all redux slices
+      dispatch(logoutHost());
+      dispatch(resetAllCatersStates());
+      dispatch(resetCatersDetailsForm());
+      dispatch(resetCatersForm());
+      dispatch(clearBookings());
+      dispatch(clearImages());
+      dispatch(resetImages());
+      dispatch(resetLocationDetails());
+      dispatch(clearMyAssets());
+      dispatch(clearReviews());
+      dispatch(resetAllService());
+      dispatch(resetAllRentCar());
+      dispatch(resetAllStudioStates());
+      dispatch(resetAllVenueStates());
+      dispatch(clearDashboard());
 
-    setTimeout(() => {
-      navigate(HOST_ROUTES.redirectRoutes.toLanding);
-    }, 1500);
-  } catch (err: unknown) {
-    if (err instanceof AxiosError) {
-      toast.error("Logout failed");
+      setTimeout(() => {
+        navigate(HOST_ROUTES.redirectRoutes.toLanding);
+      }, 1500);
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        toast.error("Logout failed");
+      }
     }
-  }
-};
-
+  };
 
   useEffect(() => {
     if (!host?.id) return;

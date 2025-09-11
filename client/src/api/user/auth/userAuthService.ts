@@ -1,9 +1,9 @@
 import axiosInstance from "@/config/user/userAxiosInstence";
 import { USER_API } from "@/utils/constants/api endpoints/user.api";
 import {
-  GoogleLoginData,
   SignupData,
   LoginData,
+  userGoogleLogin
 } from "@/utils/Types/user/authTypes";
 import {
   changePasswordState,
@@ -71,7 +71,7 @@ export const resetPassword = async (data: resetPaswordPayload) => {
   return response.data;
 };
 
-export const googleLogin = async (data: GoogleLoginData) => {
+export const googleLogin = async (data: userGoogleLogin) => {
   const response = await axiosInstance.post(
     USER_API.Authentication.userGoogleLogin,
     data

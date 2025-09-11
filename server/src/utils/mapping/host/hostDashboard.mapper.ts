@@ -99,7 +99,11 @@ export function mapBookingsToStats(bookings: IBooking[]): BookingStatsResponse {
 }
 
 // ---------------- Recent Bookings ----------------
-export function mapBookingsToRecent(bookings: IBooking[]): RecentBooking[] {
+
+export function mapBookingsToRecent(
+  bookings: IBooking[],
+  users: IUserModel[]
+): RecentBooking[] {
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
@@ -114,16 +118,24 @@ export function mapBookingsToRecent(bookings: IBooking[]): RecentBooking[] {
         (a.createdAt ? new Date(a.createdAt).getTime() : 0)
     )
     .slice(0, 6)
-    .map((b) => ({
-      id: b._id?.toString() || "",
-      user: b.userId?.toString() || "",
-      service: b.bookedData?.about || "",
-      amount: b.total,
-      status: (["accepted", "pending", "rejected"].includes(b.status)
-        ? b.status
-        : "pending") as "accepted" | "pending" | "rejected",
-    }));
+    .map((b) => {
+      const user = users.find(
+        (u) => u._id?.toString() === b.userId?.toString()
+      );
+
+      return {
+        id: b._id?.toString() || "",
+        userProfile: user?.profilePic || "",
+        userName: user ? `${user.firstname} ${user.lastname ?? ""}` : "",
+        serviceType: b.bookedData?.typeOfAsset || "",
+        totalAmount: Number(b.total) || 0,
+        bookingStatus: (["accepted", "pending", "rejected"].includes(b.status)
+          ? b.status
+          : "pending") as "accepted" | "pending" | "rejected",
+      };
+    });
 }
+
 
 // ---------------- Booking Table ----------------
 export function mapBookingsToTable(

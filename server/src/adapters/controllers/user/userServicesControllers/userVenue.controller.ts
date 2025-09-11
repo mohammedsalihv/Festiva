@@ -82,6 +82,7 @@ export class UserVenueController implements IUserVenueController {
   async filterVenues(req: Request, res: Response): Promise<void> {
     try {
       const filters = req.query;
+      console.log(req.query)
       const page = parseInt(filters.page as string) || 1;
       const limit = parseInt(filters.limit as string) || 10;
       const result = await this._userVenueUseCase.filterVenues(

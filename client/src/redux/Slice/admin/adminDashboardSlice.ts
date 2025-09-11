@@ -102,7 +102,7 @@ const dashboardSlice = createSlice({
       state.allReviews = [];
     },
 
-    clearAllDashboard: () => initialState,
+    clearAdminDashboard: () => initialState,
   },
 });
 
@@ -125,7 +125,7 @@ export const {
   clearRecentActivities,
   setAllReviews,
   clearAllReviews,
-  clearAllDashboard,
+  clearAdminDashboard,
 } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

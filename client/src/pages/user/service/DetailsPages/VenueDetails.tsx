@@ -38,12 +38,12 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
   const [bookingForm, setBookingForm] = useState<bookingState>({
     time: "",
     date: "",
-    attendees: "",
+    attendees: 0,
   });
   const [errors, setErrors] = useState<bookingErrorState>({
     time: "",
     date: "",
-    attendees: "",
+    attendees: 0,
   });
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -135,9 +135,7 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
       assetType: data.typeOfAsset,
       selectedDates: selectedDates.map((d) => d.toISOString()),
       selectedTimeSlot: selectedSlot,
-      attendeesCount: bookingForm?.attendees
-        ? parseInt(bookingForm.attendees)
-        : 0,
+      attendeesCount: bookingForm?.attendees ?? 0,
 
       total: (data.rent || 0) * selectedDates.length,
       serviceData: data,
@@ -287,10 +285,10 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
             </h3>
             <ul className="list-inside text-sm sm:text-base md:text-base text-gray-800">
               {data.features.map((feature, i) => (
-                <div className="flex items-center gap-2">
+                <li key={i} className="flex items-center gap-2">
                   <VscDebugBreakpointData className="text-black text-xs" />
-                  <li key={i}>{feature}</li>
-                </div>
+                  {feature}
+                </li>
               ))}
             </ul>
           </div>
@@ -301,9 +299,9 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
             </h3>
             <div className="flex gap-4 flex-wrap text-sm sm:text-base md:text-base text-gray-800">
               {data.parkingFeatures.map((parkingFeature, i) => (
-                <div className="flex items-center gap-1">
+                <div key={i} className="flex items-center gap-1">
                   <VscDebugBreakpointData className="text-black text-xs" />
-                  <span key={i}>{parkingFeature}</span>
+                  <span>{parkingFeature}</span>
                 </div>
               ))}
             </div>
@@ -448,9 +446,6 @@ const VenueDetails: React.FC<VenueDetailsProps> = ({ data }) => {
                 <option value="500">500 - 1500 people</option>
                 <option value="2000">2000 & above</option>
               </select>
-              {errors?.attendees && (
-                <p className="text-red-600 text-xs mt-1">{errors.attendees}</p>
-              )}
             </div>
             <Button
               onClick={handleBooking}

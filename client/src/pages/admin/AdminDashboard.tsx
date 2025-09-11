@@ -208,11 +208,7 @@ const AdminDashboard: React.FC = () => {
         <main className="flex-1 p-4">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2 space-y-4 md:space-y-0">
             <h1 className="text-2xl font-bold">Dashboard</h1>
-            <div className="flex items-center space-x-4">
-              <Button className="bg-blue-500 text-white px-4 py-2 rounded">
-                Filter data
-              </Button>
-            </div>
+           
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6 max-w-full bg-gray-100">
             <div className="bg-green-500 text-white p-3 sm:p-4 rounded-lg shadow">

@@ -2,9 +2,10 @@ import { IUserModel } from "../../../domain/entities/modelInterface/user/interfa
 import { responseUserDTO } from "./dto.user"; // your user DTO
 
 export interface googleLoginUserDTO {
-  firstname: string;
+  firstname?: string;
   email: string;
-  profilePic: string;
+  profilePic?: string;
+  phone?:string;
 }
 
 export interface userGoogleLoginResponseDTO {
@@ -41,10 +42,10 @@ export const toUserGoogleLoginResponseDTO = (
   user: Partial<IUserModel>,
   accessToken: string,
   refreshToken: string
-): { user: responseUserDTO; accessToken: string; refreshToken: string } => {
+): { userGoogle: responseUserDTO; accessToken: string; refreshToken: string } => {
   return {
-    user: {
-      id: user._id?.toString(),
+    userGoogle: {
+      id: (user as any)._id?.toString() || (user as any).id?.toString(),
       firstname: user.firstname ?? "",
       lastname: user.lastname ?? "",
       email: user.email ?? "",

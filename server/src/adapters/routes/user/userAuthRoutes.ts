@@ -28,7 +28,6 @@ userAuthRoutes.post(
   userSignupController.signupByUser.bind(userSignupController)
 );
 
-
 userAuthRoutes.post(USER_ROUTES.Authentiation.sendOtp, async (req, res) => {
   try {
     await otpController.otpSending(req, res);
@@ -36,7 +35,6 @@ userAuthRoutes.post(USER_ROUTES.Authentiation.sendOtp, async (req, res) => {
     logger.info(error);
   }
 });
-
 
 userAuthRoutes.post(
   USER_ROUTES.Authentiation.verifyOtp,
@@ -47,6 +45,7 @@ userAuthRoutes.post(
   USER_ROUTES.Authentiation.Refresh_Token,
   refreshTokenController.refreshAccessToken.bind(refreshTokenController)
 );
+
 userAuthRoutes.post(
   USER_ROUTES.Authentiation.userGoogleLogin,
   userGoogleLoginController.userLogin.bind(userGoogleLoginController)
@@ -62,7 +61,6 @@ userAuthRoutes.post(
   userController.resetPassword.bind(userController)
 );
 
-
 userAuthRoutes.post(
   USER_ROUTES.Authentiation.passwordChange,
   authenticateToken,
@@ -77,6 +75,7 @@ userAuthRoutes.delete(
 
 userAuthRoutes.delete(
   USER_ROUTES.Authentiation.userLogout,
+  authenticateToken,
   async (req, res) => {
     try {
       await userLogoutController.userLogout(req, res);

@@ -6,6 +6,16 @@ export interface AdminLoginData {
 }
 
 export const adminLogin = async (data: AdminLoginData) => {
-  const response = await axiosInstance.post(ADMIN_API.Authentication.adminLogin, data);
+  const response = await axiosInstance.post(
+    ADMIN_API.Authentication.adminLogin,
+    data
+  );
+  return response.data;
+};
+
+export const adminLogout = async () => {
+  const response = await axiosInstance.delete(
+    ADMIN_API.Authentication.adminLogout
+  );
   return response.data;
 };

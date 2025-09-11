@@ -12,6 +12,10 @@ import {
   hostLogoutController,
   hostGoogleLoginController,
 } from "../../../infrastructure/DI/host/hostAuthenticationDependencyInjections/hostAuth.DI";
+import {
+  authenticateToken,
+  isHost,
+} from "../../../utils/common/middlewares/auth";
 
 const hostAuthRoutes = express.Router();
 
@@ -71,6 +75,8 @@ hostAuthRoutes.post(
 
 hostAuthRoutes.delete(
   HOST_ROUTES.Authentiation.hostLogout,
+  authenticateToken,
+  isHost,
   async (req, res) => {
     try {
       await hostLogoutController.hostLogout(req, res);

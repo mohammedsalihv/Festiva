@@ -12,7 +12,7 @@ import { logoutUser } from "@/redux/Slice/user/userSlice";
 import { Images } from "@/assets";
 import ConfirmDialog from "./ConfirmDialog";
 import { userLogout } from "@/api/user/auth/userAuthService";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { CgMenuRight } from "react-icons/cg";

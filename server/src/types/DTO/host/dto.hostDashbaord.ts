@@ -23,10 +23,11 @@ export type BookingStatsResponse = BookingStatItem[];
 
 export interface RecentBooking {
   id: string;
-  user: string;
-  service: string;
-  amount: number;
-  status: "accepted" | "pending" | "rejected";
+  userProfile:string;
+  userName: string;
+  serviceType: string;
+  totalAmount: number;
+  bookingStatus: "accepted" | "pending" | "rejected";
 }
 
 export interface BookingTableRow {
