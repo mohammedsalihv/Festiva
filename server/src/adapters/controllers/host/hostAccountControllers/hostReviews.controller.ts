@@ -1,8 +1,8 @@
 import { Response } from "express";
-import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
-import { IHostReviewsController } from "../../../../domain/controlInterface/common/account/interface.hostReviewsController";
-import { statusCodes, statusMessages } from "../../../../utils/common/messages/constantResponses";
-import logger from "../../../../utils/common/messages/logger";
+import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
+import { IHostReviewsController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/account/interface.hostReviewsController";
+import { statusCodes, statusMessages } from "../../../../utils/baseUtilities/messages/constantResponses";
+import logger from "../../../../utils/baseUtilities/messages/logger";
 import { IHostReviewsUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostReviewsUseCase";
 
 export class HostReviewsController implements IHostReviewsController {

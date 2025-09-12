@@ -1,5 +1,5 @@
-import { IUserModel } from "../../entities/modelInterface/user/interface.user";
-import { userSignupDTO } from "../../../types/DTO/user/dto.userSignup";
+import { IUserModel } from "../../entities/databaseModelInterfaces/userModelInterfaces/interface.user";
+import { userSignupDTO } from "../../../types/DTO's/userDTO's/userAuthenticationDTO's/dto.userSignup";
 
 export class userSignupFactory {
   static createNewUser(

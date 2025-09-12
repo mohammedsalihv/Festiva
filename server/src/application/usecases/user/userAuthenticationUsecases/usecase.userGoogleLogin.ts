@@ -2,13 +2,13 @@ import { IUserGoogleLoginRepository } from "../../../../domain/entities/reposito
 import { IUserGoogleLoginUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userGoogleLoginUsecase";
 import { IUserGoogleLoginValidator } from "../../../../domain/validatorInterface/user/interface.userGoogleLoginValidator";
 import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
-import { toUserGoogleLoginUsecaseDTO } from "../../../../utils/mapping/user/userGoogleLoginMapper";
+import { toUserGoogleLoginUsecaseDTO } from "../../../../utils/mapping/userMappings/userGoogleLoginMapper";
 import { userGoogleLoginFactory } from "../../../../domain/factories/user/userGoogleLogin.factory";
-import { userGoogleLoginResponseDTO } from "../../../../types/DTO/user/dto.hostGoogleLogin";
-import { googleLoginUserDTO } from "../../../../types/DTO/user/dto.hostGoogleLogin";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { IUserModel } from "../../../../domain/entities/modelInterface/user/interface.user";
+import { userGoogleLoginResponseDTO } from "../../../../types/DTO's/userDTO's/dto.hostGoogleLogin";
+import { googleLoginUserDTO } from "../../../../types/DTO's/userDTO's/dto.hostGoogleLogin";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { IUserModel } from "../../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
 
 export class UserGoogleLoginUseCase implements IUserGoogleLoginUseCase {
   constructor(

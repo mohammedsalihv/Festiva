@@ -1,0 +1,24 @@
+import { IReview } from "../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.review";
+import { IUserModel } from "../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
+import { hostReviewsResponse } from "../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.review";
+
+export const mapHostReviews = (
+  reviews: IReview[],
+  users: IUserModel[]
+): hostReviewsResponse[] => {
+  return reviews.map((review) => {
+    const user = users.find(
+      (u) => u._id?.toString() === review.createrId.toString()
+    );
+
+    return {
+      _id: review._id ? review._id.toString() : "",
+      createrName: user ? `${user.firstname} ${user.lastname}` : "Unknown",
+      createrProfilePic: user?.profilePic ?? "",
+      createrRole: user?.role ?? "user",
+      rating: review.rating,
+      review: review.comment,
+      assetType:review.assetType
+    };
+  });
+};

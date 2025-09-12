@@ -18,8 +18,8 @@ import {
   totalIncomeResponse,
   allReviewsResponse,
   recentActivitiesResponse,
-} from "../../../../types/DTO/admin/dto.adminDashboard";
-import { mapAdminDashboard } from "../../../../utils/mapping/admin/adminDashboardMapper";
+} from "../../../../types/DTO's/adminDTO's/adminAccountDTO's/dto.adminDashboard";
+import { mapAdminDashboard } from "../../../../utils/mapping/adminMappings/adminDashboardMapper";
 
 export class AdminDashboardUseCase implements IAdminDashboardUseCase {
   constructor(

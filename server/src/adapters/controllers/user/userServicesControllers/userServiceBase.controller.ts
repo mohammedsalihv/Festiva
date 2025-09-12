@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import { IUserServicesBaseController } from "../../../../domain/controlInterface/user/services interface/interface.userServicesBaseController";
+import { IUserServicesBaseController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userServicesControllerInterfaces/interface.userServicesBaseController";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import { IUserVenueController } from "../../../../domain/controlInterface/user/services interface/interface.userVenueController";
-import { IUserRentCarController } from "../../../../domain/controlInterface/user/services interface/interface.userRentCarController";
-import { IUserCatersController } from "../../../../domain/controlInterface/user/services interface/interface.userCatersController";
-import { IUserStudioController } from "../../../../domain/controlInterface/user/services interface/interface.userStudioController";
-import CustomError from "../../../../utils/common/errors/CustomError";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import { IUserVenueController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userServicesControllerInterfaces/interface.userVenueController";
+import { IUserRentCarController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userServicesControllerInterfaces/interface.userRentCarController";
+import { IUserCatersController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userServicesControllerInterfaces/interface.userCatersController";
+import { IUserStudioController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userServicesControllerInterfaces/interface.userStudioController";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 export class UserServiceBaseController implements IUserServicesBaseController {
   constructor(
     private _userVenueController: IUserVenueController,

@@ -1,4 +1,4 @@
-import { IBooking } from "../../../../domain/entities/modelInterface/base/interface.booking";
+import { IBooking } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.booking";
 import { IAdminBookingManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminBookingManagementRepository";
 import bookingModel from "../../../../domain/models/base/booking/bookingModel";
 

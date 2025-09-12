@@ -1,9 +1,9 @@
-import { IHostModel } from "../../../../domain/entities/modelInterface/host/interface.host";
+import { IHostModel } from "../../../../domain/entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
 import { IAdminHostManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminHostManagementRepository";
 import { HostModel } from "../../../../domain/models/host/hostAuthenticationModels/hostModel";
 import { pickDefinedFields } from "../../../../utils/validations/user/pickDefinedFields";
-import { responseHostDTO } from "../../../../types/DTO/host/dto.host";
-import { responseAllHostsDTO } from "../../../../types/DTO/host/dto.host";
+import { responseHostDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
+import { responseAllHostsDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 
 export class AdminHostManagementRepostory
   implements IAdminHostManagementRepository

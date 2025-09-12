@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { IUserLogoutController } from "../../../../domain/controlInterface/user/userAuthenticationControllerInterfaces/interface.userLogoutController";
+import { IUserLogoutController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userAuthenticationControllerInterfaces/interface.userLogoutController";
 import { IUserLogoutUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userLogoutUseCase";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import logger from "../../../../utils/common/messages/logger";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import logger from "../../../../utils/baseUtilities/messages/logger";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class UserLogoutController implements IUserLogoutController {
   constructor(private _userLogoutUseCase: IUserLogoutUseCase) {}

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import logger from "../../utils/common/messages/logger";
+import logger from "../../utils/baseUtilities/messages/logger";
 import { ITokenService } from "../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
 
 export class TokenService implements ITokenService {

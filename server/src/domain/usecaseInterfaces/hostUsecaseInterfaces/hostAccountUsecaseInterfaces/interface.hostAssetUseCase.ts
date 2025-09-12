@@ -1,0 +1,27 @@
+import {
+  AssetRequestDTO,
+  myAssetsDTO,
+} from "../../../../types/DTO's/hostDTO's/hostAccountDTO's/dto.assetRequest";
+
+export interface IHostAssetUseCase {
+  getAllAssets(
+    hostId: string,
+    page: number,
+    limit: number,
+    type?: "studio" | "venue" | "rentcar" | "caters",
+    search?: string,
+    status?: string | string[],
+    sortBy?: "newest" | "oldest"
+  ): Promise<{ data: myAssetsDTO[]; totalPages: number }>;
+
+  getAllRequests(
+    hostId: string,
+    page: number,
+    limit: number,
+    search?: string,
+    status?: string,
+    sortBy?: "reqDate" | "actionDate" | "status",
+    order?: "asc" | "desc",
+    assetType?:string
+  ): Promise<{ data: AssetRequestDTO[]; totalPages: number }>;
+}

@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import { IAdminUserManagementController } from "../../../../domain/controlInterface/admin/management controller interfaces/interface.adminUserManagementController";
+import { IAdminUserManagementController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminManagementControllerInterfaces/interface.adminUserManagementController";
 import { IAdminUserManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminUserManagementUseCase";
-import logger from "../../../../utils/common/messages/logger";
+import logger from "../../../../utils/baseUtilities/messages/logger";
 import { JwtPayload } from "jsonwebtoken";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import { uploadProfileImage } from "../../../../utils/common/cloudinary/uploadProfileImage";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import { uploadProfileImage } from "../../../../utils/baseUtilities/cloudinary/uploadProfileImage";
 
 
 interface MulterRequest extends Request {

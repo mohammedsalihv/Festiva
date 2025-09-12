@@ -1,10 +1,10 @@
 import { IUserGoogleLoginValidator } from "../../../domain/validatorInterface/user/interface.userGoogleLoginValidator";
-import { googleLoginUserDTO } from "../../../types/DTO/user/dto.hostGoogleLogin";
-import CustomError from "../../common/errors/CustomError";
+import { googleLoginUserDTO } from "../../../types/DTO's/userDTO's/dto.hostGoogleLogin";
+import CustomError from "../../baseUtilities/errors/CustomError";
 import {
   statusCodes,
   statusMessages,
-} from "../../common/messages/constantResponses";
+} from "../../baseUtilities/messages/constantResponses";
 
 export class UserGoogleLoginValidator implements IUserGoogleLoginValidator {
   validate(data: googleLoginUserDTO): void {

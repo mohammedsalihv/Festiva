@@ -1,10 +1,10 @@
 import axios from "axios";
-import { geocodeAddress } from "../../../../utils/common/geocoding/geocodeAddress";
+import { geocodeAddress } from "../../../../utils/baseUtilities/geocoding/geocodeAddress";
 import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
 import { ILocationUseCase } from "../../../../domain/usecaseInterface/host/baseUsecaseInterfaces/interface.locationUsecase";
 import { ILocation } from "../../../../domain/entities/serviceInterface/host/interface.location";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class LocationUseCase implements ILocationUseCase {
   constructor(private _locationRepository: ILocationRepository) {}

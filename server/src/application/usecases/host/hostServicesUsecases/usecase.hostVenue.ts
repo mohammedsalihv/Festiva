@@ -1,9 +1,9 @@
 import { IHostVenueRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostVenueRepository";
-import ErrorHandler from "../../../../utils/common/errors/CustomError";
+import ErrorHandler from "../../../../utils/baseUtilities/errors/CustomError";
 import { IVenue } from "../../../../domain/entities/serviceInterface/host/interface.venue";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 import { IHostVenueUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.venueUseCase";
-import CustomError from "../../../../utils/common/errors/CustomError";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 
 export class HostVenueUseCase implements IHostVenueUseCase {
   constructor(private _hostVenueRepository: IHostVenueRepository) {}

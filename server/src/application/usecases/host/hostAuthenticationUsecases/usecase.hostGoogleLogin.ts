@@ -1,12 +1,12 @@
 import { IHostGoogleLoginUseCase } from "../../../../domain/usecaseInterface/host/authenticationUsecaseInterfaces/interface.hostGoogleLoginUseCase";
-import { HostDetailsDTO } from "../../../../types/DTO/host/dto.host";
-import { googleSignupHostDTO } from "../../../../types/DTO/user/dto.hostGoogleSignup";
+import { HostDetailsDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
+import { googleSignupHostDTO } from "../../../../types/DTO's/userDTO's/userAuthenticationDTO's/dto.hostGoogleSignup";
 import { IHostGoogle } from "../../../../domain/entities/baseInterface/host/authenticationInterfaces/interface.hostGoogle";
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
 import { IHostGoogleLoginRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostGoogleLoginRepository";
 import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class HostGoogleLoginUseCase implements IHostGoogleLoginUseCase {
   constructor(

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { IAdminCatersController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminCatersController";
+import { IAdminCatersController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminCatersController";
 import { IAdminCatersUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminCatersUseCase";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 
 export class AdminCatersController implements IAdminCatersController {

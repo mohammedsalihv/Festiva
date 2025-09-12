@@ -12,7 +12,7 @@ import {
   mapBookingsToStats,
   mapBookingsToTable,
   mapPaymentsToRevenue,
-} from "../../../../utils/mapping/host/hostDashboard.mapper";
+} from "../../../../utils/mapping/hostMappings/hostDashboard.mapper";
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
 
 export class HostDashbaordUseCase implements IHostDashboardUseCase {

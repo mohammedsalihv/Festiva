@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { IAdminRentCarUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminRentCar";
-import { IAdminRentCarController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminRentCarController";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import { IAdminRentCarController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminRentCarController";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class AdminRentCarController implements IAdminRentCarController {
   constructor(private _adminRentCarUseCase: IAdminRentCarUseCase) {}

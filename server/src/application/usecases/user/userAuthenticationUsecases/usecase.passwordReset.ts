@@ -1,11 +1,11 @@
-import CustomError from "../../../../utils/common/errors/CustomError";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
-import { hash } from "../../../../utils/common/auth/passwordHash";
-import { resetPasswordDTO } from "../../../../types/DTO/user/dto.user";
+import { hash } from "../../../../utils/baseUtilities/auth/passwordHash";
+import { resetPasswordDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
 import { IUserPasswordResetUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userPasswordResetUseCase";
 
 export class UserPasswordResetUseCase implements IUserPasswordResetUseCase {

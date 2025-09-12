@@ -1,6 +1,6 @@
 import express from "express";
 import { USER_ROUTES } from "../../../infrastructure/constants/user.routes";
-import { userServiceBaseController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userServiceBase.DI";
+import { userServiceBaseController } from "../../../infrastructure/DI/user/userServicesDependencyInjections/userServiceBase.DI";
 
 const userServiceRoute = express.Router();
 

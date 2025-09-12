@@ -3,11 +3,11 @@ import { ADMIN_ROUTES } from "../../../infrastructure/constants/admin.routes";
 import { adminUserController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminUserManagement.DI";
 import { adminHostController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminHostManagement.DI";
 import { adminAssetManagementController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminAssetManagement.DI";
-import { singleImageUpload } from "../../../utils/common/middlewares/multer";
+import { singleImageUpload } from "../../../utils/baseUtilities/middlewares/multer";
 import {
   authenticateToken,
   isAdmin,
-} from "../../../utils/common/middlewares/auth";
+} from "../../../utils/baseUtilities/middlewares/auth";
 import { adminBookingManagementController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminBookingManagement.DI";
 import { adminDashboardController } from "../../../infrastructure/DI/admin/adminBaseDependencyInjections/adminDashboard.DI";
 

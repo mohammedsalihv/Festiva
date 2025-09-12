@@ -1,12 +1,12 @@
 import { Response } from "express";
-import { IHostBookingsController } from "../../../../domain/controlInterface/common/account/interface.hostBookingsController";
-import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
+import { IHostBookingsController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/account/interface.hostBookingsController";
+import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
 import { IHostBookingsUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostBookingsUseCase";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import logger from "../../../../utils/common/messages/logger";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import logger from "../../../../utils/baseUtilities/messages/logger";
 
 export class HostBookingController implements IHostBookingsController {
   constructor(private _hostBookingsUseCase: IHostBookingsUseCase) {}

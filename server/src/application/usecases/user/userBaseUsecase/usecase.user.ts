@@ -1,6 +1,6 @@
 import { IUserUseCase } from "../../../../domain/usecaseInterface/user/userBaseUsecaseInterfaces/interface.userUseCase";
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
-import { resetPasswordDTO } from "../../../../types/DTO/user/dto.user";
+import { resetPasswordDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 
 export class UserUseCase implements IUserUseCase {
   constructor(private _userRepository: IUserRepository) {}

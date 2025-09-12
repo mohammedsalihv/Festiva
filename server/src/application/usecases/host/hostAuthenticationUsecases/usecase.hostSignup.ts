@@ -1,15 +1,15 @@
-import { hash } from "../../../../utils/common/auth/passwordHash";
+import { hash } from "../../../../utils/baseUtilities/auth/passwordHash";
 import { IHostSignupUseCase } from "../../../../domain/usecaseInterface/host/authenticationUsecaseInterfaces/interface.hostSignupUseCase";
 import {
   registerHostDTO,
   HostDetailsDTO,
-} from "../../../../types/DTO/host/dto.host";
-import ErrorHandler from "../../../../utils/common/errors/CustomError";
-import { IHostModel } from "../../../../domain/entities/modelInterface/host/interface.host";
+} from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
+import ErrorHandler from "../../../../utils/baseUtilities/errors/CustomError";
+import { IHostModel } from "../../../../domain/entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
 import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
 import { IHostSignupRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostSignupRepository";
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class HostSignupUseCase implements IHostSignupUseCase {
   constructor(

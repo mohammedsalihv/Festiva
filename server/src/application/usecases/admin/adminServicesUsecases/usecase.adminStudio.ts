@@ -1,8 +1,8 @@
 import { IAdminStudioUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminStudioUseCase";
 import { IStudio } from "../../../../domain/entities/serviceInterface/host/interface.studio";
 import { IAdminStudioRepository } from "../../../../domain/entities/repositoryInterface/admin/services/interface.adminStudioRepository";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class AdminStudioUseCase implements IAdminStudioUseCase {
   constructor(private _adminStudioRepository: IAdminStudioRepository) {}

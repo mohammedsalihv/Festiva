@@ -1,13 +1,13 @@
-import { responseHostDTO } from "../../../../types/DTO/host/dto.host";
+import { responseHostDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 import { IAdminHostManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminHostManagementUseCase";
 import { IAdminHostManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminHostManagementRepository";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { EditHostPayload } from "../../../../domain/adminInterface/interface.editHost";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { EditHostPayload } from "../../../../domain/baseInterfaces/adminBaseInterfaces/interface.editHost";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import { responseAllHostsDTO } from "../../../../types/DTO/host/dto.host";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import { responseAllHostsDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 
 export class AdminHostManagementUseCase implements IAdminHostManagementUseCase{
   constructor(

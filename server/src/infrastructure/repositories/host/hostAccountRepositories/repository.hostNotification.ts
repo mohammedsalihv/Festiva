@@ -5,7 +5,7 @@ import { RentCarModel } from "../../../../domain/models/host/hostServiceModels/r
 import { StudioModel } from "../../../../domain/models/host/hostServiceModels/studioModel";
 import { VenueModel } from "../../../../domain/models/host/hostServiceModels/venueModel";
 import { CatersModel } from "../../../../domain/models/host/hostServiceModels/catersModel";
-import { CreateAssetNotificationDTO } from "../../../../types/DTO/common/notification";
+import { CreateAssetNotificationDTO } from "../../../../types/DTO's/baseDTO's/notification";
 
 export class HostNotificationRepository implements IHostNotificationRepository {
   async allHostNotifications(receiverId: string): Promise<any[]> {

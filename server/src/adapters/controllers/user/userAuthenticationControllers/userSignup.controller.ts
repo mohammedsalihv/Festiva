@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { IUserModel } from "../../../../domain/entities/modelInterface/user/interface.user";
-import { registerUserDTO } from "../../../../types/DTO/user/dto.user";
-import { IUserSignupController } from "../../../../domain/controlInterface/user/userAuthenticationControllerInterfaces/interface.userSignupController";
+import { IUserModel } from "../../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
+import { registerUserDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
+import { IUserSignupController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userAuthenticationControllerInterfaces/interface.userSignupController";
 import { IUserSignupUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userSignupUseCase";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 import { userSignupSanitizer } from "../../../../utils/sanitizers/user/userSignupSanitizer";
 
 export class UserSignupController implements IUserSignupController {

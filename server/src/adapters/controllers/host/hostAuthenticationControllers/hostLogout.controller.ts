@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { IHostLogoutController } from "../../../../domain/controlInterface/host/authentication controller interface/interface.hostLogout";
+import { IHostLogoutController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostAuthenticationControllerInterfaces/interface.hostLogout";
 import { IHostLogoutUseCase } from "../../../../domain/usecaseInterface/host/authenticationUsecaseInterfaces/interface.hostLogoutUseCase";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import logger from "../../../../utils/common/messages/logger";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import logger from "../../../../utils/baseUtilities/messages/logger";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class HostLogoutController implements IHostLogoutController {
   constructor(private _userLogoutUseCase: IHostLogoutUseCase) {}

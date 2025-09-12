@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { IRefreshTokenController } from "../../../../domain/controlInterface/common/authentication/interface.refreshTokenController";
+import { IRefreshTokenController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/interface.refreshTokenController";
 import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class RefreshTokenController implements IRefreshTokenController{
   constructor(private _tokenService: ITokenService) {}

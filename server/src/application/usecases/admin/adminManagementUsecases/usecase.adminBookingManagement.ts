@@ -2,8 +2,8 @@ import { IAdminBookingManagementRepository } from "../../../../domain/entities/r
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
 import { IAdminBookingManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminBookingManagementUseCase";
-import { adminBookingsResponse } from "../../../../types/DTO/admin/dto.adminBookings";
-import { adminBookingMapper } from "../../../../utils/mapping/admin/adminBookingMapper";
+import { adminBookingsResponse } from "../../../../types/DTO's/adminDTO's/adminAccountDTO's/dto.adminBookings";
+import { adminBookingMapper } from "../../../../utils/mapping/adminMappings/adminBookingMapper";
 
 export class AdminBookingManagementUseCase
   implements IAdminBookingManagementUseCase

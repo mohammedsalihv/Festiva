@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
-import { IAdminAssetManagementController } from "../../../../domain/controlInterface/admin/management controller interfaces/interface.adminAssetManagementController";
+import { IAdminAssetManagementController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminManagementControllerInterfaces/interface.adminAssetManagementController";
 import { IAdminAssetManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminAssetManagementUseCase";
 import { IAdminNotificationUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminNotificationUsecase";
-import { IAdminVenueController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminVenueController";
-import { IAdminRentCarController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminRentCarController";
-import { IAdminCatersController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminCatersController";
-import { IAdminStudioController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminStudioController";
-import logger from "../../../../utils/common/messages/logger";
+import { IAdminVenueController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminVenueController";
+import { IAdminRentCarController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminRentCarController";
+import { IAdminCatersController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminCatersController";
+import { IAdminStudioController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminStudioController";
+import logger from "../../../../utils/baseUtilities/messages/logger";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
 import { getIO } from "../../../../config/socket";
 
 interface AuthRequest extends Request {

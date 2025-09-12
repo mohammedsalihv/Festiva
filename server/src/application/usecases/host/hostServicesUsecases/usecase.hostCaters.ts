@@ -1,9 +1,9 @@
 import { IHostCatersRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostCatersRepository";
 import { IHostCatersUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.catersUseCase";
-import ErrorHandler from "../../../../utils/common/errors/CustomError";
+import ErrorHandler from "../../../../utils/baseUtilities/errors/CustomError";
 import { ICaters } from "../../../../domain/entities/serviceInterface/host/interface.caters";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
-import CustomError from "../../../../utils/common/errors/CustomError";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 
 export class HostCatersUseCase implements IHostCatersUseCase {
   constructor(private _hostCatersRepository: IHostCatersRepository) {}

@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import { IUserGoogleLoginController } from "../../../../domain/controlInterface/user/userAuthenticationControllerInterfaces/interface.userGoogleLoginController";
+import { IUserGoogleLoginController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userAuthenticationControllerInterfaces/interface.userGoogleLoginController";
 import { IUserGoogleLoginUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userGoogleLoginUsecase";
-import { toUserGoogleLoginResponseDTO } from "../../../../types/DTO/user/dto.hostGoogleLogin";
+import { toUserGoogleLoginResponseDTO } from "../../../../types/DTO's/userDTO's/dto.hostGoogleLogin";
 import { IUserGoogleLoginValidator } from "../../../../domain/validatorInterface/user/interface.userGoogleLoginValidator";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import logger from "../../../../utils/common/messages/logger";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import logger from "../../../../utils/baseUtilities/messages/logger";
 
 export class UserGoogleLoginController implements IUserGoogleLoginController {
   constructor(

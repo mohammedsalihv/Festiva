@@ -1,12 +1,12 @@
 import bcrypt from "bcrypt";
-import CustomError from "../../common/errors/CustomError";
+import CustomError from "../../baseUtilities/errors/CustomError";
 import {
   statusCodes,
   statusMessages,
-} from "../../common/messages/constantResponses";
+} from "../../baseUtilities/messages/constantResponses";
 import { IHostLoginUsecaseValidator } from "../../../domain/validatorInterface/host/interface.hostLoginValidator";
 import { IHostLoginControllerValidator } from "../../../domain/validatorInterface/host/interface.hostLoginValidator";
-import { hostLoginDTO } from "../../../types/DTO/host/dto.hostLogin";
+import { hostLoginDTO } from "../../../types/DTO's/hostDTO's/dto.hostLogin";
 
 
 export class HostLoginUsecaseValidator implements IHostLoginUsecaseValidator {

@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { IBooking } from "../../../../domain/entities/modelInterface/base/interface.booking";
+import { IBooking } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.booking";
 import { IHostBookingsRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostBookingsRepository";
 import bookingModel from "../../../../domain/models/base/booking/bookingModel";
 

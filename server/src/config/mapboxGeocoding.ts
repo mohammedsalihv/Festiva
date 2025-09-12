@@ -1,7 +1,7 @@
 
 import axios from "axios";
-import CustomError from "../utils/common/errors/CustomError";
-import { statusCodes } from "../utils/common/messages/constantResponses";
+import CustomError from "../utils/baseUtilities/errors/CustomError";
+import { statusCodes } from "../utils/baseUtilities/messages/constantResponses";
 
 export const geocodeAddress = async (
   address: string

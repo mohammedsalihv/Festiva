@@ -5,8 +5,8 @@ import {
   IStudioBase,
 } from "../../../../domain/entities/serviceInterface/host/interface.studio";
 import { IUserStudioUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userStudioUseCase";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class UserStudioUseCase implements IUserStudioUseCase {
   constructor(private _userStudioRepository: IUserStudioRepository) {}

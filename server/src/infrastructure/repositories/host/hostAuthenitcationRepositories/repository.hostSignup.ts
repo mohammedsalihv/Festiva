@@ -1,7 +1,7 @@
 import { IHostSignupRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostSignupRepository";
 import { HostModel } from "../../../../domain/models/host/hostAuthenticationModels/hostModel";
-import { IHostModel } from "../../../../domain/entities/modelInterface/host/interface.host";
-import { responseHostDTO } from "../../../../types/DTO/host/dto.host";
+import { IHostModel } from "../../../../domain/entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
+import { responseHostDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 
 export class HostSignupRepository implements IHostSignupRepository {
   async findByEmail(email: string): Promise<responseHostDTO | null> {

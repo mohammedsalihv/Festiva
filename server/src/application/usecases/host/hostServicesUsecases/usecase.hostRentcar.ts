@@ -1,9 +1,9 @@
 import { IHostRentCarRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRentCarRepository";
-import ErrorHandler from "../../../../utils/common/errors/CustomError";
+import ErrorHandler from "../../../../utils/baseUtilities/errors/CustomError";
 import { IRentCar } from "../../../../domain/entities/serviceInterface/host/interface.rentCar";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 import { IHostRentCarUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.rentCarUseCase";
-import CustomError from "../../../../utils/common/errors/CustomError";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 
 export class HostRentCarUseCase implements IHostRentCarUseCase {
   constructor(private _hostRentCarRepository: IHostRentCarRepository) {}

@@ -1,5 +1,5 @@
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
-import { IHostModel } from "../../../../domain/entities/modelInterface/host/interface.host";
+import { IHostModel } from "../../../../domain/entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
 import { HostModel } from "../../../../domain/models/host/hostAuthenticationModels/hostModel";
 
 export class HostRepository implements IHostRepository {

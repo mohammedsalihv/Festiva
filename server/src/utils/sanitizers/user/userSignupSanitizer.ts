@@ -1,4 +1,4 @@
-import { IUserModel } from "../../../domain/entities/modelInterface/user/interface.user";
+import { IUserModel } from "../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
 
 export class userSignupSanitizer {
   static sanitize(user: IUserModel) {

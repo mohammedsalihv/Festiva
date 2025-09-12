@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { IUserUseCase } from "../../../../domain/usecaseInterface/user/userBaseUsecaseInterfaces/interface.userUseCase";
-import { AuthRequest } from "../../../../domain/controlInterface/common/authentication/authType";
+import { AuthRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authType";
 import axios from "axios";
-import { resetPasswordDTO } from "../../../../types/DTO/user/dto.user";
-import { IUserController } from "../../../../domain/controlInterface/user/userBaseControllerInterfaces/interface.userController";
+import { resetPasswordDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
+import { IUserController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userBaseControllerInterfaces/interface.userController";
 import { IUserPasswordResetUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userPasswordResetUseCase";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
-import { getSignedImageUrl } from "../../../../utils/common/cloudinary/getSignedImageUrl";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
+import { getSignedImageUrl } from "../../../../utils/baseUtilities/cloudinary/getSignedImageUrl";
 
 export class UserController implements IUserController {
   constructor(

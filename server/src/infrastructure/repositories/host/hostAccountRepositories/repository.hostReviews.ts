@@ -1,4 +1,4 @@
-import { IReview } from "../../../../domain/entities/modelInterface/base/interface.review";
+import { IReview } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.review";
 import { IHostReviewsRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostReviewsRepository";
 import { reviewModel } from "../../../../domain/models/base/review/reviewModel";
 

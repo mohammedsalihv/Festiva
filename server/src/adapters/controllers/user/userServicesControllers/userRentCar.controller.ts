@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 import { IUserRentCarUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userRentCarUseCase";
-import { IUserRentCarController } from "../../../../domain/controlInterface/user/services interface/interface.userRentCarController";
-import logger from "../../../../utils/common/messages/logger";
+import { IUserRentCarController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userServicesControllerInterfaces/interface.userRentCarController";
+import logger from "../../../../utils/baseUtilities/messages/logger";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import CustomError from "../../../../utils/common/errors/CustomError";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 
 export class UserRentCarController implements IUserRentCarController {
   constructor(private _userRentCarUseCase: IUserRentCarUseCase) {}

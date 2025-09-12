@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import { IUserVenueController } from "../../../../domain/controlInterface/user/services interface/interface.userVenueController";
+import { IUserVenueController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userServicesControllerInterfaces/interface.userVenueController";
 import { IUserVenueUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userVenueUseCase";
-import logger from "../../../../utils/common/messages/logger";
+import logger from "../../../../utils/baseUtilities/messages/logger";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import CustomError from "../../../../utils/common/errors/CustomError";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 
 export class UserVenueController implements IUserVenueController {
   constructor(private _userVenueUseCase: IUserVenueUseCase) {}

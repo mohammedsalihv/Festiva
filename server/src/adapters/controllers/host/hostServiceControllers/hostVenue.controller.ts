@@ -1,20 +1,20 @@
 import { Request, Response } from "express";
 import { IVenue } from "../../../../domain/entities/serviceInterface/host/interface.venue";
 import { ILocationUseCase } from "../../../../domain/usecaseInterface/host/baseUsecaseInterfaces/interface.locationUsecase";
-import { IHostVenueController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostVenueController";
+import { IHostVenueController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostServicesControllerInterfaces/interface.hostVenueController";
 import { IHostVenueUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.venueUseCase";
-import ErrorHandler from "../../../../utils/common/errors/CustomError";
+import ErrorHandler from "../../../../utils/baseUtilities/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import { uploadAssetImages } from "../../../../utils/common/cloudinary/uploadAssetImage";
-import { assetFilesValidate } from "../../../../utils/mapping/host/assetFilesValidate";
-import logger from "../../../../utils/common/messages/logger";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import { uploadAssetImages } from "../../../../utils/baseUtilities/cloudinary/uploadAssetImage";
+import { assetFilesValidate } from "../../../../utils/mapping/hostMappings/assetFilesValidate";
+import logger from "../../../../utils/baseUtilities/messages/logger";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };

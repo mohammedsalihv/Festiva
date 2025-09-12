@@ -1,5 +1,5 @@
 import { IAdminRepository } from "../../../../domain/entities/baseInterface/admin/interface.admin";
-import { IUserModel } from "../../../../domain/entities/modelInterface/user/interface.user";
+import { IUserModel } from "../../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
 import { UserModel } from "../../../../domain/models/user/userAuthenticationModels/userModel";
 
 export class AdminRepository implements IAdminRepository {

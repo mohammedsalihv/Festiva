@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { IOTPController } from "../../../../domain/controlInterface/common/authentication/interface.otpController";
+import { IOTPController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/interface.otpController";
 import { IOTPUseCase } from "../../../../domain/usecaseInterface/base/authentication/interface.otpUseCase";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import logger from "../../../../utils/common/messages/logger";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import logger from "../../../../utils/baseUtilities/messages/logger";
 
 export class OTPController implements IOTPController {
   constructor(private _otpUseCase: IOTPUseCase) {}

@@ -1,5 +1,5 @@
-import { IUserModel } from "../../../domain/entities/modelInterface/user/interface.user";
-import { userLoginResponseDTO } from "../../../types/DTO/user/dto.userLogin";
+import { IUserModel } from "../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
+import { userLoginResponseDTO } from "../../../types/DTO's/userDTO's/userAuthenticationDTO's/dto.userLogin";
 
 export class userLoginSanitizer {
   static toUserLoginResponse(user: IUserModel): userLoginResponseDTO {

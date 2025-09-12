@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { IAdminStudioController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminStudioController";
+import { IAdminStudioController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminStudioController";
 import { IAdminStudioUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminStudioUseCase";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class AdminStudioController implements IAdminStudioController {
   constructor(private _adminStudioUseCase: IAdminStudioUseCase) {}

@@ -1,7 +1,7 @@
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
-import { resetPasswordDTO } from "../../../../types/DTO/user/dto.user";
+import { resetPasswordDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 import { UserModel } from "../../../../domain/models/user/userAuthenticationModels/userModel";
-import { IUserModel } from "../../../../domain/entities/modelInterface/user/interface.user";
+import { IUserModel } from "../../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
 
 export class UserRepository implements IUserRepository {
   async findByEmail(email: string) {

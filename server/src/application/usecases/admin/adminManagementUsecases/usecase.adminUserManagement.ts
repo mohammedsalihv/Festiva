@@ -2,11 +2,11 @@ import { IAdminUserManagementUseCase } from "../../../../domain/usecaseInterface
 import {
   responseUserDTO,
   responseAllUsersDTO,
-} from "../../../../types/DTO/user/dto.user";
+} from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 import { IAdminUserManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminUserManagementRepository";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { EditUserPayload } from "../../../../domain/adminInterface/interface.editUser";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { EditUserPayload } from "../../../../domain/baseInterfaces/adminBaseInterfaces/interface.editUser";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class AdminUserManagementUseCase implements IAdminUserManagementUseCase {
   constructor(

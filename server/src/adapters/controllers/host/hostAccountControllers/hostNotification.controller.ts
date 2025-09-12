@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostNotificationUseCase";
-import { IHostNotificationController } from "../../../../domain/controlInterface/host/account controller interfaces/interface.hostNotificationController";
-import { statusCodes, statusMessages } from "../../../../utils/common/messages/constantResponses";
+import { IHostNotificationController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostAccountControllerInterfaces/interface.hostNotificationController";
+import { statusCodes, statusMessages } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 interface AuthRequest extends Request {
   auth?: JwtPayload & { id: string; role?: string };

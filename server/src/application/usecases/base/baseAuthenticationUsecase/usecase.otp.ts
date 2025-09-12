@@ -1,9 +1,9 @@
 import { IOTPUseCase } from "../../../../domain/usecaseInterface/base/authentication/interface.otpUseCase";
 import { IOTPRepository } from "../../../../domain/entities/repositoryInterface/base/interface.otpRepository";
-import { OTPSendingDTO } from "../../../../types/DTO/user/dto.otp";
-import { generateOTP } from "../../../../utils/common/communication/otpGenerator";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import { OTPSendingDTO } from "../../../../types/DTO's/userDTO's/userAuthenticationDTO's/dto.otp";
+import { generateOTP } from "../../../../utils/baseUtilities/communication/otpGenerator";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class OTPUseCase implements IOTPUseCase {
   private RESEND_WAIT_TIME = 60 * 1000;

@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import { IUserCatersController } from "../../../../domain/controlInterface/user/services interface/interface.userCatersController";
+import { IUserCatersController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userServicesControllerInterfaces/interface.userCatersController";
 import { IUserCatersUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userCatersUseCase";
-import logger from "../../../../utils/common/messages/logger";
+import logger from "../../../../utils/baseUtilities/messages/logger";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import CustomError from "../../../../utils/common/errors/CustomError";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 
 export class UserCatersController implements IUserCatersController {
   constructor(private _userCatersUseCase: IUserCatersUseCase) {}

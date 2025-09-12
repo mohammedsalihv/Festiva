@@ -1,9 +1,9 @@
 import { IHostStudioRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostStudioRepository";
-import ErrorHandler from "../../../../utils/common/errors/CustomError";
+import ErrorHandler from "../../../../utils/baseUtilities/errors/CustomError";
 import { IStudio } from "../../../../domain/entities/serviceInterface/host/interface.studio";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 import { IHostStudioUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.studioUseCase";
-import CustomError from "../../../../utils/common/errors/CustomError";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 
 export class HostStudioUseCase implements IHostStudioUseCase {
   constructor(private _hostStudioRepository: IHostStudioRepository) {}

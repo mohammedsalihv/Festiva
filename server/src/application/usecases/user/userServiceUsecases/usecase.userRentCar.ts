@@ -5,8 +5,8 @@ import {
   IRentCarBase,
 } from "../../../../domain/entities/serviceInterface/host/interface.rentCar";
 import { IUserRentCarUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userRentCarUseCase";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class UserRentCarUseCase implements IUserRentCarUseCase {
   constructor(private _userRentCarRepository: IUserRentCarRepository) {}

@@ -1,14 +1,14 @@
 import express, { Request, Response, NextFunction } from "express";
 import { HOST_ROUTES } from "../../../infrastructure/constants/host.routes";
-import { hostVenueController } from "../../../infrastructure/DI/host/hostServiceDependencyInjections/hostVenue.DI";
-import { hostRentCarController } from "../../../infrastructure/DI/host/hostServiceDependencyInjections/hostRentCar.DI";
-import { hostCatersController } from "../../../infrastructure/DI/host/hostServiceDependencyInjections/hostCaters.DI";
-import { hostStudioController } from "../../../infrastructure/DI/host/hostServiceDependencyInjections/hostStudio.DI";
+import { hostVenueController } from "../../../infrastructure/DI/host/hostServicesDependencyInjections/hostVenue.DI";
+import { hostRentCarController } from "../../../infrastructure/DI/host/hostServicesDependencyInjections/hostRentCar.DI";
+import { hostCatersController } from "../../../infrastructure/DI/host/hostServicesDependencyInjections/hostCaters.DI";
+import { hostStudioController } from "../../../infrastructure/DI/host/hostServicesDependencyInjections/hostStudio.DI";
 import {
   authenticateToken,
   isHost,
-} from "../../../utils/common/middlewares/auth";
-import { withImageUpload } from "../../../utils/common/middlewares/withImageUpload";
+} from "../../../utils/baseUtilities/middlewares/auth";
+import { withImageUpload } from "../../../utils/baseUtilities/middlewares/withImageUpload";
 
 export interface MulterRequest extends Request {
   files?: { [fieldname: string]: Express.Multer.File[] };

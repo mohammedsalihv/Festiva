@@ -4,14 +4,14 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import logger from "./utils/common/messages/logger";
-import userAuthRoutes from "./adapters/routes/user/userAuthRoutes";
+import logger from "./utils/baseUtilities/messages/logger";
+import userAuthRoutes from "./adapters/routes/user/userAuthenticationRoutes";
 import userRoutes from "./adapters/routes/user/userRoutes";
 import userServiceRoute from "./adapters/routes/user/userServiceRoutes";
-import hostAuthRoutes from "./adapters/routes/host/hostAuthRoutes";
+import hostAuthRoutes from "./adapters/routes/host/hostAuthenticationRoutes";
 import hostAccountRoutes from "./adapters/routes/host/hostAccountRoutes";
 import hostRoutes from "./adapters/routes/host/hostRoutes";
-import adminAuthRoutes from "./adapters/routes/admin/adminauthRoutes";
+import adminAuthRoutes from "./adapters/routes/admin/adminAuthenticationRoutes";
 import adminRoutes from "./adapters/routes/admin/adminRoutes";
 dotenv.config();
 

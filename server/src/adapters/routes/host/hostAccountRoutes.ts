@@ -3,7 +3,7 @@ import { HOST_ROUTES } from "../../../infrastructure/constants/host.routes";
 import {
   authenticateToken,
   isHost,
-} from "../../../utils/common/middlewares/auth";
+} from "../../../utils/baseUtilities/middlewares/auth";
 import { hostNotificationController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostNotification.DI";
 import { hostAssetController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostAsset.DI";
 import { hostBookingController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostBookings.DI";

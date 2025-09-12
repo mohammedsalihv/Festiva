@@ -1,10 +1,10 @@
-import { IAdminBookingManagementController } from "../../../../domain/controlInterface/admin/management controller interfaces/interface.adminBookingManagementController";
-import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
+import { IAdminBookingManagementController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminManagementControllerInterfaces/interface.adminBookingManagementController";
+import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
 import { IAdminBookingManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminBookingManagementUseCase";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
 import { Response } from "express";
 
 export class AdminBookingManagementController

@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
-import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
-import { IHostAssetController } from "../../../../domain/controlInterface/common/account/interface.hostAssetController";
+import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
+import { IHostAssetController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/account/interface.hostAssetController";
 import { IHostAssetUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostAssetUseCase";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import { IHostVenueController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostVenueController";
-import { IHostRentCarController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostRentCarController";
-import { IHostCatersController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostCatersController";
-import { IHostStudioController } from "../../../../domain/controlInterface/host/service controller interfaces/interface.hostStudioController";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import { IHostVenueController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostServicesControllerInterfaces/interface.hostVenueController";
+import { IHostRentCarController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostServicesControllerInterfaces/interface.hostRentCarController";
+import { IHostCatersController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostServicesControllerInterfaces/interface.hostCatersController";
+import { IHostStudioController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostServicesControllerInterfaces/interface.hostStudioController";
 
 export class HostAssetController implements IHostAssetController {
   constructor(

@@ -1,5 +1,5 @@
-import { IUserModel } from "../../../domain/entities/modelInterface/user/interface.user";
-import { googleLoginUserDTO } from "../../../types/DTO/user/dto.hostGoogleLogin";
+import { IUserModel } from "../../entities/databaseModelInterfaces/userModelInterfaces/interface.user";
+import { googleLoginUserDTO } from "../../../types/DTO's/userDTO's/dto.hostGoogleLogin";
 
 export class userGoogleLoginFactory {
   static createNewUser(input: googleLoginUserDTO): Omit<IUserModel, "id"> {

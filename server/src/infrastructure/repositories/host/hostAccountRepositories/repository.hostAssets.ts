@@ -2,9 +2,9 @@ import { IHostAssetRepository } from "../../../../domain/entities/repositoryInte
 import {
   AssetRequestDTO,
   myAssetsDTO,
-} from "../../../../types/DTO/host/dto.assetRequest";
-import { mapAssetsToRequestDTOs } from "../../../../utils/mapping/host/mapHostAssetsToRequests";
-import { mapAssetsToMyAssetsDTOs } from "../../../../utils/mapping/host/mappingTomyAssets";
+} from "../../../../types/DTO's/hostDTO's/hostAccountDTO's/dto.assetRequest";
+import { mapAssetsToRequestDTOs } from "../../../../utils/mapping/hostMappings/mapHostAssetsToRequests";
+import { mapAssetsToMyAssetsDTOs } from "../../../../utils/mapping/hostMappings/mappingTomyAssets";
 import { RentCarModel } from "../../../../domain/models/host/hostServiceModels/rentCarModel";
 import { StudioModel } from "../../../../domain/models/host/hostServiceModels/studioModel";
 import { VenueModel } from "../../../../domain/models/host/hostServiceModels/venueModel";

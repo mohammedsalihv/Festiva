@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
-import { IAdminHostManagementController } from "../../../../domain/controlInterface/admin/management controller interfaces/interface.adminHostManagementController";
+import { IAdminHostManagementController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminManagementControllerInterfaces/interface.adminHostManagementController";
 import { IAdminHostManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminHostManagementUseCase";
-import logger from "../../../../utils/common/messages/logger";
-import { AuthRequest } from "../../../../domain/controlInterface/common/authentication/authType";
+import logger from "../../../../utils/baseUtilities/messages/logger";
+import { AuthRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authType";
 import { JwtPayload } from "jsonwebtoken";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import { uploadProfileImage } from "../../../../utils/common/cloudinary/uploadProfileImage";
-import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import { uploadProfileImage } from "../../../../utils/baseUtilities/cloudinary/uploadProfileImage";
+import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
 
 
 interface MulterRequest extends Request {

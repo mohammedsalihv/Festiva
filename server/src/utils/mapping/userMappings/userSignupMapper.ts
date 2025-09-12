@@ -1,0 +1,19 @@
+import { userDetailsDTO } from "../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
+import { IUserModel } from "../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
+
+export class userSignupMapper {
+  static toDTO(user: IUserModel): userDetailsDTO["user"] {
+    return {
+      id: user._id!,
+      firstname: user.firstname ?? "",
+      lastname: user.lastname ?? "",
+      email: user.email ?? "",
+      phone: user.phone ?? "",
+      role: user.role ?? "user",
+      profilePic: user.profilePic ?? "",
+      isBlocked: user.isBlocked ?? false,
+      isActive: user.isActive ?? true,
+      timestamp: user.timestamp ? new Date(user.timestamp) : undefined,
+    };
+  }
+}

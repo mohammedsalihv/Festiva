@@ -1,11 +1,11 @@
 import { Response } from "express";
-import { IHostDashboardController } from "../../../../domain/controlInterface/common/account/interface.hostDashboardController";
+import { IHostDashboardController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/account/interface.hostDashboardController";
 import { IHostDashboardUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostDashboardUseCase";
-import { authenticationRequest } from "../../../../domain/controlInterface/common/authentication/authRequest";
+import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class HostDashboardController implements IHostDashboardController {
   constructor(private _hostDashboardUsecase: IHostDashboardUseCase) {}

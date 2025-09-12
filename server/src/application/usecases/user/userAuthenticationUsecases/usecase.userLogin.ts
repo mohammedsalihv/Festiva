@@ -2,9 +2,9 @@ import { IUserLoginRepository } from "../../../../domain/entities/repositoryInte
 import { IUserLoginUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userLoginUseCase";
 import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
 import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
-import { userDetailsDTO } from "../../../../types/DTO/user/dto.user";
+import { userDetailsDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 import { IUserLoginValidator } from "../../../../domain/validatorInterface/user/interface.userLoginValidator";
-import { userLoginMapper } from "../../../../utils/mapping/user/userLoginMapper";
+import { userLoginMapper } from "../../../../utils/mapping/userMappings/userLoginMapper";
 
 export class UserLoginUseCase implements IUserLoginUseCase {
   constructor(

@@ -1,17 +1,17 @@
 import express, { Request, Response } from "express";
 import { USER_ROUTES } from "../../../infrastructure/constants/user.routes";
-import logger from "../../../utils/common/messages/logger";
+import logger from "../../../utils/baseUtilities/messages/logger";
 import { userProfileController } from "../../../infrastructure/DI/user/userAccountDependencyInjections/userAccount.DI";
-import { singleImageUpload } from "../../../utils/common/middlewares/multer";
-import { authenticateToken } from "../../../utils/common/middlewares/auth";
-import { userVenueController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userVenue.DI";
-import { userRentCarController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userRentCar.DI";
-import { userStudioController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userStudio.DI";
-import { userCatersController } from "../../../infrastructure/DI/user/userServiceDependencyInjections/userCaters.DI";
+import { singleImageUpload } from "../../../utils/baseUtilities/middlewares/multer";
+import { authenticateToken } from "../../../utils/baseUtilities/middlewares/auth";
+import { userVenueController } from "../../../infrastructure/DI/user/userServicesDependencyInjections/userVenue.DI";
+import { userRentCarController } from "../../../infrastructure/DI/user/userServicesDependencyInjections/userRentCar.DI";
+import { userStudioController } from "../../../infrastructure/DI/user/userServicesDependencyInjections/userStudio.DI";
+import { userCatersController } from "../../../infrastructure/DI/user/userServicesDependencyInjections/userCaters.DI";
 import { userController } from "../../../infrastructure/DI/user/userAuthenticationDependencyInjections/userAuth.DI";
-import { paymentController } from "../../../infrastructure/DI/base/paymentDependencyInjections/payment.DI";
-import { bookingController } from "../../../infrastructure/DI/base/bookingDependencyInjections/booking.DI";
-import { reviewController } from "../../../infrastructure/DI/base/reviewDependencyInjections/review.DI";
+import { paymentController } from "../../../infrastructure/DI/base/basePaymentDependencyInjections/payment.DI";
+import { bookingController } from "../../../infrastructure/DI/base/baseBookingDependencyInjections/booking.DI";
+import { reviewController } from "../../../infrastructure/DI/base/baseReviewDependencyInjections/review.DI";
 import { userBookingsController } from "../../../infrastructure/DI/user/userAccountDependencyInjections/userBookings.DI";
 
 

@@ -1,12 +1,12 @@
-import CustomError from "../../../../utils/common/errors/CustomError";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import { mailValidation } from "../../../../types/DTO/host/dto.host";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import { mailValidation } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 import { IHostUseCase } from "../../../../domain/usecaseInterface/host/baseUsecaseInterfaces/interface.hostUseCase";
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
-import { IHostModel } from "../../../../domain/entities/modelInterface/host/interface.host";
+import { IHostModel } from "../../../../domain/entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
 
 export class HostUseCase implements IHostUseCase {
   constructor(private _hostRepository: IHostRepository) {}

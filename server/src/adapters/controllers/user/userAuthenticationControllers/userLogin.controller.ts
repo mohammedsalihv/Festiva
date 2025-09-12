@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
-import { IUserLoginController } from "../../../../domain/controlInterface/user/userAuthenticationControllerInterfaces/interface.userLoginController";
+import { IUserLoginController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userAuthenticationControllerInterfaces/interface.userLoginController";
 import { IUserLoginUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userLoginUseCase";
-import logger from "../../../../utils/common/messages/logger";
-import CustomError from "../../../../utils/common/errors/CustomError";
+import logger from "../../../../utils/baseUtilities/messages/logger";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { userLoginSanitizer } from "../../../../utils/sanitizers/user/userLoginSanitizer";
 import {
   statusCodes,
   statusMessages,
-} from "../../../../utils/common/messages/constantResponses";
-import { IUserModel } from "../../../../domain/entities/modelInterface/user/interface.user";
+} from "../../../../utils/baseUtilities/messages/constantResponses";
+import { IUserModel } from "../../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
 
 export class UserLoginController implements IUserLoginController {
   constructor(private _userLoginUseCase: IUserLoginUseCase) {}

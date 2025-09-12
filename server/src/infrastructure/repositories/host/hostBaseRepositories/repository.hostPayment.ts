@@ -1,6 +1,6 @@
 import { IHostPaymentRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostPaymentRepository";
 import { Types } from "mongoose";
-import { IPayment } from "../../../../domain/entities/modelInterface/base/interface.payment";
+import { IPayment } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.payment";
 import paymentModel from "../../../../domain/models/base/payment/paymentModel";
 
 export class HostPaymentRepository implements IHostPaymentRepository {

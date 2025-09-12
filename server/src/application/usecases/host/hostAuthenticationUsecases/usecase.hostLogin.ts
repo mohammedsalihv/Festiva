@@ -2,9 +2,9 @@ import { IHostLoginRepository } from "../../../../domain/entities/repositoryInte
 import { IHostLoginUseCase } from "../../../../domain/usecaseInterface/host/authenticationUsecaseInterfaces/interface.hostLoginUseCase";
 import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
 import { IHostLoginUsecaseValidator } from "../../../../domain/validatorInterface/host/interface.hostLoginValidator";
-import { HostLoginMapper } from "../../../../utils/mapping/host/hostLoginMapper";
+import { HostLoginMapper } from "../../../../utils/mapping/hostMappings/hostLoginMapper";
 import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
-import { HostDetailsDTO } from "../../../../types/DTO/host/dto.host";
+import { HostDetailsDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 
 export class HostLoginUseCase implements IHostLoginUseCase {
   constructor(

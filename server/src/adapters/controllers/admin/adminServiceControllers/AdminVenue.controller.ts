@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { IAdminVenueController } from "../../../../domain/controlInterface/admin/service controller interfaces/interface.adminVenueController";
+import { IAdminVenueController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminVenueController";
 import { IAdminVenueUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminVenueUseCase";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 
 export class AdminVenueController implements IAdminVenueController {

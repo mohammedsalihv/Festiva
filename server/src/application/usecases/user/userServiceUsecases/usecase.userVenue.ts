@@ -5,8 +5,8 @@ import {
   IVenueBase,
 } from "../../../../domain/entities/serviceInterface/host/interface.venue";
 import { IUserVenueUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userVenueUseCase";
-import CustomError from "../../../../utils/common/errors/CustomError";
-import { statusCodes } from "../../../../utils/common/messages/constantResponses";
+import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
+import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class UserVenueUseCase implements IUserVenueUseCase {
   constructor(private _userVenueRepository: IUserVenueRepository) {}

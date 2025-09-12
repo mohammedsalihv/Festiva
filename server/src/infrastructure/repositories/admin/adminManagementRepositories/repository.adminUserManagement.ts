@@ -1,13 +1,13 @@
-import { IUserModel } from "../../../../domain/entities/modelInterface/user/interface.user";
+import { IUserModel } from "../../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
 import { IAdminUserManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminUserManagementRepository";
 import { UserModel } from "../../../../domain/models/user/userAuthenticationModels/userModel";
 import { pickDefinedFields } from "../../../../utils/validations/user/pickDefinedFields";
-import { EditUserPayload } from "../../../../domain/adminInterface/interface.editUser";
+import { EditUserPayload } from "../../../../domain/baseInterfaces/adminBaseInterfaces/interface.editUser";
 import {
   responseUserDTO,
   responseAllUsersDTO,
-} from "../../../../types/DTO/user/dto.user";
-import { toResponseUserDTO } from "../../../../types/DTO/user/dto.user";
+} from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
+import { toResponseUserDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 
 export class AdminUserManagementRepository
   implements IAdminUserManagementRepository
