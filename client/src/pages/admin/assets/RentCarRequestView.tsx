@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/CustomToastContainer";
 
 const RentCarRequestView: React.FC<rentCarRequestProps> = ({ data }) => {
   const {

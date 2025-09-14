@@ -43,15 +43,16 @@ const ServicesPage = () => {
         case "caters": {
           const caters = await getCaters();
           setAssets(caters);
-          dispatch(setStudios(caters));
+          dispatch(setCaters(caters));
           break;
         }
         case "studio": {
           const studio = await getStudios();
           setAssets(studio);
-          dispatch(setCaters(studio));
+          dispatch(setStudios(studio));
           break;
         }
+
         default:
           setAssets([]);
           setError("Invalid asset type.");

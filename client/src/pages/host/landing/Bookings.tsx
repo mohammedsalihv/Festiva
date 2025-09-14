@@ -11,7 +11,7 @@ import { VscClose } from "react-icons/vsc";
 import { IoIosRefresh } from "react-icons/io";
 import { MdMore } from "react-icons/md";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/CustomToastContainer";
 import { toast } from "react-toastify";
 
 const Bookings = () => {

@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { logoutAdmin } from "@/redux/Slice/admin/adminSlice";
 import { toast } from "react-toastify";
-import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/CustomToastContainer";
 import { clearAllAssets } from "@/redux/Slice/admin/assetManagementSlice";
 import { clearAllHosts } from "@/redux/Slice/admin/hostManagementSlice";
 import { clearAllUsers } from "@/redux/Slice/admin/userManagementSlice";

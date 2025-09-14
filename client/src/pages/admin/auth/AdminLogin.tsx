@@ -10,7 +10,7 @@ import {
 } from "@/utils/validations/admin/auth/loginValidation";
 import { setAdminDetails } from "@/redux/Slice/admin/adminSlice";
 import { AxiosError } from "axios";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/CustomToastContainer";
 import { toast } from "react-toastify";
 
 interface ErrorState {

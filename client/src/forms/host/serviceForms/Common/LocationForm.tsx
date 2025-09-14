@@ -10,7 +10,7 @@ import {
 } from "@/utils/Types/host/services/common/locationFormTypes";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import CustomToastContainer from "../../../../reusable-components/messages/ToastContainer";
+import CustomToastContainer from "../../../../reusable-components/messages/CustomToastContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocationDetails } from "@/redux/Slice/host/common/locationSlice";
 import { handleFinalSubmit } from "../../submitForms/FinalSubmit";

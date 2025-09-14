@@ -8,7 +8,7 @@ const userVenueSlice = createSlice({
   initialState: initialUserVenueStates,
   reducers: {
     setVenues: (state, action: PayloadAction<IVenueBase[]>) => {
-      return action.payload;
+      state.splice(0, state.length, ...action.payload);
     },
 
     resetVenues: () => {

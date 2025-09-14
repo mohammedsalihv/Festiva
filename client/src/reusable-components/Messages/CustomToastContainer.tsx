@@ -1,9 +1,9 @@
-// CustomToastContainer.tsx
+
 import { ToastContainer, ToastContainerProps } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 interface CustomToastContainerProps extends ToastContainerProps {
-  style?: React.CSSProperties; // Make style optional
+  style?: React.CSSProperties;
 }
 
 const CustomToastContainer: React.FC<CustomToastContainerProps> = ({

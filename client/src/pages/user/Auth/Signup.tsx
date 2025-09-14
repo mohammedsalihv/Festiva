@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import Otp from "@/components/Otp";
-import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/CustomToastContainer";
 
 interface ErrorState {
   firstname?: string;

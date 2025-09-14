@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import ServiceCardFilter from "@/components/ServiceCardFilter";
 import ServiceCardSort from "@/components/ServiceCardSort";
 import Pagination from "@/components/Pagination";
@@ -20,7 +20,6 @@ import { filterAsset, sortAssets } from "@/api/user/base/assetServices";
 import { Button } from "@/components/Button";
 import { MdLocationPin } from "react-icons/md";
 import {
-  Asset,
   filterParams,
   sortParams,
 } from "@/utils/Types/user/filterSortTypes";
@@ -34,7 +33,23 @@ import useDebounce from "@/utils/hooks/user/debounce";
 import useMapboxGeocoder from "@/utils/hooks/user/useMapboxGeocoder";
 import useMapboxMap from "@/utils/hooks/user/useMapboxMap";
 
-export default function ServicesCard() {
+
+type ServicesCardProps = {
+  assets: any[];
+  loading: boolean;
+  error: string | null;
+  onRetry: () => Promise<void>;
+};
+
+
+const ServicesCard : React.FC<ServicesCardProps> =  ({
+  assets,
+  loading,
+  error,
+  onRetry,
+}) => {
+
+
   const { type } = useParams();
   const normalizedType = type?.toLowerCase() || "";
   const navigate = useNavigate();
@@ -44,9 +59,6 @@ export default function ServicesCard() {
   const [selectedTab, setSelectedTab] = useState<string>(normalizedType);
   const [searchTerm, setSearchTerm] = useState("");
   const [sorts, setSorts] = useState<sortParams>({});
-  const [assets, setAssets] = useState<Asset[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const fetchRef = useRef<HTMLDivElement>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const geocoderContainerRef = useRef<HTMLDivElement>(null);
@@ -116,43 +128,26 @@ export default function ServicesCard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const fetchAssets = useCallback(
-    async (
-      type: string,
-      filters: filterParams,
-      sorts: sortParams,
-      page = 1
-    ) => {
-      setLoading(true);
-      try {
-        const params: Record<string, any> = {
-          ...filters,
-          ...sorts,
-          page,
-          limit: pageSize,
-        };
 
-        if (searchTerm.trim()) {
-          params.keyword = searchTerm.trim();
-        }
 
-        const response =
-          Object.keys(sorts).length > 0
-            ? await sortAssets(type, params)
-            : await filterAsset(type, params);
-        setAssets(response.data);
-        setTotalPages(response.totalPages);
-        setCurrentPage(page);
-        setError(null);
-      } catch (err) {
-        console.error("Fetch error:", err);
-        setError("Something went wrong while fetching assets.");
-      } finally {
-        setLoading(false);
-      }
-    },
-    [searchTerm, pageSize]
-  );
+const fetchAssets = useCallback(
+  async (type: string, filters: filterParams, sorts: sortParams, page = 1) => {
+    try {
+      const params: Record<string, any> = { ...filters, ...sorts, page, limit: pageSize };
+      if (searchTerm.trim()) params.keyword = searchTerm.trim();
+
+      const response =
+        Object.keys(sorts).length > 0
+          ? await sortAssets(type, params)
+          : await filterAsset(type, params);
+      setTotalPages(response.totalPages);
+      setCurrentPage(page);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
+  },
+  [searchTerm, pageSize, sorts]
+);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
@@ -214,12 +209,19 @@ export default function ServicesCard() {
   });
 
   if (error) {
-    return (
-      <div>
-        <p className="px-10 py-10">Failed to fetch</p>
-      </div>
-    );
-  }
+  return (
+    <div className="px-10 py-10 text-center">
+      <p className="mb-4 text-red-500">Failed to fetch: {error}</p>
+      <button
+        onClick={onRetry}
+        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        Retry
+      </button>
+    </div>
+  );
+}
+
 
   const handleResetFilters = () => {
     dispatch(clearFilters());
@@ -554,3 +556,6 @@ export default function ServicesCard() {
     </div>
   );
 }
+
+
+export default ServicesCard;

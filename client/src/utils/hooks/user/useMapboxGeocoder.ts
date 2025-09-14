@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { useDispatch } from "react-redux";
@@ -24,9 +23,8 @@ export default function useMapboxGeocoder({
       accessToken: import.meta.env.VITE_MAPBOX_API_KEY,
       types: "place,locality,neighborhood,address",
       placeholder: "Search location...",
-    });
-
-    containerRef.current.appendChild(geocoder.onAdd());
+      container: containerRef.current,
+    } as any);
 
     geocoder.on("result", (e) => {
       setGeocoderResult({

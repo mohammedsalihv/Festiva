@@ -72,9 +72,8 @@ export const AssetStatus: React.FC = () => {
   const [showSort, setShowSort] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [serviceType, setServiceType] = useState("");
-
-  const sortRef = useRef(null);
-  const filterRef = useRef(null);
+  const sortRef = useRef<HTMLDivElement | null>(null);
+  const filterRef = useRef<HTMLDivElement | null>(null);
 
   const fetchRequests = async (page = 1) => {
     try {
@@ -102,10 +101,9 @@ export const AssetStatus: React.FC = () => {
     setCurrentPage(1);
   }, [activeTab]);
 
-useEffect(() => {
-  fetchRequests(currentPage);
-}, [currentPage, activeTab, search, sortBy, sortOrder, serviceType]);
-
+  useEffect(() => {
+    fetchRequests(currentPage);
+  }, [currentPage, activeTab, search, sortBy, sortOrder, serviceType]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

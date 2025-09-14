@@ -1,7 +1,7 @@
 import { Images } from "@/assets";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import ToastContainer from "@/reusable-components/messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/CustomToastContainer";
 import LogoText from "@/components/LogoText";
 
 const Footer = () => {
@@ -123,7 +123,7 @@ const Footer = () => {
                 Submit
               </button>
             </form>
-            <ToastContainer />
+            <CustomToastContainer />
           </div>
         </div>
         <div className="mt-12 border-t border-gray-700 pt-6 flex flex-col sm:flex-row items-center justify-between gap-8 text-sm">

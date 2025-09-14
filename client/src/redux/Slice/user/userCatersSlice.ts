@@ -8,7 +8,7 @@ const userCatersSlice = createSlice({
   initialState: initialUserCatersStates,
   reducers: {
     setCaters: (state, action: PayloadAction<ICatersBase[]>) => {
-      return action.payload;
+      state.splice(0, state.length, ...action.payload);
     },
 
     resetCaters: () => {

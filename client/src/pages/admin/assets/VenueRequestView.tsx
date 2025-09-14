@@ -17,7 +17,7 @@ import {
 } from "@/api/admin/assetManagement.services";
 import { toast } from "react-toastify";
 import { TbPoint } from "react-icons/tb";
-import CustomToastContainer from "@/reusable-components/Messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/CustomToastContainer";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
 import { useState } from "react";
 

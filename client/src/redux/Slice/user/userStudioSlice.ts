@@ -8,7 +8,7 @@ const userStudioSlice = createSlice({
   initialState: initialUserStudioStates,
   reducers: {
     setStudios: (state, action: PayloadAction<IStudioBase[]>) => {
-      return action.payload;
+      state.splice(0, state.length, ...action.payload);
     },
 
     resetStudios: () => {

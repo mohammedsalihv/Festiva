@@ -1,7 +1,7 @@
 import { useAppDispatch } from "@/redux/hooks";
 import { useState } from "react";
 import { Checkbox } from "@/components/Checkbox";
-import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/CustomToastContainer";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { studioServiceFeaturesOptions } from "@/utils/Options/host/studio/studioFeatures";

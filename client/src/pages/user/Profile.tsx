@@ -16,7 +16,7 @@ import {
   verifyOtp,
 } from "@/api/user/auth/userAuthService";
 import ConfirmDialog from "@/reusable-components/user/Landing/ConfirmDialog";
-import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/CustomToastContainer";
 import { AxiosError } from "axios";
 import Otp from "@/components/Otp";
 import { BiSolidEditAlt } from "react-icons/bi";
@@ -38,9 +38,6 @@ const Profile: React.FC = () => {
   const [showOtp, setShowOtp] = useState(false);
   const [otpError, setOtpError] = useState("");
   const firstInputRef = useRef<HTMLInputElement>(null);
-  // const [profileImage, setProfileImage] = useState<string>(
-  //     Images.default_profile
-  //   );
   const [editProfileForm, setEditProfileForm] = useState({
     firstname: profile?.firstname || "",
     lastname: profile?.lastname || "",
@@ -55,30 +52,6 @@ const Profile: React.FC = () => {
   const [errors, setErrors] = useState<changePasswordErrorState>({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  //  useEffect(() => {
-  //      const fetchProfileImage = async () => {
-  //        if (!profile?.id) return;
-
-  //        try {
-  //          const blob = await getProfileImage(profile.id);
-
-  //          const objectUrl = URL.createObjectURL(blob);
-  //          setProfileImage(objectUrl);
-  //        } catch (error) {
-  //          console.log(error);
-  //          setProfileImage(Images.default_profile);
-  //        }
-  //      };
-
-  //      fetchProfileImage();
-
-  //      return () => {
-  //        if (profileImage?.startsWith("blob:")) {
-  //          URL.revokeObjectURL(profileImage);
-  //        }
-  //      };
-  //    }, [profile]);
 
   const handleProfileDelete = async () => {
     await deleteProfile();
@@ -302,11 +275,6 @@ const Profile: React.FC = () => {
 
   const tabs = [
     "Profile Information",
-    "My bookings",
-    "Saved",
-    "Service ticket",
-    "Faq",
-    "Mylist",
     "Logout",
   ];
 

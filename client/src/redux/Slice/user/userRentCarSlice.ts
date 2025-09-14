@@ -8,7 +8,7 @@ const userRentCarSlice = createSlice({
   initialState: initialUserRentCarStates,
   reducers: {
     setRentCars: (state, action: PayloadAction<IRentCarBase[]>) => {
-      return action.payload;
+      state.splice(0, state.length, ...action.payload);
     },
 
     resetRentCars: () => {

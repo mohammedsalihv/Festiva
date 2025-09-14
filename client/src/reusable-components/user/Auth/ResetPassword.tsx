@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/Card";
 import { Input } from "@/components/Input";
 import { Button } from "@/components/Button";
-import CustomToastContainer from "@/reusable-components/messages/ToastContainer";
+import CustomToastContainer from "@/reusable-components/messages/CustomToastContainer";
 import { toast } from "react-toastify";
 import {
   resetPasswordErrorState,
