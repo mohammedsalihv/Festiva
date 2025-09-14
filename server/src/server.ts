@@ -1,6 +1,6 @@
 import http from "http";
 import app from "./app";
-import connectDB from "infrastructure/database/db";
+import connectDatabase from "./config/database/mongodb";
 import dotenv from "dotenv";
 import logger from "./utils/baseUtilities/messages/logger";
 import { initSocket } from "./config/socket";
@@ -8,8 +8,7 @@ import { initSocket } from "./config/socket";
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
-
-connectDB();
+connectDatabase();
 
 const server = http.createServer(app);
 

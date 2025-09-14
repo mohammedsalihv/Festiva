@@ -3,6 +3,7 @@ import { PaymentRepository } from "../../../repositories/base/basePaymentsReposi
 import { PaymentUseCase } from "../../../../application/usecases/base/basePaymentUsecases/usecase.payment";
 import { PaymentController } from "../../../../adapters/controllers/base/basePaymentControllers/payment.controller";
 
+
 const razorpayPaymentRepository = new RazorpayPaymentRepository();
 const paymentRepository = new PaymentRepository()
 const paymentUsecase = new PaymentUseCase(razorpayPaymentRepository,paymentRepository);
