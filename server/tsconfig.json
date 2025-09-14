@@ -10,6 +10,10 @@
     "strict": true,
     "noEmitOnError": true,
     "resolveJsonModule": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "src",
+    "paths": {
+      "*": ["*"]
+    }
   }
 }

@@ -63,7 +63,6 @@ userAuthenticationRoutes.post(
 
 userAuthenticationRoutes.post(
   USER_ROUTES.Authentiation.passwordChange,
-  authenticateToken,
   userProfileController.passwordModify.bind(userProfileController)
 );
 

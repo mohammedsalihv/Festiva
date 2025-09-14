@@ -8,18 +8,21 @@ import logger from "../messages/logger";
 import { statusCodes, statusMessages } from "../messages/constantResponses";
 import { authenticationRequest } from "../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
 
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
-
-if (!ACCESS_TOKEN_SECRET) {
-  logger.error(statusMessages.noAccessToken);
-  throw new Error(statusMessages.noAccessToken);
-}
-
 export const authenticateToken = (
   req: authenticationRequest,
   res: Response,
   next: NextFunction
 ): void => {
+  const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET as string;
+
+  if (!ACCESS_TOKEN_SECRET) {
+    logger.error(statusMessages.noAccessToken);
+    res
+      .status(500)
+      .json({ message: statusMessages.noAccessToken, status: 500 });
+    return;
+  }
+
   const authHeader = req.headers.authorization;
   const token =
     req.cookies?.accesstoken ||
@@ -47,6 +50,7 @@ export const authenticateToken = (
         message: statusMessages.invalidToken,
         status: statusCodes.invalidToken,
       });
+    return;
   }
 };
 
