@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { IHostGoogleSignupController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostAuthenticationControllerInterfaces/interface.hostGoogleSignupController";
-import { IHostGoogleSignupUseCase } from "../../../../domain/usecaseInterface/host/authenticationUsecaseInterfaces/interface.hostGoogleSignupUseCase";
+import { IHostGoogleSignupUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAuthenticationUsecaseInterfaces/interface.hostGoogleSignupUseCase";
 import { googleSignupHostDTO } from "../../../../types/DTO's/userDTO's/userAuthenticationDTO's/dto.hostGoogleSignup";
 import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/baseUtilities/messages/constantResponses";
 import logger from "../../../../utils/baseUtilities/messages/logger";
-import { IHostGoogleSignupValidator } from "../../../../domain/validatorInterface/host/interface.hostGoogleSignupValidator";
+import { IHostGoogleSignupValidator } from "../../../../domain/validatorInterfaces/hostValidatorInterfaces/interface.hostGoogleSignupValidator";
 
 export class HostGoogleSignupController implements IHostGoogleSignupController {
   constructor(

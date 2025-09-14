@@ -1,9 +1,6 @@
-import {
-  responseUserDTO,
-  responseAllUsersDTO,
-} from "../../../../../types/DTO/user/dto.user";
-import { EditUserPayload } from "../../../../adminInterface/interface.editUser";
-import { IUserModel } from "../../../modelInterface/user/interface.user";
+import { responseAllUsersDTO , responseUserDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
+import { EditUserPayload } from "../../../baseInterfaces/adminBaseInterfaces/interface.editUser";
+import { IUserModel } from "../../../entities/databaseModelInterfaces/userModelInterfaces/interface.user";
 
 export interface IAdminUserManagementRepository {
   findAllUsers(page: number, limit: number): Promise<responseAllUsersDTO>;

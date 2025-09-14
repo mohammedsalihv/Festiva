@@ -1,6 +1,6 @@
 import { IUserModel } from "../../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
-import { IUserSignupRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userSignupRepository";
-import { UserModel } from "../../../../domain/models/user/userAuthenticationModels/userModel";
+import { IUserSignupRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAuthenticationRepositoryInterfaces/interface.userSignupRepository";
+import { UserModel } from "../../../../domain/entities/databaseModels/user/userAuthenticationModels/userModel";
 import { responseUserDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 
 export class UserSignupRepository implements IUserSignupRepository {

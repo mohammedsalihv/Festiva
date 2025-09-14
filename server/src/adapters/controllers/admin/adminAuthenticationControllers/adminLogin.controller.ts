@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IAdminLoginController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminAuthenticationControllerInterfaces/interface.adminLoginController";
-import { IAdminLoginUseCase } from "../../../../domain/usecaseInterface/admin/authenticationUsecaseInterfaces/interface.adminLoginUseCase";
+import { IAdminLoginUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminAuthenticationUsecaseInterfaces/interface.adminLoginUseCase";
 import { adminLoginPresenter } from "../../../presenters/admin/adminLoginPresenter";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import logger from "../../../../utils/baseUtilities/messages/logger";

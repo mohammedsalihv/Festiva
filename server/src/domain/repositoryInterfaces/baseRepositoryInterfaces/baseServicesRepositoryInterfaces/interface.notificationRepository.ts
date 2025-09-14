@@ -1,5 +1,5 @@
 import { CreateAssetNotificationDTO } from "../../../../types/DTO's/baseDTO's/notification";
-import { INotification } from "../../serviceInterface/base/interface.notification";
+import { INotification } from "../../../baseInterfaces/baseServicesInterfaces/interface.notification";
 
 export interface INotificationRepository {
   create(data: CreateAssetNotificationDTO): Promise<void>;

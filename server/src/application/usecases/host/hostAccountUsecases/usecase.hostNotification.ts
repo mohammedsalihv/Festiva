@@ -1,5 +1,5 @@
-import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostNotificationUseCase";
-import { IHostNotificationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostNotificationRepositoy";
+import { IHostNotificationUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAccountUsecaseInterfaces/interface.hostNotificationUseCase";
+import { IHostNotificationRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostAccountRepositoryInterfaces/interface.hostNotificationRepositoy";
 import { CreateAssetNotificationDTO } from "../../../../types/DTO's/baseDTO's/notification";
 
 export class HostNotificationUseCase implements IHostNotificationUseCase {

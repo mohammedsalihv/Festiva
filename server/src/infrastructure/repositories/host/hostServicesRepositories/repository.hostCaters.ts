@@ -1,6 +1,6 @@
-import { ICaters } from "../../../../domain/entities/serviceInterface/host/interface.caters";
-import { IHostCatersRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostCatersRepository";
-import { CatersModel } from "../../../../domain/models/host/hostServiceModels/catersModel";
+import { ICaters } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.caters";
+import { IHostCatersRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostServicesRepositoryInterfaces/interface.hostCatersRepository";
+import { CatersModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/catersModel";
 
 export class HostCatersRepository implements IHostCatersRepository {
   async addCaters(caters: ICaters): Promise<ICaters> {

@@ -1,6 +1,6 @@
-import { ICaters } from "../../../../domain/entities/serviceInterface/host/interface.caters";
-import { IAdminCatersRepository } from "../../../../domain/entities/repositoryInterface/admin/services/interface.adminCatersRepository";
-import { CatersModel } from "../../../../domain/models/host/hostServiceModels/catersModel";
+import { ICaters } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.caters";
+import { IAdminCatersRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminServicesRepositoryInterfaces/interface.adminCatersRepository";
+import { CatersModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/catersModel";
 
 export class AdminCatersRepository implements IAdminCatersRepository {
   catersDetails(catersId: string): Promise<ICaters | null> {

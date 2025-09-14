@@ -15,10 +15,10 @@ import { IPayment } from "../../../domain/entities/databaseModelInterfaces/baseM
 import { IReview } from "../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.review";
 import { IUserModel } from "../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
 import { IHostModel } from "../../../domain/entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
-import { IVenue } from "../../../domain/entities/serviceInterface/host/interface.venue";
-import { IRentCar } from "../../../domain/entities/serviceInterface/host/interface.rentCar";
-import { ICaters } from "../../../domain/entities/serviceInterface/host/interface.caters";
-import { IStudio } from "../../../domain/entities/serviceInterface/host/interface.studio";
+import { IVenue } from "../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.venue";
+import { IRentCar } from "../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.rentCar";
+import { ICaters } from "../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.caters";
+import { IStudio } from "../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.studio";
 
 const calculateHikePercentage = (current: number, previous: number): string => {
   if (previous === 0) return current > 0 ? "100%" : "0%";

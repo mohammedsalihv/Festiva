@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { INotification } from "../../../entities/serviceInterface/base/interface.notification";
+import { INotification } from "../../../../baseInterfaces/baseServicesInterfaces/interface.notification";
 
 const notificationSchema = new Schema<INotification>(
   {

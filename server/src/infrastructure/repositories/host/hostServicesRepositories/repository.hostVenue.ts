@@ -1,6 +1,6 @@
-import { IVenue } from "../../../../domain/entities/serviceInterface/host/interface.venue";
-import { IHostVenueRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostVenueRepository";
-import { VenueModel } from "../../../../domain/models/host/hostServiceModels/venueModel";
+import { IVenue } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.venue";
+import { IHostVenueRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostServicesRepositoryInterfaces/interface.hostVenueRepository";
+import { VenueModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/venueModel";
 import { Types } from "mongoose";
 
 export class HostVenueRepository implements IHostVenueRepository {

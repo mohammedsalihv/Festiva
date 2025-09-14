@@ -1,9 +1,9 @@
 import { IPayment } from "../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.payment";
 import { IBooking } from "../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.booking";
-import { ICaters } from "../../../domain/entities/serviceInterface/host/interface.caters";
-import { IVenue } from "../../../domain/entities/serviceInterface/host/interface.venue";
-import { IStudio } from "../../../domain/entities/serviceInterface/host/interface.studio";
-import { IRentCar } from "../../../domain/entities/serviceInterface/host/interface.rentCar";
+import { ICaters } from "../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.caters";
+import { IVenue } from "../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.venue";
+import { IStudio } from "../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.studio";
+import { IRentCar } from "../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.rentCar";
 import {
   RevenueAndPaymentsResponse,
   AssetOverviewItem,

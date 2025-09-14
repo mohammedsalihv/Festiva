@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { IVenue } from "../../../../domain/entities/serviceInterface/host/interface.venue";
-import { ILocationUseCase } from "../../../../domain/usecaseInterface/host/baseUsecaseInterfaces/interface.locationUsecase";
+import { IVenue } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.venue";
+import { ILocationUseCase } from "../../../../domain/usecaseInterfaces/baseUsecaseInterfaces/baseServicesUsecaseInterfaces/interface.locationUsecase";
 import { IHostVenueController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostServicesControllerInterfaces/interface.hostVenueController";
-import { IHostVenueUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.venueUseCase";
+import { IHostVenueUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostServicesUsecaseInterfaces/interface.venueUseCase";
 import ErrorHandler from "../../../../utils/baseUtilities/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";

@@ -1,11 +1,8 @@
-import { IUserStudioRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userStudioRepository";
-import {
-  IStudio,
-  IStudioBase,
-} from "../../../../domain/entities/serviceInterface/host/interface.studio";
-import { StudioModel } from "../../../../domain/models/host/hostServiceModels/studioModel";
-import { LocationModel } from "../../../../domain/models/host/hostServiceModels/locationModel";
-import { mapStudioToBase } from "../../../../domain/entities/serviceInterface/host/interface.studio";
+import { IUserStudioRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userServicesRepositoryInterfaces/interface.userStudioRepository";
+import { IStudio , IStudioBase } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.studio";
+import { StudioModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/studioModel";
+import { LocationModel } from "../../../../domain/entities/databaseModels/baseModels/baseServicesModels/locationModel";
+import { mapStudioToBase } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.studio";
 
 export class UserStudioRepository implements IUserStudioRepository {
   async findAllStudios(): Promise<IStudioBase[]> {

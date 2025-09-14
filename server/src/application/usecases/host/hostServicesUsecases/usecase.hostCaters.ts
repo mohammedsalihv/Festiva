@@ -1,7 +1,7 @@
-import { IHostCatersRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostCatersRepository";
-import { IHostCatersUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.catersUseCase";
+import { IHostCatersRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostServicesRepositoryInterfaces/interface.hostCatersRepository";
+import { IHostCatersUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostServicesUsecaseInterfaces/interface.catersUseCase";
 import ErrorHandler from "../../../../utils/baseUtilities/errors/CustomError";
-import { ICaters } from "../../../../domain/entities/serviceInterface/host/interface.caters";
+import { ICaters } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.caters";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 
@@ -45,7 +45,6 @@ export class HostCatersUseCase implements IHostCatersUseCase {
     if (!catersId) {
       throw new CustomError("Caters ID is required", statusCodes.unAuthorized);
     }
-
     const updated = await this._hostCatersRepository.updateAvailability(
       catersId,
       isAvailable
@@ -57,7 +56,6 @@ export class HostCatersUseCase implements IHostCatersUseCase {
         statusCodes.serverError
       );
     }
-
     return true;
   }
 

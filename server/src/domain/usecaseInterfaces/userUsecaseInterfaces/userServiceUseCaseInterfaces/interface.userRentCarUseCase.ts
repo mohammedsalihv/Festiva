@@ -1,8 +1,5 @@
 import { Types } from "mongoose";
-import {
-  IRentCarBase,
-  IRentCar,
-} from "../../../entities/serviceInterface/host/interface.rentCar";
+import { IRentCar , IRentCarBase } from "../../../baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.rentCar";
 
 export interface IUserRentCarUseCase {
   allRentCars(): Promise<IRentCarBase[]>;

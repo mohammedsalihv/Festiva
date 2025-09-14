@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IAdminHostManagementController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminManagementControllerInterfaces/interface.adminHostManagementController";
-import { IAdminHostManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminHostManagementUseCase";
+import { IAdminHostManagementUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminManagementUsecaseInterfaces/interface.adminHostManagementUseCase";
 import logger from "../../../../utils/baseUtilities/messages/logger";
 import { AuthRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authType";
 import { JwtPayload } from "jsonwebtoken";

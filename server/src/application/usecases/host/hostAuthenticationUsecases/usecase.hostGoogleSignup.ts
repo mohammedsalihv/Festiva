@@ -1,10 +1,10 @@
-import { IHostGoogleSignupUseCase } from "../../../../domain/usecaseInterface/host/authenticationUsecaseInterfaces/interface.hostGoogleSignupUseCase";
+import { IHostGoogleSignupUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAuthenticationUsecaseInterfaces/interface.hostGoogleSignupUseCase";
 import { HostDetailsDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 import { googleSignupHostDTO } from "../../../../types/DTO's/userDTO's/userAuthenticationDTO's/dto.hostGoogleSignup";
-import { IHostGoogle } from "../../../../domain/entities/baseInterface/host/authenticationInterfaces/interface.hostGoogle";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
-import { IHostGoogleSignupRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostGoogleSignupRepository";
-import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
+import { IHostGoogle } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostAuthenticationBaseInterfaces/interface.hostGoogle";
+import { IHostRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostBaseRepositoryInterfaces/interface.hostRepository";
+import { IHostGoogleSignupRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostAuthenticationRepositoryInterfaces/interface.hostGoogleSignupRepository";
+import { ITokenService } from "../../../../domain/baseInterfaces/baseAuthenticationInterfaces/interface.tokenService";
 
 export class HostGoogleSignupUseCase implements IHostGoogleSignupUseCase {
   constructor(

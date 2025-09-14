@@ -1,8 +1,8 @@
-import { IHostStudioRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostStudioRepository";
+import { IHostStudioRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostServicesRepositoryInterfaces/interface.hostStudioRepository";
 import ErrorHandler from "../../../../utils/baseUtilities/errors/CustomError";
-import { IStudio } from "../../../../domain/entities/serviceInterface/host/interface.studio";
+import { IStudio } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.studio";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
-import { IHostStudioUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.studioUseCase";
+import { IHostStudioUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostServicesUsecaseInterfaces/interface.studioUseCase";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 
 export class HostStudioUseCase implements IHostStudioUseCase {
@@ -45,19 +45,16 @@ export class HostStudioUseCase implements IHostStudioUseCase {
     if (!studioId) {
       throw new CustomError("Studio ID is required", statusCodes.unAuthorized);
     }
-
     const updated = await this._hostStudioRepository.updateAvailability(
       studioId,
       isAvailable
     );
-
     if (!updated) {
       throw new CustomError(
         `Studio ${isAvailable ? "available" : "unavailable"} request failed`,
         statusCodes.serverError
       );
     }
-
     return true;
   }
 

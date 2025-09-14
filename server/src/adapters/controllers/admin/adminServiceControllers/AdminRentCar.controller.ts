@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IAdminRentCarUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminRentCar";
+import { IAdminRentCarUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminServicesUsecaseInterfaces/interface.adminRentCar";
 import { IAdminRentCarController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminRentCarController";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";

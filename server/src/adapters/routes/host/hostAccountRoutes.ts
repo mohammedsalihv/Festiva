@@ -4,11 +4,11 @@ import {
   authenticateToken,
   isHost,
 } from "../../../utils/baseUtilities/middlewares/auth";
-import { hostNotificationController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostNotification.DI";
-import { hostAssetController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostAsset.DI";
-import { hostBookingController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostBookings.DI";
-import { hostReviewsController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostReviews.DI";
-import { hostDashboardController } from "../../../infrastructure/DI/host/hostAccountDependencyInjections/hostDashboard.DI";
+import { hostNotificationController } from "../../../infrastructure/dependencyInjections/hostDependencyInjections/hostAccountDependencyInjections/hostNotification.DI";
+import { hostAssetController } from "../../../infrastructure/dependencyInjections/hostDependencyInjections/hostAccountDependencyInjections/hostAsset.DI";
+import { hostBookingController } from "../../../infrastructure/dependencyInjections/hostDependencyInjections/hostAccountDependencyInjections/hostBookings.DI";
+import { hostReviewsController } from "../../../infrastructure/dependencyInjections/hostDependencyInjections/hostAccountDependencyInjections/hostReviews.DI";
+import { hostDashboardController } from "../../../infrastructure/dependencyInjections/hostDependencyInjections/hostAccountDependencyInjections/hostDashboard.DI";
 
 const hostAccountRoutes = express.Router();
 

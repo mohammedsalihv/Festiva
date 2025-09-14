@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IUserProfileController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userAccountControllerInterfaces/interface.userProfileController";
-import { IUserProfileUseCase } from "../../../../domain/usecaseInterface/user/userProfileUsecaseInterfaces/interface.userProfileUseCase";
+import { IUserProfileUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userProfileUsecaseInterfaces/interface.userProfileUseCase";
 import logger from "../../../../utils/baseUtilities/messages/logger";
 import { JwtPayload } from "jsonwebtoken";
 import {

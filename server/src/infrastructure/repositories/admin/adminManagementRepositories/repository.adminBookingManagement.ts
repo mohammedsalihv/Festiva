@@ -1,6 +1,6 @@
 import { IBooking } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.booking";
-import { IAdminBookingManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminBookingManagementRepository";
-import bookingModel from "../../../../domain/models/base/booking/bookingModel";
+import { IAdminBookingManagementRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminManagementRepositoryInterfaces/interface.adminBookingManagementRepository";
+import bookingModel from "../../../../domain/entities/databaseModels/baseModels/baseBookingModels/bookingModel";
 
 export class AdminBookingManagementRepository
   implements IAdminBookingManagementRepository

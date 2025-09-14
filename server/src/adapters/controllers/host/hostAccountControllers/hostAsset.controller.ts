@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
-import { IHostAssetController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/account/interface.hostAssetController";
-import { IHostAssetUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostAssetUseCase";
+import { IHostAssetController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostAccountControllerInterfaces/interface.hostAssetController";
+import { IHostAssetUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAccountUsecaseInterfaces/interface.hostAssetUseCase";
 import {
   statusCodes,
   statusMessages,

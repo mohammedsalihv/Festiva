@@ -1,6 +1,6 @@
-import { IAdminVenueRepository } from "../../../../domain/entities/repositoryInterface/admin/services/interface.adminVenueRepository";
-import { VenueModel } from "../../../../domain/models/host/hostServiceModels/venueModel";
-import { IVenue } from "../../../../domain/entities/serviceInterface/host/interface.venue";
+import { IAdminVenueRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminServicesRepositoryInterfaces/interface.adminVenueRepository";
+import { VenueModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/venueModel";
+import { IVenue } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.venue";
 
 export class AdminVenueRepository implements IAdminVenueRepository {
   async venueDetails(venueId: string): Promise<IVenue | null> {

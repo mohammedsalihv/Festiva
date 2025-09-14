@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { IUserUseCase } from "../../../../domain/usecaseInterface/user/userBaseUsecaseInterfaces/interface.userUseCase";
-import { AuthRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authType";
 import axios from "axios";
+import { IUserUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userBaseUsecaseInterfaces/interface.userUseCase";
+import { AuthRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authType";
 import { resetPasswordDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 import { IUserController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userBaseControllerInterfaces/interface.userController";
-import { IUserPasswordResetUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userPasswordResetUseCase";
+import { IUserPasswordResetUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userAuthenticationUseCaseInterfaces/interface.userPasswordResetUseCase";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 import { getSignedImageUrl } from "../../../../utils/baseUtilities/cloudinary/getSignedImageUrl";
 

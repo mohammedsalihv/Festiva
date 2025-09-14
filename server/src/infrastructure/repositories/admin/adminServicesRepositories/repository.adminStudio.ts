@@ -1,6 +1,6 @@
-import { IStudio } from "../../../../domain/entities/serviceInterface/host/interface.studio";
-import { IAdminStudioRepository } from "../../../../domain/entities/repositoryInterface/admin/services/interface.adminStudioRepository";
-import { StudioModel } from "../../../../domain/models/host/hostServiceModels/studioModel";
+import { IStudio } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.studio";
+import { IAdminStudioRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminServicesRepositoryInterfaces/interface.adminStudioRepository";
+import { StudioModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/studioModel";
 
 export class AdminStudioRepository implements IAdminStudioRepository {
   studioDetails(studioId: string): Promise<IStudio | null> {

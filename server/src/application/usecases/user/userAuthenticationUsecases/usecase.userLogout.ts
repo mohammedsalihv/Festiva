@@ -1,5 +1,5 @@
-import { IUserLogoutRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userLogoutRepository";
-import { IUserLogoutUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userLogoutUseCase";
+import { IUserLogoutRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAuthenticationRepositoryInterfaces/interface.userLogoutRepository";
+import { IUserLogoutUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userAuthenticationUseCaseInterfaces/interface.userLogoutUseCase";
 
 export class UserLogoutUseCase implements IUserLogoutUseCase {
   constructor(private _userLogoutRepository: IUserLogoutRepository) {}

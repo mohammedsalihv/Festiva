@@ -1,6 +1,6 @@
 import { IReview } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.review";
-import { IReviewRepository } from "../../../../domain/entities/repositoryInterface/base/interface.reviewRepository";
-import { reviewModel } from "../../../../domain/models/base/review/reviewModel";
+import { IReviewRepository } from "../../../../domain/repositoryInterfaces/baseRepositoryInterfaces/baseServicesRepositoryInterfaces/interface.reviewRepository";
+import { reviewModel } from "../../../../domain/entities/databaseModels/baseModels/baseReviewModels/reviewModel";
 
 export class ReviewRepository implements IReviewRepository {
   async addReview(reviewDetails: IReview): Promise<boolean> {

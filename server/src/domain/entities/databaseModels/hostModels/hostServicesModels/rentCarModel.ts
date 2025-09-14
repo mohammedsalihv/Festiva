@@ -1,5 +1,5 @@
 import mongoose, { Schema, Types } from "mongoose";
-import { IRentCar } from "../../../entities/serviceInterface/host/interface.rentCar";
+import { IRentCar } from "../../../../baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.rentCar";
 
 const rentCarSchema = new Schema<IRentCar>(
   {

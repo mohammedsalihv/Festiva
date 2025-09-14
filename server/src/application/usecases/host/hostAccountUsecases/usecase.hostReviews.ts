@@ -1,7 +1,7 @@
 import { hostReviewsResponse } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.review";
-import { IHostReviewsRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostReviewsRepository";
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
-import { IHostReviewsUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostReviewsUseCase";
+import { IHostReviewsRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostAccountRepositoryInterfaces/interface.hostReviewsRepository";
+import { IUserRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAccountRepositoryInterfaces/interface.userRepository";
+import { IHostReviewsUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAccountUsecaseInterfaces/interface.hostReviewsUseCase";
 import { mapHostReviews } from "../../../../utils/mapping/hostMappings/hostReviews.mapper";
 
 export class HostReviewsUseCase implements IHostReviewsUseCase {

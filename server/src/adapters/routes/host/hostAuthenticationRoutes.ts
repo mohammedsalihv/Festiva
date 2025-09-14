@@ -5,29 +5,30 @@ import {
   hostLoginController,
   hostGoogleSignupController,
   refreshTokenController,
-} from "../../../infrastructure/DI/host/hostAuthenticationDependencyInjections/hostAuth.DI";
-import logger from "../../../utils/baseUtilities/messages/logger";
-import { hostController } from "../../../infrastructure/DI/host/hostBaseDependencyInjections/host.DI";
-import {
   hostLogoutController,
   hostGoogleLoginController,
-} from "../../../infrastructure/DI/host/hostAuthenticationDependencyInjections/hostAuth.DI";
+} from "../../../infrastructure/dependencyInjections/hostDependencyInjections/hostAuthenticationDependencyInjections/hostAuth.DI";
+import logger from "../../../utils/baseUtilities/messages/logger";
+import { hostController } from "../../../infrastructure/dependencyInjections/hostDependencyInjections/hostBaseDependencyInjections/host.DI";
 import {
   authenticateToken,
   isHost,
 } from "../../../utils/baseUtilities/middlewares/auth";
 
-const hostAuthRoutes = express.Router();
+const hostAuthenticationRoutes = express.Router();
 
-hostAuthRoutes.post(HOST_ROUTES.Authentiation.hostSignup, async (req, res) => {
-  try {
-    await hostSignupController.signupNewHost(req, res);
-  } catch (error) {
-    logger.info(error);
+hostAuthenticationRoutes.post(
+  HOST_ROUTES.Authentiation.hostSignup,
+  async (req, res) => {
+    try {
+      await hostSignupController.signupNewHost(req, res);
+    } catch (error) {
+      logger.info(error);
+    }
   }
-});
+);
 
-hostAuthRoutes.post(
+hostAuthenticationRoutes.post(
   HOST_ROUTES.Authentiation.hostGoogleSignup,
   async (req, res) => {
     try {
@@ -38,15 +39,18 @@ hostAuthRoutes.post(
   }
 );
 
-hostAuthRoutes.post(HOST_ROUTES.Authentiation.hostLogin, async (req, res) => {
-  try {
-    await hostLoginController.hostLogin(req, res);
-  } catch (error) {
-    logger.info(error);
+hostAuthenticationRoutes.post(
+  HOST_ROUTES.Authentiation.hostLogin,
+  async (req, res) => {
+    try {
+      await hostLoginController.hostLogin(req, res);
+    } catch (error) {
+      logger.info(error);
+    }
   }
-});
+);
 
-hostAuthRoutes.post(
+hostAuthenticationRoutes.post(
   HOST_ROUTES.Authentiation.hostGoogleLogin,
   async (req, res) => {
     try {
@@ -57,7 +61,7 @@ hostAuthRoutes.post(
   }
 );
 
-hostAuthRoutes.post(
+hostAuthenticationRoutes.post(
   HOST_ROUTES.Authentiation.hostEmailValidation,
   async (req, res) => {
     try {
@@ -68,12 +72,12 @@ hostAuthRoutes.post(
   }
 );
 
-hostAuthRoutes.post(
+hostAuthenticationRoutes.post(
   HOST_ROUTES.Authentiation.Refresh_Token,
   refreshTokenController.refreshAccessToken.bind(refreshTokenController)
 );
 
-hostAuthRoutes.delete(
+hostAuthenticationRoutes.delete(
   HOST_ROUTES.Authentiation.hostLogout,
   authenticateToken,
   isHost,
@@ -86,4 +90,4 @@ hostAuthRoutes.delete(
   }
 );
 
-export default hostAuthRoutes;
+export default hostAuthenticationRoutes;

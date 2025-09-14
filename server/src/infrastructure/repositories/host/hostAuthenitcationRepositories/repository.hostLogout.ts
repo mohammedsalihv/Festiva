@@ -1,5 +1,5 @@
-import { IHostLogoutRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostLogoutRepository";
-import { TokenBlacklistModel } from "../../../../domain/models/base/baseAuthenticationmodels/tokenBlacklistModel";
+import { IHostLogoutRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostAuthenticationRepositoryInterfaces/interface.hostLogoutRepository";
+import { TokenBlacklistModel } from "../../../../domain/entities/databaseModels/baseModels/baseAuthenticationModels/tokenBlacklistModel";
 
 export class HostLogoutRepository implements IHostLogoutRepository {
   async blacklistToken(token: string): Promise<void> {

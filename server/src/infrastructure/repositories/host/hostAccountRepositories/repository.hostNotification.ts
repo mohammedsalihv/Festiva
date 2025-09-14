@@ -1,10 +1,10 @@
-import { IHostNotificationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostNotificationRepositoy";
-import { NotificationModel } from "../../../../domain/models/host/hostFeaturesModels/notificationModel";
-import { UserModel } from "../../../../domain/models/user/userAuthenticationModels/userModel";
-import { RentCarModel } from "../../../../domain/models/host/hostServiceModels/rentCarModel";
-import { StudioModel } from "../../../../domain/models/host/hostServiceModels/studioModel";
-import { VenueModel } from "../../../../domain/models/host/hostServiceModels/venueModel";
-import { CatersModel } from "../../../../domain/models/host/hostServiceModels/catersModel";
+import { IHostNotificationRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostAccountRepositoryInterfaces/interface.hostNotificationRepositoy";
+import { NotificationModel } from "../../../../domain/entities/databaseModels/baseModels/baseServicesModels/notificationModel";
+import { UserModel } from "../../../../domain/entities/databaseModels/user/userAuthenticationModels/userModel";
+import { RentCarModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/rentCarModel";
+import { StudioModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/studioModel";
+import { VenueModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/venueModel";
+import { CatersModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/catersModel";
 import { CreateAssetNotificationDTO } from "../../../../types/DTO's/baseDTO's/notification";
 
 export class HostNotificationRepository implements IHostNotificationRepository {

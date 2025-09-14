@@ -1,7 +1,6 @@
-import { IBookingRepository } from "../../../../domain/entities/repositoryInterface/base/interface.bookingRepository";
+import { IBookingRepository } from "../../../../domain/repositoryInterfaces/baseRepositoryInterfaces/baseServicesRepositoryInterfaces/interface.bookingRepository";
 import { IBooking } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.booking";
-import bookingModel from "../../../../domain/models/base/booking/bookingModel";
-
+import bookingModel from "../../../../domain/entities/databaseModels/baseModels/baseBookingModels/bookingModel";
 export class BookingRepository implements IBookingRepository {
   async createBooking(booking: IBooking): Promise<IBooking> {
     const doc = await bookingModel.create(booking);

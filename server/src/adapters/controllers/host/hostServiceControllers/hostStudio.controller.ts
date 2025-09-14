@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { IStudio } from "../../../../domain/entities/serviceInterface/host/interface.studio";
-import { IHostStudioUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.studioUseCase";
+import { IStudio } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.studio";
+import { IHostStudioUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostServicesUsecaseInterfaces/interface.studioUseCase";
 import { IHostStudioController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostServicesControllerInterfaces/interface.hostStudioController";
-import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
+import { ILocationUseCase } from "../../../../domain/usecaseInterfaces/baseUsecaseInterfaces/baseServicesUsecaseInterfaces/interface.locationUsecase";
 import ErrorHandler from "../../../../utils/baseUtilities/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";
@@ -25,7 +25,7 @@ export interface MulterRequest extends Request {
 export class HostStudioController implements IHostStudioController {
   constructor(
     private _hostStudioUseCase: IHostStudioUseCase,
-    private _locationRepository: ILocationRepository
+    private _locationUsecase: ILocationUseCase
   ) {}
 
   async addStudioService(req: MulterRequest, res: Response): Promise<void> {
@@ -53,7 +53,7 @@ export class HostStudioController implements IHostStudioController {
 
       try {
         await assetFilesValidate({ files, typeOfAsset });
-        const newLocation = await this._locationRepository.addLocation(
+        const newLocation = await this._locationUsecase.execute(
           newStudio.location
         );
 

@@ -1,7 +1,7 @@
-import { IAdminBookingManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminBookingManagementRepository";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
-import { IAdminBookingManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminBookingManagementUseCase";
+import { IAdminBookingManagementRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminManagementRepositoryInterfaces/interface.adminBookingManagementRepository";
+import { IHostRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostBaseRepositoryInterfaces/interface.hostRepository";
+import { IUserRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAccountRepositoryInterfaces/interface.userRepository";
+import { IAdminBookingManagementUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminManagementUsecaseInterfaces/interface.adminBookingManagementUseCase";
 import { adminBookingsResponse } from "../../../../types/DTO's/adminDTO's/adminAccountDTO's/dto.adminBookings";
 import { adminBookingMapper } from "../../../../utils/mapping/adminMappings/adminBookingMapper";
 

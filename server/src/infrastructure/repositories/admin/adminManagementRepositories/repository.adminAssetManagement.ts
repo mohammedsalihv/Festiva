@@ -1,9 +1,9 @@
-import { IAdminAssetManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminAssetManagementRepository";
-import { IAdminAssetBaseRepositoryDTO } from "../../../../domain/entities/repositoryInterface/base/interface.assetBaseRepository";
-import { VenueModel } from "../../../../domain/models/host/hostServiceModels/venueModel";
-import { CatersModel } from "../../../../domain/models/host/hostServiceModels/catersModel";
-import { RentCarModel } from "../../../../domain/models/host/hostServiceModels/rentCarModel";
-import { StudioModel } from "../../../../domain/models/host/hostServiceModels/studioModel";
+import { IAdminAssetManagementRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminManagementRepositoryInterfaces/interface.adminAssetManagementRepository";
+import { IAdminAssetBaseRepositoryDTO } from "../../../../domain/repositoryInterfaces/baseRepositoryInterfaces/baseServicesRepositoryInterfaces/interface.assetBaseRepository";
+import { VenueModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/venueModel";
+import { CatersModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/catersModel";
+import { RentCarModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/rentCarModel";
+import { StudioModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/studioModel";
 
 export class AdminAssetManagementRepository
   implements IAdminAssetManagementRepository

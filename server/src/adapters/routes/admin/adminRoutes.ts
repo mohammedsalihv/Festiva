@@ -1,15 +1,15 @@
 import express, { Request, Response, RequestHandler } from "express";
 import { ADMIN_ROUTES } from "../../../infrastructure/constants/admin.routes";
-import { adminUserController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminUserManagement.DI";
-import { adminHostController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminHostManagement.DI";
-import { adminAssetManagementController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminAssetManagement.DI";
+import { adminUserController } from "../../../infrastructure/dependencyInjections/adminDependencyInjections/adminManagementDependencyInjections/adminUserManagement.DI";
+import { adminHostController } from "../../../infrastructure/dependencyInjections/adminDependencyInjections/adminManagementDependencyInjections/adminHostManagement.DI";
+import { adminAssetManagementController } from "../../../infrastructure/dependencyInjections/adminDependencyInjections/adminManagementDependencyInjections/adminAssetManagement.DI";
 import { singleImageUpload } from "../../../utils/baseUtilities/middlewares/multer";
 import {
   authenticateToken,
   isAdmin,
 } from "../../../utils/baseUtilities/middlewares/auth";
-import { adminBookingManagementController } from "../../../infrastructure/DI/admin/adminManagementDependencyInjections/adminBookingManagement.DI";
-import { adminDashboardController } from "../../../infrastructure/DI/admin/adminBaseDependencyInjections/adminDashboard.DI";
+import { adminBookingManagementController } from "../../../infrastructure/dependencyInjections/adminDependencyInjections/adminManagementDependencyInjections/adminBookingManagement.DI";
+import { adminDashboardController } from "../../../infrastructure/dependencyInjections/adminDependencyInjections/adminBaseDependencyInjections/adminDashboard.DI";
 
 const adminRoutes = express.Router();
 export interface MulterRequest extends Request {

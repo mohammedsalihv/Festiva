@@ -1,8 +1,7 @@
 import {
   AssetRequestDTO,
   myAssetsDTO,
-} from "../../../../../types/DTO/host/dto.assetRequest";
-
+} from "../../../../types/DTO's/hostDTO's/hostAccountDTO's/dto.assetRequest";
 export interface IHostAssetRepository {
   myAssets(
     hostId: string,

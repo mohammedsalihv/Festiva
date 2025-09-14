@@ -1,6 +1,6 @@
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
+import { IHostRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostBaseRepositoryInterfaces/interface.hostRepository";
 import { IHostModel } from "../../../../domain/entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
-import { HostModel } from "../../../../domain/models/host/hostAuthenticationModels/hostModel";
+import { HostModel } from "../../../../domain/entities/databaseModels/hostModels/hostAuthenticationModels/hostModel";
 
 export class HostRepository implements IHostRepository {
   async findByEmail(email: string): Promise<IHostModel | null> {

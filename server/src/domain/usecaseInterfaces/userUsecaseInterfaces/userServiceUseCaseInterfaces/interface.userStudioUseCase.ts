@@ -1,8 +1,5 @@
 import { Types } from "mongoose";
-import {
-  IStudioBase,
-  IStudio,
-} from "../../../entities/serviceInterface/host/interface.studio";
+import { IStudio , IStudioBase } from "../../../baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.studio";
 export interface IUserStudioUseCase {
   allStudios(): Promise<IStudioBase[]>;
   studioDetails(studioId: string): Promise<IStudio>;

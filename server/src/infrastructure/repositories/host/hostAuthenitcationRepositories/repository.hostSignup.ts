@@ -1,5 +1,5 @@
-import { IHostSignupRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostSignupRepository";
-import { HostModel } from "../../../../domain/models/host/hostAuthenticationModels/hostModel";
+import { IHostSignupRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostAuthenticationRepositoryInterfaces/interface.hostSignupRepository";
+import { HostModel } from "../../../../domain/entities/databaseModels/hostModels/hostAuthenticationModels/hostModel";
 import { IHostModel } from "../../../../domain/entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
 import { responseHostDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 

@@ -1,13 +1,13 @@
-import { IAdminCatersRepository } from "../../../../domain/entities/repositoryInterface/admin/services/interface.adminCatersRepository";
-import { IAdminRentCarRepository } from "../../../../domain/entities/repositoryInterface/admin/services/interface.adminRentCarRepository";
-import { IAdminStudioRepository } from "../../../../domain/entities/repositoryInterface/admin/services/interface.adminStudioRepository";
-import { IAdminVenueRepository } from "../../../../domain/entities/repositoryInterface/admin/services/interface.adminVenueRepository";
-import { IAdminBookingManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminBookingManagementRepository";
-import { IPaymentRepository } from "../../../../domain/entities/repositoryInterface/base/interface.paymentRepository";
-import { IReviewRepository } from "../../../../domain/entities/repositoryInterface/base/interface.reviewRepository";
-import { IAdminHostManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminHostManagementRepository";
-import { IAdminUserManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminUserManagementRepository";
-import { IAdminDashboardUseCase } from "../../../../domain/usecaseInterface/admin/adminBaseUsecaseInterfaces/interface.adminDashboardUseCase";
+import { IAdminCatersRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminServicesRepositoryInterfaces/interface.adminCatersRepository";
+import { IAdminRentCarRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminServicesRepositoryInterfaces/interface.adminRentCarRepository";
+import { IAdminStudioRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminServicesRepositoryInterfaces/interface.adminStudioRepository";
+import { IAdminVenueRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminServicesRepositoryInterfaces/interface.adminVenueRepository";
+import { IAdminBookingManagementRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminManagementRepositoryInterfaces/interface.adminBookingManagementRepository";
+import { IPaymentRepository } from "../../../../domain/repositoryInterfaces/baseRepositoryInterfaces/basePaymentsRepositoryInterfaces/interface.paymentRepository";
+import { IReviewRepository } from "../../../../domain/repositoryInterfaces/baseRepositoryInterfaces/baseServicesRepositoryInterfaces/interface.reviewRepository";
+import { IAdminHostManagementRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminManagementRepositoryInterfaces/interface.adminHostManagementRepository";
+import { IAdminUserManagementRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminManagementRepositoryInterfaces/interface.adminUserManagementRepository";
+import { IAdminDashboardUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminBaseUsecaseInterfaces/interface.adminDashboardUseCase";
 import {
   revenueResponse,
   serviceStatisticsResponse,

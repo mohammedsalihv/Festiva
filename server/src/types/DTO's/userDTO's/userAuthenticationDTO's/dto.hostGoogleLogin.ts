@@ -1,5 +1,5 @@
-import { IUserModel } from "../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
-import { responseUserDTO } from "./dto.user"; // your user DTO
+import { IUserModel } from "../../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
+import { responseUserDTO } from "../userBaseDTO's/dto.user";
 
 export interface googleLoginUserDTO {
   firstname?: string;

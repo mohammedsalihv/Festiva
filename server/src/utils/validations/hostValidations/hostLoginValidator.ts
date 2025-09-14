@@ -4,10 +4,9 @@ import {
   statusCodes,
   statusMessages,
 } from "../../baseUtilities/messages/constantResponses";
-import { IHostLoginUsecaseValidator } from "../../../domain/validatorInterface/host/interface.hostLoginValidator";
-import { IHostLoginControllerValidator } from "../../../domain/validatorInterface/host/interface.hostLoginValidator";
-import { hostLoginDTO } from "../../../types/DTO's/hostDTO's/dto.hostLogin";
-
+import { IHostLoginUsecaseValidator } from "../../../domain/validatorInterfaces/hostValidatorInterfaces/interface.hostLoginValidator";
+import { IHostLoginControllerValidator } from "../../../domain/validatorInterfaces/hostValidatorInterfaces/interface.hostLoginValidator";
+import { hostLoginDTO } from "../../../types/DTO's/hostDTO's/hostAuthenticationDTO's/dto.hostLogin";
 
 export class HostLoginUsecaseValidator implements IHostLoginUsecaseValidator {
   validateRequiredFields(email: string, password: string): void {
@@ -34,7 +33,10 @@ export class HostLoginUsecaseValidator implements IHostLoginUsecaseValidator {
     }
   }
 
-  async validatePassword(storedPassword: string, inputPassword: string): Promise<void> {
+  async validatePassword(
+    storedPassword: string,
+    inputPassword: string
+  ): Promise<void> {
     const isValid = storedPassword
       ? await bcrypt.compare(inputPassword, storedPassword)
       : false;
@@ -47,12 +49,15 @@ export class HostLoginUsecaseValidator implements IHostLoginUsecaseValidator {
   }
 }
 
-
-
-export class HostLoginControllerValidator implements IHostLoginControllerValidator {
+export class HostLoginControllerValidator
+  implements IHostLoginControllerValidator
+{
   validate(data: hostLoginDTO): void {
     if (!data.email || !data.password) {
-      throw new CustomError(statusMessages.invalidCredential, statusCodes.unAuthorized);
+      throw new CustomError(
+        statusMessages.invalidCredential,
+        statusCodes.unAuthorized
+      );
     }
   }
 }

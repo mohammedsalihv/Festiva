@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { IBooking } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.booking";
-import { IHostBookingsRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostBookingsRepository";
-import bookingModel from "../../../../domain/models/base/booking/bookingModel";
+import { IHostBookingsRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostAccountRepositoryInterfaces/interface.hostBookingsRepository";
+import bookingModel from "../../../../domain/entities/databaseModels/baseModels/baseBookingModels/bookingModel";
 
 export class HostBookingsRepository implements IHostBookingsRepository {
   async getAllBookings(

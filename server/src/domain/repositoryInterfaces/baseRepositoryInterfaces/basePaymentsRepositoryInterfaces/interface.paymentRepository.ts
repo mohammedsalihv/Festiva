@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { IPayment } from "../../modelInterface/base/interface.payment";
+import { IPayment } from "../../../entities/databaseModelInterfaces/baseModelInterfaces/interface.payment";
 export interface IPaymentRepository {
   paymentStatusChange(
     status: string,

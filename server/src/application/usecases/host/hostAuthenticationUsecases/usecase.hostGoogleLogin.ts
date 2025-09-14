@@ -1,10 +1,10 @@
-import { IHostGoogleLoginUseCase } from "../../../../domain/usecaseInterface/host/authenticationUsecaseInterfaces/interface.hostGoogleLoginUseCase";
+import { IHostGoogleLoginUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAuthenticationUsecaseInterfaces/interface.hostGoogleLoginUseCase";
 import { HostDetailsDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 import { googleSignupHostDTO } from "../../../../types/DTO's/userDTO's/userAuthenticationDTO's/dto.hostGoogleSignup";
-import { IHostGoogle } from "../../../../domain/entities/baseInterface/host/authenticationInterfaces/interface.hostGoogle";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
-import { IHostGoogleLoginRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostGoogleLoginRepository";
-import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
+import { IHostGoogle } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostAuthenticationBaseInterfaces/interface.hostGoogle";
+import { IHostRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostBaseRepositoryInterfaces/interface.hostRepository";
+import { IHostGoogleLoginRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostAuthenticationRepositoryInterfaces/interface.hostGoogleLoginRepository";
+import { ITokenService } from "../../../../domain/baseInterfaces/baseAuthenticationInterfaces/interface.tokenService";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 

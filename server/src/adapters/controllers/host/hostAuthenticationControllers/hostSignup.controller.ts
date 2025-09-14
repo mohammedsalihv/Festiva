@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { IHostSignupController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostAuthenticationControllerInterfaces/interaface.hostSignupController";
-import { IHostSignupUseCase } from "../../../../domain/usecaseInterface/host/authenticationUsecaseInterfaces/interface.hostSignupUseCase";
-import { IHostSignupValidator } from "../../../../domain/validatorInterface/host/interface.hostSignupValidator";
+import { IHostSignupUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAuthenticationUsecaseInterfaces/interface.hostSignupUseCase";
+import { IHostSignupValidator } from "../../../../domain/validatorInterfaces/hostValidatorInterfaces/interface.hostSignupValidator";
 import { toHostSignupResponseDTO } from "../../../../types/DTO's/hostDTO's/hostAuthenticationDTO's/dto.hostSignup";
 import logger from "../../../../utils/baseUtilities/messages/logger";
 import {

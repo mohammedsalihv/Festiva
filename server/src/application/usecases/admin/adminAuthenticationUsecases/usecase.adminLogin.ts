@@ -1,16 +1,16 @@
-import { IAdminLoginRepository } from "../../../../domain/entities/repositoryInterface/admin/authentication/interface.adminLogin";
-import { IAdminLoginUseCase } from "../../../../domain/usecaseInterface/admin/authenticationUsecaseInterfaces/interface.adminLoginUseCase";
+import { IAdminLoginRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminAuthenticationRepositoryInterfaces/interface.adminLogin";
+import { IAdminLoginUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminAuthenticationUsecaseInterfaces/interface.adminLoginUseCase";
 import { adminLoginMapper } from "../../../../utils/mapping/adminMappings/adminLoginMapper";
-import { IAdminRepository } from "../../../../domain/entities/baseInterface/admin/interface.admin";
+import { IAdminRepository } from "../../../../domain/baseInterfaces/adminBaseInterfaces/interface.admin";
 import { AdminDetailsDTO } from "../../../../types/DTO's/adminDTO's/adminBaseDTO's/dto.admin";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
-import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
+import { ITokenService } from "../../../../domain/baseInterfaces/baseAuthenticationInterfaces/interface.tokenService";
 import bcrypt from "bcrypt";
 import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/baseUtilities/messages/constantResponses";
-import { IAdminLoginValidator } from "../../../../domain/validatorInterface/admin/interface.adminLoginValidator";
+import { IAdminLoginValidator } from "../../../../domain/validatorInterfaces/adminValidatorInterfaces/interface.adminLoginValidator";
 
 export class AdminLoginUsecase implements IAdminLoginUseCase {
   constructor(

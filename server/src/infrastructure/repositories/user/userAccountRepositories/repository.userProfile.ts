@@ -1,6 +1,6 @@
-import { UserModel } from "../../../../domain/models/user/userAuthenticationModels/userModel";
-import { IUserProfileRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userProfileRepository";
-import { profileEditDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
+import { UserModel } from "../../../../domain/entities/databaseModels/user/userAuthenticationModels/userModel";
+import { IUserProfileRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAccountRepositoryInterfaces/interface.userProfileRepository";
+import { userProfileEditDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 import { responseUserDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 import { toResponseUserDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 
@@ -24,7 +24,7 @@ export class UserProfileRepository implements IUserProfileRepository {
 
   async profileEdit(
     userId: string,
-    form: profileEditDTO
+    form: userProfileEditDTO
   ): Promise<responseUserDTO> {
     const updatedUser = await UserModel.findByIdAndUpdate(
       userId,

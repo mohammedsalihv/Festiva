@@ -1,6 +1,6 @@
-import { IAdminVenueUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminVenueUseCase";
-import { IVenue } from "../../../../domain/entities/serviceInterface/host/interface.venue";
-import { IAdminVenueRepository } from "../../../../domain/entities/repositoryInterface/admin/services/interface.adminVenueRepository";
+import { IAdminVenueUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminServicesUsecaseInterfaces/interface.adminVenueUseCase";
+import { IVenue } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.venue";
+import { IAdminVenueRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminServicesRepositoryInterfaces/interface.adminVenueRepository";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 

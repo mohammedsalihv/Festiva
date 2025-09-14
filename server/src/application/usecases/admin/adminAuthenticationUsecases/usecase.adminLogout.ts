@@ -1,5 +1,5 @@
-import { IAdminLogoutRepository } from "../../../../domain/entities/repositoryInterface/admin/authentication/interface.adminLogout";
-import { IAdminLogoutUseCase } from "../../../../domain/usecaseInterface/admin/authenticationUsecaseInterfaces/interface.adminLogoutUseCase";
+import { IAdminLogoutRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminAuthenticationRepositoryInterfaces/interface.adminLogout";
+import { IAdminLogoutUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminAuthenticationUsecaseInterfaces/interface.adminLogoutUseCase";
 
 export class AdminLogoutUseCase implements IAdminLogoutUseCase {
   constructor(private _adminLogoutRepository: IAdminLogoutRepository) {}

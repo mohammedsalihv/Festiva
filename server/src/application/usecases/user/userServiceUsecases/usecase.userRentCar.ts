@@ -1,10 +1,10 @@
 import { Types } from "mongoose";
-import { IUserRentCarRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userRentCarRepository";
+import { IUserRentCarRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userServicesRepositoryInterfaces/interface.userRentCarRepository";
 import {
   IRentCar,
   IRentCarBase,
-} from "../../../../domain/entities/serviceInterface/host/interface.rentCar";
-import { IUserRentCarUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userRentCarUseCase";
+} from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.rentCar";
+import { IUserRentCarUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userServiceUseCaseInterfaces/interface.userRentCarUseCase";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
@@ -18,11 +18,9 @@ export class UserRentCarUseCase implements IUserRentCarUseCase {
     const car = await this._userRentCarRepository.fetchRentCarDetailsById(
       rentcarId
     );
-
     if (!car) {
       throw new CustomError("Car not found", statusCodes.notfound);
     }
-
     return car;
   }
   async filterRentCars(

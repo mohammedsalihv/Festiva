@@ -1,4 +1,4 @@
-import { IHostGoogleLoginValidator } from "../../../domain/validatorInterface/host/interface.hostGoogleLoginValidator";
+import { IHostGoogleLoginValidator } from "../../../domain/validatorInterfaces/hostValidatorInterfaces/interface.hostGoogleLoginValidator";
 import { googleLoginHostDTO } from "../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 import CustomError from "../../baseUtilities/errors/CustomError";
 import {

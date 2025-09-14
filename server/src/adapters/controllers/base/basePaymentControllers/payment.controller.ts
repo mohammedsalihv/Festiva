@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IPaymentController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/basePaymentControllerInterfaces/interface.paymentController";
-import { IPaymentUseCase } from "../../../../domain/usecaseInterface/base/payment/interface.paymentUsecase";
+import { IPaymentUseCase } from "../../../../domain/usecaseInterfaces/baseUsecaseInterfaces/basePaymentUsecaseInterfaces/interface.paymentUsecase";
 import {
   statusCodes,
   statusMessages,

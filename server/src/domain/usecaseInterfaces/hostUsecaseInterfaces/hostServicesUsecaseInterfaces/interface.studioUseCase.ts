@@ -1,4 +1,4 @@
-import { IStudio } from "../../../entities/serviceInterface/host/interface.studio";
+import { IStudio } from "../../../baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.studio";
 export interface IHostStudioUseCase {
   addStudio(studio: IStudio): Promise<IStudio>;
   studioDetails(studioId: string): Promise<IStudio>;

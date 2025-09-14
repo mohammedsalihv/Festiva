@@ -1,5 +1,5 @@
-import { IBookingUseCase } from "../../../../domain/usecaseInterface/base/booking/interface.bookingUsecase";
-import { IBookingRepository } from "../../../../domain/entities/repositoryInterface/base/interface.bookingRepository";
+import { IBookingUseCase } from "../../../../domain/usecaseInterfaces/baseUsecaseInterfaces/baseBookingUsecaseInterfaces/interface.bookingUsecase";
+import { IBookingRepository } from "../../../../domain/repositoryInterfaces/baseRepositoryInterfaces/baseServicesRepositoryInterfaces/interface.bookingRepository";
 import { IBooking } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.booking";
 
 export class BookingUseCase implements IBookingUseCase {

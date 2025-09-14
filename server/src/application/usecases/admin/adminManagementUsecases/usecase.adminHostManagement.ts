@@ -1,6 +1,6 @@
 import { responseHostDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
-import { IAdminHostManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminHostManagementUseCase";
-import { IAdminHostManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminHostManagementRepository";
+import { IAdminHostManagementUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminManagementUsecaseInterfaces/interface.adminHostManagementUseCase";
+import { IAdminHostManagementRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminManagementRepositoryInterfaces/interface.adminHostManagementRepository";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { EditHostPayload } from "../../../../domain/baseInterfaces/adminBaseInterfaces/interface.editHost";
 import {

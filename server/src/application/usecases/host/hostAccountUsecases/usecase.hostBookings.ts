@@ -1,6 +1,6 @@
 import { IBooking } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.booking";
-import { IHostBookingsUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostBookingsUseCase";
-import { IHostBookingsRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostBookingsRepository";
+import { IHostBookingsUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAccountUsecaseInterfaces/interface.hostBookingsUseCase";
+import { IHostBookingsRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostAccountRepositoryInterfaces/interface.hostBookingsRepository";
 
 export class HostBookingsUseCase implements IHostBookingsUseCase {
   constructor(private _hostBookingsRepository: IHostBookingsRepository) {}

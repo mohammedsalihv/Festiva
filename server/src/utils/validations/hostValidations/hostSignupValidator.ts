@@ -1,4 +1,4 @@
-import { IHostSignupValidator } from "../../../domain/validatorInterface/host/interface.hostSignupValidator";
+import { IHostSignupValidator } from "../../../domain/validatorInterfaces/hostValidatorInterfaces/interface.hostSignupValidator";
 import { registerHostDTO } from "../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 import CustomError from "../../baseUtilities/errors/CustomError";
 import { statusCodes } from "../../baseUtilities/messages/constantResponses";

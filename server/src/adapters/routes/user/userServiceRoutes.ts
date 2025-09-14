@@ -1,6 +1,6 @@
 import express from "express";
 import { USER_ROUTES } from "../../../infrastructure/constants/user.routes";
-import { userServiceBaseController } from "../../../infrastructure/DI/user/userServicesDependencyInjections/userServiceBase.DI";
+import { userServiceBaseController } from "../../../infrastructure/dependencyInjections/userDependencyInjections/userServicesDependencyInjections/userServiceBase.DI";
 
 const userServiceRoute = express.Router();
 
@@ -18,6 +18,5 @@ userServiceRoute.get(
   USER_ROUTES.UserServices.sortAssets,
   userServiceBaseController.sortAssets.bind(userServiceBaseController)
 );
-
 
 export default userServiceRoute;

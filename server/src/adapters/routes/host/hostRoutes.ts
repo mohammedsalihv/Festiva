@@ -1,9 +1,9 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request } from "express";
 import { HOST_ROUTES } from "../../../infrastructure/constants/host.routes";
-import { hostVenueController } from "../../../infrastructure/DI/host/hostServicesDependencyInjections/hostVenue.DI";
-import { hostRentCarController } from "../../../infrastructure/DI/host/hostServicesDependencyInjections/hostRentCar.DI";
-import { hostCatersController } from "../../../infrastructure/DI/host/hostServicesDependencyInjections/hostCaters.DI";
-import { hostStudioController } from "../../../infrastructure/DI/host/hostServicesDependencyInjections/hostStudio.DI";
+import { hostVenueController } from "../../../infrastructure/dependencyInjections/hostDependencyInjections/hostServicesDependencyInjections/hostVenue.DI";
+import { hostRentCarController } from "../../../infrastructure/dependencyInjections/hostDependencyInjections/hostServicesDependencyInjections/hostRentCar.DI";
+import { hostCatersController } from "../../../infrastructure/dependencyInjections/hostDependencyInjections/hostServicesDependencyInjections/hostCaters.DI";
+import { hostStudioController } from "../../../infrastructure/dependencyInjections/hostDependencyInjections/hostServicesDependencyInjections/hostStudio.DI";
 import {
   authenticateToken,
   isHost,

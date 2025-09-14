@@ -1,6 +1,6 @@
-import { IStudio } from "../../../../domain/entities/serviceInterface/host/interface.studio";
-import { StudioModel } from "../../../../domain/models/host/hostServiceModels/studioModel";
-import { IHostStudioRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostStudioRepository";
+import { IStudio } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.studio";
+import { StudioModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/studioModel";
+import { IHostStudioRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostServicesRepositoryInterfaces/interface.hostStudioRepository";
 import { Types } from "mongoose";
 
 export class HostStudioRepository implements IHostStudioRepository {

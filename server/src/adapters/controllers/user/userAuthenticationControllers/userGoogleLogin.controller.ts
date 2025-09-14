@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { IUserGoogleLoginController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userAuthenticationControllerInterfaces/interface.userGoogleLoginController";
-import { IUserGoogleLoginUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userGoogleLoginUsecase";
-import { toUserGoogleLoginResponseDTO } from "../../../../types/DTO's/userDTO's/dto.hostGoogleLogin";
-import { IUserGoogleLoginValidator } from "../../../../domain/validatorInterface/user/interface.userGoogleLoginValidator";
+import { IUserGoogleLoginUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userAuthenticationUseCaseInterfaces/interface.userGoogleLoginUsecase";
+import { toUserGoogleLoginResponseDTO } from "../../../../types/DTO's/userDTO's/userAuthenticationDTO's/dto.hostGoogleLogin";
+import { IUserGoogleLoginValidator } from "../../../../domain/validatorInterfaces/userValidatorInterfaces/interface.userGoogleLoginValidator";
 import {
   statusCodes,
   statusMessages,

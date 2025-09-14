@@ -1,8 +1,7 @@
 import { Types } from "mongoose";
-import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
-import { ILocation } from "../../../../domain/entities/serviceInterface/host/interface.location";
-import { LocationModel } from "../../../../domain/models/host/hostServiceModels/locationModel";
-
+import { ILocationRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostBaseRepositoryInterfaces/interface.locationRepostory";
+import { ILocation } from "../../../../domain/baseInterfaces/baseServicesInterfaces/interface.location";
+import { LocationModel } from "../../../../domain/entities/databaseModels/baseModels/baseServicesModels/locationModel";
 export class LocationRepository implements ILocationRepository {
   async addLocation(location: ILocation): Promise<ILocation> {
     const newLocation = new LocationModel(location);

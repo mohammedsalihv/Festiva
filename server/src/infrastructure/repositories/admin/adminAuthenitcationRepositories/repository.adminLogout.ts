@@ -1,5 +1,5 @@
-import { IAdminLogoutRepository } from "../../../../domain/entities/repositoryInterface/admin/authentication/interface.adminLogout";
-import { TokenBlacklistModel } from "../../../../domain/models/base/baseAuthenticationmodels/tokenBlacklistModel";
+import { IAdminLogoutRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminAuthenticationRepositoryInterfaces/interface.adminLogout";
+import { TokenBlacklistModel } from "../../../../domain/entities/databaseModels/baseModels/baseAuthenticationModels/tokenBlacklistModel";
 
 export class AdminLogoutRepository implements IAdminLogoutRepository {
   async blacklistToken(token: string): Promise<void> {

@@ -1,7 +1,7 @@
 import { TokenService } from "../../../../application/tokenService/service.token";
 
-import { UserLoginValidator } from "../../../../utils/validations/user/userLoginValidator";
-import { UserGoogleLoginValidator } from "../../../../utils/validations/user/userGoogleLoginValidator";
+import { UserLoginValidator } from "../../../../utils/validations/userValidations/userLoginValidator";
+import { UserGoogleLoginValidator } from "../../../../utils/validations/userValidations/userGoogleLoginValidator";
 
 // controllers
 import { UserSignupController } from "../../../../adapters/controllers/user/userAuthenticationControllers/userSignup.controller";

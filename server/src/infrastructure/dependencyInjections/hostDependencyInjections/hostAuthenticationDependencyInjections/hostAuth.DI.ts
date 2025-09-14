@@ -1,9 +1,9 @@
 import { TokenService } from "../../../../application/tokenService/service.token";
-import { HostLoginUsecaseValidator } from "../../../../utils/validations/host/hostLoginValidator";
-import { HostSignupValidator } from "../../../../utils/validations/host/hostSignupValidator";
-import { HostLoginControllerValidator } from "../../../../utils/validations/host/hostLoginValidator";
-import { HostGoogleLoginValidator } from "../../../../utils/validations/host/hostGoogleLoginValidator";
-import { HostGoogleSignupValidator } from "../../../../utils/validations/host/hostGoogleSignupValidator";
+import { HostLoginUsecaseValidator } from "../../../../utils/validations/hostValidations/hostLoginValidator";
+import { HostSignupValidator } from "../../../../utils/validations/hostValidations/hostSignupValidator";
+import { HostLoginControllerValidator } from "../../../../utils/validations/hostValidations/hostLoginValidator";
+import { HostGoogleLoginValidator } from "../../../../utils/validations/hostValidations/hostGoogleLoginValidator";
+import { HostGoogleSignupValidator } from "../../../../utils/validations/hostValidations/hostGoogleSignupValidator";
 
 // Controller
 

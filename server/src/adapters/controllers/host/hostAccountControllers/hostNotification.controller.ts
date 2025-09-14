@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
-import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostNotificationUseCase";
+import { IHostNotificationUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAccountUsecaseInterfaces/interface.hostNotificationUseCase";
 import { IHostNotificationController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostAccountControllerInterfaces/interface.hostNotificationController";
 import { statusCodes, statusMessages } from "../../../../utils/baseUtilities/messages/constantResponses";
 

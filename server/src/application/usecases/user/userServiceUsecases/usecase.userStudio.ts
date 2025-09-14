@@ -1,10 +1,7 @@
 import { Types } from "mongoose";
-import { IUserStudioRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userStudioRepository";
-import {
-  IStudio,
-  IStudioBase,
-} from "../../../../domain/entities/serviceInterface/host/interface.studio";
-import { IUserStudioUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userStudioUseCase";
+import { IUserStudioRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userServicesRepositoryInterfaces/interface.userStudioRepository";
+import { IStudio , IStudioBase} from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.studio";
+import { IUserStudioUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userServiceUseCaseInterfaces/interface.userStudioUseCase";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 

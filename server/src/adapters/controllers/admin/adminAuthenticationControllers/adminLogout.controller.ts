@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
+import {Response } from "express";
 import { IAdminLogoutController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminAuthenticationControllerInterfaces/interface.adminLogoutController";
-import { IAdminLogoutUseCase } from "../../../../domain/usecaseInterface/admin/authenticationUsecaseInterfaces/interface.adminLogoutUseCase";
+import { IAdminLogoutUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminAuthenticationUsecaseInterfaces/interface.adminLogoutUseCase";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import logger from "../../../../utils/baseUtilities/messages/logger";
 import {

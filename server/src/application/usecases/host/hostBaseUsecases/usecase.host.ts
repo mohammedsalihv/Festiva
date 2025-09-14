@@ -4,8 +4,8 @@ import {
   statusMessages,
 } from "../../../../utils/baseUtilities/messages/constantResponses";
 import { mailValidation } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
-import { IHostUseCase } from "../../../../domain/usecaseInterface/host/baseUsecaseInterfaces/interface.hostUseCase";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
+import { IHostUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostBaseUsecaseInterfaces/interface.hostUseCase";
+import { IHostRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostBaseRepositoryInterfaces/interface.hostRepository";
 import { IHostModel } from "../../../../domain/entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
 
 export class HostUseCase implements IHostUseCase {

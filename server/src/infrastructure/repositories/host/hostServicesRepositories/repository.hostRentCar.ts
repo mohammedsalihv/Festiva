@@ -1,6 +1,6 @@
-import { IRentCar } from "../../../../domain/entities/serviceInterface/host/interface.rentCar";
-import { IHostRentCarRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRentCarRepository";
-import { RentCarModel } from "../../../../domain/models/host/hostServiceModels/rentCarModel";
+import { IRentCar } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.rentCar";
+import { IHostRentCarRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostServicesRepositoryInterfaces/interface.hostRentCarRepository";
+import { RentCarModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/rentCarModel";
 import { Types } from "mongoose";
 
 export class HostRentCarRepository implements IHostRentCarRepository {

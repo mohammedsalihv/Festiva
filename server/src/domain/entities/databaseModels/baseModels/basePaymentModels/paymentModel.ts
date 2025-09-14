@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { IPayment } from "../../../entities/modelInterface/base/interface.payment";
+import { IPayment } from "../../../databaseModelInterfaces/baseModelInterfaces/interface.payment";
 
 export interface IPaymentDoc extends IPayment, Document {}
 

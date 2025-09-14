@@ -1,11 +1,8 @@
-import { IUserVenueRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userVenueRepository";
-import {
-  IVenue,
-  IVenueBase,
-} from "../../../../domain/entities/serviceInterface/host/interface.venue";
-import { VenueModel } from "../../../../domain/models/host/hostServiceModels/venueModel";
-import { LocationModel } from "../../../../domain/models/host/hostServiceModels/locationModel";
-import { mapVenueToBase } from "../../../../domain/entities/serviceInterface/host/interface.venue";
+import { IUserVenueRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userServicesRepositoryInterfaces/interface.userVenueRepository";
+import { IVenue , IVenueBase } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.venue";
+import { VenueModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/venueModel";
+import { LocationModel } from "../../../../domain/entities/databaseModels/baseModels/baseServicesModels/locationModel";
+import { mapVenueToBase } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.venue";
 
 export class UserVenueRepository implements IUserVenueRepository {
   async findAllVenues(): Promise<IVenueBase[]> {

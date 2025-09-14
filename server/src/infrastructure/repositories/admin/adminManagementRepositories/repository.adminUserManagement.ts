@@ -1,7 +1,7 @@
 import { IUserModel } from "../../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
-import { IAdminUserManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminUserManagementRepository";
-import { UserModel } from "../../../../domain/models/user/userAuthenticationModels/userModel";
-import { pickDefinedFields } from "../../../../utils/validations/user/pickDefinedFields";
+import { IAdminUserManagementRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminManagementRepositoryInterfaces/interface.adminUserManagementRepository";
+import { UserModel } from "../../../../domain/entities/databaseModels/user/userAuthenticationModels/userModel";
+import { pickDefinedFields } from "../../../../utils/validations/userValidations/pickDefinedFields";
 import { EditUserPayload } from "../../../../domain/baseInterfaces/adminBaseInterfaces/interface.editUser";
 import {
   responseUserDTO,

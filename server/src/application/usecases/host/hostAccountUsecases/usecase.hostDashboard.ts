@@ -1,11 +1,11 @@
 import { Types } from "mongoose";
-import { IHostBookingsRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostBookingsRepository";
-import { IHostPaymentRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostPaymentRepository";
-import { IHostCatersRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostCatersRepository";
-import { IHostRentCarRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRentCarRepository";
-import { IHostStudioRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostStudioRepository";
-import { IHostVenueRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostVenueRepository";
-import { IHostDashboardUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostDashboardUseCase";
+import { IHostBookingsRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostAccountRepositoryInterfaces/interface.hostBookingsRepository";
+import { IHostPaymentRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostBaseRepositoryInterfaces/interface.hostPaymentRepository";
+import { IHostCatersRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostServicesRepositoryInterfaces/interface.hostCatersRepository";
+import { IHostRentCarRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostServicesRepositoryInterfaces/interface.hostRentCarRepository";
+import { IHostStudioRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostServicesRepositoryInterfaces/interface.hostStudioRepository";
+import { IHostVenueRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostServicesRepositoryInterfaces/interface.hostVenueRepository";
+import { IHostDashboardUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAccountUsecaseInterfaces/interface.hostDashboardUseCase";
 import {
   mapAssetsToOverview,
   mapBookingsToRecent,
@@ -13,7 +13,7 @@ import {
   mapBookingsToTable,
   mapPaymentsToRevenue,
 } from "../../../../utils/mapping/hostMappings/hostDashboard.mapper";
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
+import { IUserRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAccountRepositoryInterfaces/interface.userRepository";
 
 export class HostDashbaordUseCase implements IHostDashboardUseCase {
   constructor(
@@ -56,7 +56,7 @@ export class HostDashbaordUseCase implements IHostDashboardUseCase {
         hostStudios
       ),
       bookingStatistics: mapBookingsToStats(hostBookings),
-      recentBookings: mapBookingsToRecent(hostBookings , users),
+      recentBookings: mapBookingsToRecent(hostBookings, users),
       bookingTable: mapBookingsToTable(hostBookings, hostPayments, users),
     };
   }

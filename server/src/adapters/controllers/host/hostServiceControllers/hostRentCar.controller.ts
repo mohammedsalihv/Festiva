@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { IRentCar } from "../../../../domain/entities/serviceInterface/host/interface.rentCar";
-import { IHostRentCarUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.rentCarUseCase";
+import { IRentCar } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.rentCar";
+import { IHostRentCarUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostServicesUsecaseInterfaces/interface.rentCarUseCase";
 import { IHostRentCarController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostServicesControllerInterfaces/interface.hostRentCarController";
-import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
+import { ILocationUseCase } from "../../../../domain/usecaseInterfaces/baseUsecaseInterfaces/baseServicesUsecaseInterfaces/interface.locationUsecase";
 import ErrorHandler from "../../../../utils/baseUtilities/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";
@@ -25,7 +25,7 @@ export interface MulterRequest extends Request {
 export class HostRentCarController implements IHostRentCarController {
   constructor(
     private _hostRentCarUseCase: IHostRentCarUseCase,
-    private _locationRepository: ILocationRepository
+    private _locationUsecase: ILocationUseCase
   ) {}
 
   async addRentCarService(req: MulterRequest, res: Response): Promise<void> {
@@ -44,7 +44,7 @@ export class HostRentCarController implements IHostRentCarController {
 
       try {
         await assetFilesValidate({ files, typeOfAsset: typeOfAsset });
-        const newLocation = await this._locationRepository.addLocation(
+        const newLocation = await this._locationUsecase.execute(
           newRentCar.location
         );
 

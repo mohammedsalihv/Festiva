@@ -1,5 +1,5 @@
-import { IUserBookingsRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userBookingsRepository";
-import { IUserBookingUseCase } from "../../../../domain/usecaseInterface/user/userProfileUsecaseInterfaces/interface.userBookingsUseCase";
+import { IUserBookingsRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAccountRepositoryInterfaces/interface.userBookingsRepository";
+import { IUserBookingUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userProfileUsecaseInterfaces/interface.userBookingsUseCase";
 import {
   userBookingDetailsResponse,
   userMyBookingsResponse,
@@ -8,9 +8,9 @@ import {
   mapBookingDetails,
   userBookingsMapping,
 } from "../../../../utils/mapping/userMappings/userBookingMapper";
-import { IPaymentRepository } from "../../../../domain/entities/repositoryInterface/base/interface.paymentRepository";
-import { IHostRepository } from "../../../../domain/entities/repositoryInterface/host/hostBaseRepositoryInterfaces/interface.hostRepository";
-import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
+import { IPaymentRepository } from "../../../../domain/repositoryInterfaces/baseRepositoryInterfaces/basePaymentsRepositoryInterfaces/interface.paymentRepository";
+import { IHostRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostBaseRepositoryInterfaces/interface.hostRepository";
+import { ILocationRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostBaseRepositoryInterfaces/interface.locationRepostory";
 
 export class UserBookingsUseCase implements IUserBookingUseCase {
   constructor(

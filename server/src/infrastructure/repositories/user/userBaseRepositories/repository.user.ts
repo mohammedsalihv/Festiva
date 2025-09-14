@@ -1,6 +1,6 @@
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
+import { IUserRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAccountRepositoryInterfaces/interface.userRepository";
 import { resetPasswordDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
-import { UserModel } from "../../../../domain/models/user/userAuthenticationModels/userModel";
+import { UserModel } from "../../../../domain/entities/databaseModels/user/userAuthenticationModels/userModel";
 import { IUserModel } from "../../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
 
 export class UserRepository implements IUserRepository {

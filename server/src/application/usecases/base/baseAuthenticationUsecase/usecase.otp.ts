@@ -1,5 +1,5 @@
-import { IOTPUseCase } from "../../../../domain/usecaseInterface/base/authentication/interface.otpUseCase";
-import { IOTPRepository } from "../../../../domain/entities/repositoryInterface/base/interface.otpRepository";
+import { IOTPUseCase } from "../../../../domain/usecaseInterfaces/baseUsecaseInterfaces/baseAuthenticationUsecaseInterfaces/interface.otpUseCase";
+import { IOTPRepository } from "../../../../domain/repositoryInterfaces/baseRepositoryInterfaces/baseAuthenticationRepositoryInterfaces/interface.otpRepository";
 import { OTPSendingDTO } from "../../../../types/DTO's/userDTO's/userAuthenticationDTO's/dto.otp";
 import { generateOTP } from "../../../../utils/baseUtilities/communication/otpGenerator";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
@@ -23,7 +23,6 @@ export class OTPUseCase implements IOTPUseCase {
       }
       await this._otpRepository.deleteOTP(email);
     }
-
     const otp = generateOTP();
     await this._otpRepository.createOTP({ email, otp });
 

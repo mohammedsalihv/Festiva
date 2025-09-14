@@ -1,5 +1,5 @@
-import { IUserGoogleLoginValidator } from "../../../domain/validatorInterface/user/interface.userGoogleLoginValidator";
-import { googleLoginUserDTO } from "../../../types/DTO's/userDTO's/dto.hostGoogleLogin";
+import { IUserGoogleLoginValidator } from "../../../domain/validatorInterfaces/userValidatorInterfaces/interface.userGoogleLoginValidator";
+import { googleLoginUserDTO } from "../../../types/DTO's/userDTO's/userAuthenticationDTO's/dto.hostGoogleLogin";
 import CustomError from "../../baseUtilities/errors/CustomError";
 import {
   statusCodes,

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { authenticationRequest } from "../baseAuthenticationInterfaces/authRequest";
+import { authenticationRequest } from "../../baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
 
 export interface IHostBookingsController {
   getAllBookings(req: authenticationRequest, res: Response): Promise<void>;

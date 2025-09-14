@@ -1,11 +1,8 @@
-import { IUserCatersRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userCatersRepository";
-import {
-  ICaters,
-  ICatersBase,
-} from "../../../../domain/entities/serviceInterface/host/interface.caters";
-import { CatersModel } from "../../../../domain/models/host/hostServiceModels/catersModel";
-import { mapCatersToBase } from "../../../../domain/entities/serviceInterface/host/interface.caters";
-import { LocationModel } from "../../../../domain/models/host/hostServiceModels/locationModel";
+import { IUserCatersRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userServicesRepositoryInterfaces/interface.userCatersRepository";
+import { ICaters, ICatersBase } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.caters";
+import { CatersModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/catersModel";
+import { mapCatersToBase } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.caters";
+import { LocationModel } from "../../../../domain/entities/databaseModels/baseModels/baseServicesModels/locationModel";
 
 export class UserCatersRepository implements IUserCatersRepository {
   async findAllCaters(): Promise<ICatersBase[]> {

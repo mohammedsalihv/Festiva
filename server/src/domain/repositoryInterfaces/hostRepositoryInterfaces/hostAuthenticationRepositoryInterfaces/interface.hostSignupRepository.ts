@@ -1,6 +1,6 @@
-import { responseHostDTO } from "../../../../../types/DTO/host/dto.host";
-import { IHost } from "../../../modelInterface/host/interface.host";
+import { responseHostDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
+import { IHostModel } from "../../../entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
 
 export interface IHostSignupRepository {
-  createHost(host: IHost): Promise<responseHostDTO>;
+  createHost(host: IHostModel): Promise<responseHostDTO>;
 }

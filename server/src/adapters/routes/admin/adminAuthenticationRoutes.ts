@@ -3,14 +3,17 @@ import { ADMIN_ROUTES } from "../../../infrastructure/constants/admin.routes";
 import {
   adminLoginController,
   adminLogoutController,
-} from "../../../infrastructure/DI/admin/adminAuthenticationDependencyInjections/adminAuth.DI";
-import { refreshTokenController } from "../../../infrastructure/DI/admin/adminAuthenticationDependencyInjections/adminAuth.DI";
+  refreshTokenController,
+} from "../../../infrastructure/dependencyInjections/adminDependencyInjections/adminAuthenticationDependencyInjections/adminAuth.DI";
 import logger from "../../../utils/baseUtilities/messages/logger";
-import { authenticateToken, isAdmin } from "../../../utils/baseUtilities/middlewares/auth";
+import {
+  authenticateToken,
+  isAdmin,
+} from "../../../utils/baseUtilities/middlewares/auth";
 
-const adminAuthRoutes = express.Router();
+const adminAuthenticationRoutes = express.Router();
 
-adminAuthRoutes.post(
+adminAuthenticationRoutes.post(
   ADMIN_ROUTES.Authentiation.adminLogin,
   async (req, res) => {
     try {
@@ -21,15 +24,15 @@ adminAuthRoutes.post(
   }
 );
 
-adminAuthRoutes.post(
+adminAuthenticationRoutes.post(
   ADMIN_ROUTES.Authentiation.Refresh_Token,
   refreshTokenController.refreshAccessToken.bind(refreshTokenController)
 );
 
-adminAuthRoutes.delete(
+adminAuthenticationRoutes.delete(
   ADMIN_ROUTES.Authentiation.adminLogout,
-  authenticateToken,  
-  isAdmin, 
+  authenticateToken,
+  isAdmin,
   async (req, res) => {
     try {
       await adminLogoutController.logoutByAdmin(req, res);
@@ -40,5 +43,4 @@ adminAuthRoutes.delete(
   }
 );
 
-
-export default adminAuthRoutes;
+export default adminAuthenticationRoutes;

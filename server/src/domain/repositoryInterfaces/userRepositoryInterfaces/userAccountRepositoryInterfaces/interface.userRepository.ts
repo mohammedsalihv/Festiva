@@ -1,5 +1,5 @@
-import { IUserModel } from "../../../modelInterface/user/interface.user";
-import { resetPasswordDTO } from "../../../../../types/DTO/user/dto.user";
+import { IUserModel } from "../../../entities/databaseModelInterfaces/userModelInterfaces/interface.user";
+import { resetPasswordDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 import { Types } from "mongoose";
 
 export interface IUserRepository {

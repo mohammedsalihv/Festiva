@@ -1,6 +1,6 @@
 import { Response } from "express";
-import { IHostDashboardController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/account/interface.hostDashboardController";
-import { IHostDashboardUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostDashboardUseCase";
+import { IHostDashboardController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostAccountControllerInterfaces/interface.hostDashboardController";
+import { IHostDashboardUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAccountUsecaseInterfaces/interface.hostDashboardUseCase";
 import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
 import {
   statusCodes,

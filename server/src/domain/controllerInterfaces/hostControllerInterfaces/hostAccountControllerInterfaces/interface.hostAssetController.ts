@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { authenticationRequest } from "../baseAuthenticationInterfaces/authRequest";
+import {Response } from "express";
+import { authenticationRequest } from "../../baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
 
 export interface IHostAssetController {
   allAssets(req: authenticationRequest, res: Response): Promise<void>;

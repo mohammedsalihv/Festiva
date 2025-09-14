@@ -1,8 +1,5 @@
 import { Types } from "mongoose";
-import {
-  IVenue,
-  IVenueBase,
-} from "../../../entities/serviceInterface/host/interface.venue";
+import { IVenue , IVenueBase } from "../../../baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.venue";
 export interface IUserVenueUseCase {
   allVenues(): Promise<IVenueBase[]>;
   venueDetails(venueId: string): Promise<IVenue>;

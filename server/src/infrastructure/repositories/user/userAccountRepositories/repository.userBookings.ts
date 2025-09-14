@@ -1,6 +1,6 @@
 import { IBooking } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.booking";
-import { IUserBookingsRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userBookingsRepository";
-import bookingModel from "../../../../domain/models/base/booking/bookingModel";
+import { IUserBookingsRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAccountRepositoryInterfaces/interface.userBookingsRepository";
+import bookingModel from "../../../../domain/entities/databaseModels/baseModels/baseBookingModels/bookingModel";
 
 export class UserBookingsRepository implements IUserBookingsRepository {
   async findBookings(

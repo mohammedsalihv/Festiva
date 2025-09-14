@@ -1,5 +1,4 @@
-import { IHostAssetBase } from "../../../entities/serviceInterface/host/interface.hostAssetsBase";
-
+import { IHostAssetBase } from "../../../baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.hostAssetsBase";
 export interface IAdminAssetManagementUseCase {
   execute(typeOfAsset: string): Promise<IHostAssetBase[]>;
   fetchAssetById(

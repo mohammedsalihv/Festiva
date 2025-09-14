@@ -1,7 +1,7 @@
 import { IHostCatersController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostServicesControllerInterfaces/interface.hostCatersController";
-import { IHostCatersUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.catersUseCase";
-import { ICaters } from "../../../../domain/entities/serviceInterface/host/interface.caters";
-import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
+import { IHostCatersUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostServicesUsecaseInterfaces/interface.catersUseCase";
+import { ICaters } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.caters";
+import { ILocationUseCase } from "../../../../domain/usecaseInterfaces/baseUsecaseInterfaces/baseServicesUsecaseInterfaces/interface.locationUsecase";
 import ErrorHandler from "../../../../utils/baseUtilities/errors/CustomError";
 import { JwtPayload } from "jsonwebtoken";
 import { Types } from "mongoose";
@@ -25,7 +25,7 @@ export interface MulterRequest extends Request {
 export class HostCatersController implements IHostCatersController {
   constructor(
     private _hostCatersUseCase: IHostCatersUseCase,
-    private _locationRepository: ILocationRepository
+    private _locationUsecase: ILocationUseCase
   ) {}
 
   async addCatersService(req: MulterRequest, res: Response): Promise<void> {
@@ -43,7 +43,7 @@ export class HostCatersController implements IHostCatersController {
       const typeOfAsset = "caters";
       try {
         await assetFilesValidate({ files, typeOfAsset });
-        const newLocation = await this._locationRepository.addLocation(
+        const newLocation = await this._locationUsecase.execute(
           newCaters.location
         );
 

@@ -1,7 +1,7 @@
 import { IHostModel } from "../../../../domain/entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
-import { IAdminHostManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminHostManagementRepository";
-import { HostModel } from "../../../../domain/models/host/hostAuthenticationModels/hostModel";
-import { pickDefinedFields } from "../../../../utils/validations/user/pickDefinedFields";
+import { IAdminHostManagementRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminManagementRepositoryInterfaces/interface.adminHostManagementRepository";
+import { HostModel } from "../../../../domain/entities/databaseModels/hostModels/hostAuthenticationModels/hostModel";
+import { pickDefinedFields } from "../../../../utils/validations/userValidations/pickDefinedFields";
 import { responseHostDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 import { responseAllHostsDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 
@@ -18,7 +18,6 @@ export class AdminHostManagementRepostory
       HostModel.find().skip(skip).limit(limit).exec(),
       HostModel.countDocuments().exec(),
     ]);
-
     const totalPages = Math.ceil(totalItems / limit);
 
     const data: responseHostDTO[] = rawHosts.map((host) => ({

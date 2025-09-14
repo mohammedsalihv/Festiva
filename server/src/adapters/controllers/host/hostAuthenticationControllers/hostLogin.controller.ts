@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { IHostLoginController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostAuthenticationControllerInterfaces/interface.hostLoginController";
-import { IHostLoginUseCase } from "../../../../domain/usecaseInterface/host/authenticationUsecaseInterfaces/interface.hostLoginUseCase";
-import { IHostLoginControllerValidator } from "../../../../domain/validatorInterface/host/interface.hostLoginValidator";
+import { IHostLoginUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAuthenticationUsecaseInterfaces/interface.hostLoginUseCase";
+import { IHostLoginControllerValidator } from "../../../../domain/validatorInterfaces/hostValidatorInterfaces/interface.hostLoginValidator";
 import logger from "../../../../utils/baseUtilities/messages/logger";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
-import { toHostLoginResponseDTO } from "../../../../types/DTO's/hostDTO's/dto.hostLogin";
+import { toHostLoginResponseDTO } from "../../../../types/DTO's/hostDTO's/hostAuthenticationDTO's/dto.hostLogin";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 
 export class HostLoginController implements IHostLoginController {

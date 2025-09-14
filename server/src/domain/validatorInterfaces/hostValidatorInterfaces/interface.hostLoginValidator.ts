@@ -1,5 +1,5 @@
-import { hostLoginDTO } from "../../../types/DTO's/hostDTO's/dto.hostLogin";
-import { IHostModel } from "../../entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
+import { hostLoginDTO } from "../../../types/DTO's/hostDTO's/hostAuthenticationDTO's/dto.hostLogin";
+
 
 export interface IHostLoginUsecaseValidator {
   validateRequiredFields(email: string, password: string): void;

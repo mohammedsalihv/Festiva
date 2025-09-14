@@ -3,7 +3,7 @@ import { IBooking } from "../../../domain/entities/databaseModelInterfaces/baseM
 import { userBookingDetailsResponse } from "../../../types/DTO's/userDTO's/userBaseDTO's/dto.userBookings";
 import { IPayment } from "../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.payment";
 import { IHostModel } from "../../../domain/entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
-import { ILocation } from "../../../domain/entities/serviceInterface/host/interface.location";
+import { ILocation } from "../../../domain/baseInterfaces/baseServicesInterfaces/interface.location";
 
 export const userBookingsMapping = (
   bookings: IBooking[]

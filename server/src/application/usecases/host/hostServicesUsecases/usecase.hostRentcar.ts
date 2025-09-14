@@ -1,8 +1,8 @@
-import { IHostRentCarRepository } from "../../../../domain/entities/repositoryInterface/host/services repository interface/interface.hostRentCarRepository";
+import { IHostRentCarRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostServicesRepositoryInterfaces/interface.hostRentCarRepository";
 import ErrorHandler from "../../../../utils/baseUtilities/errors/CustomError";
-import { IRentCar } from "../../../../domain/entities/serviceInterface/host/interface.rentCar";
+import { IRentCar } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.rentCar";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
-import { IHostRentCarUseCase } from "../../../../domain/usecaseInterface/host/services usecase interfaces/interface.rentCarUseCase";
+import { IHostRentCarUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostServicesUsecaseInterfaces/interface.rentCarUseCase";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 
 export class HostRentCarUseCase implements IHostRentCarUseCase {
@@ -54,19 +54,16 @@ export class HostRentCarUseCase implements IHostRentCarUseCase {
     if (!rentcarId) {
       throw new CustomError("Rentcar ID is required", statusCodes.unAuthorized);
     }
-
     const updated = await this._hostRentCarRepository.updateAvailability(
       rentcarId,
       isAvailable
     );
-
     if (!updated) {
       throw new CustomError(
         `Rentcar ${isAvailable ? "available" : "unavailable"} request failed`,
         statusCodes.serverError
       );
     }
-
     return true;
   }
 

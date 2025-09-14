@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import { IUserRentCarUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userRentCarUseCase";
+import { IUserRentCarUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userServiceUseCaseInterfaces/interface.userRentCarUseCase";
 import { IUserRentCarController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userServicesControllerInterfaces/interface.userRentCarController";
 import logger from "../../../../utils/baseUtilities/messages/logger";
 import {

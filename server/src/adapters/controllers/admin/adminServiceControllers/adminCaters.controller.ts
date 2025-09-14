@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IAdminCatersController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminCatersController";
-import { IAdminCatersUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminCatersUseCase";
+import { IAdminCatersUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminServicesUsecaseInterfaces/interface.adminCatersUseCase";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 

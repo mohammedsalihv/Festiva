@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IHostController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostBaseControllerInterfaces/interface.hostController";
-import { IHostUseCase } from "../../../../domain/usecaseInterface/host/baseUsecaseInterfaces/interface.hostUseCase";
+import { IHostUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostBaseUsecaseInterfaces/interface.hostUseCase";
 import { statusCodes , statusMessages } from "../../../../utils/baseUtilities/messages/constantResponses";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 

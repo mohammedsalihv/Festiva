@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 import { IUserCatersController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userServicesControllerInterfaces/interface.userCatersController";
-import { IUserCatersUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userCatersUseCase";
+import { IUserCatersUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userServiceUseCaseInterfaces/interface.userCatersUseCase";
 import logger from "../../../../utils/baseUtilities/messages/logger";
 import {
   statusCodes,

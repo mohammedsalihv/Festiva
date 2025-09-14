@@ -48,7 +48,7 @@ export interface userDetailsDTO {
   refreshToken: string;
 }
 
-export interface profileEditDTO {
+export interface userProfileEditDTO {
   firstname: string;
   lastname: string;
   email?: string;

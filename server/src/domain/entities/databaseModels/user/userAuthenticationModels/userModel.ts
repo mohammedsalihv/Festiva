@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import { IUserModel } from "../../../entities/modelInterface/user/interface.user";
-
+import { IUserModel
+  
+ } from "../../../databaseModelInterfaces/userModelInterfaces/interface.user";
 const UserSchema = new Schema<IUserModel>({
   firstname: { type: String, required: false },
   lastname: { type: String, required: false },

@@ -1,4 +1,4 @@
-import { CreateAssetNotificationDTO } from "../../../../../types/DTO/common/notification";
+import { CreateAssetNotificationDTO } from "../../../../types/DTO's/baseDTO's/notification";
 
 export interface IHostNotificationRepository {
   allHostNotifications(receiverId: string): Promise<any[]>;

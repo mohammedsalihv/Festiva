@@ -5,14 +5,15 @@ import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import logger from "./utils/baseUtilities/messages/logger";
-import userAuthRoutes from "./adapters/routes/user/userAuthenticationRoutes";
+import userAuthenticationRoutes from "./adapters/routes/user/userAuthenticationRoutes";
 import userRoutes from "./adapters/routes/user/userRoutes";
 import userServiceRoute from "./adapters/routes/user/userServiceRoutes";
-import hostAuthRoutes from "./adapters/routes/host/hostAuthenticationRoutes";
+import hostAuthenticationRoutes from "./adapters/routes/host/hostAuthenticationRoutes";
 import hostAccountRoutes from "./adapters/routes/host/hostAccountRoutes";
 import hostRoutes from "./adapters/routes/host/hostRoutes";
-import adminAuthRoutes from "./adapters/routes/admin/adminAuthenticationRoutes";
+import adminAuthenticationRoutes from "./adapters/routes/admin/adminAuthenticationRoutes";
 import adminRoutes from "./adapters/routes/admin/adminRoutes";
+
 dotenv.config();
 
 const app: Application = express();
@@ -45,16 +46,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: "10mb" }));
 
 
-app.use("/api/user/auth", userAuthRoutes);
+app.use("/api/user/auth", userAuthenticationRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/user/service", userServiceRoute);
 
-app.use("/api/host/auth", hostAuthRoutes);
+app.use("/api/host/auth", hostAuthenticationRoutes);
 app.use("/api/host", hostRoutes);
 app.use("/api/host/account", hostAccountRoutes);
 
 
-app.use("/api/admin/auth", adminAuthRoutes);
+app.use("/api/admin/auth", adminAuthenticationRoutes);
 app.use("/api/admin", adminRoutes);
 
 export default app;

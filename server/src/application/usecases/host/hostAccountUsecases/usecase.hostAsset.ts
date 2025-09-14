@@ -1,5 +1,5 @@
-import { IHostAssetUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostAssetUseCase";
-import { IHostAssetRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetRepository";
+import { IHostAssetUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAccountUsecaseInterfaces/interface.hostAssetUseCase";
+import { IHostAssetRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostAccountRepositoryInterfaces/interface.hostAssetRepository";
 
 export class HostAssetUseCase implements IHostAssetUseCase {
   constructor(private _hostAssetRepository: IHostAssetRepository) {}

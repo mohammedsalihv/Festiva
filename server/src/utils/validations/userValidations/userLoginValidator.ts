@@ -4,7 +4,7 @@ import {
   statusCodes,
   statusMessages,
 } from "../../baseUtilities/messages/constantResponses";
-import { IUserLoginValidator } from "../../../domain/validatorInterface/user/interface.userLoginValidator";
+import { IUserLoginValidator } from "../../../domain/validatorInterfaces/userValidatorInterfaces/interface.userLoginValidator";
 
 export class UserLoginValidator implements IUserLoginValidator {
   validateUserExistence(user: any): void {

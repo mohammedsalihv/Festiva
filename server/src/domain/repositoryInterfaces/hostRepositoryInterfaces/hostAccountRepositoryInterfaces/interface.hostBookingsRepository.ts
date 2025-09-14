@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { IBooking } from "../../../modelInterface/base/interface.booking";
+import { IBooking } from "../../../entities/databaseModelInterfaces/baseModelInterfaces/interface.booking";
 
 export interface IHostBookingsRepository {
   getAllBookings(

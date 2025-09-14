@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IHostLogoutController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostAuthenticationControllerInterfaces/interface.hostLogout";
-import { IHostLogoutUseCase } from "../../../../domain/usecaseInterface/host/authenticationUsecaseInterfaces/interface.hostLogoutUseCase";
+import { IHostLogoutUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAuthenticationUsecaseInterfaces/interface.hostLogoutUseCase";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import logger from "../../../../utils/baseUtilities/messages/logger";
 import {

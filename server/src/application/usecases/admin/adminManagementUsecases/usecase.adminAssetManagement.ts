@@ -1,6 +1,6 @@
-import { IAdminAssetBaseUseCase } from "../../../../domain/entities/serviceInterface/admin/usecase/interface.adminAssetBaseUsecase";
-import { IAdminAssetManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminAssetManagementRepository";
-import { IAdminAssetManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminAssetManagementUseCase";
+import { IAdminAssetBaseUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminBaseUsecaseInterfaces/interface.adminAssetBaseUsecase";
+import { IAdminAssetManagementRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminManagementRepositoryInterfaces/interface.adminAssetManagementRepository";
+import { IAdminAssetManagementUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminManagementUsecaseInterfaces/interface.adminAssetManagementUseCase";
 
 export class AdminAssetManagementUseCase
   implements IAdminAssetManagementUseCase

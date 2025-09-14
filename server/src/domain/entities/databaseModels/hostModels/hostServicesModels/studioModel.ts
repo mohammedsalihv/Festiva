@@ -1,5 +1,5 @@
 import mongoose, { Schema, Types } from "mongoose";
-import { IStudio } from "../../../entities/serviceInterface/host/interface.studio";
+import { IStudio } from "../../../../baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.studio";
 
 const studioSchema = new Schema<IStudio>(
   {

@@ -1,6 +1,6 @@
-import { IOTPRepository } from "../../../../domain/entities/repositoryInterface/base/interface.otpRepository";
+import { IOTPRepository } from "../../../../domain/repositoryInterfaces/baseRepositoryInterfaces/baseAuthenticationRepositoryInterfaces/interface.otpRepository";
 import { IOTP } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.otp";
-import { OTPModel } from "../../../../domain/models/base/baseAuthenticationmodels/otpModel";
+import { OTPModel } from "../../../../domain/entities/databaseModels/baseModels/baseAuthenticationModels/otpModel";
 
 export class OTPRepository implements IOTPRepository {
   async findByEmail(email: string): Promise<IOTP | null> {

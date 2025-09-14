@@ -1,9 +1,9 @@
-import { IAdminUserManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminUserManagementUseCase";
+import { IAdminUserManagementUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminManagementUsecaseInterfaces/interface.adminUserManagementUseCase";
 import {
   responseUserDTO,
   responseAllUsersDTO,
 } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
-import { IAdminUserManagementRepository } from "../../../../domain/entities/repositoryInterface/admin/management/interface.adminUserManagementRepository";
+import { IAdminUserManagementRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminManagementRepositoryInterfaces/interface.adminUserManagementRepository";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { EditUserPayload } from "../../../../domain/baseInterfaces/adminBaseInterfaces/interface.editUser";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";

@@ -1,6 +1,6 @@
 import { IAdminBookingManagementController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminManagementControllerInterfaces/interface.adminBookingManagementController";
 import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
-import { IAdminBookingManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminBookingManagementUseCase";
+import { IAdminBookingManagementUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminManagementUsecaseInterfaces/interface.adminBookingManagementUseCase";
 import {
   statusCodes,
   statusMessages,

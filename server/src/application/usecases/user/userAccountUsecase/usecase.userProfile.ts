@@ -1,13 +1,13 @@
 import { responseUserDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
-import { IUserProfileUseCase } from "../../../../domain/usecaseInterface/user/userProfileUsecaseInterfaces/interface.userProfileUseCase";
-import { IUserProfileRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userProfileRepository";
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
+import { IUserProfileUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userProfileUsecaseInterfaces/interface.userProfileUseCase";
+import { IUserProfileRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAccountRepositoryInterfaces/interface.userProfileRepository";
+import { IUserRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAccountRepositoryInterfaces/interface.userRepository";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import {
   changePasswordDTO,
-  profileEditDTO,
+  userProfileEditDTO,
 } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
-import { hash } from "../../../../utils/baseUtilities/auth/passwordHash";
+import { hash } from "../../../../utils/baseUtilities/authentications/passwordHash";
 import {
   statusCodes,
   statusMessages,
@@ -37,7 +37,7 @@ export class UserProfileUseCase implements IUserProfileUseCase {
 
   async profileEdit(
     userId: string,
-    form: profileEditDTO
+    form:   userProfileEditDTO,
   ): Promise<responseUserDTO> {
     if (form.email) {
       const existedEmail = await this._userRepository.findByEmail(form.email);

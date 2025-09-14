@@ -1,7 +1,7 @@
 import { Response } from "express";
-import { IHostBookingsController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/account/interface.hostBookingsController";
+import { IHostBookingsController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostAccountControllerInterfaces/interface.hostBookingsController";
 import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
-import { IHostBookingsUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostBookingsUseCase";
+import { IHostBookingsUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAccountUsecaseInterfaces/interface.hostBookingsUseCase";
 import {
   statusCodes,
   statusMessages,

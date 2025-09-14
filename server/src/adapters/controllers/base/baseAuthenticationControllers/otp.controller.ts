@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IOTPController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/interface.otpController";
-import { IOTPUseCase } from "../../../../domain/usecaseInterface/base/authentication/interface.otpUseCase";
+import { IOTPUseCase } from "../../../../domain/usecaseInterfaces/baseUsecaseInterfaces/baseAuthenticationUsecaseInterfaces/interface.otpUseCase";
 import {
   statusCodes,
   statusMessages,

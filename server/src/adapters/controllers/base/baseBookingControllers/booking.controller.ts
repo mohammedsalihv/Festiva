@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { IBookingController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseBookingControllerInterfaces/interface.bookingController";
-import { IBookingUseCase } from "../../../../domain/usecaseInterface/base/booking/interface.bookingUsecase";
+import { IBookingUseCase } from "../../../../domain/usecaseInterfaces/baseUsecaseInterfaces/baseBookingUsecaseInterfaces/interface.bookingUsecase";
 import { IBooking } from "../../../../domain/entities/databaseModelInterfaces/baseModelInterfaces/interface.booking";
 import logger from "../../../../utils/baseUtilities/messages/logger";
 import {
   statusCodes,
   statusMessages,
 } from "../../../../utils/baseUtilities/messages/constantResponses";
-import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostNotificationUseCase";
+import { IHostNotificationUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAccountUsecaseInterfaces/interface.hostNotificationUseCase";
 import { getIO } from "../../../../config/socket";
-import { IPaymentUseCase } from "../../../../domain/usecaseInterface/base/payment/interface.paymentUsecase";
+import { IPaymentUseCase } from "../../../../domain/usecaseInterfaces/baseUsecaseInterfaces/basePaymentUsecaseInterfaces/interface.paymentUsecase";
 
 export class BookingController implements IBookingController {
   constructor(

@@ -1,10 +1,10 @@
 import { Types } from "mongoose";
-import { IUserVenueRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userVenueRepository";
+import { IUserVenueRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userServicesRepositoryInterfaces/interface.userVenueRepository";
 import {
   IVenue,
   IVenueBase,
-} from "../../../../domain/entities/serviceInterface/host/interface.venue";
-import { IUserVenueUseCase } from "../../../../domain/usecaseInterface/user/userServiceUseCaseInterfaces/interface.userVenueUseCase";
+} from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.venue";
+import { IUserVenueUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userServiceUseCaseInterfaces/interface.userVenueUseCase";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 

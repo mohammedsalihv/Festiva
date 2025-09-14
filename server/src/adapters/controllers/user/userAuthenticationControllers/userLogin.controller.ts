@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IUserLoginController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userAuthenticationControllerInterfaces/interface.userLoginController";
-import { IUserLoginUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userLoginUseCase";
+import { IUserLoginUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userAuthenticationUseCaseInterfaces/interface.userLoginUseCase";
 import logger from "../../../../utils/baseUtilities/messages/logger";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { userLoginSanitizer } from "../../../../utils/sanitizers/user/userLoginSanitizer";
@@ -34,7 +34,6 @@ export class UserLoginController implements IUserLoginController {
           message: error.message,
         });
       }
-
       return res.status(statusCodes.serverError).json({
         success: false,
         message: statusMessages.serverError,

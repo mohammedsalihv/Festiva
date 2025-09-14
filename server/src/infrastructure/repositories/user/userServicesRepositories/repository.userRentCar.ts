@@ -1,11 +1,9 @@
-import { IUserRentCarRepository } from "../../../../domain/entities/repositoryInterface/user/services/interface.userRentCarRepository";
-import { RentCarModel } from "../../../../domain/models/host/hostServiceModels/rentCarModel";
-import {
-  IRentCar,
-  mapRentCarToBase,
-} from "../../../../domain/entities/serviceInterface/host/interface.rentCar";
-import { IRentCarBase } from "../../../../domain/entities/serviceInterface/host/interface.rentCar";
-import { LocationModel } from "../../../../domain/models/host/hostServiceModels/locationModel";
+import { IUserRentCarRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userServicesRepositoryInterfaces/interface.userRentCarRepository";
+import { RentCarModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/rentCarModel";
+import { IRentCar , IRentCarBase } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.rentCar";
+import { LocationModel } from "../../../../domain/entities/databaseModels/baseModels/baseServicesModels/locationModel";
+import { mapRentCarToBase } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.rentCar";
+
 
 export class UserRentCarRepository implements IUserRentCarRepository {
   async findAllRentCars(): Promise<IRentCarBase[]> {

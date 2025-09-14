@@ -12,7 +12,6 @@ import {
   Filler,
   ChartData,
 } from "chart.js";
-import { Button } from "@/components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { getDashboard } from "@/api/admin/adminDashboardService";
 import { AppDispatch, RootState } from "@/redux/store";

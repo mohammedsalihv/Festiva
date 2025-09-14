@@ -1,9 +1,9 @@
-import { IUserLoginRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userLoginRepository";
-import { IUserLoginUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userLoginUseCase";
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
-import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
+import { IUserLoginRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAuthenticationRepositoryInterfaces/interface.userLoginRepository";
+import { IUserLoginUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userAuthenticationUseCaseInterfaces/interface.userLoginUseCase";
+import { IUserRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAccountRepositoryInterfaces/interface.userRepository";
+import { ITokenService } from "../../../../domain/baseInterfaces/baseAuthenticationInterfaces/interface.tokenService";
 import { userDetailsDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
-import { IUserLoginValidator } from "../../../../domain/validatorInterface/user/interface.userLoginValidator";
+import { IUserLoginValidator } from "../../../../domain/validatorInterfaces/userValidatorInterfaces/interface.userLoginValidator";
 import { userLoginMapper } from "../../../../utils/mapping/userMappings/userLoginMapper";
 
 export class UserLoginUseCase implements IUserLoginUseCase {
@@ -25,13 +25,13 @@ export class UserLoginUseCase implements IUserLoginUseCase {
     await this._validator.validatePassword(userValidation!.password!, password);
 
     const accessToken = this._tokenService.generateAccessToken({
-      id: user.id!,
-      role: user.role,
+      id: user?.id!,
+      role: user?.role,
     });
 
     const refreshToken = this._tokenService.generateRefreshToken({
-      id: user.id!,
-      role: user.role,
+      id: user?.id!,
+      role: user?.role,
     });
 
     return userLoginMapper.toUserDetailsDTO(user, accessToken, refreshToken);

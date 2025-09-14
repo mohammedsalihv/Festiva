@@ -1,5 +1,5 @@
-import { IHostLogoutRepository } from "../../../../domain/entities/repositoryInterface/host/auth repository interface/interface.hostLogoutRepository";
-import { IHostLogoutUseCase } from "../../../../domain/usecaseInterface/host/authenticationUsecaseInterfaces/interface.hostLogoutUseCase";
+import { IHostLogoutRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostAuthenticationRepositoryInterfaces/interface.hostLogoutRepository";
+import { IHostLogoutUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAuthenticationUsecaseInterfaces/interface.hostLogoutUseCase";
 
 export class HostLogoutUseCase implements IHostLogoutUseCase {
   constructor(private _hostLogoutRepository: IHostLogoutRepository) {}

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { JwtPayload } from "jsonwebtoken";
 import { IAdminAssetManagementController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminManagementControllerInterfaces/interface.adminAssetManagementController";
-import { IAdminAssetManagementUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminAssetManagementUseCase";
-import { IAdminNotificationUseCase } from "../../../../domain/usecaseInterface/admin/managementUsecaseInterfaces/interface.adminNotificationUsecase";
+import { IAdminAssetManagementUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminManagementUsecaseInterfaces/interface.adminAssetManagementUseCase";
+import { IAdminNotificationUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminManagementUsecaseInterfaces/interface.adminNotificationUsecase";
 import { IAdminVenueController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminVenueController";
 import { IAdminRentCarController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminRentCarController";
 import { IAdminCatersController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminCatersController";

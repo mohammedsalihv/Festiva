@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { IAdminDashboardController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminDashboardControllerInterfaces/interface.adminDashboardController";
 import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
-import { IAdminDashboardUseCase } from "../../../../domain/usecaseInterface/admin/adminBaseUsecaseInterfaces/interface.adminDashboardUseCase";
+import { IAdminDashboardUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminBaseUsecaseInterfaces/interface.adminDashboardUseCase";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 
 export class AdminDashboardController implements IAdminDashboardController {

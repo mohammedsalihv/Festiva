@@ -1,7 +1,7 @@
-import { IHostGoogleAuth } from "../../../modelInterface/host/interface.hostGoogleAuth";
-import { responseHostDTO } from "../../../../../types/DTO/host/dto.host";
+import { IHostGoogle } from "../../../baseInterfaces/hostBaseInterfaces/hostAuthenticationBaseInterfaces/interface.hostGoogle";
+import { responseHostDTO } from "../../../../types/DTO's/hostDTO's/hostBaseDTO's/dto.host";
 
 export interface IHostGoogleSignupRepository {
   findByEmail(email: string): Promise<responseHostDTO | null>;
-  createHost(host: IHostGoogleAuth): Promise<responseHostDTO>;
+  createHost(host: IHostGoogle): Promise<responseHostDTO>;
 }

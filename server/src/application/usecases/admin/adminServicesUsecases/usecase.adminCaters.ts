@@ -1,6 +1,6 @@
-import { IAdminCatersUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminCatersUseCase";
-import { ICaters } from "../../../../domain/entities/serviceInterface/host/interface.caters";
-import { IAdminCatersRepository } from "../../../../domain/entities/repositoryInterface/admin/services/interface.adminCatersRepository";
+import { IAdminCatersUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminServicesUsecaseInterfaces/interface.adminCatersUseCase";
+import { ICaters } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.caters";
+import { IAdminCatersRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminServicesRepositoryInterfaces/interface.adminCatersRepository";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 

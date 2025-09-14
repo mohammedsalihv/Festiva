@@ -1,5 +1,5 @@
-import { IUserUseCase } from "../../../../domain/usecaseInterface/user/userBaseUsecaseInterfaces/interface.userUseCase";
-import { IUserRepository } from "../../../../domain/entities/repositoryInterface/user/account/interface.userRepository";
+import { IUserUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userBaseUsecaseInterfaces/interface.userUseCase";
+import { IUserRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAccountRepositoryInterfaces/interface.userRepository";
 import { resetPasswordDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 
 export class UserUseCase implements IUserUseCase {

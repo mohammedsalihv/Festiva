@@ -1,14 +1,14 @@
-import { IHostAssetRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.hostAssetRepository";
+import { IHostAssetRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostAccountRepositoryInterfaces/interface.hostAssetRepository";
 import {
   AssetRequestDTO,
   myAssetsDTO,
 } from "../../../../types/DTO's/hostDTO's/hostAccountDTO's/dto.assetRequest";
 import { mapAssetsToRequestDTOs } from "../../../../utils/mapping/hostMappings/mapHostAssetsToRequests";
 import { mapAssetsToMyAssetsDTOs } from "../../../../utils/mapping/hostMappings/mappingTomyAssets";
-import { RentCarModel } from "../../../../domain/models/host/hostServiceModels/rentCarModel";
-import { StudioModel } from "../../../../domain/models/host/hostServiceModels/studioModel";
-import { VenueModel } from "../../../../domain/models/host/hostServiceModels/venueModel";
-import { CatersModel } from "../../../../domain/models/host/hostServiceModels/catersModel";
+import { RentCarModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/rentCarModel";
+import { StudioModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/studioModel";
+import { VenueModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/venueModel";
+import { CatersModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/catersModel";
 
 export class HostAssetRepository implements IHostAssetRepository {
   async myAssets(

@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { IBooking } from "../../../entities/modelInterface/base/interface.booking";
+import { IBooking } from "../../../databaseModelInterfaces/baseModelInterfaces/interface.booking";
 
 const BookingSchema = new Schema<IBooking>(
   {

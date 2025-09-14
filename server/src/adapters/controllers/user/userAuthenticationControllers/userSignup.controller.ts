@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { IUserModel } from "../../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
 import { registerUserDTO } from "../../../../types/DTO's/userDTO's/userBaseDTO's/dto.user";
 import { IUserSignupController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userAuthenticationControllerInterfaces/interface.userSignupController";
-import { IUserSignupUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userSignupUseCase";
+import { IUserSignupUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userAuthenticationUseCaseInterfaces/interface.userSignupUseCase";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 import { userSignupSanitizer } from "../../../../utils/sanitizers/user/userSignupSanitizer";
 
@@ -19,7 +19,6 @@ export class UserSignupController implements IUserSignupController {
         phone,
         password,
       };
-
       const { user, accessToken, refreshToken } =
         await this._userSignupUseCase.userSignup(userData);
       res.status(statusCodes.Success).json({

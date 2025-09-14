@@ -1,9 +1,9 @@
 import { Response } from "express";
 import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
-import { IHostReviewsController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/account/interface.hostReviewsController";
+import { IHostReviewsController } from "../../../../domain/controllerInterfaces/hostControllerInterfaces/hostAccountControllerInterfaces/interface.hostReviewsController";
 import { statusCodes, statusMessages } from "../../../../utils/baseUtilities/messages/constantResponses";
 import logger from "../../../../utils/baseUtilities/messages/logger";
-import { IHostReviewsUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostReviewsUseCase";
+import { IHostReviewsUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAccountUsecaseInterfaces/interface.hostReviewsUseCase";
 
 export class HostReviewsController implements IHostReviewsController {
   constructor(private _hostReviewsUseCase: IHostReviewsUseCase) {}

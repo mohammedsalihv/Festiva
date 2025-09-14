@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IReviewController } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseReviewControllerInterfaces/interface.reviewController";
-import { IReviewUseCase } from "../../../../domain/usecaseInterface/base/review/interface.reviewUsecase";
+import { IReviewUseCase } from "../../../../domain/usecaseInterfaces/baseUsecaseInterfaces/baseReviewUsecaseInterfaces/interface.reviewUsecase";
 import { validateReviewRequest } from "../../../../types/DTO's/baseDTO's/review";
 import {
   statusCodes,
@@ -10,7 +10,7 @@ import logger from "../../../../utils/baseUtilities/messages/logger";
 import { IUserServicesBaseController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userServicesControllerInterfaces/interface.userServicesBaseController";
 import { mapReviewPayloadToIReview } from "../../../../utils/mapping/baseMappings/reviewMapper";
 import { getIO } from "../../../../config/socket";
-import { IHostNotificationUseCase } from "../../../../domain/usecaseInterface/host/accountUsecaseInterfaces/interface.hostNotificationUseCase";
+import { IHostNotificationUseCase } from "../../../../domain/usecaseInterfaces/hostUsecaseInterfaces/hostAccountUsecaseInterfaces/interface.hostNotificationUseCase";
 import { AssetType } from "../../../../types/baseTypes/assetsTypes";
 
 export class ReviewController implements IReviewController {

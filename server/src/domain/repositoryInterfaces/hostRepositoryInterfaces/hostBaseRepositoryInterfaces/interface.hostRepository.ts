@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { IHostModel } from "../../../modelInterface/host/interface.host";
+import { IHostModel } from "../../../entities/databaseModelInterfaces/hostModelInterfaces/interface.host";
 
 export interface IHostRepository {
   findByEmail(email: string): Promise<IHostModel | null>;

@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
+import {Response } from "express";
 import { IUserBookingsController } from "../../../../domain/controllerInterfaces/userControllerInterfaces/userAccountControllerInterfaces/interface.userBookingsController";
-import { IUserBookingUseCase } from "../../../../domain/usecaseInterface/user/userProfileUsecaseInterfaces/interface.userBookingsUseCase";
+import { IUserBookingUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userProfileUsecaseInterfaces/interface.userBookingsUseCase";
 import { authenticationRequest } from "../../../../domain/controllerInterfaces/baseControllerInterfaces/baseAuthenticationInterfaces/authRequest";
 import {
   statusCodes,

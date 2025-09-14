@@ -1,8 +1,8 @@
 import axios from "axios";
 import { geocodeAddress } from "../../../../utils/baseUtilities/geocoding/geocodeAddress";
-import { ILocationRepository } from "../../../../domain/entities/repositoryInterface/host/account repository interfaces/interface.locationRepostory";
-import { ILocationUseCase } from "../../../../domain/usecaseInterface/host/baseUsecaseInterfaces/interface.locationUsecase";
-import { ILocation } from "../../../../domain/entities/serviceInterface/host/interface.location";
+import { ILocationRepository } from "../../../../domain/repositoryInterfaces/hostRepositoryInterfaces/hostBaseRepositoryInterfaces/interface.locationRepostory";
+import { ILocationUseCase } from "../../../../domain/usecaseInterfaces/baseUsecaseInterfaces/baseServicesUsecaseInterfaces/interface.locationUsecase";
+import { ILocation } from "../../../../domain/baseInterfaces/baseServicesInterfaces/interface.location";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 

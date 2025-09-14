@@ -1,6 +1,6 @@
-import { IRentCar } from "../../../../domain/entities/serviceInterface/host/interface.rentCar";
-import { IAdminRentCarRepository } from "../../../../domain/entities/repositoryInterface/admin/services/interface.adminRentCarRepository";
-import { RentCarModel } from "../../../../domain/models/host/hostServiceModels/rentCarModel";
+import { IRentCar } from "../../../../domain/baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.rentCar";
+import { IAdminRentCarRepository } from "../../../../domain/repositoryInterfaces/adminRepositoryInterfaces/adminServicesRepositoryInterfaces/interface.adminRentCarRepository";
+import { RentCarModel } from "../../../../domain/entities/databaseModels/hostModels/hostServicesModels/rentCarModel";
 
 export class AdminRentCarRepository implements IAdminRentCarRepository {
   carDetails(rentcarId: string): Promise<IRentCar | null> {

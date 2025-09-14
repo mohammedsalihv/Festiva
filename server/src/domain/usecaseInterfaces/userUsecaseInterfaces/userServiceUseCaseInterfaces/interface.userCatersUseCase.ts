@@ -1,8 +1,5 @@
 import { Types } from "mongoose";
-import {
-  ICatersBase,
-  ICaters,
-} from "../../../entities/serviceInterface/host/interface.caters";
+import { ICaters , ICatersBase } from "../../../baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.caters";
 
 export interface IUserCatersUseCase {
   allCaters(): Promise<ICatersBase[]>;

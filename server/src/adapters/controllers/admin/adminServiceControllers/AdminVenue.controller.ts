@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { IAdminVenueController } from "../../../../domain/controllerInterfaces/adminControllerInterfaces/adminServicesControllerInterfaces/interface.adminVenueController";
-import { IAdminVenueUseCase } from "../../../../domain/usecaseInterface/admin/servicesUsecaseInterfaces/interface.adminVenueUseCase";
+import { IAdminVenueUseCase } from "../../../../domain/usecaseInterfaces/adminUsecaseInterfaces/adminServicesUsecaseInterfaces/interface.adminVenueUseCase";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 

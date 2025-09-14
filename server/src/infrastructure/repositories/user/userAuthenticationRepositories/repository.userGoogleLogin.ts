@@ -1,6 +1,6 @@
 import { IUserModel } from "../../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
-import { IUserGoogleLoginRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userGoogleLoginRepository";
-import { UserModel } from "../../../../domain/models/user/userAuthenticationModels/userModel";
+import { IUserGoogleLoginRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAuthenticationRepositoryInterfaces/interface.userGoogleLoginRepository";
+import { UserModel } from "../../../../domain/entities/databaseModels/user/userAuthenticationModels/userModel";
 
 
 export class UserGoogleLoginRepository implements IUserGoogleLoginRepository {

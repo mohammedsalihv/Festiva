@@ -1,11 +1,11 @@
-import { IUserGoogleLoginRepository } from "../../../../domain/entities/repositoryInterface/user/authentication/interface.userGoogleLoginRepository";
-import { IUserGoogleLoginUseCase } from "../../../../domain/usecaseInterface/user/userAuthenticationUseCaseInterfaces/interface.userGoogleLoginUsecase";
-import { IUserGoogleLoginValidator } from "../../../../domain/validatorInterface/user/interface.userGoogleLoginValidator";
-import { ITokenService } from "../../../../domain/entities/baseInterface/authenticationInterfaces/interface.tokenService";
+import { IUserGoogleLoginRepository } from "../../../../domain/repositoryInterfaces/userRepositoryInterfaces/userAuthenticationRepositoryInterfaces/interface.userGoogleLoginRepository";
+import { IUserGoogleLoginUseCase } from "../../../../domain/usecaseInterfaces/userUsecaseInterfaces/userAuthenticationUseCaseInterfaces/interface.userGoogleLoginUsecase";
+import { IUserGoogleLoginValidator } from "../../../../domain/validatorInterfaces/userValidatorInterfaces/interface.userGoogleLoginValidator";
+import { ITokenService } from "../../../../domain/baseInterfaces/baseAuthenticationInterfaces/interface.tokenService";
 import { toUserGoogleLoginUsecaseDTO } from "../../../../utils/mapping/userMappings/userGoogleLoginMapper";
 import { userGoogleLoginFactory } from "../../../../domain/factories/user/userGoogleLogin.factory";
-import { userGoogleLoginResponseDTO } from "../../../../types/DTO's/userDTO's/dto.hostGoogleLogin";
-import { googleLoginUserDTO } from "../../../../types/DTO's/userDTO's/dto.hostGoogleLogin";
+import { userGoogleLoginResponseDTO } from "../../../../types/DTO's/userDTO's/userAuthenticationDTO's/dto.hostGoogleLogin";
+import { googleLoginUserDTO } from "../../../../types/DTO's/userDTO's/userAuthenticationDTO's/dto.hostGoogleLogin";
 import { statusCodes } from "../../../../utils/baseUtilities/messages/constantResponses";
 import CustomError from "../../../../utils/baseUtilities/errors/CustomError";
 import { IUserModel } from "../../../../domain/entities/databaseModelInterfaces/userModelInterfaces/interface.user";
@@ -49,13 +49,13 @@ export class UserGoogleLoginUseCase implements IUserGoogleLoginUseCase {
     }
 
     const accessToken = this._tokenService.generateAccessToken({
-      id: user._id!,
-      role: user.role,
+      id: user?._id!,
+      role: user?.role,
     });
 
     const refreshToken = this._tokenService.generateRefreshToken({
-      id: user._id!,
-      role: user.role,
+      id: user?._id!,
+      role: user?.role,
     });
 
     return {

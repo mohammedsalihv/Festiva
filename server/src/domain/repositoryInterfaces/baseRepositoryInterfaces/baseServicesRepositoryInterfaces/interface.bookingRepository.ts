@@ -1,5 +1,4 @@
-import { IBooking } from "../../modelInterface/base/interface.booking";
-
+import { IBooking } from "../../../entities/databaseModelInterfaces/baseModelInterfaces/interface.booking";
 export interface IBookingRepository {
   createBooking(booking: IBooking): Promise<IBooking>;
   getBookingById(bookingId: string): Promise<IBooking | null>;

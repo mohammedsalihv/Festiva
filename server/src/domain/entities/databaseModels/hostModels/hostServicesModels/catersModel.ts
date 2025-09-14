@@ -1,5 +1,5 @@
 import mongoose, { Schema, Types } from "mongoose";
-import { ICaters } from "../../../entities/serviceInterface/host/interface.caters";
+import { ICaters } from "../../../../baseInterfaces/hostBaseInterfaces/hostServicesInterfaces/interface.caters";
 
 const catersSchema = new Schema<ICaters>(
   {

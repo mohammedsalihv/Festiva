@@ -1,19 +1,18 @@
 import express, { Request, Response } from "express";
 import { USER_ROUTES } from "../../../infrastructure/constants/user.routes";
 import logger from "../../../utils/baseUtilities/messages/logger";
-import { userProfileController } from "../../../infrastructure/DI/user/userAccountDependencyInjections/userAccount.DI";
+import { userProfileController } from "../../../infrastructure/dependencyInjections/userDependencyInjections/userAccountDependencyInjections/userAccount.DI";
 import { singleImageUpload } from "../../../utils/baseUtilities/middlewares/multer";
 import { authenticateToken } from "../../../utils/baseUtilities/middlewares/auth";
-import { userVenueController } from "../../../infrastructure/DI/user/userServicesDependencyInjections/userVenue.DI";
-import { userRentCarController } from "../../../infrastructure/DI/user/userServicesDependencyInjections/userRentCar.DI";
-import { userStudioController } from "../../../infrastructure/DI/user/userServicesDependencyInjections/userStudio.DI";
-import { userCatersController } from "../../../infrastructure/DI/user/userServicesDependencyInjections/userCaters.DI";
-import { userController } from "../../../infrastructure/DI/user/userAuthenticationDependencyInjections/userAuth.DI";
-import { paymentController } from "../../../infrastructure/DI/base/basePaymentDependencyInjections/payment.DI";
-import { bookingController } from "../../../infrastructure/DI/base/baseBookingDependencyInjections/booking.DI";
-import { reviewController } from "../../../infrastructure/DI/base/baseReviewDependencyInjections/review.DI";
-import { userBookingsController } from "../../../infrastructure/DI/user/userAccountDependencyInjections/userBookings.DI";
-
+import { userVenueController } from "../../../infrastructure/dependencyInjections/userDependencyInjections/userServicesDependencyInjections/userVenue.DI";
+import { userRentCarController } from "../../../infrastructure/dependencyInjections/userDependencyInjections/userServicesDependencyInjections/userRentCar.DI";
+import { userStudioController } from "../../../infrastructure/dependencyInjections/userDependencyInjections/userServicesDependencyInjections/userStudio.DI";
+import { userCatersController } from "../../../infrastructure/dependencyInjections/userDependencyInjections/userServicesDependencyInjections/userCaters.DI";
+import { userController } from "../../../infrastructure/dependencyInjections/userDependencyInjections/userAuthenticationDependencyInjections/userAuth.DI";
+import { paymentController } from "../../../infrastructure/dependencyInjections/baseDependencyInjections/basePaymentDependencyInjections/payment.DI";
+import { bookingController } from "../../../infrastructure/dependencyInjections/baseDependencyInjections/baseBookingDependencyInjections/booking.DI";
+import { reviewController } from "../../../infrastructure/dependencyInjections/baseDependencyInjections/baseReviewDependencyInjections/review.DI";
+import { userBookingsController } from "../../../infrastructure/dependencyInjections/userDependencyInjections/userAccountDependencyInjections/userBookings.DI";
 
 export interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -40,13 +39,11 @@ userRoutes.post(
   userProfileController.profileEdit.bind(userProfileController)
 );
 
-
 userRoutes.get(
-  USER_ROUTES.UserAccount.getProfileImage, 
-  authenticateToken, 
+  USER_ROUTES.UserAccount.getProfileImage,
+  authenticateToken,
   userController.profileImage.bind(userController)
 );
-
 
 // venues
 
@@ -78,7 +75,6 @@ userRoutes.get(
   userStudioController.getStudios.bind(userStudioController)
 );
 
-
 // booking
 
 userRoutes.post(
@@ -99,8 +95,7 @@ userRoutes.get(
   userBookingsController.getBookingDetails.bind(userBookingsController)
 );
 
-
-// payment 
+// payment
 userRoutes.post(
   USER_ROUTES.paymentRoutes.startPayment,
   authenticateToken,
@@ -113,14 +108,12 @@ userRoutes.put(
   paymentController.paymentStatusUpdate.bind(paymentController)
 );
 
-
-// review 
+// review
 
 userRoutes.post(
   USER_ROUTES.reviewRoutes.addNewReview,
   authenticateToken,
   reviewController.addReview.bind(reviewController)
 );
-
 
 export default userRoutes;

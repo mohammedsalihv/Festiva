@@ -4,7 +4,7 @@ import {
   statusCodes,
   statusMessages,
 } from "../../baseUtilities/messages/constantResponses";
-import { IAdminLoginValidator } from "../../../domain/validatorInterface/admin/interface.adminLoginValidator";
+import { IAdminLoginValidator } from "../../../domain/validatorInterfaces/adminValidatorInterfaces/interface.adminLoginValidator";
 
 export class AdminLoginValidator implements IAdminLoginValidator {
   validateAdminExistence(admin: any) {
